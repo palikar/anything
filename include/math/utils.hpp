@@ -1,8 +1,12 @@
 #pragma once
-
+#include <iostream>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <glm/ext/quaternion_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+
 
 namespace ay
 {
@@ -68,6 +72,37 @@ inline glm::mat4 init_identity() {
                      0,1,0,0,
                      0,0,1,0,
                      0,0,0,1);    
+}
+
+inline glm::vec3 rotate(glm::vec3 v, glm::quat q) {
+    // return glm::conjugate(q) * v * q;
+
+    auto res = (q * glm::quat(0, v.x, v.y, v.z)) * glm::conjugate(q);
+    return glm::vec3(res.x, res.y, res.z);
+}
+
+inline glm::vec3 up(glm::quat q) {
+    return rotate(glm::vec3(0, 1, 0), q );
+}
+
+inline glm::vec3 down(glm::quat q) {
+    return rotate(glm::vec3(0, -1, 0), q );
+}
+
+inline glm::vec3 right(glm::quat q) {
+    return rotate(glm::vec3(1, 0, 0), q );
+}
+
+inline glm::vec3 left(glm::quat q) {
+    return rotate(glm::vec3(-1, 0, 0), q );
+}
+
+inline glm::vec3 forward(glm::quat q) {
+    return glm::axis(q);
+}
+
+inline glm::vec3 backward(glm::quat q) {
+    return -glm::axis(q);
 }
 
 template<typename T>

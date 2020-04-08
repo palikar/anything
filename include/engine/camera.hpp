@@ -17,23 +17,44 @@
 namespace ay
 {
 
+glm::vec3 to_vec3(glm::quat q){
+    glm::vec3 v;
+
+    v.x =  2 * (q.x * q.z - q.w * q.y);
+    v.y =  2 * (q.y * q.z + q.w * q.x);
+    v.z = 1 - 2 * (q.x * q.x + q.y * q.y);
+    
+    return v;
+}
+
+
 class Camera
 {
   private:
     
     glm::mat4 m_projection;
-    glm::vec2 m_center;
+    glm::mat4 m_view;
 
-    Transform m_transform;
+    glm::vec3 m_pos;
+    glm::quat m_rot;
 
-  public:
+    void update(){
 
-    Camera() :
-        m_transform(glm::vec3(0, 0, 0), glm::angleAxis(0.0f, glm::vec3(0, 1, 0)), glm::vec3(0,0,0))
-    {
+        m_view = glm::lookAt(m_pos, 
+                             m_pos + glm::axis(m_rot), 
+                             glm::vec3(0.0, 1.0, 0.0));
         
     }
-    
+
+  public:
+    Camera() :
+        m_pos(glm::vec3(0,0,0)),
+        m_rot(glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, -1.0f)))
+    {
+
+        update();
+    }
+
 
     void init_prescpective_projection(float fov, float aspectRatio, float zNear, float zFar)
     {
@@ -47,38 +68,44 @@ class Camera
 
     glm::mat4 view_projection()
     {
-        glm::mat4 rot = glm::mat4(glm::conjugate(m_transform.rotation()));
-        glm::vec3 pos = m_transform.position() * -1.0f;
-        glm::mat4 trans = init_translate(pos);
-        
-        return m_projection * ( rot * trans);
+        return m_projection * m_view;
     }
 
     void move(glm::vec3 dir, float amt)
     {
-        
-        m_transform.set_position(m_transform.position() + (dir * amt));
+        m_pos += dir*amt;
+        update();
     }
 
     void rotate(glm::vec3 axis, float amt)
     {
-        m_transform.rotate(axis, amt);
+        m_rot *= glm::angleAxis(amt, axis);
+        update();
     }
 
     void set_position(glm::vec3 point)
     {
-        m_transform.set_position(point);
+        m_pos = point;
+        update();
     }
+    
+    void set_rotation(glm::vec3 r)
+    {
 
+        m_rot = glm::angleAxis(glm::radians(180.0f), r);
+        update();
+
+    }
+    
     void set_rotation(glm::quat rot)
     {
-        m_transform.set_rotation(rot);
+        m_rot = rot;
+        update();
     }
 
-    Transform& transform()
-    {
-        return m_transform;
-    }
+    glm::vec3 pos() { return m_pos; }
+    
+    glm::quat rot() { return m_rot; }
 
 
 };

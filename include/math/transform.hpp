@@ -30,6 +30,11 @@ class Transform {
         m_rotation = glm::normalize(glm::quat(angle, axis) * m_rotation);
     }
 
+    void move(glm::vec3 axis, float amt)
+    {
+        m_position = glm::normalize(axis)*amt + m_position;
+    }
+
     void look_at(glm::vec3 point, glm::vec3 up)
     {
         auto m = init_rotation(glm::normalize((point - m_position)), up);
