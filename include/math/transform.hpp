@@ -13,7 +13,16 @@ class Transform {
     
   public:
 
-    Transform()
+    Transform(glm::vec3 t_position, glm::quat t_rotation, glm::vec3 t_scale) :
+        m_position(t_position),
+        m_rotation(t_rotation),
+        m_scale(t_scale)
+    {}
+
+    Transform():
+        m_position(glm::vec3(0,0,0)),
+        m_rotation(glm::quat(0,0,1,0)),
+        m_scale(glm::vec3(1,1,1))
     {}
 
     void rotate(glm::vec3 axis, float angle)
@@ -29,11 +38,16 @@ class Transform {
 
     glm::mat4 get_tranformation()
     {
-        auto trans = glm::mat4(m_position.x,0,0,0,0,m_position.y,0,0,0,0,m_position.z,0,0,0,0,1);
+        auto trans = glm::mat4(1,0,0,m_position.x,
+                               0,1,0,m_position.y,
+                               0,0,1,m_position.z,
+                               0,0,0,1);
+        
         auto rot = glm::mat4(m_rotation);
-        auto scal = glm::mat4(0,0,0,m_position.x,
-                              0,0,0,m_position.y,
-                              0,0,0,m_position.z,
+        
+        auto scal = glm::mat4(m_scale.x,0,0,0,
+                              0,m_scale.y,0,0,
+                              0,0,m_scale.z,0,
                               0,0,0,1);
         
         if (parent) {
@@ -41,8 +55,7 @@ class Transform {
         }
         
         return (trans * (rot * scal));
-
-    }
+}
 
     glm::mat4 get_parent() { return parent_mat; }
 

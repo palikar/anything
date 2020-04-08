@@ -37,13 +37,14 @@ class Keyboard {
 
     void callback(GLFWwindow*, int key, int, int action, int mods)
     {
+
         for (auto& state : pressed) { state = false; }
         for (auto& state : released) { state = false; }
 
         
         if (key >= MAX_KEYS) { return; }
 
-        if (action == GLFW_PRESS) {
+        if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             pressed[key] = true;
         }
 

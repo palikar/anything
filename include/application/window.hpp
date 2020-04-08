@@ -65,7 +65,7 @@ class Window {
 
         m_input = Input::get_instance();
         m_input->init(m_window);
-
+ 
     }
 
     void set_title(std::string_view t_name) {

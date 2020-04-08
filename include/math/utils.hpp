@@ -40,9 +40,9 @@ inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up){
 
 inline glm::mat4 init_scale(float x, float y, float z) {
     
-    return glm::mat4(0,0,0,x,
-                     0,0,0,y,
-                     0,0,0,z,
+    return glm::mat4(x,0,0,0,
+                     0,y,0,0,
+                     0,0,z,0,
                      0,0,0,1);
 }
 
@@ -52,9 +52,9 @@ inline glm::mat4 init_scale(glm::vec3 v) {
 
 inline glm::mat4 init_translate(float x, float y, float z) {
     
-    return glm::mat4(x,0,0,0,
-                     0,y,0,0,
-                     0,0,z,0,
+    return glm::mat4(1,0,0,x,
+                     0,1,0,y,
+                     0,0,1,z,
                      0,0,0,1);
 }
 
