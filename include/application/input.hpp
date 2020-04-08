@@ -37,6 +37,10 @@ class Keyboard {
 
     void callback(GLFWwindow*, int key, int, int action, int mods)
     {
+        for (auto& state : pressed) { state = false; }
+        for (auto& state : released) { state = false; }
+
+        
         if (key >= MAX_KEYS) { return; }
 
         if (action == GLFW_PRESS) {
@@ -119,6 +123,9 @@ class Mouse {
     
     void button_callback(GLFWwindow*, int button, int action, int)
     {
+        for (auto& state : m_pressed) { state = false; }
+        for (auto& state : m_released) { state = false; }
+        
         if (button >= MAX_KEYS) { return; }
 
         if (action == GLFW_PRESS) {

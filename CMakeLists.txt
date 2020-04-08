@@ -147,30 +147,41 @@ include_directories(${GLEW_INCLUDE_DIRS})
 include_directories(${GLFW_INCLUDE_DIRS})
 
 # The testing example
-add_executable(anything    
+add_library(anything_engine
     ./src/main.cpp
     ./src/resource_loader.cpp
+    ./src/game_base.cpp
     )
 
-target_include_directories(anything
+target_include_directories(anything_engine
     PUBLIC
-
     )
 
-target_link_libraries(anything PRIVATE project_options project_warnings
+target_link_libraries(anything_engine PRIVATE project_options project_warnings
     PUBLIC glfw OpenGL::GL GLEW::GLEW
+    )
+
+
+
+add_executable(simple_anything ./examples/simple.cpp)
+
+
+target_link_libraries(simple_anything
+    PRIVATE project_options project_warnings
+    PUBLIC anything_engine
+    
     )
 
 
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-install(TARGETS anything
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-    RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
-    INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-    ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
+# install(TARGETS anything
+#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+#     RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
+#     LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
+#     INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+#     ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
 
 # install(DIRECTORY ./include/ DESTINATION include)
 

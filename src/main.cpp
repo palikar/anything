@@ -29,10 +29,10 @@ bool GLLogCall(const char* function, const char* file, int32_t line)
 
 
 
-int main()
-{
-    ay::Application app{1024, 768, nullptr};
-    return app.run();
+// int main()
+// {k
+//     ay::Application app{1024, 768, nullptr};
+//     return app.run();
     
-    return 0;
-}
+//     return 0;
+// }

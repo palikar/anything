@@ -66,10 +66,6 @@ class Window {
         m_input = Input::get_instance();
         m_input->init(m_window);
 
-        int width, height;
-        glfwGetFramebufferSize(m_window, &width, &height);
-        glViewport(0, 0, width, height);
-        
     }
 
     void set_title(std::string_view t_name) {
