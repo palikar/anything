@@ -27,7 +27,7 @@ class Shader
            const std::string &fragment_src) : m_name(t_name)
     {
 
-        std::unordered_map<GLenum, std::string> sources{
+        std::unordered_map<GLenum, std::string> sources {
             { GL_VERTEX_SHADER, vertex_src }, { GL_FRAGMENT_SHADER, fragment_src }
         };
 
@@ -93,11 +93,11 @@ class Shader
     }
 
     void bind(){
-        
+        glUseProgram(m_id);
     }
 
     void unbind(){
-
+        glUseProgram(0);
     }
 
   private:
@@ -113,7 +113,6 @@ class Shader
             shader_ids.push_back(id);
         }
         glLinkProgram(m_id);
-        glValidateProgram(m_id);
 
         GLint is_linked = 0;
 		glGetProgramiv(m_id, GL_LINK_STATUS, (int*)&is_linked);
@@ -134,6 +133,7 @@ class Shader
             std::cout << "Shader m_id linking error:\n\t" << info_log.data() << "\n";
         }
 
+        glValidateProgram(m_id);
         GLint is_valid = 0;
 		glGetProgramiv(m_id, GL_LINK_STATUS, (int*)&is_valid);
         if (is_valid == GL_FALSE)

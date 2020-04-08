@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "commons.hpp"
+
 #include <GL/glew.h>
 
 namespace ay
@@ -80,8 +82,8 @@ struct BufferElement
 {
     std::string name;
     ShaderDataType type;
-    uint32_t size{data_type_size(type)};
     size_t offset{0};
+    uint32_t size{data_type_size(type)};
     bool normalized{false};
 };
 
@@ -141,26 +143,25 @@ class VertexBuffer
 
     VertexBuffer(float* t_vertices, uint32_t t_size)
     {
-        glCreateBuffers(1, &m_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-		glBufferData(GL_ARRAY_BUFFER, t_size, t_vertices, GL_DYNAMIC_DRAW);
+        GLCall(glCreateBuffers(1, &m_vbo));
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, t_size, t_vertices, GL_DYNAMIC_DRAW));
     }
 
     ~VertexBuffer()
     {
-        glDeleteBuffers(1, &m_vbo);
+        GLCall(glDeleteBuffers(1, &m_vbo));
     }
 
     void bind() const
     {
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
     }
 
     void unbind()
     {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
-
 
     void set_data(const void* t_data, uint32_t t_size)
     {
@@ -173,7 +174,7 @@ class VertexBuffer
         return m_layout;
     };
 
-    void SetLayout(BufferLayout t_layout)
+    void set_layout(BufferLayout t_layout)
     {
         m_layout = std::move(t_layout);
     };
@@ -189,9 +190,9 @@ class IndexBuffer
 
     IndexBuffer(uint32_t* indices, uint32_t count) : m_count(count)
     {
-        glCreateBuffers(1, &m_vio);
-		glBindBuffer(GL_ARRAY_BUFFER, m_vio);
-		glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+        GLCall(glCreateBuffers(1, &m_vio));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vio));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW));
     }
     
     ~IndexBuffer()
@@ -201,15 +202,15 @@ class IndexBuffer
 
     void bind() const
     {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vio);
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vio));
     }
     
     void unbind() const
     {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     }
 
-    uint32_t GetCount() const
+    uint32_t count() const
     {
         return m_count;
     }
