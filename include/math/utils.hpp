@@ -70,7 +70,7 @@ inline glm::mat4 init_identity() {
                      0,0,0,1);    
 }
 
-<template T>
+template<typename T>
 inline T saturate(T x)
 {
     if (x > 1.0d)
