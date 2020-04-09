@@ -103,7 +103,7 @@ class SimpleGame : public ay::GameBase {
         // s->set("red_channel", 1.0f);
         
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        rend.draw_indexed(buffers);
+        rend.draw_indexed(buffers.get());
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
         
     }

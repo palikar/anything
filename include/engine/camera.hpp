@@ -18,7 +18,7 @@
 namespace ay
 {
 
-glm::vec3 to_vec3(glm::quat q){
+inline glm::vec3 to_vec3(glm::quat q){
     glm::vec3 v;
 
     v.x =  2 * (q.x * q.z - q.w * q.y);

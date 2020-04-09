@@ -35,7 +35,7 @@ class VertexArray
         GLCall(glBindVertexArray(0));
     }
 
-    void add_vertex_buffer(const VertexBufferPtr& vertex_buffer)
+    void add_vertex_buffer(VertexBufferPtr vertex_buffer)
     {
         GLCall(glBindVertexArray(m_vao));
 		vertex_buffer->bind();
@@ -52,14 +52,14 @@ class VertexArray
                                          (const void*)element.offset));
             ++m_index;
         }
-        m_vertex_buffers.push_back(vertex_buffer);
+        m_vertex_buffers.push_back(std::move(vertex_buffer));
     }
     
-    void set_index_buffer(const IndexBufferPtr& index_buffer)
+    void set_index_buffer(IndexBufferPtr index_buffer)
     {
         glBindVertexArray(m_vao);
         index_buffer->bind();
-        m_index_buffer = index_buffer;
+        m_index_buffer = std::move(index_buffer);
         glBindVertexArray(0);
         
     }
@@ -77,6 +77,6 @@ class VertexArray
 };
 
 
-using VertexArrayPtr = std::shared_ptr<VertexArray>;
+using VertexArrayPtr = std::unique_ptr<VertexArray>;
 
 }

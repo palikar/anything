@@ -7,6 +7,7 @@
 
 
 #include "engine/component.hpp"
+#include "graphics/mesh.hpp"
 
 namespace ay
 {
@@ -17,6 +18,7 @@ class Entity {
     std::unordered_map<ComponentType*, ComponentPtr> m_components;
     std::string m_id;
 
+    bool m_update_components{true};
     bool m_enabled{true};
     bool m_render{false};
 
@@ -41,15 +43,23 @@ class Entity {
         return component_internal<T>();
     }
 
-    virtual void update(double) {}
+    void add_component(ComponentPtr t_comp)
+    {
+        m_components.insert({t_comp->type(), std::move(t_comp)});
+    }
 
+    virtual void update(double dt) {
+        if (m_update_components) {
+            update_components(dt);
+        }
+    }    
     
   private:
 
     template <typename T>
     T* component_internal()
     {
-        ComponentType* type = T::GetStaticType();
+        ComponentType* type = T::static_type();
         auto it = m_components.find(type);
         if (it == m_components.end())
             return nullptr;
@@ -59,5 +69,17 @@ class Entity {
 };
 
 using EntityPtr = std::unique_ptr<Entity>;
+
+
+
+inline EntityPtr mesh_entity(Mesh mesh, std::string name = {})
+{
+    EntityPtr new_ent = std::make_unique<Entity>(name);
+    new_ent->add_component(std::make_unique<TransformComponent>());
+    new_ent->add_component(std::make_unique<MeshComponent>(std::move(mesh)));
+    return new_ent;
+}
+
+
 
 }

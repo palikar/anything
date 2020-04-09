@@ -18,18 +18,25 @@
 namespace ay
 {
 
+class GameBase;
+
 class Scene3D
 {
   private:
     std::vector<EntityPtr> m_entities;
     Camera m_camera;
+    GameBase* m_game;
 
   public:
     
     Scene3D()
     {}
 
-    void add(EntityPtr t_entity)
+    void init(){
+
+    }
+
+    Entity* add(EntityPtr t_entity)
     {}
     
     void update(double)

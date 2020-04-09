@@ -217,8 +217,8 @@ class IndexBuffer
 
 };
     
-using VertexBufferPtr = std::shared_ptr<VertexBuffer>;
+using VertexBufferPtr = std::unique_ptr<VertexBuffer>;
 
-using IndexBufferPtr = std::shared_ptr<IndexBuffer>;
+using IndexBufferPtr = std::unique_ptr<IndexBuffer>;
 
 }

@@ -5,6 +5,7 @@
 #include <utility>
 #include <memory>
 
+#include "engine/scene.hpp"
 
 namespace ay {
 
@@ -16,6 +17,7 @@ class GameBase {
     
   protected:
     GameEngine* m_engine;
+  std::unordered_map<std::string, Scene3D> m_scenes;
     
   public:
 
@@ -26,6 +28,8 @@ class GameBase {
     virtual void init() = 0;
     virtual void update(double dt) = 0;
     virtual void render(Renderer& renderer) = 0;
+
+    
 
 };
 
