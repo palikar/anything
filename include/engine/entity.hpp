@@ -58,4 +58,6 @@ class Entity {
 
 };
 
+using EntityPtr = std::unique_ptr<Entity>;
+
 }
