@@ -16,3 +16,11 @@ extern bool GLLogCall(const char* function, const char* file, int32_t line);
 #define GLCall(x) ay::GLCheckError();                           \
     x;                                                          \
     if (!ay::GLLogCall(#x, __FILE__, __LINE__)) exit(1);
+
+
+
+template <typename T, int N>
+constexpr int dim(T(&)[N])
+{
+    return N;
+}

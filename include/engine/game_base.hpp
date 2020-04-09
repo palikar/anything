@@ -1,35 +1,16 @@
 #pragma once
 
-
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <memory>
 
 
 namespace ay {
 
-
-
-class Component {
-    
-  private:
-
-
-  public:
-
-};
-
-
-
-class Entity {
-    
-  private:
-
-
-  public:
-
-};
-
 class GameEngine;
 class Renderer;
-
+class ShaderLibrary;
 
 class GameBase {
     
@@ -38,7 +19,8 @@ class GameBase {
     
   public:
 
-
+    ShaderLibrary& shaders();
+    
     void set_up(GameEngine* t_engine);
 
     virtual void init() = 0;

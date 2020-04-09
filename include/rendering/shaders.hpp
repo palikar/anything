@@ -226,6 +226,12 @@ class ShaderLibrary
         return m_shaders.at(name);
     }
 
+    ShaderPtr bind(const std::string& name){
+        auto s = get(name);
+        s->bind();
+        return s;
+    }
+
     bool exists(const std::string& name) const
     {
         return m_shaders.count(name) == 0;

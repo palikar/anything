@@ -6,6 +6,7 @@
 #include "rendering/vertex_array.hpp"
 #include "rendering/shaders.hpp"
 #include "math/transform.hpp"
+#include "math/utils.hpp"
 #include "commons.hpp"
 
 #include <glm/glm.hpp>
@@ -103,9 +104,27 @@ class Camera
         update();
     }
 
+    void set_look_at(glm::vec3 position, glm::vec3 point)
+    {
+        
+        m_pos = position;
+        m_rot = glm::angleAxis(glm::radians(180.0f), glm::normalize(position - point) - position);
+        update();
+
+    }
+
     glm::vec3 pos() { return m_pos; }
     
     glm::quat rot() { return m_rot; }
+
+    glm::vec3 at() { return ::ay::forward(m_rot); }
+    
+    glm::vec3 up() { return glm::vec3(0,1,0); }
+    
+    glm::vec3 right() { return glm::normalize(glm::cross(at(), up())); }
+    
+
+    
 
 
 };
