@@ -21,7 +21,7 @@ class Transform {
 
     Transform():
         m_position(glm::vec3(0,0,0)),
-        m_rotation(glm::quat(0,0,1,0)),
+        m_rotation(glm::angleAxis(0.0f, glm::vec3(0.0f, 1.0f, 0.0f))),
         m_scale(glm::vec3(1,1,1))
     {}
 
@@ -43,17 +43,9 @@ class Transform {
 
     glm::mat4 get_tranformation()
     {
-        auto trans = glm::mat4(1,0,0,m_position.x,
-                               0,1,0,m_position.y,
-                               0,0,1,m_position.z,
-                               0,0,0,1);
-        
+        auto trans = glm::translate(glm::mat4(1.0f), m_position);
         auto rot = glm::mat4(m_rotation);
-        
-        auto scal = glm::mat4(m_scale.x,0,0,0,
-                              0,m_scale.y,0,0,
-                              0,0,m_scale.z,0,
-                              0,0,0,1);
+        auto scal = glm::scale(glm::mat4(1.0f), m_scale);
         
         if (parent) {
             return parent_mat * (trans * (rot * scal));

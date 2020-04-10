@@ -13,7 +13,7 @@ namespace ay
 {
 
 class Entity {
-    
+
   protected:
     std::unordered_map<ComponentType*, ComponentPtr> m_components;
     std::string m_id;
@@ -27,7 +27,7 @@ class Entity {
             comp->update(dt);
         }
     }
-    
+
   public:
     Entity(std::string t_id = {}) : m_id(t_id) {}
 
@@ -52,8 +52,12 @@ class Entity {
         if (m_update_components) {
             update_components(dt);
         }
-    }    
+    }
+
+    bool enabled() { return m_enabled; }
+    bool renderable() { return m_enabled; }
     
+
   private:
 
     template <typename T>
@@ -63,7 +67,7 @@ class Entity {
         auto it = m_components.find(type);
         if (it == m_components.end())
             return nullptr;
-        return it->second.get();
+        return static_cast<T*>(it->second.get());
     }
 
 };

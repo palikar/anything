@@ -5,6 +5,14 @@ namespace ay
 {
 
 
+
+Scene3D* GameBase::init_scene(const std::string& t_name)
+{
+    auto sc = Scene3D();
+    sc.init(this);
+    return &m_scenes.insert({t_name, std::move(sc)}).first->second;
+}
+
 ShaderLibrary& GameBase::shaders()
 {
     return m_engine->shader_lib();

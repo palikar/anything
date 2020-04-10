@@ -151,6 +151,7 @@ add_library(anything_engine
     ./src/main.cpp
     ./src/resource_loader.cpp
     ./src/game_base.cpp
+    ./src/scene.cpp
     )
 
 target_include_directories(anything_engine

@@ -46,8 +46,10 @@ class Renderer
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
 
-    void draw_indexed(VertexArray* vertex_array, uint32_t index_count = 0)
+    void draw_indexed(const VertexArray* vertex_array, uint32_t index_count = 0)
     {
+        
+        vertex_array->bind();
         uint32_t count = index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
 		GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }

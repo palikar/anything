@@ -37,7 +37,6 @@ class Component {
 
 using ComponentPtr = std::unique_ptr<Component>;
 
-
 class TransformComponent : public Component
 {
   public:
@@ -55,7 +54,6 @@ class TransformComponent : public Component
     TransformComponent(Transform t_transform) : transform(t_transform)
     {};
 };
-
 
 class MeshComponent : public Component
 {

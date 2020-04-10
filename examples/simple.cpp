@@ -16,96 +16,53 @@ using namespace ay;
 class SimpleGame : public ay::GameBase {
 
   private:
+    Scene3D* main_scene;
+    double rot_speed = 1.0;
 
-    ay::VertexArrayPtr buffers;
-    float acc = 0;
-    Camera camera;
-    Transform model;
-
+    Entity* cube_1;
+    Entity* cube_2;
+    
   public:
     
     SimpleGame()
     {
-
+        
     }
 
     void init() override
     {
-        buffers = make_vertex_array(
-            make_index_buffer({
-                    {0, 1, 2},
-                    {2, 3, 0},
-            
-                    {1, 5, 6},
-                    {6, 2, 1},
-            
-                    {7, 6, 5},
-                    {5, 4, 7},
-            
-                    {4, 0, 3},
-                    {3, 7, 4},
-            
-                    {4, 5, 1},
-                    {1, 0, 4},
-                
-                    {3, 2, 6},
-                    {6, 7, 3}
-                }),
-            make_vertex_buffer({
-                    {-1.0, -1.0,  1.0},
-                    {1.0, -1.0,  1.0},
-                    {1.0,  1.0,  1.0},
-                    {-1.0,  1.0,  1.0},
+        main_scene = init_scene("main");
 
-                    {-1.0, -1.0, -1.0},
-                    {1.0, -1.0, -1.0},
-                    {1.0,  1.0, -1.0},
-                    {-1.0,  1.0, -1.0}
-                }));
-        
-        auto s = m_engine->shader_lib().load("simple");
-        
-        
-        model.set_scale(glm::vec3(2,2,2));
-        model.set_position(glm::vec3(0, 0, 0));
+        cube_1 = main_scene->add(mesh_entity(create_cube()));
+        cube_2 = main_scene->add(mesh_entity(create_cube()));
 
-        camera.init_orthographic(100, -100, 100, -100, -100, 100);
-        camera.init_prescpective_projection(glm::radians(45.0f), 1024.0/768.0, 0.001f, 10000.0f);
-
+        cube_1->component<TransformComponent>()->transform.set_position({2.0f, 0.0f, 0.0f});
+        cube_2->component<TransformComponent>()->transform.set_position({-2.0f, 0.0f, 0.0f});
+            
+        main_scene->camera().init_prescpective_projection(glm::radians(75.0f), 1024.0/768.0, 0.001, 1000.0);
+        main_scene->camera().set_look_at(glm::vec3(10, 10, 10), glm::vec3(0.0f,0.0f,0.0f));
     }
-
-    float deg = 1;
-
-    void update(double) override
+    
+    void update(double dt) override
     {
-        acc += 0.01;
-        deg += 0.01;
+        // const float radius = 10.0f;
+        // float camX = sin(glfwGetTime()) * radius;
+        // float camZ = cos(glfwGetTime()) * radius;
 
-        const float radius = 10.0f;
-        float camX = sin(deg) * radius;
-        float camZ = cos(deg) * radius;
-        
-        camera.set_look_at(glm::vec3(camX, 10, camZ), glm::vec3(0,0,0));
-        
-        auto s = shaders().get("simple");
-        s->set("projection_matrix", camera.view_projection());
-        s->set("model_matrix", model.get_tranformation());
+        // main_scene->camera().set_look_at(glm::vec3(camX, 10, camZ), glm::vec3(0.0f,0.0f,0.0f));
+            
+        cube_1->component<TransformComponent>()->transform.rotate(glm::vec3(0,1,0), rot_speed*dt);
+        cube_2->component<TransformComponent>()->transform.rotate(glm::vec3(0,1,0), -1.0f * rot_speed*dt);
+
+        main_scene->update(dt);
     }
 
     
-    void render(ay::Renderer& rend) override
+    void render(ay::Renderer& render_api) override
     {
-        auto s = shaders().bind("simple");
-        buffers->bind();
-
-        // s->set("red_channel", 0.0f);
-        // rend.draw_indexed(buffers);
-        // s->set("red_channel", 1.0f);
-        
         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        rend.draw_indexed(buffers.get());
+        main_scene->render(render_api);
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-        
     }
 
 

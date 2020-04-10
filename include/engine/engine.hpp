@@ -55,10 +55,8 @@ class GameEngine {
         m_game->update(dt);
     }
 
-    void render() {
-        
+    void render() {        
         m_renderer.clear();
-        
         m_game->render(m_renderer);
     }
 
