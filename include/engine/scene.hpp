@@ -46,6 +46,7 @@ class Scene3D
         for (auto& object : m_entities) {
             object->update(dt);
         }
+        
         m_base_shader->bind();
         m_base_shader->set("projection_matrix", m_camera.view_projection());
     }
@@ -53,9 +54,6 @@ class Scene3D
     void render(Renderer& render_api)
     {
         m_base_shader->bind();
-        
-        // std::cout << glm::to_string(trans_comp->transform.get_tranformation()) << "\n";
-        // std::cout << glm::to_string(m_camera.view_projection()) << "\n";
 
         for (auto& object : m_entities) {
 
@@ -67,7 +65,6 @@ class Scene3D
                 m_base_shader->set("model_matrix", trans_comp->transform.get_tranformation());
                 mesh_comp->mesh.geometry()->bind();
                 render_api.draw_indexed(mesh_comp->mesh.geometry());
-                
             }
             
         }        

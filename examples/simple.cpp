@@ -21,6 +21,7 @@ class SimpleGame : public ay::GameBase {
 
     Entity* cube_1;
     Entity* cube_2;
+    Entity* plane;
     
   public:
     
@@ -33,26 +34,30 @@ class SimpleGame : public ay::GameBase {
     {
         main_scene = init_scene("main");
 
-        cube_1 = main_scene->add(mesh_entity(create_cube()));
-        cube_2 = main_scene->add(mesh_entity(create_cube()));
+        plane = main_scene->add(mesh_entity(create_plane(10, 10, 10, 10)));
 
-        cube_1->component<TransformComponent>()->transform.set_position({2.0f, 0.0f, 0.0f});
-        cube_2->component<TransformComponent>()->transform.set_position({-2.0f, 0.0f, 0.0f});
-            
-        main_scene->camera().init_prescpective_projection(glm::radians(75.0f), 1024.0/768.0, 0.001, 1000.0);
-        main_scene->camera().set_look_at(glm::vec3(10, 10, 10), glm::vec3(0.0f,0.0f,0.0f));
+        get_transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        
+        cube_1 = main_scene->add(mesh_entity(create_cube()));
+        // get_transform(cube_1).rotate(glm::vec3(0,1 ,0), glm::radians(90.0f));
+
+
+        main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
+        main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
+
     }
     
     void update(double dt) override
     {
-        // const float radius = 10.0f;
-        // float camX = sin(glfwGetTime()) * radius;
-        // float camZ = cos(glfwGetTime()) * radius;
+        const float radius = 20.0f;
+        float camX = sin(glfwGetTime()) * radius;
+        float camZ = cos(glfwGetTime()) * radius;
+        // main_scene->camera().set_look_at(glm::vec3(camX, 5, camZ), glm::vec3(0.0f,0.0f,0.0f));
 
-        // main_scene->camera().set_look_at(glm::vec3(camX, 10, camZ), glm::vec3(0.0f,0.0f,0.0f));
             
-        cube_1->component<TransformComponent>()->transform.rotate(glm::vec3(0,1,0), rot_speed*dt);
-        cube_2->component<TransformComponent>()->transform.rotate(glm::vec3(0,1,0), -1.0f * rot_speed*dt);
+        // get_transform(cube_1).rotate(glm::vec3(1,0,0), rot_speed*dt*0.1f);
+
+        get_transform(plane).rotate(glm::vec3(0.0f, 1.0f, 0.0f), rot_speed*dt*0.3);
 
         main_scene->update(dt);
     }
@@ -73,13 +78,9 @@ class SimpleGame : public ay::GameBase {
 
 int main()
 {
-
     std::unique_ptr<SimpleGame> game = std::make_unique<SimpleGame>();
     
     ay::Application app{1024, 768, game.get()};
-
-    return app.run();
-
-
-
+    
+    return app.run();    
 }

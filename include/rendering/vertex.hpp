@@ -49,11 +49,12 @@ class Index3i
     uint32_t i_1;
     uint32_t i_2;
 
-    Index3i(uint32_t one, uint32_t two, uint32_t three) :
+    Index3i(size_t one, size_t two, size_t three) :
         i_0(one),
         i_1(two),
         i_2(three)
     {}
+
 
     Index3i() : i_0(0), i_1(0), i_2(0)
     {}

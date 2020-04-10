@@ -56,7 +56,6 @@ class Entity {
 
     bool enabled() { return m_enabled; }
     bool renderable() { return m_enabled; }
-    
 
   private:
 
@@ -84,6 +83,21 @@ inline EntityPtr mesh_entity(Mesh mesh, std::string name = {})
     return new_ent;
 }
 
+inline Transform& get_transform(Entity* t_entity) {
+    auto p = t_entity->component<TransformComponent>();
+    if (!p) {
+
+    }
+    return p->transform;
+}
+
+inline Mesh& get_mesh(Entity* t_entity) {
+    auto p = t_entity->component<MeshComponent>();
+    if (!p) {
+
+    }
+    return p->mesh;
+}
 
 
 }
