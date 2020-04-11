@@ -1,6 +1,7 @@
 #pragma once
 
 #include "application/resource_loader.hpp"
+#include "application/event.hpp"
 
 #include "rendering/buffers.hpp"
 #include "rendering/vertex_array.hpp"
@@ -30,7 +31,7 @@ class GameEngine {
     ShaderLibrary m_shader_lib;
     GameBase* m_game;
     Renderer m_renderer;
-    
+
 
   public:
 
@@ -44,24 +45,29 @@ class GameEngine {
         m_renderer.init();
         m_renderer.set_viewport(0, 0, m_width, m_height);
         m_renderer.set_clear_color(glm::vec4(0.0, 0.0, 0.0, 0.0));
-        
+
         m_game->set_up(this);
-        
+
         m_game->init();
-        
+
     }
 
     void update(double dt) {
         m_game->update(dt);
     }
 
-    void render() {        
+    void render() {
         m_renderer.clear();
         m_game->render(m_renderer);
     }
 
     ShaderLibrary& shader_lib() {
         return m_shader_lib;
+    }
+
+    bool on_event(Event& t_event)
+    {
+        return m_game->event(t_event);
     }
 
 

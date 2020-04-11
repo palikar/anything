@@ -36,6 +36,21 @@ class Transform {
         }
     }
 
+    void rotateX(float angle, bool local = false)
+    {
+        rotate(glm::vec3(1,0,0), angle, local);
+    }
+
+    void rotateY(float angle, bool local = false)
+    {
+        rotate(glm::vec3(0,1,0), angle, local);
+    }
+
+    void rotateZ(float angle, bool local = false)
+    {
+        rotate(glm::vec3(0,0,1), angle, local);
+    }
+    
     void move(glm::vec3 axis, float amt)
     {
         m_position = glm::normalize(axis)*amt + m_position;

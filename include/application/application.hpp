@@ -5,6 +5,7 @@
 
 #include "application/window.hpp"
 #include "application/resource_loader.hpp"
+#include "application/event.hpp"
 #include "engine/engine.hpp"
 
 namespace ay
@@ -105,6 +106,7 @@ class Application
         }
 
         m_window->init(m_width, m_height, "Anything");
+        m_window->set_eventcall([this](Event& t_event){this->on_event(t_event);});
 
         glewExperimental = GL_TRUE;
         GLenum err = glewInit();
@@ -119,6 +121,27 @@ class Application
         std::cout << glGetString( GL_VERSION ) << "\n";
         
         m_engine.init(m_width, m_height);
+    }
+
+    void on_event(Event& t_event)
+    {
+        Dispatcher dispatch{t_event};
+        dispatch.dispatch<WindowCloseEvent>([this](auto& e){return this->on_close(e);});
+        dispatch.dispatch<WindowResizeEvent>([this](auto& e){return this->on_resize(e);});
+
+        m_engine.on_event(t_event);
+    }
+    
+    bool on_close(WindowCloseEvent&)
+    {
+        m_running = false;
+        return true;
+    }
+
+    bool on_resize(WindowResizeEvent& e)
+    {
+        glViewport(0, 0, e.width(), e.height());
+        return true;
     }
 };
 

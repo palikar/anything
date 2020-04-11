@@ -41,7 +41,7 @@ class SimpleGame : public ay::GameBase {
         cube_1 = main_scene->add(mesh_entity(create_cube()));
         // get_transform(cube_1).rotate(glm::vec3(0,1 ,0), glm::radians(90.0f));
 
-
+        
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
 
@@ -49,15 +49,21 @@ class SimpleGame : public ay::GameBase {
     
     void update(double dt) override
     {
-        const float radius = 20.0f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camZ = cos(glfwGetTime()) * radius;
+        // const float radius = 20.0f;
+        // float camX = sin(glfwGetTime()) * radius;
+        // float camZ = cos(glfwGetTime()) * radius;
         // main_scene->camera().set_look_at(glm::vec3(camX, 5, camZ), glm::vec3(0.0f,0.0f,0.0f));
 
             
         // get_transform(cube_1).rotate(glm::vec3(1,0,0), rot_speed*dt*0.1f);
 
-        get_transform(plane).rotate(glm::vec3(0.0f, 1.0f, 0.0f), rot_speed*dt*0.3);
+        if(Input::is_pressed(KeyCode::A)) {
+            get_transform(plane).rotateY(rot_speed*dt*0.3);
+        }
+        if(Input::is_pressed(KeyCode::D)) {
+            get_transform(plane).rotateY(-rot_speed*dt*0.3);
+        }
+
 
         main_scene->update(dt);
     }

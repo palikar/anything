@@ -179,9 +179,8 @@ class Mouse {
 class Input {
   private:
     static inline std::unique_ptr<Input> m_instance;
-
-    Keyboard* t_keyboard;
-    Mouse* t_mouse;
+    
+    GLFWwindow* m_window;
 
   public:
 
@@ -192,35 +191,46 @@ class Input {
         return m_instance.get();
     }
 
+    GLFWwindow* window() { return m_window; }
+    
 
     void init(GLFWwindow* t_window)
     {
-        t_keyboard = Keyboard::get_instance();
-        t_mouse = Mouse::get_instance();
-
-        t_keyboard->init(t_window);
-        t_mouse->init(t_window);
+        m_window = t_window;
     }
 
-    Keyboard* keyboard() {return t_keyboard; };
-    Mouse* mouse() {return t_mouse; };
-
-
-    static bool is_pressed(MouseCode key) { return get_instance()->mouse()->is_pressed(key); }
-    static bool is_pressed(KeyCode key) { return get_instance()->keyboard()->is_pressed(key); }
-
-    static bool is_released(MouseCode key) { return get_instance()->mouse()->is_released(key); }
-    static bool is_released(KeyCode key) { return get_instance()->keyboard()->is_released(key); }
-
-    static glm::vec2 mouse_pos() { return get_instance()->mouse()->pos(); }
-    static glm::vec2 mouse_last_pos() { return get_instance()->mouse()->last_pos(); }
-
-    static double mouse_scroll() { return get_instance()->mouse()->scroll(); }
-    static double mouse_last_scroll() { return get_instance()->mouse()->last_scroll(); }
+    static bool is_pressed(MouseCode key) {
+        auto state = glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
+        return state == GLFW_PRESS || state == GLFW_REPEAT;
+    }
     
-    static bool ctrl() { return get_instance()->keyboard()->ctrl_pressed(); }
-    static bool shift() { return get_instance()->keyboard()->shift_pressed(); }
-    static bool alt() { return get_instance()->keyboard()->alt_pressed(); }
+    static bool is_pressed(KeyCode key) {
+        auto state = glfwGetKey(get_instance()->window(), static_cast<int32_t>(key));
+		return state == GLFW_PRESS;
+    }
+
+    static bool is_released(MouseCode key) {
+        auto state = glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
+        return state == GLFW_RELEASE;
+    }
+    
+    static bool is_released(KeyCode key) {
+        auto state = glfwGetKey(get_instance()->window(), static_cast<int32_t>(key));
+		return state == GLFW_PRESS;
+    }
+    
+    static glm::vec2 mouse_pos() {
+        auto window = static_cast<GLFWwindow*>(get_instance()->window());
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		return { (float)xpos, (float)ypos };
+    }
+
+    static void set_mouse_pos(glm::vec2 pos) {
+        auto window = static_cast<GLFWwindow*>(get_instance()->window());
+        glfwSetCursorPos(window, pos.x, pos.y);
+    }
+
     
 };
 
