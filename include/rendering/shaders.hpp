@@ -1,14 +1,9 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
-#include <string>
-#include <string_view>
-
 #include "application/resource_loader.hpp"
+#include "std_header.hpp"
+#include "glm_header.hpp"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
 namespace ay

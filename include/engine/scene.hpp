@@ -1,11 +1,5 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <memory>
-#include <vector>
-
 
 #include "engine/component.hpp"
 #include "engine/entity.hpp"
@@ -13,7 +7,7 @@
 
 #include "rendering/renderer.hpp"
 
-
+#include "std_header.hpp"
 
 namespace ay
 {

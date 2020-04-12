@@ -1,14 +1,11 @@
 #pragma once
 
-#include <array>
-#include <memory>
-
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 
 #include "application/keycodes.hpp"
-
+#include "std_header.hpp"
 
 namespace ay
 {

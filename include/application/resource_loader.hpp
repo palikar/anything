@@ -1,13 +1,7 @@
 #pragma once
 
 
-#include <string>
-#include <vector>
-#include <fstream>
-#include <filesystem>
-#include <memory>
-#include <iostream>
-#include <utility>
+#include "std_header.hpp"
 
 
 namespace ay

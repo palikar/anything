@@ -9,11 +9,8 @@
 #include "math/utils.hpp"
 #include "commons.hpp"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/string_cast.hpp>
 
+#include "glm_header.hpp"
 
 namespace ay
 {

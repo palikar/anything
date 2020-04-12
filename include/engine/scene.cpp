@@ -4,7 +4,6 @@
 
 namespace ay {
 
-
 void Scene3D::init(GameBase* t_game)
 {
     m_game = t_game;

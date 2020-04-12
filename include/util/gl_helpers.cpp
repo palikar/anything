@@ -1,9 +1,6 @@
-#include <iostream>
-
 #include <GL/glew.h>
 
-#include "application/application.hpp"
-#include "commons.hpp"
+#include "util/gl_helpers.hpp"
 
 
 namespace ay {
@@ -25,14 +22,3 @@ bool GLLogCall(const char* function, const char* file, int32_t line)
 }
 
 }
-
-
-
-
-// int main()
-// {k
-//     ay::Application app{1024, 768, nullptr};
-//     return app.run();
-    
-//     return 0;
-// }

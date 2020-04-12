@@ -1,11 +1,8 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <memory>
 
 #include "commons.hpp"
+#include "std_header.hpp"
 #include "macros.hpp"
 
 #include "math/transform.hpp"

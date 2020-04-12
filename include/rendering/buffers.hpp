@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "commons.hpp"
+#include "util/gl_helpers.hpp"
 
 #include <GL/glew.h>
 

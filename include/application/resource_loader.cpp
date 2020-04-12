@@ -1,9 +1,5 @@
-
-
-
 #include "application/resource_loader.hpp"
-#include <cstring>
-#include <cassert>
+
 
 namespace ay
 {

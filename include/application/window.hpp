@@ -1,19 +1,12 @@
 #pragma once
 
-#include <iostream>
-#include <string_view>
-#include <string>
-#include <sstream>
-#include <cstdio>
-#include <memory>
-#include <functional>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "application/input.hpp"
 #include "application/event.hpp"
 
+#include "std_header.hpp"
 
 namespace ay {
 

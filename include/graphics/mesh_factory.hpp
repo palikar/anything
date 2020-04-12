@@ -1,16 +1,12 @@
 #pragma once
 
-#include <vector>
-#include <memory>
-#include <utility>
-#include <cmath>
-#include <iostream>
-
 #include "rendering/buffer_factory.hpp"
 #include "graphics/mesh.hpp"
-#include "commons.hpp"
 
-#include <glm/glm.hpp>
+#include "commons.hpp"
+#include "std_header.hpp"
+
+#include "glm_header.hpp"
 
 namespace ay
 {

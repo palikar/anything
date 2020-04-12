@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
+
 
 #include "application/keycodes.hpp"
 
+#include "std_header.hpp"
 #include "commons.hpp"
 
 #include <GLFW/glfw3.h>
@@ -35,7 +36,6 @@ class Event
     virtual const std::string name() const = 0;    
 
 };
-
 
 class WindowResizeEvent : public Event
 {
@@ -142,7 +142,7 @@ class MouseScrolledEvent : public Event
   public:
     MouseScrolledEvent(float xoffset, float yoffset)
         : m_xoffset(xoffset), m_yoffset(yoffset) {}
-
+    
     inline float x_offset() const { return m_xoffset; }
     inline float y_offset() const { return m_yoffset; }
     

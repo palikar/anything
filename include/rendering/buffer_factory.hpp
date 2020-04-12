@@ -1,13 +1,10 @@
 #pragma once
 
-
-#include <vector>
-#include <memory>
-
 #include "rendering/vertex.hpp"
 #include "rendering/vertex_array.hpp"
 #include "commons.hpp"
 
+#include "std_header.hpp"
 
 namespace ay
 {

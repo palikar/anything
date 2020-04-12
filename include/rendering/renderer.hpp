@@ -1,9 +1,8 @@
 #pragma once
 
-#include <vector>
-
 #include "rendering/buffers.hpp"
 #include "commons.hpp"
+#include "util/gl_helpers.hpp"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>

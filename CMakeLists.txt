@@ -148,10 +148,13 @@ include_directories(${GLFW_INCLUDE_DIRS})
 
 # The testing example
 add_library(anything_engine
-    ./src/main.cpp
-    ./src/resource_loader.cpp
-    ./src/game_base.cpp
-    ./src/scene.cpp
+
+    ./include/application/resource_loader.cpp
+
+    ./include/engine/game_base.cpp
+    ./include/engine/scene.cpp
+
+    ./include/util/gl_helpers.cpp    
     )
 
 target_include_directories(anything_engine
@@ -162,6 +165,8 @@ target_link_libraries(anything_engine PRIVATE project_options project_warnings
     PUBLIC glfw OpenGL::GL GLEW::GLEW
     )
 
+target_precompile_headers(anything_engine
+    PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
 
 
 add_executable(simple_anything ./examples/simple.cpp)

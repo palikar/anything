@@ -1,12 +1,9 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <memory>
-
 #include "engine/scene.hpp"
 #include "application/event.hpp"
+
+#include "std_header.hpp"
 
 namespace ay {
 
