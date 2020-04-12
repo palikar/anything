@@ -1,5 +1,10 @@
 #pragma once
 
+#include "glm_header.hpp"
+#include "std_header.hpp"
+#include "macros.hpp"
+#include "commons.hpp"
+
 #include "rendering/buffer_factory.hpp"
 #include "rendering/renderer.hpp"
 #include "rendering/shaders.hpp"
@@ -10,10 +15,12 @@
 #include "engine/engine.hpp"
 #include "engine/component.hpp"
 #include "engine/entity.hpp"
+#include "engine/entity_factory.hpp"
 #include "engine/game_base.hpp"
 #include "engine/scene.hpp"
 
 #include "engine/components/orbital_camera.hpp"
+#include "engine/components/clock.hpp"
 
 #include "math/utils.hpp"
 #include "math/transform.hpp"

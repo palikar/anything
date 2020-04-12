@@ -1,14 +1,9 @@
 #include <iostream>
 #include <memory>
 #include <utility>
-
 #include <cmath>
 
 #include "ay.hpp"
-
-#include <glm/gtx/string_cast.hpp>
-#include <glm/ext/quaternion_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
 
 using namespace ay;
 
@@ -23,8 +18,10 @@ class SimpleGame : public ay::GameBase {
     Entity* cube_2;
     Entity* plane;
 
-    OribalCamearComponent camera_controller;
+    OrbitalCameraComponent* camera_controller;
+    Clock* clock;
 
+    
   public:
 
     SimpleGame()
@@ -41,31 +38,28 @@ class SimpleGame : public ay::GameBase {
         get_transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
         cube_1 = main_scene->add(mesh_entity(create_cube()));
-        // get_transform(cube_1).rotate(glm::vec3(0,1 ,0), glm::radians(90.0f));
 
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
 
-        camera_controller.set_camera(&main_scene->camera());
+        camera_controller = main_scene->add_component<OrbitalCameraComponent>(&main_scene->camera());
+
+        clock = main_scene->add_component<Clock>();
+        clock->add_callback(2.0, [](){
+            std::cout << "Two second!" << "\n";
+        });
+        clock->start();
 
     }
-
-    glm::vec2 last_mouse_pos{0,0};
-    bool initial_click{false};
-    glm::vec2 orbit{0, 0};
-    float radius = 10.0f;
-    float last_scroll = 0;
-
+    
     void update(double dt) override
     {
-
-        camera_controller.update(dt);
         main_scene->update(dt);
     }
 
     bool event(Event& e) override {
-        camera_controller.event(e);
-        
+        main_scene->event(e);
+
         return false;
     }
 

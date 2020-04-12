@@ -14,7 +14,7 @@
 namespace ay
 {
 
-class OribalCamearComponent : public Component
+class OrbitalCameraComponent : public Component
 {
   private:
     Camera* m_camera;
@@ -60,9 +60,9 @@ class OribalCamearComponent : public Component
   public:
     AY_COMPONENT(OrbitalCamera)
 
-    OribalCamearComponent(float t_radius = 15.0f) : m_radius(t_radius){}
+    OrbitalCameraComponent(float t_radius = 15.0f) : m_radius(t_radius){}
 
-    OribalCamearComponent(Camera *t_camera, float t_radius = 15.0f)
+    OrbitalCameraComponent(Camera *t_camera, float t_radius = 15.0f)
       : m_camera(t_camera), m_radius(t_radius)
     {
     }

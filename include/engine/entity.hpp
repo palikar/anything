@@ -1,18 +1,18 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <memory>
+#include "std_header.hpp"
 
+#include "application/event.hpp"
 
 #include "engine/component.hpp"
+
 #include "graphics/mesh.hpp"
 
 namespace ay
 {
 
-class Entity {
+class Entity
+{
 
   protected:
     std::unordered_map<ComponentType*, ComponentPtr> m_components;
@@ -53,7 +53,8 @@ class Entity {
             update_components(dt);
         }
     }
-
+    virtual bool event(Event&) { return false;}
+    
     bool enabled() { return m_enabled; }
     bool renderable() { return m_enabled; }
 
@@ -74,30 +75,18 @@ class Entity {
 using EntityPtr = std::unique_ptr<Entity>;
 
 
-
-inline EntityPtr mesh_entity(Mesh mesh, std::string name = {})
-{
-    EntityPtr new_ent = std::make_unique<Entity>(name);
-    new_ent->add_component(std::make_unique<TransformComponent>());
-    new_ent->add_component(std::make_unique<MeshComponent>(std::move(mesh)));
-    return new_ent;
-}
-
 inline Transform& get_transform(Entity* t_entity) {
     auto p = t_entity->component<TransformComponent>();
-    if (!p) {
-
-    }
+    if (!p)
+    {}
     return p->transform;
 }
 
 inline Mesh& get_mesh(Entity* t_entity) {
     auto p = t_entity->component<MeshComponent>();
-    if (!p) {
-
-    }
+    if (!p)
+    {}
     return p->mesh;
 }
-
 
 }

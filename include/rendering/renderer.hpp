@@ -1,12 +1,13 @@
 #pragma once
 
 #include "rendering/buffers.hpp"
-#include "commons.hpp"
 #include "util/gl_helpers.hpp"
 
+#include "commons.hpp"
+#include "glm_header.hpp"
+
 #include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 
 namespace ay
 {
