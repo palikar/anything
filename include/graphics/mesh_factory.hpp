@@ -104,12 +104,12 @@ inline VertexArrayPtr plane_geometry(size_t width,
 
 
 inline VertexArrayPtr sphere_geometry(float radius,
-                                      float widthSegments,
-                                      float heightSegments,
-                                      float phiStart = 0.0f,
-                                      float phiLength = 2.0f * PI,
-                                      float thetaStart = 0.0f,
-                                      float thetaLength = 2.0f * PI)
+                                      float width_segments,
+                                      float height_segments,
+                                      float phi_start = 0.0f,
+                                      float phi_length = 2.0f * PI,
+                                      float theta_start = 0.0f,
+                                      float theta_length = 2.0f * PI)
 {
     
     std::vector<Index3i> indices;
@@ -117,35 +117,35 @@ inline VertexArrayPtr sphere_geometry(float radius,
     
 	radius = std::max(radius, 1.0f);
 
-	widthSegments = std::max(3.0f, std::floor( widthSegments ) );
-	heightSegments = std::max(2.0f, std::floor( heightSegments ) );
+	width_segments = std::max(3.0f, std::floor( width_segments ) );
+	height_segments = std::max(2.0f, std::floor( height_segments ) );
     
-    float thetaEnd = std::min( thetaStart + thetaLength, PI );
+    float theta_end = std::min( theta_start + theta_length, PI );
     int ix, iy;
     float index = 0;
     std::vector<std::vector<size_t>> grid;
     
-    for ( iy = 0; iy <= heightSegments; iy ++ )
+    for ( iy = 0; iy <= height_segments; iy ++ )
     {
         std::vector<size_t> verticesRow;
-        float v = iy / heightSegments;
+        float v = iy / height_segments;
+
         // float uOffset = 0;
-
-        // if ( iy == 0 && thetaStart == 0 )
+        // if ( iy == 0 && theta_start == 0 )
         // {
-        //     uOffset = 0.5 / widthSegments;
+        //     uOffset = 0.5 / width_segments;
         // }
-        // else if ( iy == heightSegments && thetaEnd == PI )
+        // else if ( iy == height_segments && theta_end == PI )
         // {
-        //     uOffset = - 0.5 / widthSegments;
+        //     uOffset = - 0.5 / width_segments;
         // }
 
-        for ( ix = 0; ix <= widthSegments; ix ++ )
+        for ( ix = 0; ix <= width_segments; ix ++ )
         {
-            float u = ix / widthSegments;
-            const float x = - radius * std::cos( phiStart + u * phiLength ) * std::sin( thetaStart + v * thetaLength );
-            const float y = radius * std::cos( thetaStart + v * thetaLength );
-            const float z = radius * std::sin( phiStart + u * phiLength ) * std::sin( thetaStart + v * thetaLength );
+            float u = ix / width_segments;
+            const float x = - radius * std::cos( phi_start + u * phi_length ) * std::sin( theta_start + v * theta_length );
+            const float y = radius * std::cos( theta_start + v * theta_length );
+            const float z = radius * std::sin( phi_start + u * phi_length ) * std::sin( theta_start + v * theta_length );
             vertices.push_back({x, y, z});
             // normal.copy( vertex ).normalize();
             // normals.push( normal.x, normal.y, normal.z );
@@ -156,17 +156,17 @@ inline VertexArrayPtr sphere_geometry(float radius,
 
     }
 
-    for ( iy = 0; iy < heightSegments; iy ++ ) {
+    for ( iy = 0; iy < height_segments; iy ++ ) {
 
-        for ( ix = 0; ix < widthSegments; ix ++ ) {
+        for ( ix = 0; ix < width_segments; ix ++ ) {
 
             size_t a = grid[ iy ][ ix + 1 ];
             size_t b = grid[ iy ][ ix ];
             size_t c = grid[ iy + 1 ][ ix ];
             size_t d = grid[ iy + 1 ][ ix + 1 ];
 
-            if ( iy != 0 || thetaStart > 0 ) indices.push_back({ a, b, d });
-            if ( iy != heightSegments - 1 || thetaEnd < PI ) indices.push_back({ b, c, d });
+            if ( iy != 0 || theta_start > 0 ) indices.push_back({ a, b, d });
+            if ( iy != height_segments - 1 || theta_end < PI ) indices.push_back({ b, c, d });
 
         }
 

@@ -3,6 +3,7 @@
 #include "rendering/buffers.hpp"
 #include "util/gl_helpers.hpp"
 
+#include "macros.hpp"
 #include "commons.hpp"
 #include "glm_header.hpp"
 
@@ -54,7 +55,38 @@ class Renderer
 		GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
 
+    void enable_wireframe() {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    }
 
+    void disable_wireframe() {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
+};
+
+struct EnableDisableWireframe
+{
+
+    EnableDisableWireframe(Renderer &t_renderer, bool t_execute = true)
+        : m_renderer(t_renderer), m_execute(t_execute)
+    {
+        if (t_execute) {
+            t_renderer.enable_wireframe();
+        }
+    }
+
+    ~EnableDisableWireframe()
+    {
+        if (m_execute) {
+            m_renderer.disable_wireframe();
+        }
+    }
+
+    AY_RAII_OBJECT(EnableDisableWireframe);
+
+  private:
+    Renderer& m_renderer;
+    bool m_execute;
 };
 
 }

@@ -32,6 +32,7 @@
 #include "application/keycodes.hpp"
 #include "application/window.hpp"
 
+#include "graphics/geometry.hpp"
 #include "graphics/mesh.hpp"
 #include "graphics/material.hpp"
 #include "graphics/mesh_factory.hpp"

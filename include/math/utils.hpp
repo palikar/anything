@@ -101,7 +101,6 @@ inline glm::vec3 backward(glm::quat q) {
     return -glm::axis(q);
 }
 
-
 inline glm::vec3 to_vec3(glm::quat q){
     glm::vec3 v;
 
@@ -136,6 +135,17 @@ inline T saturate(T x)
     }
     
     return x;
+}
+
+
+inline glm::mat3 normal(glm::mat4 mat)
+{
+    return glm::mat3(
+        mat[0][0],mat[0][1], mat[0][2],
+        mat[1][0],mat[1][1], mat[1][2],
+        mat[2][0],mat[2][1], mat[2][2]
+        );
+
 }
 
 }

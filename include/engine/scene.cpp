@@ -1,4 +1,3 @@
-
 #include "engine/scene.hpp"
 #include "engine/game_base.hpp"
 
@@ -12,7 +11,7 @@ void Scene3D::init(GameBase* t_game)
     // m_base_shader->bind();
     // m_base_shader->set("red_channel", 0.3f);
     // m_base_shader->set("projection_matrix", m_camera.view_projection());
-    
+
     std::cout << "initing scene" << "\n";
 
 }
@@ -26,42 +25,43 @@ Entity* Scene3D::add(EntityPtr t_entity)
     if (mesh) {
         mesh->mesh.material()->init_shader(m_game->shaders());
     }
-        
+
     return obj;
 }
 
 void Scene3D::render(Renderer& render_api)
 {
-    
+
     uint32_t current_shader = 0;
-    
+
     for (auto& object : m_entities) {
 
         auto mesh_comp = object->component<MeshComponent>();
         auto trans_comp = object->component<TransformComponent>();
-            
+
         if (mesh_comp && trans_comp ) {
             auto shader = mesh_comp->mesh.material()->shader();
 
             shader->bind();
             if (current_shader != shader->id()) {
-                
+
                 current_shader = shader->id();
             }
 
             shader->set("model_matrix", trans_comp->transform.get_tranformation());
             shader->set("projection_matrix", m_camera.view_projection());
-            
-            mesh_comp->mesh.material()->update_uniforms();
+
+            auto mat = mesh_comp->mesh.material();
+            mat->update_uniforms();
 
             mesh_comp->mesh.geometry()->bind();
 
+            EnableDisableWireframe wireframe_raii{render_api, mat->wire_frame()};
             render_api.draw_indexed(mesh_comp->mesh.geometry());
-        }
 
+        }
         
-            
-    }        
+    }
 }
-    
+
 }
