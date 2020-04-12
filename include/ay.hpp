@@ -33,6 +33,7 @@
 #include "application/window.hpp"
 
 #include "graphics/mesh.hpp"
+#include "graphics/material.hpp"
 #include "graphics/mesh_factory.hpp"
 
 #include "util/meta.hpp"

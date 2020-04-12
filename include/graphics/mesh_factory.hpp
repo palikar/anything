@@ -3,19 +3,21 @@
 #include "rendering/buffer_factory.hpp"
 #include "graphics/mesh.hpp"
 
+#include "math/utils.hpp"
+
 #include "commons.hpp"
 #include "std_header.hpp"
-
 #include "glm_header.hpp"
 
 namespace ay
 {
 
 
-inline Mesh create_cube(){
+inline VertexArrayPtr cube_geometry()
+{
 
     auto buffers = make_vertex_array(
-        make_index_buffer({
+    make_index_buffer({
                 {0, 1, 2},
                 {2, 3, 0},
             
@@ -46,12 +48,12 @@ inline Mesh create_cube(){
                     {-1.0,  1.0, -1.0}
                 }));
 
-    return Mesh(std::move(buffers));
+    return buffers;
 
 }
 
 
-inline Mesh create_plane(size_t width,
+inline VertexArrayPtr plane_geometry(size_t width,
                          size_t height,
                          float width_segments,
                          float height_segments)
@@ -98,17 +100,16 @@ inline Mesh create_plane(size_t width,
 
     return make_vertex_array(make_index_buffer(indices),
                              make_vertex_buffer(vertecies));
-
 }
 
 
-inline Mesh create_sphere(float radius,
-                          float widthSegments,
-                          float heightSegments,
-                          float phiStart = 0.0f,
-                          float phiLength = 2.0f * PI,
-                          float thetaStart = 0.0f,
-                          float thetaLength = 2.0f * PI)
+inline VertexArrayPtr sphere_geometry(float radius,
+                                      float widthSegments,
+                                      float heightSegments,
+                                      float phiStart = 0.0f,
+                                      float phiLength = 2.0f * PI,
+                                      float thetaStart = 0.0f,
+                                      float thetaLength = 2.0f * PI)
 {
     
     std::vector<Index3i> indices;

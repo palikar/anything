@@ -19,6 +19,8 @@ class GameBase {
     
   public:
 
+    virtual ~GameBase(){};
+    
     ShaderLibrary& shaders();
     void set_up(GameEngine* t_engine);
     Scene3D* init_scene(const std::string& t_name);

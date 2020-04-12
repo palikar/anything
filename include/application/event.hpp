@@ -158,6 +158,8 @@ class MouseButtonPressedEvent : public Event
     MouseButtonPressedEvent(MouseCode button)
         : m_button(button) {}
 
+    MouseCode button() { return m_button; }
+    
     EVENT_TYPE(MOUSEBUTTONPRESSED)
     
     private:
@@ -170,9 +172,12 @@ class MouseButtonReleasedEvent : public Event
     MouseButtonReleasedEvent(MouseCode button)
         : m_button(button) {}
 
+    
+    MouseCode button() { return m_button; }
+    
     EVENT_TYPE(MOUSEBUTTONPRESSED)
     
-    private:
+  private:
     MouseCode m_button;
 };
 

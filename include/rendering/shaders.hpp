@@ -38,6 +38,8 @@ class Shader
     {
         return m_name;
     }
+
+    uint32_t id() const { return m_id; }
     
     void set(const std::string& name, int value)
     {
@@ -66,13 +68,13 @@ class Shader
     void set(const std::string& name, const glm::vec3& value)
     {
         GLint location = glGetUniformLocation(m_id, name.c_str());
-		glUniform2f(location, value.x, value.y);
+		glUniform3f(location, value.x, value.y, value.z);
     }
 
     void set(const std::string& name, const glm::vec4& value)
     {
         GLint location = glGetUniformLocation(m_id, name.c_str());
-		glUniform3f(location, value.x, value.y, value.z);
+		glUniform4f(location, value.x, value.y, value.z, value.w);
     }
 
     void set(const std::string& name, const glm::mat3& mat)

@@ -34,11 +34,12 @@ class SimpleGame : public ay::GameBase {
     {
         main_scene = init_scene("main");
 
-        plane = main_scene->add(mesh_entity(create_plane(10, 10, 10, 10)));
+        plane = main_scene->add(mesh_entity({plane_geometry(10, 10, 10, 10),
+                                             solid_color({ 1.0f, 0.0f, 0.0f })}));
 
         get_transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
-        cube_1 = main_scene->add(mesh_entity(create_sphere(3, 20, 20)));
+        // cube_1 = main_scene->add(mesh_entity({sphere_geometry(3, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));
 
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
@@ -46,9 +47,6 @@ class SimpleGame : public ay::GameBase {
         camera_controller = main_scene->add_component<OrbitalCameraComponent>(&main_scene->camera());
 
         clock = main_scene->add_component<Clock>();
-        clock->add_callback(2.0, [](){
-            std::cout << "Two second!" << "\n";
-        });
         clock->start();
 
     }

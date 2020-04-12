@@ -31,6 +31,8 @@ class Entity
   public:
     Entity(std::string t_id = {}) : m_id(t_id) {}
 
+    virtual ~Entity(){}
+
     template <typename T>
     const T* component() const
     {

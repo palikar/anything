@@ -11,7 +11,7 @@
 namespace ay {
 
 
-struct Event;
+class Event;
 
 class Window {
 

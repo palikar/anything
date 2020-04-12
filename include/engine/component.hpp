@@ -27,7 +27,8 @@ class Component
     Entity* m_entity;
     
   public:
-
+    virtual ~Component(){}
+    
     virtual Entity* entity() { return m_entity; };
     virtual ComponentType* type() const { return nullptr; }
     virtual void update(double) {}

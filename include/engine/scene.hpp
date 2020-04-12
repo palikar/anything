@@ -23,7 +23,6 @@ class Scene3D
     std::vector<ComponentPtr> m_game_components;
     Camera m_camera;
     GameBase* m_game;
-    ShaderPtr m_base_shader;
 
   public:
     
@@ -32,12 +31,7 @@ class Scene3D
 
     void init(GameBase* t_game);
 
-    Entity* add(EntityPtr t_entity)
-    {
-        m_entities.push_back(std::move(t_entity));
-        return m_entities.back().get();
-    }
-
+    Entity* add(EntityPtr t_entity);
 
     template<typename T, typename ... Args>
     T* add_component(Args ... args)
@@ -57,8 +51,6 @@ class Scene3D
         }
         
         
-        m_base_shader->bind();
-        m_base_shader->set("projection_matrix", m_camera.view_projection());
     }
 
     void event(Event& t_ev)
@@ -72,24 +64,7 @@ class Scene3D
         }
     }
 
-    void render(Renderer& render_api)
-    {
-        m_base_shader->bind();
-
-        for (auto& object : m_entities) {
-
-            auto mesh_comp = object->component<MeshComponent>();
-            auto trans_comp = object->component<TransformComponent>();
-            
-            if (mesh_comp && trans_comp ) {
-
-                m_base_shader->set("model_matrix", trans_comp->transform.get_tranformation());
-                mesh_comp->mesh.geometry()->bind();
-                render_api.draw_indexed(mesh_comp->mesh.geometry());
-            }
-            
-        }        
-    }
+    void render(Renderer& render_api);
 
     Camera& camera()
     {

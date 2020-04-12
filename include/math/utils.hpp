@@ -125,14 +125,14 @@ inline T clamp(T x, T down, T up)
 template<typename T>
 inline T saturate(T x)
 {
-    if (x > 1.0d)
+    if (x > 1.0)
     {
-        return 1.0d;
+        return 1.0;
     }
     
-    if (x < 0.0d)
+    if (x < 0.0)
     {
-        return 0.0d;
+        return 0.0;
     }
     
     return x;

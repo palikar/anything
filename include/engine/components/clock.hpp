@@ -16,7 +16,6 @@ class Clock : public Component
   private:
     
 	float m_time = 0.0f;
-	float m_elapsed_time = 0.0f;
     float m_running{false};
 
     std::vector<std::tuple<double, double, std::function<void()>>> m_callbacks; 
@@ -30,6 +29,7 @@ class Clock : public Component
     void start()
     {
         m_running = true;
+        m_time = 0;
     }
 
     void stop()
@@ -61,7 +61,7 @@ class Clock : public Component
     template<typename T>
     void add_callback(double period, T && t_callback)
     {
-        m_callbacks.push_back({0.0d, period, std::forward<T>(t_callback)});
+        m_callbacks.push_back({0.0, period, std::forward<T>(t_callback)});
     }
     
 };
