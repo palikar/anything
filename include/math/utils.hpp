@@ -11,6 +11,7 @@
 namespace ay
 {
 
+static constexpr float PI = 3.14156592;
 
 inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up, glm::vec3 right){
     glm::mat4 m;
@@ -103,6 +104,27 @@ inline glm::vec3 forward(glm::quat q) {
 
 inline glm::vec3 backward(glm::quat q) {
     return -glm::axis(q);
+}
+
+
+inline glm::vec3 to_vec3(glm::quat q){
+    glm::vec3 v;
+
+    v.x =  2 * (q.x * q.z - q.w * q.y);
+    v.y =  2 * (q.y * q.z + q.w * q.x);
+    v.z = 1 - 2 * (q.x * q.x + q.y * q.y);
+    
+    return v;
+}
+
+template<typename T>
+inline T clamp(T x, T down, T up)
+{
+    if (x < down)
+        return down;
+    if (x > up)
+        return up;
+    return x;
 }
 
 template<typename T>

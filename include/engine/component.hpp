@@ -11,6 +11,7 @@
 #include "math/transform.hpp"
 
 #include "graphics/mesh.hpp"
+#include "application/event.hpp"
 
 
 namespace ay
@@ -22,7 +23,8 @@ struct ComponentType {
 
 class Entity;
 
-class Component {
+class Component
+{
     
   protected:
     Entity* m_entity;
@@ -32,6 +34,7 @@ class Component {
     virtual Entity* entity() { return m_entity; };
     virtual ComponentType* type() const { return nullptr; }
     virtual void update(double) {}
+    virtual bool event(Event&) {return false; }
 
 };
 

@@ -13,6 +13,14 @@ enum class KeyCode : uint16_t
     Period              = 46, /* . */
     Slash               = 47, /* / */
 
+    // LeftControl         = 341,
+    // LeftAlt             = 342,
+    // LeftShift           = 340,
+
+    // RightControl        = 345,
+    // RightAlt            = 346,
+    // RightShift          = 344,
+
     D0                  = 48, /* 0 */
     D1                  = 49, /* 1 */
     D2                  = 50, /* 2 */

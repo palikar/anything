@@ -216,7 +216,7 @@ class Input {
     
     static bool is_released(KeyCode key) {
         auto state = glfwGetKey(get_instance()->window(), static_cast<int32_t>(key));
-		return state == GLFW_PRESS;
+		return state == GLFW_RELEASE;
     }
     
     static glm::vec2 mouse_pos() {

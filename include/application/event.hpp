@@ -99,7 +99,7 @@ class KeyReleasedEvent : public Event
         return m_keycode;
     }
 
-    EVENT_TYPE(KEYPRESSED)
+    EVENT_TYPE(KEYRELEASED)
     private:
     KeyCode m_keycode;
 };
@@ -117,7 +117,7 @@ class KeyTypedEvent : public Event
         return m_keycode;
     }
 
-    EVENT_TYPE(KEYPRESSED)
+    EVENT_TYPE(KEYTYPED)
     private:
     KeyCode m_keycode;
 };
@@ -145,7 +145,7 @@ class MouseScrolledEvent : public Event
 
     inline float x_offset() const { return m_xoffset; }
     inline float y_offset() const { return m_yoffset; }
-
+    
     EVENT_TYPE(MOUSESCROLLED)
 
 	private:

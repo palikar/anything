@@ -18,16 +18,6 @@
 namespace ay
 {
 
-inline glm::vec3 to_vec3(glm::quat q){
-    glm::vec3 v;
-
-    v.x =  2 * (q.x * q.z - q.w * q.y);
-    v.y =  2 * (q.y * q.z + q.w * q.x);
-    v.z = 1 - 2 * (q.x * q.x + q.y * q.y);
-    
-    return v;
-}
-
 
 class Camera
 {
