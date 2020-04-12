@@ -101,4 +101,80 @@ inline Mesh create_plane(size_t width,
 
 }
 
+
+inline Mesh create_sphere(float radius,
+                          float widthSegments,
+                          float heightSegments,
+                          float phiStart = 0.0f,
+                          float phiLength = 2.0f * PI,
+                          float thetaStart = 0.0f,
+                          float thetaLength = 2.0f * PI)
+{
+    
+    std::vector<Index3i> indices;
+    std::vector<Vertex3f> vertices;
+    
+	radius = std::max(radius, 1.0f);
+
+	widthSegments = std::max(3.0f, std::floor( widthSegments ) );
+	heightSegments = std::max(2.0f, std::floor( heightSegments ) );
+    
+    float thetaEnd = std::min( thetaStart + thetaLength, PI );
+    int ix, iy;
+    float index = 0;
+    std::vector<std::vector<size_t>> grid;
+    
+    for ( iy = 0; iy <= heightSegments; iy ++ )
+    {
+        std::vector<size_t> verticesRow;
+        float v = iy / heightSegments;
+        // float uOffset = 0;
+
+        // if ( iy == 0 && thetaStart == 0 )
+        // {
+        //     uOffset = 0.5 / widthSegments;
+        // }
+        // else if ( iy == heightSegments && thetaEnd == PI )
+        // {
+        //     uOffset = - 0.5 / widthSegments;
+        // }
+
+        for ( ix = 0; ix <= widthSegments; ix ++ )
+        {
+            float u = ix / widthSegments;
+            const float x = - radius * std::cos( phiStart + u * phiLength ) * std::sin( thetaStart + v * thetaLength );
+            const float y = radius * std::cos( thetaStart + v * thetaLength );
+            const float z = radius * std::sin( phiStart + u * phiLength ) * std::sin( thetaStart + v * thetaLength );
+            vertices.push_back({x, y, z});
+            // normal.copy( vertex ).normalize();
+            // normals.push( normal.x, normal.y, normal.z );
+            // uvs.push( u + uOffset, 1 - v );
+            verticesRow.push_back(index++);
+        }
+        grid.push_back( verticesRow );
+
+    }
+
+    for ( iy = 0; iy < heightSegments; iy ++ ) {
+
+        for ( ix = 0; ix < widthSegments; ix ++ ) {
+
+            size_t a = grid[ iy ][ ix + 1 ];
+            size_t b = grid[ iy ][ ix ];
+            size_t c = grid[ iy + 1 ][ ix ];
+            size_t d = grid[ iy + 1 ][ ix + 1 ];
+
+            if ( iy != 0 || thetaStart > 0 ) indices.push_back({ a, b, d });
+            if ( iy != heightSegments - 1 || thetaEnd < PI ) indices.push_back({ b, c, d });
+
+        }
+
+    }
+
+    
+    return make_vertex_array(make_index_buffer(indices),
+                             make_vertex_buffer(vertices));
+
+}
+
 }

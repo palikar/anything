@@ -16,6 +16,7 @@ class SimpleGame : public ay::GameBase {
 
     Entity* cube_1;
     Entity* cube_2;
+    
     Entity* plane;
 
     OrbitalCameraComponent* camera_controller;
@@ -37,7 +38,7 @@ class SimpleGame : public ay::GameBase {
 
         get_transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
-        cube_1 = main_scene->add(mesh_entity(create_cube()));
+        cube_1 = main_scene->add(mesh_entity(create_sphere(3, 20, 20)));
 
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
