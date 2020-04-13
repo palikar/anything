@@ -43,10 +43,10 @@ class SimpleGame : public ay::GameBase {
         cube_1 = main_scene->add(mesh_entity({sphere_geometry(2, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));
 
         add_children(cube_1, 
-                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}),
-                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 0.0f, 1.0f, 1.0f })}),
-                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 0.0f, 1.0f, 1.0f })}),
-                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 1.0f, 1.0f, 0.0f })}));
+                     mesh_entity({cube_geometry(), solid_color({ 0.0f, 1.0f, 0.0f })}),
+                     mesh_entity({cube_geometry(), solid_color({ 0.0f, 1.0f, 1.0f })}),
+                     mesh_entity({cube_geometry(), solid_color({ 0.0f, 1.0f, 1.0f })}),
+                     mesh_entity({cube_geometry(), solid_color({ 1.0f, 1.0f, 0.0f })}));
 
         
         transform(children(cube_1)[0].get()).translateX(-3.0f);
@@ -61,6 +61,12 @@ class SimpleGame : public ay::GameBase {
     
     void update(double dt) override
     {
+        for (auto& ch : children(cube_1)) {
+
+            transform(ch.get()).rotateY(glm::radians(0.5));
+                
+        }
+
         main_scene->update(dt);
     }
 
