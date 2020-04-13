@@ -166,6 +166,7 @@ add_library(anything_engine
 
     ./include/util/gl_helpers.cpp
     ./include/util/files.cpp
+    ./include/util/logging.cpp
     )
 
 target_include_directories(anything_engine
