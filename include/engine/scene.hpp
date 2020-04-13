@@ -19,15 +19,12 @@ class GameBase;
 class Scene3D
 {
   private:
+
     std::vector<EntityPtr> m_entities;
     std::vector<ComponentPtr> m_game_components;
     Camera m_camera;
+    
     GameBase* m_game;
-
-    uint32_t current_shader = 0;
-    std::vector<glm::mat4> m_mat_stack;
-
-    void render_entity(Renderer& render_api, Entity* t_entity);
     
   public:
     
@@ -69,12 +66,15 @@ class Scene3D
         }
     }
 
-    void render(Renderer& render_api);
-
     Camera& camera()
     {
         return m_camera;
-    }    
+    }
+
+    std::vector<EntityPtr>& entities()
+    {
+        return m_entities;
+    }
 
 };
 

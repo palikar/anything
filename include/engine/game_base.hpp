@@ -28,7 +28,7 @@ class GameBase {
 
     virtual void init() = 0;
     virtual void update(double dt) = 0;
-    virtual void render(Renderer& renderer) = 0;
+    virtual void render(RenderAPI& renderer) = 0;
     virtual bool event(Event&) { return false; };
 
     

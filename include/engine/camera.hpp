@@ -23,11 +23,9 @@ class Camera
     glm::quat m_rot;
 
     void update(){
-
         m_view = glm::lookAt(m_pos, 
                              m_pos + glm::axis(m_rot), 
-                             glm::vec3(0.0, 1.0, 0.0));
-        
+                             glm::vec3(0.0, 1.0, 0.0));        
     }
 
   public:

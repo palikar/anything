@@ -12,14 +12,14 @@ namespace ay
 
 
 
-class Renderer
+class RenderAPI
 {
   private:
 
 
   public:
 
-    Renderer() {}
+    RenderAPI() {}
 
     void init(){
 
@@ -64,7 +64,7 @@ class Renderer
 struct EnableDisableWireframe
 {
 
-    EnableDisableWireframe(Renderer &t_renderer, bool t_execute = true)
+    EnableDisableWireframe(RenderAPI &t_renderer, bool t_execute = true)
         : m_renderer(t_renderer), m_execute(t_execute)
     {
         if (t_execute) {
@@ -82,7 +82,7 @@ struct EnableDisableWireframe
     AY_RAII_OBJECT(EnableDisableWireframe);
 
   private:
-    Renderer& m_renderer;
+    RenderAPI& m_renderer;
     bool m_execute;
 };
 

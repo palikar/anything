@@ -10,8 +10,6 @@
 namespace ay
 {
 
-
-
 class Keyboard {
   public:
 

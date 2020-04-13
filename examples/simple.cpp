@@ -12,9 +12,10 @@ class SimpleGame : public ay::GameBase {
 
   private:
     Scene3D* main_scene;
-
+    RendererScene3D renderer;
 
     Entity* cube_1;
+    Entity* cube_2;
     Entity* plane;
 
     OrbitalCameraComponent* camera_controller;
@@ -28,6 +29,7 @@ class SimpleGame : public ay::GameBase {
 
     void init() override
     {
+        renderer.init(engine()->api());
         main_scene = init_scene("main");
 
         
@@ -41,59 +43,35 @@ class SimpleGame : public ay::GameBase {
         transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
         cube_1 = main_scene->add(mesh_entity({sphere_geometry(2, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));
-
         mesh(cube_1).material()->set_wire_frame(true);
         
-        add_children(cube_1, 
-                     mesh_entity({cube_geometry(1), solid_color({ 0.0f, 0.0f, 1.0f })}),
-                     mesh_entity({cube_geometry(1), solid_color({ 0.0f, 1.0f, 1.0f })}),
-                     mesh_entity({cube_geometry(1), solid_color({ 1.0f, 0.0f, 1.0f })}),
-                     mesh_entity({cube_geometry(1), solid_color({ 1.0f, 1.0f, 0.0f })}));
-
-        transform(children(cube_1)[0].get()).translateX(-3.0f);
-        transform(children(cube_1)[1].get()).translateX(3.0f);
-        transform(children(cube_1)[2].get()).translateZ(3.0f);
-        transform(children(cube_1)[3].get()).translateZ(-3.0f);
-
-        add_children(children(cube_1)[0].get(), 
-                     mesh_entity({cube_geometry(0.5), solid_color({ 0.0f, 0.0f, 1.0f })}),
-                     mesh_entity({cube_geometry(0.5), solid_color({ 0.0f, 1.0f, 0.0f })}),
-                     mesh_entity({cube_geometry(0.5), solid_color({ 1.0f, 0.0f, 0.0f })}),
-                     mesh_entity({cube_geometry(0.5), solid_color({ 1.0f, 0.0f, 1.0f })})
-            );
-
-        transform(children(children(cube_1)[0].get())[0].get()).translateX(-3.0f);
-        transform(children(children(cube_1)[0].get())[1].get()).translateX(3.0f);
-        transform(children(children(cube_1)[0].get())[2].get()).translateZ(3.0f);
-        transform(children(children(cube_1)[0].get())[3].get()).translateZ(-3.0f);
+        
+        cube_2 = main_scene->add(mesh_entity({cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
+                                              solid_color({ 0.0f, 1.0f, 0.0f })}));
+        mesh(cube_2).material()->set_wire_frame(true);
         
     }
     
     void update(double dt) override
     {
-
-        for (auto& ch : children(children(cube_1)[0].get())) {
-            transform(ch.get()).rotateY(glm::radians(5.0f));
-        }
         
-        for (auto& ch : children(cube_1)) {
-            transform(ch.get()).rotateY(glm::radians(0.5));
-        }
+        // for (auto& ch : children(cube_1)) {
+        //     transform(ch.get()).rotateY(glm::radians(0.5));
+        // }
         
-        transform(cube_1).rotateZ(glm::radians(50*dt));
+        transform(cube_2).rotateZ(glm::radians(50*dt));
 
         main_scene->update(dt);
     }
 
     bool event(Event& e) override {
         main_scene->event(e);
-
         return false;
     }
 
-    void render(ay::Renderer& render_api) override
-    {        
-        main_scene->render(render_api);   
+    void render(RenderAPI&) override
+    {
+        renderer.render_scene(*main_scene);
     }
 
 

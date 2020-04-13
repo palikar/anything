@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 project(anything LANGUAGES CXX)
-
 include(safeguards)
+
 include(GNUInstallDirs)
 
 find_program(CCACHE ccache)
@@ -149,7 +149,16 @@ include_directories(${GLFW_INCLUDE_DIRS})
 # The testing example
 add_library(anything_engine
 
+    ./include/rendering/renderer3D.cpp
+    ./include/rendering/shaders.cpp
+    ./include/rendering/vertex_array.cpp
+
+    ./include/graphics/materials/solid_color.cpp
+    ./include/graphics/mesh_factory.cpp
+    
     ./include/application/resource_loader.cpp
+    ./include/application/application.cpp
+    ./include/application/window.cpp
 
     ./include/engine/game_base.cpp
     ./include/engine/scene.cpp
