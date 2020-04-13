@@ -24,28 +24,24 @@ class Transform {
         m_scale(glm::vec3(1,1,1))
     {}
 
-    void rotate(glm::vec3 axis, float angle, bool local = false)
-    {
-        if (local) {
-            m_rotation = glm::normalize(glm::quat(angle, m_rotation*glm::normalize(axis)) * m_rotation);
-        }else {
-            m_rotation = glm::normalize(glm::quat(angle, glm::normalize(axis)) * m_rotation);
-        }
+    void rotate(glm::vec3 axis, float angle)
+    {        
+        m_rotation = glm::rotate(m_rotation, angle, axis);
     }
 
-    void rotateX(float angle, bool local = false)
+    void rotateX(float angle)
     {
-        rotate(glm::vec3(1,0,0), angle, local);
+        rotate(glm::vec3(1,0,0), angle);
     }
 
-    void rotateY(float angle, bool local = false)
+    void rotateY(float angle)
     {
-        rotate(glm::vec3(0,1,0), angle, local);
+        rotate(glm::vec3(0,1,0), angle);
     }
 
-    void rotateZ(float angle, bool local = false)
+    void rotateZ(float angle)
     {
-        rotate(glm::vec3(0,0,1), angle, local);
+        rotate(glm::vec3(0,0,1), angle);
     }
 
     void translateX(float amt)

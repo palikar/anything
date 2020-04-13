@@ -42,7 +42,7 @@ inline Entity* add_children(Entity* t_entity, Args ...  t_children)
         t_entity->add_component(std::make_unique<GroupComponent>());
         p = t_entity->component<GroupComponent>();
     }
-
+    
     (t_children->set_game(t_entity->game()), ...);
     (p->children.push_back(std::move(t_children)), ...);
 

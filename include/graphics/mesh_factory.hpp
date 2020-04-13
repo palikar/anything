@@ -13,7 +13,7 @@ namespace ay
 {
 
 
-inline VertexArrayPtr cube_geometry()
+inline VertexArrayPtr cube_geometry(float side = 1.0f)
 {
 
     auto buffers = make_vertex_array(
@@ -37,16 +37,16 @@ inline VertexArrayPtr cube_geometry()
                 {6, 7, 3}
             }),
         make_vertex_buffer({
-                {-1.0, -1.0,  1.0},
-                    {1.0, -1.0,  1.0},
-                    {1.0,  1.0,  1.0},
-                    {-1.0,  1.0,  1.0},
+                {-side, -side,  side},
+                {side, -side,  side},
+                {side,  side,  side},
+                {-side,  side,  side},
 
-                    {-1.0, -1.0, -1.0},
-                    {1.0, -1.0, -1.0},
-                    {1.0,  1.0, -1.0},
-                    {-1.0,  1.0, -1.0}
-                }));
+                {-side, -side, -side},
+                {side, -side, -side},
+                {side,  side, -side},
+                {-side,  side, -side}
+            }));
 
     return buffers;
 

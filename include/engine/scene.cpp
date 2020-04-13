@@ -23,12 +23,7 @@ Entity* Scene3D::add(EntityPtr t_entity)
     t_entity->set_game(m_game);
     t_entity->init(m_game);
     m_entities.push_back(std::move(t_entity));
-
-    // auto mesh = obj->component<MeshComponent>();    
-    // if (mesh) {
-    //     mesh->mesh.material()->init_shader(m_game->shaders());
-    // }
-
+    
     return m_entities.back().get();
 }
 
@@ -83,12 +78,13 @@ void Scene3D::render_entity(Renderer& render_api, Entity* object)
 
         if (m_mat_stack.empty()) {
             m_mat_stack.push_back(trans_comp->transform.get_tranformation());
+        } else {
+            m_mat_stack.push_back(m_mat_stack.back() * trans_comp->transform.get_tranformation());
         }
-
+        
         for (auto& child : ch ) {
             render_entity(render_api, child.get());
         }
-        
 
         m_mat_stack.pop_back();
 
