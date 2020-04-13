@@ -19,8 +19,8 @@ class OrbitalCameraComponent : public Component
     Camera* m_camera;
     float m_radius{10.0f};
     glm::vec3 m_pos{0.0f,0.0f,0.0f};
-    glm::vec2 m_orbit;
-    glm::vec2 m_last_mouse_pos;
+    glm::vec2 m_orbit{};
+    glm::vec2 m_last_mouse_pos{};
     bool m_initial_click{false};
     float m_last_scroll = 10;
 

@@ -24,6 +24,11 @@ class Scene3D
     Camera m_camera;
     GameBase* m_game;
 
+    uint32_t current_shader = 0;
+    std::vector<glm::mat4> m_mat_stack;
+
+    void render_entity(Renderer& render_api, Entity* t_entity);
+    
   public:
     
     Scene3D()

@@ -9,12 +9,15 @@
 namespace ay
 {
 
+class GameBase;
+
 class Entity
 {
 
   protected:
     std::unordered_map<ComponentType*, ComponentPtr> m_components;
     std::string m_id;
+    GameBase* m_game{nullptr};
 
     bool m_update_components{true};
     bool m_enabled{true};
@@ -45,8 +48,27 @@ class Entity
 
     void add_component(ComponentPtr t_comp)
     {
+        if(m_game != nullptr) {
+            t_comp->init(m_game);
+        }
+        
         m_components.insert({t_comp->type(), std::move(t_comp)});
     }
+
+    void set_game(GameBase* t_game)
+    {
+        m_game = t_game;
+        for (auto& [t, comp] : m_components) {
+            comp->init(m_game);
+        }
+
+    };
+
+    GameBase* game()
+    {
+        return m_game;
+    };
+
 
     virtual void update(double dt) {
         if (m_update_components) {
@@ -54,6 +76,8 @@ class Entity
         }
     }
     virtual bool event(Event&) { return false;}
+    virtual void init(GameBase*){};
+
     
     bool enabled() { return m_enabled; }
     bool renderable() { return m_enabled; }

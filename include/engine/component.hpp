@@ -14,6 +14,7 @@ struct ComponentType {
 };
 
 class Entity;
+class GameBase;
 
 class Component
 {
@@ -28,6 +29,7 @@ class Component
     virtual ComponentType* type() const { return nullptr; }
     virtual void update(double) {}
     virtual bool event(Event&) {return false; }
+    virtual void init(GameBase*) {}
 
 };
 

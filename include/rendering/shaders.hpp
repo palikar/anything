@@ -209,6 +209,9 @@ class ShaderLibrary
 
     ShaderPtr load(const std::string& t_name)
     {
+        if (m_shaders.count(t_name) != 0) {
+            return m_shaders.at(t_name);
+        }
         auto sh = load_shader(t_name);
         m_shaders.insert({t_name, sh});
         return sh;

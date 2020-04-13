@@ -1,6 +1,8 @@
 #pragma once
 
+#include "engine/game_base.hpp"
 #include "graphics/mesh.hpp"
+
 #include "engine/entity.hpp"
 
 #include "commons.hpp"
@@ -19,6 +21,12 @@ class MeshComponent : public Component
 
     MeshComponent(Mesh t_mesh) : mesh(std::move(t_mesh))
     {};
+
+    void init(GameBase* t_game) override
+    {
+        mesh.material()->init_shader(t_game->shaders());
+        
+    }
 };
 
 inline Mesh& mesh(Entity* t_entity) {

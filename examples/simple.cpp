@@ -40,7 +40,22 @@ class SimpleGame : public ay::GameBase {
         mesh(plane).material()->set_wire_frame(true);
         transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
-        cube_1 = main_scene->add(mesh_entity({sphere_geometry(2, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));        
+        cube_1 = main_scene->add(mesh_entity({sphere_geometry(2, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));
+
+        add_children(cube_1, 
+                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}),
+                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 0.0f, 1.0f, 1.0f })}),
+                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 0.0f, 1.0f, 1.0f })}),
+                     mesh_entity({sphere_geometry(1, 20, 20), solid_color({ 1.0f, 1.0f, 0.0f })}));
+
+        
+        transform(children(cube_1)[0].get()).translateX(-3.0f);
+        transform(children(cube_1)[1].get()).translateX(3.0f);
+        transform(children(cube_1)[2].get()).translateZ(3.0f);
+        transform(children(cube_1)[3].get()).translateZ(-3.0f);
+        
+
+        
         
     }
     

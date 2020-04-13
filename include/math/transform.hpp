@@ -47,6 +47,21 @@ class Transform {
     {
         rotate(glm::vec3(0,0,1), angle, local);
     }
+
+    void translateX(float amt)
+    {
+        move(glm::vec3(1,0,0), amt);
+    }
+
+    void translateY(float amt)
+    {
+        move(glm::vec3(0,1,0), amt);
+    }
+
+    void translateZ(float amt)
+    {
+        move(glm::vec3(0,0,1), amt);
+    }
     
     void move(glm::vec3 axis, float amt)
     {
