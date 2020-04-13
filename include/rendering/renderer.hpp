@@ -11,22 +11,20 @@ namespace ay
 {
 
 
-
 class RenderAPI
 {
   private:
-
-
   public:
+    RenderAPI()
+    {
+    }
 
-    RenderAPI() {}
-
-    void init(){
+    void init()
+    {
 
         GLCall(glEnable(GL_DEPTH_TEST));
         glCullFace(GL_BACK);
         glFrontFace(GL_CW);
-        
     }
 
     void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
@@ -44,20 +42,23 @@ class RenderAPI
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
 
-    void draw_indexed(const VertexArray* vertex_array, uint32_t index_count = 0)
+    void draw_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
     {
-        
+
         vertex_array->bind();
-        uint32_t count = index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
-		GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
+        uint32_t count =
+          index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
+        GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
 
-    void enable_wireframe() {
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    void enable_wireframe()
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
-    void disable_wireframe() {
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    void disable_wireframe()
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 };
 
@@ -65,16 +66,18 @@ struct EnableDisableWireframe
 {
 
     EnableDisableWireframe(RenderAPI &t_renderer, bool t_execute = true)
-        : m_renderer(t_renderer), m_execute(t_execute)
+      : m_renderer(t_renderer), m_execute(t_execute)
     {
-        if (t_execute) {
+        if (t_execute)
+        {
             t_renderer.enable_wireframe();
         }
     }
 
     ~EnableDisableWireframe()
     {
-        if (m_execute) {
+        if (m_execute)
+        {
             m_renderer.disable_wireframe();
         }
     }
@@ -82,8 +85,8 @@ struct EnableDisableWireframe
     AY_RAII_OBJECT(EnableDisableWireframe);
 
   private:
-    RenderAPI& m_renderer;
+    RenderAPI &m_renderer;
     bool m_execute;
 };
 
-}
+}  // namespace ay

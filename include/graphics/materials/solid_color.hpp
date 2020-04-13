@@ -9,26 +9,23 @@ namespace ay
 {
 
 
-
 class SolidColorMaterial : public Material
 {
   private:
     glm::vec3 m_color;
 
   public:
-
     SolidColorMaterial(glm::vec3 t_color, bool t_wireframe = false);
 
     virtual ~SolidColorMaterial() = default;
 
-    void init_shader(ShaderLibrary& t_shader_lib) override;
+    void init_shader(ShaderLibrary &t_shader_lib) override;
 
     void update_uniforms() override;
 
-    glm::vec3& color();
+    glm::vec3 &color();
 
     void set_color(glm::vec3 t_color);
-    
 };
 
 
@@ -38,4 +35,4 @@ inline MaterialPtr solid_color(glm::vec3 color)
 }
 
 
-}
+}  // namespace ay

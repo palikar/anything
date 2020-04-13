@@ -20,17 +20,23 @@ class VertexArray
     void unbind() const;
 
     void add_vertex_buffer(VertexBufferPtr vertex_buffer);
-    
+
     void set_index_buffer(IndexBufferPtr index_buffer);
 
-    const std::vector<VertexBufferPtr>& vertex_buffers() const { return m_vertex_buffers; }
-    
-    const IndexBufferPtr& index_buffer() const { return m_index_buffer; }
+    const std::vector<VertexBufferPtr> &vertex_buffers() const
+    {
+        return m_vertex_buffers;
+    }
+
+    const IndexBufferPtr &index_buffer() const
+    {
+        return m_index_buffer;
+    }
+
   private:
-    
     uint32_t m_vao;
     uint32_t m_index = 0;
-    
+
     std::vector<VertexBufferPtr> m_vertex_buffers;
     IndexBufferPtr m_index_buffer;
 };
@@ -38,4 +44,4 @@ class VertexArray
 
 using VertexArrayPtr = std::unique_ptr<VertexArray>;
 
-}
+}  // namespace ay

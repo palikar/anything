@@ -5,9 +5,10 @@
 #include "engine/scene.hpp"
 #include "engine/game_base.hpp"
 
-namespace ay {
+namespace ay
+{
 
-void Scene3D::init(GameBase* t_game)
+void Scene3D::init(GameBase *t_game)
 {
     m_game = t_game;
 
@@ -18,14 +19,14 @@ void Scene3D::init(GameBase* t_game)
 }
 
 
-Entity* Scene3D::add(EntityPtr t_entity)
+Entity *Scene3D::add(EntityPtr t_entity)
 {
     t_entity->set_game(m_game);
     t_entity->init(m_game);
     m_entities.push_back(std::move(t_entity));
-    
+
     return m_entities.back().get();
 }
 
 
-}
+}  // namespace ay

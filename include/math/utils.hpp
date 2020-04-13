@@ -8,7 +8,8 @@ namespace ay
 
 static constexpr float PI = 3.14156592;
 
-inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up, glm::vec3 right){
+inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up, glm::vec3 right)
+{
     glm::mat4 m;
 
     m[0][0] = right.x;
@@ -27,87 +28,92 @@ inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up, glm::vec3 right)
     m[3][1] = 0;
     m[3][2] = 0;
     m[3][3] = 1;
-    
+
     return m;
 }
 
-inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up){
+inline glm::mat4 init_rotation(glm::vec3 forward, glm::vec3 up)
+{
     auto f = glm::normalize(forward);
     auto r = glm::cross(f, glm::normalize(up));
     auto u = glm::cross(f, r);
     return init_rotation(f, u, r);
 }
 
-inline glm::mat4 init_scale(float x, float y, float z) {
-    
-    return glm::mat4(x,0,0,0,
-                     0,y,0,0,
-                     0,0,z,0,
-                     0,0,0,1);
+inline glm::mat4 init_scale(float x, float y, float z)
+{
+
+    return glm::mat4(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
 }
 
-inline glm::mat4 init_scale(glm::vec3 v) {
-    return init_scale(v.x,v.y,v.z);
+inline glm::mat4 init_scale(glm::vec3 v)
+{
+    return init_scale(v.x, v.y, v.z);
 }
 
-inline glm::mat4 init_translate(float x, float y, float z) {
-    
-    return glm::mat4(1,0,0,x,
-                     0,1,0,y,
-                     0,0,1,z,
-                     0,0,0,1);
+inline glm::mat4 init_translate(float x, float y, float z)
+{
+
+    return glm::mat4(1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
 }
 
-inline glm::mat4 init_translate(glm::vec3 v) {
-    return init_translate(v.x,v.y,v.z);
+inline glm::mat4 init_translate(glm::vec3 v)
+{
+    return init_translate(v.x, v.y, v.z);
 }
 
-inline glm::mat4 init_identity() {
+inline glm::mat4 init_identity()
+{
 
-    return glm::mat4(1,0,0,0,
-                     0,1,0,0,
-                     0,0,1,0,
-                     0,0,0,1);    
+    return glm::mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 }
 
-inline glm::vec3 rotate(glm::vec3 v, glm::quat q) {
+inline glm::vec3 rotate(glm::vec3 v, glm::quat q)
+{
     // return glm::conjugate(q) * v * q;
 
     auto res = (q * glm::quat(0, v.x, v.y, v.z)) * glm::conjugate(q);
     return glm::vec3(res.x, res.y, res.z);
 }
 
-inline glm::vec3 up(glm::quat q) {
-    return rotate(glm::vec3(0, 1, 0), q );
+inline glm::vec3 up(glm::quat q)
+{
+    return rotate(glm::vec3(0, 1, 0), q);
 }
 
-inline glm::vec3 down(glm::quat q) {
-    return rotate(glm::vec3(0, -1, 0), q );
+inline glm::vec3 down(glm::quat q)
+{
+    return rotate(glm::vec3(0, -1, 0), q);
 }
 
-inline glm::vec3 right(glm::quat q) {
-    return rotate(glm::vec3(1, 0, 0), q );
+inline glm::vec3 right(glm::quat q)
+{
+    return rotate(glm::vec3(1, 0, 0), q);
 }
 
-inline glm::vec3 left(glm::quat q) {
-    return rotate(glm::vec3(-1, 0, 0), q );
+inline glm::vec3 left(glm::quat q)
+{
+    return rotate(glm::vec3(-1, 0, 0), q);
 }
 
-inline glm::vec3 forward(glm::quat q) {
+inline glm::vec3 forward(glm::quat q)
+{
     return glm::axis(q);
 }
 
-inline glm::vec3 backward(glm::quat q) {
+inline glm::vec3 backward(glm::quat q)
+{
     return -glm::axis(q);
 }
 
-inline glm::vec3 to_vec3(glm::quat q){
+inline glm::vec3 to_vec3(glm::quat q)
+{
     glm::vec3 v;
 
-    v.x =  2 * (q.x * q.z - q.w * q.y);
-    v.y =  2 * (q.y * q.z + q.w * q.x);
+    v.x = 2 * (q.x * q.z - q.w * q.y);
+    v.y = 2 * (q.y * q.z + q.w * q.x);
     v.z = 1 - 2 * (q.x * q.x + q.y * q.y);
-    
+
     return v;
 }
 
@@ -128,24 +134,27 @@ inline T saturate(T x)
     {
         return 1.0;
     }
-    
+
     if (x < 0.0)
     {
         return 0.0;
     }
-    
+
     return x;
 }
 
 
 inline glm::mat3 normal(glm::mat4 mat)
 {
-    return glm::mat3(
-        mat[0][0],mat[0][1], mat[0][2],
-        mat[1][0],mat[1][1], mat[1][2],
-        mat[2][0],mat[2][1], mat[2][2]
-        );
-
+    return glm::mat3(mat[0][0],
+                     mat[0][1],
+                     mat[0][2],
+                     mat[1][0],
+                     mat[1][1],
+                     mat[1][2],
+                     mat[2][0],
+                     mat[2][1],
+                     mat[2][2]);
 }
 
-}
+}  // namespace ay

@@ -15,35 +15,39 @@ namespace ay
 class Camera
 {
   private:
-    
     glm::mat4 m_projection;
     glm::mat4 m_view;
 
     glm::vec3 m_pos;
     glm::quat m_rot;
 
-    void update(){
-        m_view = glm::lookAt(m_pos, 
-                             m_pos + glm::axis(m_rot), 
-                             glm::vec3(0.0, 1.0, 0.0));        
+    void update()
+    {
+        m_view = glm::lookAt(m_pos, m_pos + glm::axis(m_rot), glm::vec3(0.0, 1.0, 0.0));
     }
 
   public:
-    Camera() :
-        m_pos(glm::vec3(0,0,0)),
-        m_rot(glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, -1.0f)))
+    Camera()
+      : m_pos(glm::vec3(0, 0, 0))
+      , m_rot(glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, -1.0f)))
     {
 
         update();
     }
 
 
-    void init_prescpective_projection(float fov, float aspectRatio, float zNear, float zFar)
+    void
+      init_prescpective_projection(float fov, float aspectRatio, float zNear, float zFar)
     {
         m_projection = glm::perspective(fov, aspectRatio, zNear, zFar);
     }
 
-    void init_orthographic(float left, float right, float bottom, float top, float near, float far)
+    void init_orthographic(float left,
+                           float right,
+                           float bottom,
+                           float top,
+                           float near,
+                           float far)
     {
         m_projection = glm::ortho(left, right, bottom, top, near, far);
     }
@@ -55,7 +59,7 @@ class Camera
 
     void move(glm::vec3 dir, float amt)
     {
-        m_pos += dir*amt;
+        m_pos += dir * amt;
         update();
     }
 
@@ -70,15 +74,14 @@ class Camera
         m_pos = point;
         update();
     }
-    
+
     void set_rotation(glm::vec3 r)
     {
 
         m_rot = glm::angleAxis(glm::radians(180.0f), r);
         update();
-
     }
-    
+
     void set_rotation(glm::quat rot)
     {
         m_rot = rot;
@@ -87,28 +90,38 @@ class Camera
 
     void set_look_at(glm::vec3 position, glm::vec3 point)
     {
-        
-        m_pos = position;
-        m_rot = glm::angleAxis(glm::radians(180.0f), glm::normalize(position - point) - position);
-        update();
 
+        m_pos = position;
+        m_rot = glm::angleAxis(glm::radians(180.0f),
+                               glm::normalize(position - point) - position);
+        update();
     }
 
-    glm::vec3 pos() { return m_pos; }
-    
-    glm::quat rot() { return m_rot; }
+    glm::vec3 pos()
+    {
+        return m_pos;
+    }
 
-    glm::vec3 at() { return ::ay::forward(m_rot); }
-    
-    glm::vec3 up() { return glm::vec3(0,1,0); }
-    
-    glm::vec3 right() { return glm::normalize(glm::cross(at(), up())); }
-    
+    glm::quat rot()
+    {
+        return m_rot;
+    }
 
-    
+    glm::vec3 at()
+    {
+        return ::ay::forward(m_rot);
+    }
 
+    glm::vec3 up()
+    {
+        return glm::vec3(0, 1, 0);
+    }
 
+    glm::vec3 right()
+    {
+        return glm::normalize(glm::cross(at(), up()));
+    }
 };
 
 
-}
+}  // namespace ay

@@ -34,15 +34,15 @@ class Application
   private:
     void init();
 
-    void on_event(Event& t_event);
-    
-    bool on_close(WindowCloseEvent&)
+    void on_event(Event &t_event);
+
+    bool on_close(WindowCloseEvent &)
     {
         m_running = false;
         return true;
     }
 
-    bool on_resize(WindowResizeEvent& e)
+    bool on_resize(WindowResizeEvent &e)
     {
         m_engine.resize(e);
         return true;

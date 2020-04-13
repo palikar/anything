@@ -15,87 +15,103 @@ class Entity
 {
 
   protected:
-    std::unordered_map<ComponentType*, ComponentPtr> m_components;
+    std::unordered_map<ComponentType *, ComponentPtr> m_components;
     std::string m_id;
-    GameBase* m_game{nullptr};
+    GameBase *m_game{ nullptr };
 
-    bool m_update_components{true};
-    bool m_enabled{true};
-    bool m_render{false};
+    bool m_update_components{ true };
+    bool m_enabled{ true };
+    bool m_render{ false };
 
-    void update_components(double dt) {
-        for (auto& [_, comp] : m_components) {
+    void update_components(double dt)
+    {
+        for (auto &[_, comp] : m_components)
+        {
             comp->update(dt);
         }
     }
 
   public:
-    Entity(std::string t_id = {}) : m_id(t_id) {}
+    Entity(std::string t_id = {}) : m_id(t_id)
+    {
+    }
 
-    virtual ~Entity(){}
+    virtual ~Entity()
+    {
+    }
 
-    template <typename T>
-    const T* component() const
+    template<typename T>
+    const T *component() const
     {
         return component_internal<T>();
     }
 
-    template <typename T>
-    T* component()
+    template<typename T>
+    T *component()
     {
         return component_internal<T>();
     }
 
     void add_component(ComponentPtr t_comp)
     {
-        if(m_game != nullptr) {
+        if (m_game != nullptr)
+        {
             t_comp->init(m_game);
         }
-        
-        m_components.insert({t_comp->type(), std::move(t_comp)});
+
+        m_components.insert({ t_comp->type(), std::move(t_comp) });
     }
 
-    void set_game(GameBase* t_game)
+    void set_game(GameBase *t_game)
     {
         m_game = t_game;
-        for (auto& [t, comp] : m_components) {
+        for (auto &[t, comp] : m_components)
+        {
             comp->init(m_game);
         }
-
     };
 
-    GameBase* game()
+    GameBase *game()
     {
         return m_game;
     };
 
 
-    virtual void update(double dt) {
-        if (m_update_components) {
+    virtual void update(double dt)
+    {
+        if (m_update_components)
+        {
             update_components(dt);
         }
     }
-    virtual bool event(Event&) { return false;}
-    virtual void init(GameBase*){};
-
-    
-    bool enabled() { return m_enabled; }
-    bool renderable() { return m_enabled; }
-
-  private:
-
-    template <typename T>
-    T* component_internal()
+    virtual bool event(Event &)
     {
-        ComponentType* type = T::static_type();
-        auto it = m_components.find(type);
-        if (it == m_components.end())
-            return nullptr;
-        return static_cast<T*>(it->second.get());
+        return false;
+    }
+    virtual void init(GameBase *){};
+
+
+    bool enabled()
+    {
+        return m_enabled;
+    }
+    bool renderable()
+    {
+        return m_enabled;
     }
 
+  private:
+    template<typename T>
+    T *component_internal()
+    {
+        ComponentType *type = T::static_type();
+        auto it             = m_components.find(type);
+        if (it == m_components.end())
+            return nullptr;
+        return static_cast<T *>(it->second.get());
+    }
 };
 
 using EntityPtr = std::unique_ptr<Entity>;
 
-}
+}  // namespace ay

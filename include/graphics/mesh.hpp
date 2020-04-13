@@ -17,38 +17,30 @@ class Mesh
     MaterialPtr m_material;
 
   public:
-
     Mesh() : m_geometry()
-    {}
+    {
+    }
 
-    Mesh(VertexArrayPtr t_geometry, MaterialPtr t_material) :
-        m_geometry(std::move(t_geometry)), m_material(std::move(t_material))
-    {}
+    Mesh(VertexArrayPtr t_geometry, MaterialPtr t_material)
+      : m_geometry(std::move(t_geometry)), m_material(std::move(t_material))
+    {
+    }
 
     void set_geometry(VertexArrayPtr t_geometry)
     {
         m_geometry = std::move(t_geometry);
     }
-    
-    const VertexArray* geometry() const
+
+    const VertexArray *geometry() const
     {
         return m_geometry.get();
     }
 
-    Material* material() const
+    Material *material() const
     {
         return m_material.get();
     }
-    
 };
 
 
-
-
-
-
-
-
-
-
-}
+}  // namespace ay

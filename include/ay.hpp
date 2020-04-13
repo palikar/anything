@@ -11,7 +11,7 @@
 #include "rendering/shaders.hpp"
 #include "rendering/vertex.hpp"
 #include "rendering/vertex_array.hpp"
-	
+
 #include "engine/camera.hpp"
 #include "engine/engine.hpp"
 #include "engine/component.hpp"

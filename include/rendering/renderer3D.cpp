@@ -15,12 +15,13 @@
 namespace ay
 {
 
-void RendererScene3D::render_entity(Entity* object)
+void RendererScene3D::render_entity(Entity *object)
 {
-    auto mesh_comp = object->component<MeshComponent>();
+    auto mesh_comp  = object->component<MeshComponent>();
     auto trans_comp = object->component<TransformComponent>();
 
-    if (mesh_comp && trans_comp ) {
+    if (mesh_comp && trans_comp)
+    {
 
         auto shader = mesh_comp->mesh.material()->shader();
 
@@ -34,7 +35,9 @@ void RendererScene3D::render_entity(Entity* object)
         {
             shader->set("model_matrix",
                         m_mat_stack.back() * trans_comp->transform.get_tranformation());
-        } else {
+        }
+        else
+        {
             shader->set("model_matrix", trans_comp->transform.get_tranformation());
         }
 
@@ -45,46 +48,49 @@ void RendererScene3D::render_entity(Entity* object)
 
         mesh_comp->mesh.geometry()->bind();
 
-        EnableDisableWireframe wireframe_raii{*m_api, mat->wire_frame()};
+        EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
         m_api->draw_indexed(mesh_comp->mesh.geometry());
-
     }
 
     auto group_comp = object->component<GroupComponent>();
 
-    if (group_comp) {
-        auto& ch = children(object);
+    if (group_comp)
+    {
+        auto &ch = children(object);
 
-        if (m_mat_stack.empty()) {
+        if (m_mat_stack.empty())
+        {
             m_mat_stack.push_back(trans_comp->transform.get_tranformation());
-        } else {
-            m_mat_stack.push_back(m_mat_stack.back() * trans_comp->transform.get_tranformation());
+        }
+        else
+        {
+            m_mat_stack.push_back(m_mat_stack.back()
+                                  * trans_comp->transform.get_tranformation());
         }
 
-        for (auto& child : ch ) {
-                 render_entity(child.get());
-             }
+        for (auto &child : ch)
+        {
+            render_entity(child.get());
+        }
 
-             m_mat_stack.pop_back();
-
-
-         }
-
-
+        m_mat_stack.pop_back();
     }
+}
 
-void RendererScene3D::init(RenderAPI* t_api)
+void RendererScene3D::init(RenderAPI *t_api)
 {
     m_api = t_api;
 }
 
-void RendererScene3D::render_scene(Scene3D& scene) {
+void RendererScene3D::render_scene(Scene3D &scene)
+{
 
     m_projection = scene.camera().view_projection();
-        
-    for (auto& object : scene.entities()) {
+
+    for (auto &object : scene.entities())
+    {
         render_entity(object.get());
     }
 }
 
-}
+}  // namespace ay

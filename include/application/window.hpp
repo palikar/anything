@@ -8,28 +8,30 @@
 
 #include "std_header.hpp"
 
-namespace ay {
+namespace ay
+{
 
 
 class Event;
 
-class Window {
+class Window
+{
 
   public:
-    using EventCallbackFn = std::function<void(Event&)>;
+    using EventCallbackFn = std::function<void(Event &)>;
 
   private:
     inline static std::unique_ptr<Window> m_instance;
 
     EventCallbackFn m_callback;
 
-    GLFWwindow* m_window;
-    Input* m_input;
+    GLFWwindow *m_window;
+    Input *m_input;
 
     int m_width;
     int m_height;
-  public:
 
+  public:
     static Window *get_instance()
     {
         if (!m_instance)
@@ -48,7 +50,8 @@ class Window {
         m_callback = t_callback;
     }
 
-    void set_title(std::string_view t_name) {
+    void set_title(std::string_view t_name)
+    {
         glfwSetWindowTitle(m_window, t_name.data());
     }
 
@@ -59,9 +62,7 @@ class Window {
     void render();
 
     bool closed();
-
-
 };
 
 
-}
+}  // namespace ay

@@ -13,49 +13,79 @@ namespace ay
 enum class EventType
 {
     NONE = 0,
-    WINDOWCLOSE, WINDOWRESIZE, WINDOWFOCUS, WINDOWLOSTFOCUS, WINDOWMOVED,
-    APPTICK, APPUPDATE, APPRENDER,
-    KEYPRESSED, KEYRELEASED, KEYTYPED,
-    MOUSEBUTTONPRESSED, MOUSEBUTTONRELEASED, MOUSEMOVED, MOUSESCROLLED
+    WINDOWCLOSE,
+    WINDOWRESIZE,
+    WINDOWFOCUS,
+    WINDOWLOSTFOCUS,
+    WINDOWMOVED,
+    APPTICK,
+    APPUPDATE,
+    APPRENDER,
+    KEYPRESSED,
+    KEYRELEASED,
+    KEYTYPED,
+    MOUSEBUTTONPRESSED,
+    MOUSEBUTTONRELEASED,
+    MOUSEMOVED,
+    MOUSESCROLLED
 };
 
 
-#define EVENT_TYPE(t_type) static EventType static_type() { return EventType::t_type; } \
-    virtual EventType type() const override { return static_type(); }   \
-    virtual const std::string name() const override { return #t_type; }
+#define EVENT_TYPE(t_type)                          \
+    static EventType static_type()                  \
+    {                                               \
+        return EventType::t_type;                   \
+    }                                               \
+    virtual EventType type() const override         \
+    {                                               \
+        return static_type();                       \
+    }                                               \
+    virtual const std::string name() const override \
+    {                                               \
+        return #t_type;                             \
+    }
 
 class Event
 {
   public:
     bool handled = false;
 
-    virtual EventType type() const = 0;
-    virtual const std::string name() const = 0;    
-
+    virtual EventType type() const         = 0;
+    virtual const std::string name() const = 0;
 };
 
 class WindowResizeEvent : public Event
 {
   public:
     WindowResizeEvent(unsigned int width, unsigned int height)
-        : m_width(width), m_height(height) {}
+      : m_width(width), m_height(height)
+    {
+    }
 
-    inline unsigned int width() const { return m_width; }
-    inline unsigned int height() const { return m_height; }
+    inline unsigned int width() const
+    {
+        return m_width;
+    }
+    inline unsigned int height() const
+    {
+        return m_height;
+    }
 
-    
+
     EVENT_TYPE(WINDOWRESIZE)
 
-	private:
+  private:
     unsigned int m_width, m_height;
 };
 
 class WindowCloseEvent : public Event
 {
   public:
-    WindowCloseEvent() {}
+    WindowCloseEvent()
+    {
+    }
 
-    EVENT_TYPE(WINDOWCLOSE)    
+    EVENT_TYPE(WINDOWCLOSE)
 };
 
 class KeyPressedEvent : public Event
@@ -70,7 +100,7 @@ class KeyPressedEvent : public Event
     {
         return m_keycode;
     }
-    
+
     inline int repeat_count() const
     {
         return m_repeat_count;
@@ -86,8 +116,7 @@ class KeyPressedEvent : public Event
 class KeyReleasedEvent : public Event
 {
   public:
-    KeyReleasedEvent(KeyCode keycode)
-        : m_keycode(keycode)
+    KeyReleasedEvent(KeyCode keycode) : m_keycode(keycode)
     {
     }
 
@@ -97,15 +126,14 @@ class KeyReleasedEvent : public Event
     }
 
     EVENT_TYPE(KEYRELEASED)
-    private:
+  private:
     KeyCode m_keycode;
 };
 
 class KeyTypedEvent : public Event
 {
   public:
-    KeyTypedEvent(KeyCode keycode)
-        : m_keycode(keycode)
+    KeyTypedEvent(KeyCode keycode) : m_keycode(keycode)
     {
     }
 
@@ -115,22 +143,29 @@ class KeyTypedEvent : public Event
     }
 
     EVENT_TYPE(KEYTYPED)
-    private:
+  private:
     KeyCode m_keycode;
 };
 
 class MouseMovedEvent : public Event
 {
   public:
-    MouseMovedEvent(float x, float y)
-        : m_mousex(x), m_mousey(y) {}
+    MouseMovedEvent(float x, float y) : m_mousex(x), m_mousey(y)
+    {
+    }
 
-    inline float get_x() const { return m_mousex; }
-    inline float get_y() const { return m_mousey; }
+    inline float get_x() const
+    {
+        return m_mousex;
+    }
+    inline float get_y() const
+    {
+        return m_mousey;
+    }
 
     EVENT_TYPE(MOUSEMOVED)
-    
-	private:
+
+  private:
     float m_mousex, m_mousey;
 };
 
@@ -138,42 +173,58 @@ class MouseScrolledEvent : public Event
 {
   public:
     MouseScrolledEvent(float xoffset, float yoffset)
-        : m_xoffset(xoffset), m_yoffset(yoffset) {}
-    
-    inline float x_offset() const { return m_xoffset; }
-    inline float y_offset() const { return m_yoffset; }
-    
+      : m_xoffset(xoffset), m_yoffset(yoffset)
+    {
+    }
+
+    inline float x_offset() const
+    {
+        return m_xoffset;
+    }
+    inline float y_offset() const
+    {
+        return m_yoffset;
+    }
+
     EVENT_TYPE(MOUSESCROLLED)
 
-	private:
+  private:
     float m_xoffset, m_yoffset;
 };
 
 class MouseButtonPressedEvent : public Event
 {
   public:
-    MouseButtonPressedEvent(MouseCode button)
-        : m_button(button) {}
+    MouseButtonPressedEvent(MouseCode button) : m_button(button)
+    {
+    }
 
-    MouseCode button() { return m_button; }
-    
+    MouseCode button()
+    {
+        return m_button;
+    }
+
     EVENT_TYPE(MOUSEBUTTONPRESSED)
-    
-    private:
+
+  private:
     MouseCode m_button;
 };
 
 class MouseButtonReleasedEvent : public Event
 {
   public:
-    MouseButtonReleasedEvent(MouseCode button)
-        : m_button(button) {}
+    MouseButtonReleasedEvent(MouseCode button) : m_button(button)
+    {
+    }
 
-    
-    MouseCode button() { return m_button; }
-    
+
+    MouseCode button()
+    {
+        return m_button;
+    }
+
     EVENT_TYPE(MOUSEBUTTONPRESSED)
-    
+
   private:
     MouseCode m_button;
 };
@@ -182,25 +233,24 @@ class MouseButtonReleasedEvent : public Event
 class Dispatcher
 {
   public:
-    Dispatcher(Event& event)
-        : m_event(event)
-    {}
-		
+    Dispatcher(Event &event) : m_event(event)
+    {
+    }
+
     template<typename T, typename F>
-    bool dispatch(const F& func)
+    bool dispatch(const F &func)
     {
         if (m_event.type() == T::static_type())
         {
-            m_event.handled = func(static_cast<T&>(m_event));
+            m_event.handled = func(static_cast<T &>(m_event));
             return true;
         }
         return false;
     }
+
   private:
-    Event& m_event;
+    Event &m_event;
 };
 
 
-
-
-}
+}  // namespace ay

@@ -24,13 +24,9 @@ inline EntityPtr group_entity(std::vector<EntityPtr> children)
 {
     EntityPtr new_ent = std::make_unique<Entity>();
     new_ent->add_component(std::make_unique<TransformComponent>());
-    new_ent->add_component(std::make_unique<GroupComponent>(std::move(children)));    
+    new_ent->add_component(std::make_unique<GroupComponent>(std::move(children)));
     return new_ent;
 }
 
 
-
-
-
-
-}
+}  // namespace ay

@@ -16,24 +16,25 @@ class MeshComponent : public Component
 {
   public:
     Mesh mesh;
+
   public:
     AY_COMPONENT(Mesh)
 
-    MeshComponent(Mesh t_mesh) : mesh(std::move(t_mesh))
-    {};
+    MeshComponent(Mesh t_mesh) : mesh(std::move(t_mesh)){};
 
-    void init(GameBase* t_game) override
+    void init(GameBase *t_game) override
     {
         mesh.material()->init_shader(t_game->shaders());
-        
     }
 };
 
-inline Mesh& mesh(Entity* t_entity) {
+inline Mesh &mesh(Entity *t_entity)
+{
     auto p = t_entity->component<MeshComponent>();
     if (!p)
-    {}
+    {
+    }
     return p->mesh;
 }
 
-}
+}  // namespace ay
