@@ -1,9 +1,9 @@
-
+#
 #include "rendering/vertex_array.hpp"
 
 #include "util/gl_helpers.hpp"
 
-namespace ay
+namespace ay::rend
 {
 
 void VertexArray::bind() const
@@ -57,4 +57,4 @@ void VertexArray::set_index_buffer(IndexBufferPtr index_buffer)
     glBindVertexArray(0);
 }
 
-}  // namespace ay
+}  // namespace ay::rend

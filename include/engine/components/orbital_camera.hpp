@@ -10,13 +10,13 @@
 #include "macros.hpp"
 #include "glm_header.hpp"
 
-namespace ay
+namespace ay::cmp
 {
 
-class OrbitalCameraComponent : public Component
+class OrbitalCameraComponent : public gmt::Component
 {
   private:
-    Camera *m_camera;
+    gmt::Camera *m_camera;
     float m_radius{ 10.0f };
     glm::vec3 m_pos{ 0.0f, 0.0f, 0.0f };
     glm::vec2 m_orbit{};
@@ -32,11 +32,11 @@ class OrbitalCameraComponent : public Component
 
     float m_damping{ 0.3 };
 
-    bool scroll_radius(MouseScrolledEvent &t_e)
+    bool scroll_radius(app::MouseScrolledEvent &t_e)
     {
         const auto diff = m_last_scroll - t_e.y_offset();
         m_radius += diff;
-        m_radius      = clamp(m_radius, 5.0f, 30.0f);
+        m_radius      = mth::clamp(m_radius, 5.0f, 30.0f);
         m_last_scroll = t_e.x_offset();
 
         update_rotation();
@@ -46,8 +46,8 @@ class OrbitalCameraComponent : public Component
 
     void update_rotation()
     {
-        m_orbit.y = clamp(m_orbit.y, -1.57f, 1.57f);
-        m_orbit.x = clamp(m_orbit.x, -2 * PI, 2 * PI);
+        m_orbit.y = mth::clamp(m_orbit.y, -1.57f, 1.57f);
+        m_orbit.x = mth::clamp(m_orbit.x, -2 * mth::PI, 2 * mth::PI);
 
         const float camX = -m_radius * sin(m_orbit.x) * cos(m_orbit.y);
         const float camY = -m_radius * sin(m_orbit.y);
@@ -63,12 +63,12 @@ class OrbitalCameraComponent : public Component
     {
     }
 
-    OrbitalCameraComponent(Camera *t_camera, float t_radius = 15.0f)
+    OrbitalCameraComponent(gmt::Camera *t_camera, float t_radius = 15.0f)
       : m_camera(t_camera), m_radius(t_radius)
     {
     }
 
-    void set_camera(Camera *t_camera)
+    void set_camera(gmt::Camera *t_camera)
     {
         m_camera = t_camera;
     }
@@ -100,15 +100,15 @@ class OrbitalCameraComponent : public Component
 
     void update(double dt) override
     {
-        if (Input::is_released(MouseCode::BUTTON_1))
+        if (app::Input::is_released(MouseCode::BUTTON_1))
         {
             m_initial_click = false;
         }
 
-        if (Input::is_pressed(MouseCode::BUTTON_1))
+        if (app::Input::is_pressed(MouseCode::BUTTON_1))
         {
 
-            const auto pos = Input::mouse_pos();
+            const auto pos = app::Input::mouse_pos();
             if (!m_initial_click)
             {
                 m_initial_click = true;
@@ -123,13 +123,13 @@ class OrbitalCameraComponent : public Component
         }
     }
 
-    bool event(Event &e) override
+    bool event(app::Event &e) override
     {
-        Dispatcher dispatch{ e };
-        dispatch.dispatch<MouseScrolledEvent>(
+        app::Dispatcher dispatch{ e };
+        dispatch.dispatch<app::MouseScrolledEvent>(
           [this](auto &ev) { return scroll_radius(ev); });
         return false;
     }
 };
 
-}  // namespace ay
+}  // namespace ay::cmp

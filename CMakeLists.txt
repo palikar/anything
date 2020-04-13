@@ -42,25 +42,25 @@ endif()
 target_compile_options(project_warnings
     INTERFACE
     -Wall
-    -Wextra 
+    -Wextra
     -Wshadow
     )
 
 option(ALL_WARNINGS "Enable all waring that the compiler supports" FALSE)
 if(${ALL_WARNINGS})
     target_compile_options(project_warnings
-	INTERFACE
-	-Wnon-virtual-dtor
-	-Wold-style-cast 
-	-Wcast-align 
-	-Wunused 
-	-Woverloaded-virtual
-	-Wpedantic 
-	-Wconversion
-	-Wsign-conversion 
-	-Wnull-dereference
-	-Wdouble-promotion                         
-	-Wformat=2)
+        INTERFACE
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Wcast-align
+        -Wunused
+        -Woverloaded-virtual
+        -Wpedantic
+        -Wconversion
+        -Wsign-conversion
+        -Wnull-dereference
+        -Wdouble-promotion
+        -Wformat=2)
 endif()
 
 
@@ -69,18 +69,18 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND ${ALL_WARNINGS})
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.3)
         target_compile_options(project_warnings INTERFACE
             -Wduplicated-branches)
-    endif()    
+    endif()
     target_compile_options(project_warnings INTERFACE
-	-Wmisleading-indentation
+        -Wmisleading-indentation
         -Wduplicated-cond
-	-Wlogical-op
-	-Wuseless-cast)
+        -Wlogical-op
+        -Wuseless-cast)
     target_link_libraries(project_options INTERFACE stdc++fs)
 else()
     if(LIBCPP)
-	target_compile_options(project_options INTERFACE -stdlib=libc++)
+        target_compile_options(project_options INTERFACE -stdlib=libc++)
     else()
-	target_link_libraries(project_options INTERFACE stdc++fs)
+        target_link_libraries(project_options INTERFACE stdc++fs)
     endif()
 endif()
 
@@ -90,9 +90,9 @@ option(ENABLE_CLANG_TIDY "Enable testing with clang-tidy" FALSE)
 if(ENABLE_CLANG_TIDY)
     find_program(CLANGTIDY clang-tidy)
     if(CLANGTIDY)
-	set(CMAKE_CXX_CLANG_TIDY ${CLANGTIDY})
+        set(CMAKE_CXX_CLANG_TIDY ${CLANGTIDY})
     else()
-	message(SEND_ERROR "clang-tidy requested but executable not found")
+        message(SEND_ERROR "clang-tidy requested but executable not found")
     endif()
 endif()
 
@@ -101,13 +101,13 @@ option(ENABLE_CPPCHECK "Enable testing with cppcheck" FALSE)
 if(ENABLE_CPPCHECK)
     find_program(CPPCHECK cppcheck)
     if(CPPCHECK)
-	set(CMAKE_CXX_CPPCHECK
-	    ${CPPCHECK}
-	    --suppress=syntaxError
-	    --enable=all
-	    --inconclusive)
+        set(CMAKE_CXX_CPPCHECK
+            ${CPPCHECK}
+            --suppress=syntaxError
+            --enable=all
+            --inconclusive)
     else()
-	message(SEND_ERROR "cppcheck requested but executable not found")
+        message(SEND_ERROR "cppcheck requested but executable not found")
     endif()
 endif()
 
@@ -155,15 +155,17 @@ add_library(anything_engine
 
     ./include/graphics/materials/solid_color.cpp
     ./include/graphics/mesh_factory.cpp
-    
+
     ./include/application/resource_loader.cpp
     ./include/application/application.cpp
     ./include/application/window.cpp
 
     ./include/engine/game_base.cpp
+    ./include/engine/engine.cpp
     ./include/engine/scene.cpp
 
-    ./include/util/gl_helpers.cpp    
+    ./include/util/gl_helpers.cpp
+    ./include/util/files.cpp
     )
 
 target_include_directories(anything_engine
@@ -184,7 +186,7 @@ add_executable(simple_anything ./examples/simple.cpp)
 target_link_libraries(simple_anything
     PRIVATE project_options project_warnings
     PUBLIC anything_engine
-    
+
     )
 
 

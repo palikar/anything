@@ -8,10 +8,14 @@
 #include "application/event.hpp"
 #include "engine/engine.hpp"
 
-namespace ay
+namespace ay::gmt
+{
+class GameBase;
+}
+
+namespace ay::app
 {
 
-class GameBase;
 
 class Application
 {
@@ -22,10 +26,10 @@ class Application
     bool m_running{ true };
 
     Window *m_window;
-    GameEngine m_engine;
+    gmt::GameEngine m_engine;
 
   public:
-    Application(int t_width, int t_height, GameBase *t_game);
+    Application(int t_width, int t_height, gmt::GameBase *t_game);
     ~Application() = default;
 
     int run();
@@ -50,4 +54,4 @@ class Application
 };
 
 
-}  // namespace ay
+}  // namespace ay::app

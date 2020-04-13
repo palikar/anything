@@ -8,7 +8,7 @@
 
 #include "glm_header.hpp"
 
-namespace ay
+namespace ay::gmt
 {
 
 
@@ -109,7 +109,7 @@ class Camera
 
     glm::vec3 at()
     {
-        return ::ay::forward(m_rot);
+        return mth::forward(m_rot);
     }
 
     glm::vec3 up()
@@ -124,4 +124,4 @@ class Camera
 };
 
 
-}  // namespace ay
+}  // namespace ay::gmt

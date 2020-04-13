@@ -8,17 +8,17 @@
 using namespace ay;
 
 
-class SimpleGame : public ay::GameBase {
+class SimpleGame : public gmt::GameBase {
 
   private:
-    Scene3D* main_scene;
-    RendererScene3D renderer;
+    gmt::Scene3D* main_scene;
+    rend::RendererScene3D renderer;
 
-    Entity* cube_1;
-    Entity* cube_2;
-    Entity* plane;
+    gmt::Entity* cube_1;
+    gmt::Entity* cube_2;
+    gmt::Entity* plane;
 
-    OrbitalCameraComponent* camera_controller;
+    cmp::OrbitalCameraComponent* camera_controller;
     
   public:
 
@@ -36,40 +36,45 @@ class SimpleGame : public ay::GameBase {
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
 
-        camera_controller = main_scene->add_component<OrbitalCameraComponent>(&main_scene->camera());
+        camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
 
-        plane = main_scene->add(mesh_entity({plane_geometry(10, 10, 10, 10), solid_color({ 1.0f, 0.0f, 0.0f })}));
-        mesh(plane).material()->set_wire_frame(true);
-        transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        plane = main_scene->add(gmt::mesh_entity(
+                                    {grph::plane_geometry(10, 10, 10, 10),
+                                     grph::solid_color({ 1.0f, 0.0f, 0.0f })}));
+        
+        cmp::mesh(plane).material()->set_wire_frame(true);
 
-        cube_1 = main_scene->add(mesh_entity({sphere_geometry(2, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));
-        mesh(cube_1).material()->set_wire_frame(true);
+        cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+
+        cube_1 = main_scene->add(gmt::mesh_entity(
+                                     {grph::sphere_geometry(2, 20, 20),
+                                      grph::solid_color({ 0.0f, 1.0f, 0.0f })}));
+        
+        cmp::mesh(cube_1).material()->set_wire_frame(true);
         
         
-        cube_2 = main_scene->add(mesh_entity({cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
-                                              solid_color({ 0.0f, 1.0f, 0.0f })}));
-        mesh(cube_2).material()->set_wire_frame(true);
+        cube_2 = main_scene->add(gmt::mesh_entity({
+                    grph::cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
+                    grph::solid_color({ 0.0f, 1.0f, 0.0f })}));
+        
+        cmp::mesh(cube_2).material()->set_wire_frame(true);
         
     }
     
     void update(double dt) override
     {
         
-        // for (auto& ch : children(cube_1)) {
-        //     transform(ch.get()).rotateY(glm::radians(0.5));
-        // }
-        
-        transform(cube_2).rotateZ(glm::radians(50*dt));
+        cmp::transform(cube_2).rotateZ(glm::radians(50*dt));
 
         main_scene->update(dt);
     }
 
-    bool event(Event& e) override {
+    bool event(app::Event& e) override {
         main_scene->event(e);
         return false;
     }
 
-    void render(RenderAPI&) override
+    void render(rend::RenderAPI&) override
     {
         renderer.render_scene(*main_scene);
     }
@@ -84,7 +89,7 @@ int main()
 {
     std::unique_ptr<SimpleGame> game = std::make_unique<SimpleGame>();
 
-    ay::Application app{1024, 768, game.get()};
+    ay::app::Application app{1024, 768, game.get()};
 
     return app.run();
 }

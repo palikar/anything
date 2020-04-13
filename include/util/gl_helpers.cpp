@@ -3,7 +3,7 @@
 
 #include "util/gl_helpers.hpp"
 
-namespace ay
+namespace ay::gl
 {
 
 GLenum GLCheckError()
@@ -23,4 +23,4 @@ bool GLLogCall(const char *function, const char *file, int32_t line)
     return true;
 }
 
-}  // namespace ay
+}  // namespace ay::gl

@@ -3,13 +3,17 @@
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::gmt
+{
+class Entity;
+class Entity;
+class Scene3D;
+}  // namespace ay::gmt
+
+namespace ay::rend
 {
 
-class Entity;
-class Entity;
 class RenderAPI;
-class Scene3D;
 
 class RendererScene3D
 {
@@ -21,14 +25,14 @@ class RendererScene3D
     std::vector<glm::mat4> m_mat_stack;
     glm::mat4 m_projection;
 
-    void render_entity(Entity *object);
+    void render_entity(gmt::Entity *object);
 
   public:
     RendererScene3D() = default;
 
     void init(RenderAPI *t_api);
 
-    void render_scene(Scene3D &scene);
+    void render_scene(gmt::Scene3D &scene);
 };
 
-}  // namespace ay
+}  // namespace ay::rend

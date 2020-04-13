@@ -1,7 +1,7 @@
 #include "engine/game_base.hpp"
 #include "engine/engine.hpp"
 
-namespace ay
+namespace ay::gmt
 {
 
 
@@ -12,7 +12,7 @@ Scene3D *GameBase::init_scene(const std::string &t_name)
     return &m_scenes.insert({ t_name, std::move(sc) }).first->second;
 }
 
-ShaderLibrary &GameBase::shaders()
+rend::ShaderLibrary &GameBase::shaders()
 {
     return m_engine->shader_lib();
 }
@@ -24,4 +24,4 @@ void GameBase::set_up(GameEngine *t_engine)
 }
 
 
-}  // namespace ay
+}  // namespace ay::gmt

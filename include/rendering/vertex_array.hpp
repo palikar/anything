@@ -5,7 +5,7 @@
 
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::rend
 {
 
 class VertexArray
@@ -44,4 +44,4 @@ class VertexArray
 
 using VertexArrayPtr = std::unique_ptr<VertexArray>;
 
-}  // namespace ay
+}  // namespace ay::rend

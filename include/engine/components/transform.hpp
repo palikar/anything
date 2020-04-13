@@ -6,13 +6,13 @@
 #include "macros.hpp"
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::cmp
 {
 
-class TransformComponent : public Component
+class TransformComponent : public gmt::Component
 {
   public:
-    Transform transform;
+    mth::Transform transform;
 
   public:
     AY_COMPONENT(Tranform)
@@ -22,11 +22,11 @@ class TransformComponent : public Component
     TransformComponent(glm::vec3 t_position, glm::quat t_rotation, glm::vec3 t_scale)
       : transform(t_position, t_rotation, t_scale){};
 
-    TransformComponent(Transform t_transform) : transform(t_transform){};
+    TransformComponent(mth::Transform t_transform) : transform(t_transform){};
 };
 
 
-inline Transform &transform(Entity *t_entity)
+inline mth::Transform &transform(gmt::Entity *t_entity)
 {
     auto p = t_entity->component<TransformComponent>();
     if (!p)
@@ -35,4 +35,4 @@ inline Transform &transform(Entity *t_entity)
     return p->transform;
 }
 
-}  // namespace ay
+}  // namespace ay::cmp

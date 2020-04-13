@@ -3,7 +3,7 @@
 
 #include "glm_header.hpp"
 
-namespace ay
+namespace ay::mth
 {
 
 static constexpr float PI = 3.14156592;
@@ -157,4 +157,4 @@ inline glm::mat3 normal(glm::mat4 mat)
                      mat[2][2]);
 }
 
-}  // namespace ay
+}  // namespace ay::mth

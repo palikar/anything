@@ -8,7 +8,7 @@
 
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::app
 {
 
 
@@ -65,4 +65,4 @@ class Window
 };
 
 
-}  // namespace ay
+}  // namespace ay::app

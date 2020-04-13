@@ -7,7 +7,7 @@
 #include "application/keycodes.hpp"
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::app
 {
 
 class Keyboard
@@ -293,4 +293,4 @@ class Input
     }
 };
 
-}  // namespace ay
+}  // namespace ay::app

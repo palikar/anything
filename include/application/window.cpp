@@ -1,7 +1,7 @@
 #include "application/window.hpp"
 
 
-namespace ay
+namespace ay::app
 {
 
 
@@ -141,4 +141,4 @@ bool Window::closed()
     return glfwWindowShouldClose(m_window);
 }
 
-}  // namespace ay
+}  // namespace ay::app

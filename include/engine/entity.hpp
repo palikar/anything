@@ -6,7 +6,7 @@
 
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::gmt
 {
 
 class GameBase;
@@ -84,7 +84,7 @@ class Entity
             update_components(dt);
         }
     }
-    virtual bool event(Event &)
+    virtual bool event(app::Event &)
     {
         return false;
     }
@@ -114,4 +114,4 @@ class Entity
 
 using EntityPtr = std::unique_ptr<Entity>;
 
-}  // namespace ay
+}  // namespace ay::gmt

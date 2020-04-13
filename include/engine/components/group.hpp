@@ -6,24 +6,25 @@
 #include "std_header.hpp"
 #include "macros.hpp"
 
-namespace ay
+namespace ay::cmp
 {
 
-class GroupComponent : public Component
+class GroupComponent : public gmt::Component
 {
   public:
-    std::vector<EntityPtr> children;
+    std::vector<gmt::EntityPtr> children;
 
   public:
     AY_COMPONENT(Mesh)
 
     GroupComponent() : children(){};
 
-    GroupComponent(std::vector<EntityPtr> t_children) : children(std::move(t_children)){};
+    GroupComponent(std::vector<gmt::EntityPtr> t_children)
+      : children(std::move(t_children)){};
 };
 
 
-inline std::vector<EntityPtr> &children(Entity *t_entity)
+inline std::vector<gmt::EntityPtr> &children(gmt::Entity *t_entity)
 {
     auto p = t_entity->component<GroupComponent>();
     if (!p)
@@ -34,7 +35,7 @@ inline std::vector<EntityPtr> &children(Entity *t_entity)
 
 
 template<typename... Args>
-inline Entity *add_children(Entity *t_entity, Args... t_children)
+inline gmt::Entity *add_children(gmt::Entity *t_entity, Args... t_children)
 {
     auto p = t_entity->component<GroupComponent>();
     if (!p)
@@ -50,7 +51,8 @@ inline Entity *add_children(Entity *t_entity, Args... t_children)
 }
 
 
-inline Entity *add_children(Entity *t_entity, std::vector<EntityPtr> &t_children)
+inline gmt::Entity *add_children(gmt::Entity *t_entity,
+                                 std::vector<gmt::EntityPtr> &t_children)
 {
     auto p = t_entity->component<GroupComponent>();
     if (!p)
@@ -69,4 +71,4 @@ inline Entity *add_children(Entity *t_entity, std::vector<EntityPtr> &t_children
 }
 
 
-}  // namespace ay
+}  // namespace ay::cmp

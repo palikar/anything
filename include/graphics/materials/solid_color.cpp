@@ -1,7 +1,7 @@
 
 #include "graphics/materials/solid_color.hpp"
 
-namespace ay
+namespace ay::grph
 {
 
 
@@ -12,7 +12,7 @@ SolidColorMaterial::SolidColorMaterial(glm::vec3 t_color, bool t_wireframe)
 }
 
 
-void SolidColorMaterial::init_shader(ShaderLibrary &t_shader_lib)
+void SolidColorMaterial::init_shader(rend::ShaderLibrary &t_shader_lib)
 {
     m_shader = t_shader_lib.load("solid_color");
 }
@@ -33,4 +33,4 @@ void SolidColorMaterial::set_color(glm::vec3 t_color)
 }
 
 
-}  // namespace ay
+}  // namespace ay::grph

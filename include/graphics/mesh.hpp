@@ -7,13 +7,13 @@
 
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::grph
 {
 
 class Mesh
 {
   private:
-    VertexArrayPtr m_geometry;
+    rend::VertexArrayPtr m_geometry;
     MaterialPtr m_material;
 
   public:
@@ -21,17 +21,17 @@ class Mesh
     {
     }
 
-    Mesh(VertexArrayPtr t_geometry, MaterialPtr t_material)
+    Mesh(rend::VertexArrayPtr t_geometry, MaterialPtr t_material)
       : m_geometry(std::move(t_geometry)), m_material(std::move(t_material))
     {
     }
 
-    void set_geometry(VertexArrayPtr t_geometry)
+    void set_geometry(rend::VertexArrayPtr t_geometry)
     {
         m_geometry = std::move(t_geometry);
     }
 
-    const VertexArray *geometry() const
+    const rend::VertexArray *geometry() const
     {
         return m_geometry.get();
     }
@@ -43,4 +43,4 @@ class Mesh
 };
 
 
-}  // namespace ay
+}  // namespace ay::grph

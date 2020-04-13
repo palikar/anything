@@ -4,7 +4,7 @@
 
 #include "math/utils.hpp"
 
-namespace ay
+namespace ay::mth
 {
 
 class Transform
@@ -145,4 +145,4 @@ class Transform
 };
 
 
-}  // namespace ay
+}  // namespace ay::mth

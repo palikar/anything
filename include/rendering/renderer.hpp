@@ -7,7 +7,7 @@
 #include "macros.hpp"
 #include "glm_header.hpp"
 
-namespace ay
+namespace ay::rend
 {
 
 
@@ -89,4 +89,4 @@ struct EnableDisableWireframe
     bool m_execute;
 };
 
-}  // namespace ay
+}  // namespace ay::rend

@@ -2,17 +2,17 @@
 
 #include <GL/glew.h>
 
-namespace ay
+namespace ay::gl
 {
 
 extern GLenum GLCheckError();
 extern bool GLLogCall(const char *function, const char *file, int32_t line);
 
-}  // namespace ay
+}  // namespace ay::gl
 
 
-#define GLCall(x)                               \
-    ay::GLCheckError();                         \
-    x;                                          \
-    if (!ay::GLLogCall(#x, __FILE__, __LINE__)) \
+#define GLCall(x)                                   \
+    ay::gl::GLCheckError();                         \
+    x;                                              \
+    if (!ay::gl::GLLogCall(#x, __FILE__, __LINE__)) \
         exit(1);

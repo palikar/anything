@@ -9,26 +9,26 @@
 #include "std_header.hpp"
 #include "macros.hpp"
 
-namespace ay
+namespace ay::cmp
 {
 
-class MeshComponent : public Component
+class MeshComponent : public gmt::Component
 {
   public:
-    Mesh mesh;
+    grph::Mesh mesh;
 
   public:
     AY_COMPONENT(Mesh)
 
-    MeshComponent(Mesh t_mesh) : mesh(std::move(t_mesh)){};
+    MeshComponent(grph::Mesh t_mesh) : mesh(std::move(t_mesh)){};
 
-    void init(GameBase *t_game) override
+    void init(gmt::GameBase *t_game) override
     {
         mesh.material()->init_shader(t_game->shaders());
     }
 };
 
-inline Mesh &mesh(Entity *t_entity)
+inline grph::Mesh &mesh(gmt::Entity *t_entity)
 {
     auto p = t_entity->component<MeshComponent>();
     if (!p)
@@ -37,4 +37,4 @@ inline Mesh &mesh(Entity *t_entity)
     return p->mesh;
 }
 
-}  // namespace ay
+}  // namespace ay::cmp

@@ -3,45 +3,46 @@
 #include "graphics/mesh_factory.hpp"
 
 
-namespace ay
+namespace ay::grph
 {
 
 
-VertexArrayPtr cube_geometry(float side)
+rend::VertexArrayPtr cube_geometry(float side)
 {
 
-    auto buffers = make_vertex_array(make_index_buffer({ { 0, 1, 2 },
-                                                         { 2, 3, 0 },
+    auto buffers =
+      rend::make_vertex_array(rend::make_index_buffer({ { 0, 1, 2 },
+                                                        { 2, 3, 0 },
 
-                                                         { 1, 5, 6 },
-                                                         { 6, 2, 1 },
+                                                        { 1, 5, 6 },
+                                                        { 6, 2, 1 },
 
-                                                         { 7, 6, 5 },
-                                                         { 5, 4, 7 },
+                                                        { 7, 6, 5 },
+                                                        { 5, 4, 7 },
 
-                                                         { 4, 0, 3 },
-                                                         { 3, 7, 4 },
+                                                        { 4, 0, 3 },
+                                                        { 3, 7, 4 },
 
-                                                         { 4, 5, 1 },
-                                                         { 1, 0, 4 },
+                                                        { 4, 5, 1 },
+                                                        { 1, 0, 4 },
 
-                                                         { 3, 2, 6 },
-                                                         { 6, 7, 3 } }),
-                                     make_vertex_buffer({ { -side, -side, side },
-                                                          { side, -side, side },
-                                                          { side, side, side },
-                                                          { -side, side, side },
+                                                        { 3, 2, 6 },
+                                                        { 6, 7, 3 } }),
+                              rend::make_vertex_buffer({ { -side, -side, side },
+                                                         { side, -side, side },
+                                                         { side, side, side },
+                                                         { -side, side, side },
 
-                                                          { -side, -side, -side },
-                                                          { side, -side, -side },
-                                                          { side, side, -side },
-                                                          { -side, side, -side } }));
+                                                         { -side, -side, -side },
+                                                         { side, -side, -side },
+                                                         { side, side, -side },
+                                                         { -side, side, -side } }));
 
     return buffers;
 }
 
 
-VertexArrayPtr
+rend::VertexArrayPtr
   plane_geometry(size_t width, size_t height, float width_segments, float height_segments)
 {
 
@@ -88,17 +89,18 @@ VertexArrayPtr
         }
     }
 
-    return make_vertex_array(make_index_buffer(indices), make_vertex_buffer(vertecies));
+    return rend::make_vertex_array(rend::make_index_buffer(indices),
+                                   rend::make_vertex_buffer(vertecies));
 }
 
 
-VertexArrayPtr sphere_geometry(float radius,
-                               float width_segments,
-                               float height_segments,
-                               float phi_start,
-                               float phi_length,
-                               float theta_start,
-                               float theta_length)
+rend::VertexArrayPtr sphere_geometry(float radius,
+                                     float width_segments,
+                                     float height_segments,
+                                     float phi_start,
+                                     float phi_length,
+                                     float theta_start,
+                                     float theta_length)
 {
 
     std::vector<Index3i> indices;
@@ -109,7 +111,7 @@ VertexArrayPtr sphere_geometry(float radius,
     width_segments  = std::max(3.0f, std::floor(width_segments));
     height_segments = std::max(2.0f, std::floor(height_segments));
 
-    float theta_end = std::min(theta_start + theta_length, PI);
+    float theta_end = std::min(theta_start + theta_length, mth::PI);
     int ix, iy;
     float index = 0;
     std::vector<std::vector<size_t>> grid;
@@ -159,24 +161,25 @@ VertexArrayPtr sphere_geometry(float radius,
 
             if (iy != 0 || theta_start > 0)
                 indices.push_back({ a, b, d });
-            if (iy != height_segments - 1 || theta_end < PI)
+            if (iy != height_segments - 1 || theta_end < mth::PI)
                 indices.push_back({ b, c, d });
         }
     }
 
 
-    return make_vertex_array(make_index_buffer(indices), make_vertex_buffer(vertices));
+    return rend::make_vertex_array(rend::make_index_buffer(indices),
+                                   rend::make_vertex_buffer(vertices));
 }
 
 
-VertexArrayPtr cylinder_geometry(float radiusTop,
-                                 float radiusBottom,
-                                 float height,
-                                 float radialSegments,
-                                 float heightSegments,
-                                 bool openEnded,
-                                 float thetaStart,
-                                 float thetaLength)
+rend::VertexArrayPtr cylinder_geometry(float radiusTop,
+                                       float radiusBottom,
+                                       float height,
+                                       float radialSegments,
+                                       float heightSegments,
+                                       bool openEnded,
+                                       float thetaStart,
+                                       float thetaLength)
 {
 
     std::vector<Index3i> indices;
@@ -313,8 +316,9 @@ VertexArrayPtr cylinder_geometry(float radiusTop,
     }
 
 
-    return make_vertex_array(make_index_buffer(indices), make_vertex_buffer(vertices));
+    return make_vertex_array(rend::make_index_buffer(indices),
+                             rend::make_vertex_buffer(vertices));
 }
 
 
-}  // namespace ay
+}  // namespace ay::grph

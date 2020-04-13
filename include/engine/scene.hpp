@@ -11,7 +11,7 @@
 
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::gmt
 {
 
 class GameBase;
@@ -54,7 +54,7 @@ class Scene3D
         }
     }
 
-    void event(Event &t_ev)
+    void event(app::Event &t_ev)
     {
         for (auto &object : m_entities)
         {
@@ -79,4 +79,4 @@ class Scene3D
 };
 
 
-}  // namespace ay
+}  // namespace ay::gmt

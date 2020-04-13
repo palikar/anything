@@ -5,14 +5,14 @@
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::grph
 {
 
 class Material
 {
   protected:
     bool m_wire_frame;
-    ShaderPtr m_shader;
+    rend::ShaderPtr m_shader;
 
   public:
     Material()
@@ -23,8 +23,8 @@ class Material
     {
     }
 
-    virtual void init_shader(ShaderLibrary &t_shader_lib) = 0;
-    virtual void update_uniforms()                        = 0;
+    virtual void init_shader(rend::ShaderLibrary &t_shader_lib) = 0;
+    virtual void update_uniforms()                              = 0;
 
     void set_wire_frame(bool value)
     {
@@ -35,7 +35,7 @@ class Material
     {
         return m_wire_frame;
     }
-    Shader *shader()
+    rend::Shader *shader()
     {
         return m_shader.get();
     }
@@ -49,4 +49,4 @@ class Material
 
 using MaterialPtr = std::unique_ptr<Material>;
 
-}  // namespace ay
+}  // namespace ay::grph

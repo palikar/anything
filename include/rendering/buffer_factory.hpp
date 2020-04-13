@@ -6,7 +6,7 @@
 
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::rend
 {
 
 enum class VetexType
@@ -24,7 +24,7 @@ inline VertexBufferPtr make_vertex_buffer(std::vector<Vertex3f> vertecies)
 {
     auto buf = std::make_unique<VertexBuffer>(vertecies.front().data(),
                                               vertecies.size() * Vertex3f::element_size);
-    buf->set_layout({ { "position", ay::ShaderDataType::Float3 } });
+    buf->set_layout({ { "position", ShaderDataType::Float3 } });
     return buf;
 }
 
@@ -35,7 +35,7 @@ inline VertexBufferPtr make_vertex_buffer(Vertex... vertecies)
 
     auto buf = std::make_unique<VertexBuffer>(
       temp[0].data(), sizeof...(vertecies) * Vertex3f::element_size);
-    buf->set_layout({ { "position", ay::ShaderDataType::Float3 } });
+    buf->set_layout({ { "position", ShaderDataType::Float3 } });
     return buf;
 }
 
@@ -44,7 +44,7 @@ inline VertexBufferPtr make_vertex_buffer(Vertex3f vertecies[N])
 {
     auto buf =
       std::make_unique<VertexBuffer>(vertecies[0].data(), N * Vertex3f::element_size);
-    buf->set_layout({ { "position", ay::ShaderDataType::Float3 } });
+    buf->set_layout({ { "position", ShaderDataType::Float3 } });
     return buf;
 }
 
@@ -55,7 +55,7 @@ inline VertexBufferPtr make_vertex_buffer(VetexType type, float vertecies[N])
     {
         auto buf =
           std::make_unique<VertexBuffer>(vertecies[0], N * Vertex3f::element_size);
-        buf->set_layout({ { "position", ay::ShaderDataType::Float3 } });
+        buf->set_layout({ { "position", ShaderDataType::Float3 } });
         return buf;
     }
     return nullptr;
@@ -89,13 +89,13 @@ inline IndexBufferPtr make_index_buffer(Index3i indices[N])
 
 inline VertexArrayPtr make_vertex_array()
 {
-    return std::make_unique<ay::VertexArray>();
+    return std::make_unique<VertexArray>();
 }
 
 inline VertexArrayPtr make_vertex_array(IndexBufferPtr index,
                                         std::vector<VertexBufferPtr> vertex_bufffers)
 {
-    auto ind = std::make_unique<ay::VertexArray>();
+    auto ind = std::make_unique<VertexArray>();
     ind->set_index_buffer(std::move(index));
     for (auto &ver : vertex_bufffers)
     {
@@ -107,7 +107,7 @@ inline VertexArrayPtr make_vertex_array(IndexBufferPtr index,
 template<typename... Buffer>
 inline VertexArrayPtr make_vertex_array(IndexBufferPtr index, Buffer... vertex_bufffers)
 {
-    auto ind = std::make_unique<ay::VertexArray>();
+    auto ind = std::make_unique<VertexArray>();
     ind->set_index_buffer(std::move(index));
 
     (ind->add_vertex_buffer(std::move(vertex_bufffers)), ...);
@@ -116,4 +116,4 @@ inline VertexArrayPtr make_vertex_array(IndexBufferPtr index, Buffer... vertex_b
 }
 
 
-}  // namespace ay
+}  // namespace ay::rend

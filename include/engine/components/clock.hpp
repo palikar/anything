@@ -6,11 +6,11 @@
 #include "macros.hpp"
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::cmp
 {
 
 
-class Clock : public Component
+class Clock : public gmt::Component
 {
   private:
     float m_time = 0.0f;
@@ -67,4 +67,4 @@ class Clock : public Component
     }
 };
 
-}  // namespace ay
+}  // namespace ay::cmp

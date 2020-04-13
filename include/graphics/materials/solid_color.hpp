@@ -5,7 +5,7 @@
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::grph
 {
 
 
@@ -19,7 +19,7 @@ class SolidColorMaterial : public Material
 
     virtual ~SolidColorMaterial() = default;
 
-    void init_shader(ShaderLibrary &t_shader_lib) override;
+    void init_shader(rend::ShaderLibrary &t_shader_lib) override;
 
     void update_uniforms() override;
 
@@ -35,4 +35,4 @@ inline MaterialPtr solid_color(glm::vec3 color)
 }
 
 
-}  // namespace ay
+}  // namespace ay::grph

@@ -5,7 +5,7 @@
 #include "std_header.hpp"
 
 
-namespace ay
+namespace ay::rend
 {
 
 enum class ShaderDataType : uint16_t
@@ -239,4 +239,4 @@ using VertexBufferPtr = std::unique_ptr<VertexBuffer>;
 
 using IndexBufferPtr = std::unique_ptr<IndexBuffer>;
 
-}  // namespace ay
+}  // namespace ay::rend

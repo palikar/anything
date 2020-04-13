@@ -9,18 +9,18 @@
 
 #include "math/utils.hpp"
 
-namespace ay
+namespace ay::grph
 {
 
-ShaderDataType stride_to_data_type(size_t s)
+rend::ShaderDataType stride_to_data_type(size_t s)
 {
     switch (s)
     {
-    case 2: return ShaderDataType::Float2;
-    case 3: return ShaderDataType::Float3;
-    case 4: return ShaderDataType::Float4;
+    case 2: return rend::ShaderDataType::Float2;
+    case 3: return rend::ShaderDataType::Float3;
+    case 4: return rend::ShaderDataType::Float4;
     }
-    return ShaderDataType::None;
+    return rend::ShaderDataType::None;
 }
 
 class Geometry
@@ -74,7 +74,7 @@ class Geometry
         if (m_buffers.count("normal"))
         {
             auto &norm      = std::get<0>(m_buffers.at("normal"));
-            auto normal_mat = normal(t_mat);
+            auto normal_mat = mth::normal(t_mat);
             for (size_t i = 0; i < norm.size() - 3; i += 3)
             {
                 auto res = glm::vec3(norm[i], norm[i + 1], norm[i + 2]) * normal_mat;
@@ -88,7 +88,7 @@ class Geometry
         if (m_buffers.count("tangent"))
         {
             auto &tan       = std::get<0>(m_buffers.at("normal"));
-            auto normal_mat = normal(t_mat);
+            auto normal_mat = mth::normal(t_mat);
             for (size_t i = 0; i < tan.size() - 3; i += 3)
             {
                 auto res = glm::vec3(tan[i], tan[i + 1], tan[i + 2]) * normal_mat;
@@ -151,17 +151,17 @@ class Geometry
         apply(glm::translate(glm::mat4(1), glm::vec3(t_x, t_y, t_z)));
     }
 
-    VertexArrayPtr to_vertex_buffer()
+    rend::VertexArrayPtr to_vertex_buffer()
     {
-        auto arr = std::make_unique<ay::VertexArray>();
-        arr->set_index_buffer(make_index_buffer(m_index));
+        auto arr = std::make_unique<rend::VertexArray>();
+        arr->set_index_buffer(rend::make_index_buffer(m_index));
 
         for (auto &[name, buff] : m_buffers)
         {
             auto &data  = std::get<0>(buff);
             auto stride = std::get<1>(buff);
 
-            auto vert = std::make_unique<VertexBuffer>(data.data(), data.size());
+            auto vert = std::make_unique<rend::VertexBuffer>(data.data(), data.size());
             vert->set_layout({ { name, stride_to_data_type(stride) } });
 
             arr->add_vertex_buffer(std::move(vert));
@@ -172,4 +172,4 @@ class Geometry
 };
 
 
-}  // namespace ay
+}  // namespace ay::grph

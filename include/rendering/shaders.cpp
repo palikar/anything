@@ -3,7 +3,7 @@
 
 #include "util/gl_helpers.hpp"
 
-namespace ay
+namespace ay::rend
 {
 
 Shader::Shader(const std::string &t_name,
@@ -167,7 +167,7 @@ GLuint Shader::compile_shader(const GLchar *t_src, GLenum type)
 
 ShaderPtr load_shader(std::string_view t_name)
 {
-    auto [vert, frag] = ResouceLoader::get_instance()->get_shader_sources(t_name);
+    auto [vert, frag] = app::ResouceLoader::get_instance()->get_shader_sources(t_name);
     return std::make_shared<Shader>(std::string(t_name), vert, frag);
 }
 
@@ -215,4 +215,4 @@ bool ShaderLibrary::exists(const std::string &name) const
     return m_shaders.count(name) == 0;
 }
 
-}  // namespace ay
+}  // namespace ay::rend

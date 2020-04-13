@@ -12,13 +12,13 @@
 #include "engine/components/group.hpp"
 
 
-namespace ay
+namespace ay::rend
 {
 
-void RendererScene3D::render_entity(Entity *object)
+void RendererScene3D::render_entity(gmt::Entity *object)
 {
-    auto mesh_comp  = object->component<MeshComponent>();
-    auto trans_comp = object->component<TransformComponent>();
+    auto mesh_comp  = object->component<cmp::MeshComponent>();
+    auto trans_comp = object->component<cmp::TransformComponent>();
 
     if (mesh_comp && trans_comp)
     {
@@ -52,11 +52,11 @@ void RendererScene3D::render_entity(Entity *object)
         m_api->draw_indexed(mesh_comp->mesh.geometry());
     }
 
-    auto group_comp = object->component<GroupComponent>();
+    auto group_comp = object->component<cmp::GroupComponent>();
 
     if (group_comp)
     {
-        auto &ch = children(object);
+        auto &ch = cmp::children(object);
 
         if (m_mat_stack.empty())
         {
@@ -82,7 +82,7 @@ void RendererScene3D::init(RenderAPI *t_api)
     m_api = t_api;
 }
 
-void RendererScene3D::render_scene(Scene3D &scene)
+void RendererScene3D::render_scene(gmt::Scene3D &scene)
 {
 
     m_projection = scene.camera().view_projection();
@@ -93,4 +93,4 @@ void RendererScene3D::render_scene(Scene3D &scene)
     }
 }
 
-}  // namespace ay
+}  // namespace ay::rend

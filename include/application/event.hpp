@@ -7,7 +7,7 @@
 
 #include <GLFW/glfw3.h>
 
-namespace ay
+namespace ay::app
 {
 
 enum class EventType
@@ -253,4 +253,4 @@ class Dispatcher
 };
 
 
-}  // namespace ay
+}  // namespace ay::app

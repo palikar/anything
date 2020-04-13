@@ -7,7 +7,7 @@
 
 #include "util/gl_helpers.hpp"
 
-namespace ay
+namespace ay::rend
 {
 
 class Shader
@@ -85,4 +85,4 @@ class ShaderLibrary
 };
 
 
-}  // namespace ay
+}  // namespace ay::rend

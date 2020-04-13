@@ -4,10 +4,10 @@
 #include "application/application.hpp"
 
 
-namespace ay
+namespace ay::app
 {
 
-Application::Application(int t_width, int t_height, GameBase *t_game)
+Application::Application(int t_width, int t_height, gmt::GameBase *t_game)
   : m_width(t_width)
   , m_height(t_height)
   , m_window(Window::get_instance())
@@ -113,4 +113,4 @@ void Application::on_event(Event &t_event)
 }
 
 
-}  // namespace ay
+}  // namespace ay::app

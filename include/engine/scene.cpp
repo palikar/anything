@@ -5,7 +5,7 @@
 #include "engine/scene.hpp"
 #include "engine/game_base.hpp"
 
-namespace ay
+namespace ay::gmt
 {
 
 void Scene3D::init(GameBase *t_game)
@@ -29,4 +29,4 @@ Entity *Scene3D::add(EntityPtr t_entity)
 }
 
 
-}  // namespace ay
+}  // namespace ay::gmt

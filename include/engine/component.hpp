@@ -6,7 +6,7 @@
 #include "std_header.hpp"
 
 
-namespace ay
+namespace ay::gmt
 {
 
 struct ComponentType
@@ -32,14 +32,17 @@ class Component
     {
         return m_entity;
     };
+
     virtual ComponentType *type() const
     {
         return nullptr;
     }
+
     virtual void update(double)
     {
     }
-    virtual bool event(Event &)
+
+    virtual bool event(app::Event &)
     {
         return false;
     }
@@ -51,4 +54,4 @@ class Component
 using ComponentPtr = std::unique_ptr<Component>;
 
 
-}  // namespace ay
+}  // namespace ay::gmt

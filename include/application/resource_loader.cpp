@@ -1,105 +1,52 @@
+
 #include "application/resource_loader.hpp"
+#include "util/files.hpp"
 
-
-namespace ay
+namespace ay::app
 {
 
 
-namespace detail
+void ResouceLoader::init(std::string t_root)
 {
+    m_root    = fs::absolute(t_root);
+    m_shaders = m_root / "shaders";
+}
 
-    bool skip_bom(std::ifstream &infile)
+std::string ResouceLoader::get_file_text(std::string_view t_file)
+{
+    fs::path path = m_root / t_file;
+    if (!fs::exists(path))
     {
-        size_t bytes_needed = 3;
-        char buffer[3];
-
-        std::memset(buffer, '\0', bytes_needed);
-
-        infile.read(buffer, static_cast<std::streamsize>(bytes_needed));
-
-        if ((buffer[0] == '\xef') && (buffer[1] == '\xbb') && (buffer[2] == '\xbf'))
-        {
-
-            infile.seekg(3);
-            return true;
-        }
-
-        infile.seekg(0);
-
-        return false;
+        std::cout << "No such resource: " << path << "\n";
     }
 
-    bool skip_elf(std::ifstream &infile)
+    return files::load_file(path);
+}
+
+std::pair<std::string, std::string>
+  ResouceLoader::get_shader_files(std::string_view t_shader)
+{
+    fs::path vertex   = (m_shaders / t_shader) += ".vert";
+    fs::path fragment = (m_shaders / t_shader) += ".frag";
+
+    if (!fs::exists(vertex))
     {
-        size_t bytes_needed = 4;
-        char buffer[4];
-
-        std::memset(buffer, '\0', bytes_needed);
-
-        infile.read(buffer, static_cast<std::streamsize>(bytes_needed));
-
-        if ((buffer[0] == '\x7f') && (buffer[1] == '\x45') && (buffer[2] == '\x4c')
-            && (buffer[3] == '\x46'))
-        {
-            infile.close();
-            return true;
-        }
-
-        infile.close();
-        return false;
+        std::cout << "No such resource: " << vertex << "\n";
     }
 
-    bool check_elf(const std::string &t_filename)
+    if (!fs::exists(fragment))
     {
-        std::ifstream infile(t_filename.c_str(),
-                             std::ios::in | std::ios::ate | std::ios::binary);
-        infile.seekg(0, std::ios::beg);
-
-        if (!infile.is_open())
-        {
-            return false;
-        }
-
-        if (skip_elf(infile))
-        {
-            infile.close();
-            return true;
-        }
-        infile.close();
-        return false;
+        std::cout << "No such resource: " << fragment << "\n";
     }
 
-    std::string load_file(const std::string &t_filename)
-    {
-        std::ifstream infile(t_filename.c_str(),
-                             std::ios::in | std::ios::ate | std::ios::binary);
+    return { vertex, fragment };
+}
 
-        if (!infile.is_open())
-        {
-        }
+std::pair<std::string, std::string>
+  ResouceLoader::get_shader_sources(std::string_view t_shader)
+{
+    auto [vert, frag] = get_shader_files(t_shader);
+    return { files::load_file(vert), files::load_file(frag) };
+}
 
-        auto size = infile.tellg();
-        infile.seekg(0, std::ios::beg);
-
-        assert(size >= 0);
-
-        if (skip_bom(infile))
-        {
-            size -= 3;
-            assert(size >= 0);
-        }
-
-        if (size == std::streampos(0))
-        {
-            return std::string();
-        }
-        else
-        {
-            std::vector<char> v(static_cast<size_t>(size));
-            infile.read(&v[0], static_cast<std::streamsize>(size));
-            return std::string(v.begin(), v.end());
-        }
-    }
-}  // namespace detail
-
-}  // namespace ay
+}  // namespace ay::app
