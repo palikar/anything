@@ -13,7 +13,7 @@
 #include "math/transform.hpp"
 #include "commons.hpp"
 
-#include <GL/glew.h>
+#include "util/gl_helpers.hpp"
 #include <iostream>
 
 namespace ay {

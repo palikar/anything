@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/glew.h>
+#include "util/gl_helpers.hpp"
 #include <GLFW/glfw3.h>
 
 #include "application/window.hpp"

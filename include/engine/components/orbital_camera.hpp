@@ -7,7 +7,6 @@
 
 #include "application/input.hpp"
 
-#include "commons.hpp"
 #include "macros.hpp"
 #include "glm_header.hpp"
 

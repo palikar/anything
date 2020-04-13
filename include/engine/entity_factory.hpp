@@ -2,9 +2,9 @@
 
 #include "std_header.hpp"
 
-#include "application/event.hpp"
-
-#include "engine/component.hpp"
+#include "engine/components/group.hpp"
+#include "engine/components/mesh.hpp"
+#include "engine/components/transform.hpp"
 
 #include "graphics/mesh.hpp"
 
@@ -28,4 +28,3 @@ inline EntityPtr mesh_entity(Mesh mesh, std::string name = {})
 
 
 }
-

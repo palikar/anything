@@ -37,8 +37,8 @@ class SimpleGame : public ay::GameBase {
         camera_controller = main_scene->add_component<OrbitalCameraComponent>(&main_scene->camera());
 
         plane = main_scene->add(mesh_entity({plane_geometry(10, 10, 10, 10), solid_color({ 1.0f, 0.0f, 0.0f })}));
-        get_mesh(plane).material()->set_wire_frame(true);
-        get_transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        mesh(plane).material()->set_wire_frame(true);
+        transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
         cube_1 = main_scene->add(mesh_entity({sphere_geometry(2, 20, 20), solid_color({ 0.0f, 1.0f, 0.0f })}));        
         

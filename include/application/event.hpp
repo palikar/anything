@@ -1,14 +1,11 @@
 #pragma once
 
-
+#include "util/gl_helpers.hpp"
 
 #include "application/keycodes.hpp"
-
 #include "std_header.hpp"
-#include "commons.hpp"
 
 #include <GLFW/glfw3.h>
-
 
 namespace ay
 {

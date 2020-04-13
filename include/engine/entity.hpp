@@ -1,12 +1,10 @@
 #pragma once
 
-#include "std_header.hpp"
 
 #include "application/event.hpp"
-
 #include "engine/component.hpp"
 
-#include "graphics/mesh.hpp"
+#include "std_header.hpp"
 
 namespace ay
 {
@@ -75,20 +73,5 @@ class Entity
 };
 
 using EntityPtr = std::unique_ptr<Entity>;
-
-
-inline Transform& get_transform(Entity* t_entity) {
-    auto p = t_entity->component<TransformComponent>();
-    if (!p)
-    {}
-    return p->transform;
-}
-
-inline Mesh& get_mesh(Entity* t_entity) {
-    auto p = t_entity->component<MeshComponent>();
-    if (!p)
-    {}
-    return p->mesh;
-}
 
 }

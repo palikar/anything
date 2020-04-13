@@ -1,10 +1,11 @@
 #pragma once
 
 #include "application/resource_loader.hpp"
+
 #include "std_header.hpp"
 #include "glm_header.hpp"
 
-#include <GL/glew.h>
+#include "util/gl_helpers.hpp"
 
 namespace ay
 {

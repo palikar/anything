@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "glm_header.hpp"
 
 namespace ay

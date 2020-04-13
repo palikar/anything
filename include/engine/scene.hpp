@@ -1,11 +1,11 @@
 #pragma once
 
 
+#include "rendering/renderer.hpp"
+
 #include "engine/component.hpp"
 #include "engine/entity.hpp"
 #include "engine/camera.hpp"
-
-#include "rendering/renderer.hpp"
 
 #include "application/event.hpp"
 

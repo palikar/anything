@@ -1,3 +1,4 @@
+#pragma once
 
 #define AY_COMPONENT(name)                                              \
     static ComponentType* static_type()                                 \

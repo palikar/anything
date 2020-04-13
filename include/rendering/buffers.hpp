@@ -1,10 +1,9 @@
 #pragma once
 
-#include <memory>
-
 #include "util/gl_helpers.hpp"
 
-#include <GL/glew.h>
+#include "std_header.hpp"
+
 
 namespace ay
 {

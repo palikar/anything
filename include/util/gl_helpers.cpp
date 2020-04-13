@@ -1,7 +1,7 @@
-#include <GL/glew.h>
+
+#include "std_header.hpp"
 
 #include "util/gl_helpers.hpp"
-#include "std_header.hpp"
 
 namespace ay {
 

@@ -1,10 +1,6 @@
 #pragma once
-#include <iostream>
 
-#include "application/resource_loader.hpp"
-#include "rendering/buffers.hpp"
-#include "rendering/vertex_array.hpp"
-#include "rendering/shaders.hpp"
+
 #include "math/transform.hpp"
 #include "math/utils.hpp"
 #include "commons.hpp"

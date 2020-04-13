@@ -5,8 +5,6 @@
 
 #include "graphics/material.hpp"
 
-#include "commons.hpp"
-
 #include "std_header.hpp"
 
 namespace ay

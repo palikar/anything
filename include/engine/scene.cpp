@@ -1,3 +1,7 @@
+#include "engine/components/transform.hpp"
+#include "engine/components/mesh.hpp"
+#include "engine/components/group.hpp"
+
 #include "engine/scene.hpp"
 #include "engine/game_base.hpp"
 
