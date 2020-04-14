@@ -1,8 +1,10 @@
 #pragma once
 
 #include "util/gl_helpers.hpp"
+
 #include "rendering/buffer_factory.hpp"
 #include "rendering/buffers.hpp"
+#include "rendering/api.hpp"
 
 #include "macros.hpp"
 #include "glm_header.hpp"
@@ -23,6 +25,9 @@ class RenderAPI
     {
 
         GLCall(glEnable(GL_DEPTH_TEST));
+
+        GLCall(glEnable(GL_CULL_FACE));
+        
         GLCall(glCullFace(GL_BACK));
         GLCall(glFrontFace(GL_CW));
     }

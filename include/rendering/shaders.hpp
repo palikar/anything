@@ -33,6 +33,8 @@ class Shader
         return m_id;
     }
 
+    void set(const std::string &name, bool value);
+    
     void set(const std::string &name, int value);
 
     void set(const std::string &name, int *values, uint32_t count);

@@ -15,6 +15,12 @@
 namespace ay::rend
 {
 
+void RendererScene3D::init(RenderAPI *t_api)
+{
+    m_api = t_api;
+}
+
+
 void RendererScene3D::render_entity(gmt::Entity *object)
 {
     auto mesh_comp  = object->component<cmp::MeshComponent>();
@@ -44,12 +50,48 @@ void RendererScene3D::render_entity(gmt::Entity *object)
         shader->set("projection_matrix", m_projection);
 
         auto mat = mesh_comp->mesh.material();
+
+        glDepthFunc(static_cast<GLenum>(mat->depth_func()));
+        if (mat->depth_test()) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+
+        if (mat->depth_write()) {
+            glDepthMask(GL_TRUE);  
+        } else {
+            glDepthMask(GL_FALSE);
+        }
+        
+        if (mat->blending_setup().blending)
+        {
+            glEnable(GL_BLEND);
+
+            glBlendEquation(static_cast<GLenum>(mat->blending_setup().blend_equation));
+            glBlendFuncSeparate(static_cast<GLenum>(mat->blending_setup().blend_src),
+                                static_cast<GLenum>(mat->blending_setup().blend_dst),
+                                static_cast<GLenum>(mat->blending_setup().blend_src_alpha),
+                                static_cast<GLenum>(mat->blending_setup().blend_dst_alpha));
+
+                shader->set("opacity", mat->opacity());
+                shader->set("alpha_threshold", mat->blending_setup().alpha_test);
+                std::cout << mat->blending_setup().alpha_test << "\n";
+            }
+        shader->set("visible", mat->visible());
+
+
         mat->update_uniforms(m_binder);
 
         mesh_comp->mesh.geometry()->bind();
-
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
         m_api->draw_indexed(mesh_comp->mesh.geometry());
+
+        if (mat->blending_setup().blending)
+        {
+            glDisable(GL_BLEND);
+        }
+
     }
 
     auto group_comp = object->component<cmp::GroupComponent>();
@@ -77,10 +119,6 @@ void RendererScene3D::render_entity(gmt::Entity *object)
     }
 }
 
-void RendererScene3D::init(RenderAPI *t_api)
-{
-    m_api = t_api;
-}
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)
 {

@@ -23,17 +23,6 @@ namespace ay::grph
 // int m_flat_shading;
 // int m_fog;
 
-struct BlendingSetup
-{
-    float alpha_test{0.0f};
-    rend::BlenidngDestination blend_dst{rend::BlenidngDestination::ONE_MINUS_SRC_ALPHA};
-    int blend_dst_alpha{0};
-    rend::BlenidngEquation blend_equation{rend::BlenidngEquation::ADD};
-    int blend_equation_alpha{0};
-    rend::BlenidngSource blend_src{rend::BlenidngSource::SRC_ALPHA};
-    int blend_src_alpha{0};
-    bool blending{false};
-};
 
 class Material
 {
@@ -41,13 +30,19 @@ class Material
     rend::ShaderPtr m_shader;
 
     float m_opacity{1.0};
-    BlendingSetup m_blending{};
+    rend::BlendingSetup m_blending{};
     
     rend::Side m_side;
+
+    
     
     bool m_wire_frame{false};
     bool m_visible{true};
     bool m_transparent{false};
+
+    rend::DepthFunc m_depth_func{GL_LESS};
+    bool m_depth_test{true};
+    bool m_depth_write{true};
 
   public:
     Material()
@@ -88,11 +83,23 @@ class Material
 
     rend::Side& side() { return m_side; }
     
-
     void set_opacity(float val) { m_opacity = val;  }
+    
     float opacity() { return m_opacity; }
 
-    BlendingSetup& blending_setup()
+    bool depth_test() { return m_depth_test; }
+
+    void set_depth_test(bool value) { m_depth_test = value; }
+
+    bool depth_write() { return m_depth_write; }
+
+    void set_depth_write(bool value) { m_depth_write = value; }
+
+    rend::DepthFunc depth_func() { return m_depth_func; }
+
+    void set_depth_func(rend::DepthFunc value) { m_depth_func = value; }
+
+    rend::BlendingSetup& blending_setup()
     {
         return m_blending;
     }

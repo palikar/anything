@@ -49,7 +49,7 @@ class MaterialBuilder
         return *this;
     }
 
-    MaterialBuilder& blend_dst_alpha(int blend_dst_alpha)
+    MaterialBuilder& blend_dst_alpha(rend::BlenidngDestination blend_dst_alpha)
     {
         m_mat->blending_setup().blend_dst_alpha = blend_dst_alpha;
         return *this;
@@ -61,7 +61,7 @@ class MaterialBuilder
         return *this;
     }
 
-    MaterialBuilder& blend_equation_alpha(int blend_equation_alpha)
+    MaterialBuilder& blend_equation_alpha(rend::BlenidngEquation blend_equation_alpha)
     {
         m_mat->blending_setup().blend_equation_alpha = blend_equation_alpha;
         return *this;
@@ -73,7 +73,7 @@ class MaterialBuilder
         return *this;
     }
 
-    MaterialBuilder& blend_src_alpha(int blend_src_alpha)
+    MaterialBuilder& blend_src_alpha(rend::BlenidngSource blend_src_alpha)
     {
         m_mat->blending_setup().blend_src_alpha = blend_src_alpha;
         return *this;
@@ -103,8 +103,31 @@ class MaterialBuilder
         return *this;
     }
 
-    
+    MaterialBuilder& alpha_blending()
+    {
+        m_mat->blending_setup().blend_equation = rend::BlenidngEquation::ADD;
+        m_mat->blending_setup().blend_equation_alpha = rend::BlenidngEquation::ADD;
+        
+        m_mat->blending_setup().blend_src = rend::BlenidngSource::SRC_ALPHA;
+        m_mat->blending_setup().blend_dst = rend::BlenidngDestination::ONE_MINUS_SRC_ALPHA;
 
+        m_mat->blending_setup().blend_src_alpha = rend::BlenidngSource::SRC_ALPHA;
+        m_mat->blending_setup().blend_dst_alpha = rend::BlenidngDestination::ONE_MINUS_SRC_ALPHA;
+        
+        return *this;
+    }
+
+    MaterialBuilder& depth_test(bool value = false)
+    {
+        m_mat->set_depth_test(value);
+        return *this;
+    }
+    
+    MaterialBuilder& depth_write(bool value = false)
+    {
+        m_mat->set_depth_write(value);
+        return *this;
+    }
 
 };
 

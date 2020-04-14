@@ -24,6 +24,12 @@ Shader::~Shader()
     glDeleteProgram(m_id);
 }
 
+void Shader::set(const std::string &name, bool value)
+{
+    GLint location = glGetUniformLocation(m_id, name.c_str());
+    glUniform1i(location, value ? 1 : 0);
+}
+
 void Shader::set(const std::string &name, int value)
 {
     GLint location = glGetUniformLocation(m_id, name.c_str());

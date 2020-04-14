@@ -27,45 +27,56 @@ class SimpleGame : public gmt::GameBase {
 
     }
 
-    void init() override
+    void init_basic()
     {
         renderer.init(engine()->api());
         main_scene = init_scene("main");
-
-        
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
-
         camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
+        camera_controller->set_max_radius(60.0f);
+    }
 
-        plane = main_scene->add(gmt::mesh_entity(
-                                    {grph::plane_geometry(10, 10, 10, 10),
-                                     grph::solid_color({ 1.0f, 0.0f, 0.0f })}));
+    void init() override
+    {
+        init_basic();
+
+
+        auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
         
-        cmp::mesh(plane).material()->set_wire_frame(true);
+        plane = main_scene->add(gmt::mesh_entity(
+                                    {grph::plane_geometry(50, 50, 20, 20),
+                                     grph::texture_material(tex)}));
+        
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
         
 
-        // cube_2 = main_scene->add(gmt::mesh_entity(
-        //                              {grph::cube_geometry(2.0f, 2.0f, 2.0f),
-        //                               grph::solid_color({ 0.0f, 0.0f, 1.0f })}));
+        auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
 
+        // grph::MaterialBuilder::from_existing(cube_mat.get())
+        //     .enable_lending()
+        //     .alpha_blending()
+        //     .alpha_test(0.1)
+        //     .opacity(0.2)
+        //     .transparent(false);
+            
 
-
-        auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/happy_boo.png"));
-        
         cube_2 = main_scene->add(gmt::mesh_entity(
-                                     {grph::cube_geometry(10,10,10, 100, 100, 100),
-                                      grph::texture_material(tex)}));
+                                     {grph::sphere_geometry(2, 20, 20),
+                                      std::move(cube_mat)}));
+
+        cmp::transform(cube_2).translateY(3.0f);
+
+        // auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/happy_boo.png"));
         
 
+        // cube_2 = main_scene->add(gmt::mesh_entity(
+        //                              {grph::cube_geometry(10,10,10, 100, 100, 100),
+        //                               grph::texture_material(tex)}));
 
-        
-        
         // cube_2 = main_scene->add(gmt::mesh_entity({
         //             grph::cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
-        //             grph::solid_color({ 0.0f, 1.0f, 0.0f })}));
-        
+        //             grph::solid_color({ 0.0f, 1.0f, 0.0f })}));        
         // cmp::mesh(cube_2).material()->set_wire_frame(true);
         
     }
