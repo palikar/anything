@@ -40,6 +40,7 @@
 #include "graphics/geometry.hpp"
 #include "graphics/mesh.hpp"
 #include "graphics/material.hpp"
+#include "graphics/material_builder.hpp"
 #include "graphics/mesh_factory.hpp"
 
 #include "graphics/materials/solid_color.hpp"

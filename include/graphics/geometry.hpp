@@ -16,8 +16,8 @@ rend::ShaderDataType stride_to_data_type(size_t s)
 {
     switch (s)
     {
-    case 2: return rend::ShaderDataType::Float2;
-    case 3: return rend::ShaderDataType::Float3;
+      case 2: return rend::ShaderDataType::Float2;
+      case 3: return rend::ShaderDataType::Float3;
     case 4: return rend::ShaderDataType::Float4;
     }
     return rend::ShaderDataType::None;
@@ -30,6 +30,13 @@ class Geometry
     std::unordered_map<std::string, std::tuple<std::vector<float>, size_t>> m_buffers;
     std::vector<uint32_t> m_index;
 
+    std::vector<uint32_t> m_groups;
+
+    std::vector<rend::VertexArrayPtr> m_glbuffers;
+
+    bool m_dirty;
+
+    
   public:
     Geometry()
     {
@@ -150,7 +157,13 @@ class Geometry
     {
         apply(glm::translate(glm::mat4(1), glm::vec3(t_x, t_y, t_z)));
     }
+    
+    void pack(bool tight = true)
+    {
+        
 
+    }
+    
     rend::VertexArrayPtr to_vertex_buffer()
     {
         auto arr = std::make_unique<rend::VertexArray>();
