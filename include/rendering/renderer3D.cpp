@@ -44,7 +44,7 @@ void RendererScene3D::render_entity(gmt::Entity *object)
         shader->set("projection_matrix", m_projection);
 
         auto mat = mesh_comp->mesh.material();
-        mat->update_uniforms();
+        mat->update_uniforms(m_binder);
 
         mesh_comp->mesh.geometry()->bind();
 

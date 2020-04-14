@@ -23,8 +23,8 @@ class RenderAPI
     {
 
         GLCall(glEnable(GL_DEPTH_TEST));
-        glCullFace(GL_BACK);
-        glFrontFace(GL_CW);
+        GLCall(glCullFace(GL_BACK));
+        GLCall(glFrontFace(GL_CW));
     }
 
     void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
@@ -48,6 +48,7 @@ class RenderAPI
         vertex_array->bind();
         uint32_t count =
           index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
+        
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
 

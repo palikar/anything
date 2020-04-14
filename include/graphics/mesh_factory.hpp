@@ -1,19 +1,20 @@
 #pragma once
 
-#include "rendering/buffer_factory.hpp"
-#include "graphics/mesh.hpp"
-
+#include "rendering/vertex_array.hpp"
 #include "math/utils.hpp"
 
-#include "commons.hpp"
-#include "std_header.hpp"
-#include "glm_header.hpp"
 
 namespace ay::grph
 {
 
 
-rend::VertexArrayPtr cube_geometry(float side = 1.0f);
+
+rend::VertexArrayPtr cube_geometry(float width = 1.0,
+                                   float height= 1.0,
+                                   float depth = 1.0,
+                                   float widthSegments = 1.0,
+                                   float heightSegments= 1.0,
+                                   float depthSegments = 1.0);
 
 
 rend::VertexArrayPtr plane_geometry(size_t width,

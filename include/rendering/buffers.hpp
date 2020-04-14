@@ -95,6 +95,10 @@ struct BufferElement
     size_t offset{ 0 };
     uint32_t size{ data_type_size(type) };
     bool normalized{ false };
+
+    // BufferElement(std::string t_name, ShaderDataType t_type, bool t_normalized):
+    //     name(t_name), type(t_type), normalized(t_normalized)
+    // {}
 };
 
 class BufferLayout
@@ -164,7 +168,7 @@ class VertexBuffer
     {
         GLCall(glCreateBuffers(1, &m_vbo));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, t_size, t_vertices, GL_DYNAMIC_DRAW));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, t_size, t_vertices, GL_STATIC_DRAW));
     }
 
     ~VertexBuffer()

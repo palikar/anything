@@ -9,6 +9,7 @@
 #include "rendering/renderer.hpp"
 #include "rendering/renderer3D.hpp"
 #include "rendering/shaders.hpp"
+#include "rendering/texture.hpp"
 #include "rendering/vertex.hpp"
 #include "rendering/vertex_array.hpp"
 
@@ -42,6 +43,7 @@
 #include "graphics/mesh_factory.hpp"
 
 #include "graphics/materials/solid_color.hpp"
+#include "graphics/materials/textured.hpp"
 
 
 #include "util/meta.hpp"

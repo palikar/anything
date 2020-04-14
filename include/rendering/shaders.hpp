@@ -49,9 +49,15 @@ class Shader
 
     void set(const std::string &name, const glm::mat4 &mat);
 
+    void set_sampler(const std::string &name, size_t unit)
+    {
+        auto location = glGetUniformLocation(m_id, name.c_str());
+        glUniform1i(location, unit);
+    }
+
     void bind();
 
-    void unbind();
+void unbind();
 
   private:
     void compile_program(const std::unordered_map<GLenum, std::string> &shader_sources);

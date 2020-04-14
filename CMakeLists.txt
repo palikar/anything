@@ -149,6 +149,7 @@ include_directories(${GLFW_INCLUDE_DIRS})
 # The testing example
 add_library(anything_engine
 
+    ./include/rendering/texture.cpp
     ./include/rendering/renderer3D.cpp
     ./include/rendering/shaders.cpp
     ./include/rendering/vertex_array.cpp

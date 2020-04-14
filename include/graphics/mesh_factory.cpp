@@ -1,49 +1,107 @@
-
-
 #include "graphics/mesh_factory.hpp"
+#include "rendering/buffer_factory.hpp"
+
+#include "math/utils.hpp"
+
+#include "std_header.hpp"
 
 
 namespace ay::grph
 {
 
 
-rend::VertexArrayPtr cube_geometry(float side)
+rend::VertexArrayPtr cube_geometry(float width,
+                                   float height,
+                                   float depth,
+                                   float widthSegments,
+                                   float heightSegments,
+                                   float depthSegments)
+
 {
 
-    auto buffers =
-      rend::make_vertex_array(rend::make_index_buffer({ { 0, 1, 2 },
-                                                        { 2, 3, 0 },
 
-                                                        { 1, 5, 6 },
-                                                        { 6, 2, 1 },
+    std::vector<Index3i> indices;
+    std::vector<Vertex8fg> vertecies;
+    int numberOfVertices = 0;
 
-                                                        { 7, 6, 5 },
-                                                        { 5, 4, 7 },
+    auto buildPlane = [&](char u,
+                          char v,
+                          char w,
+                          float udir,
+                          float vdir,
+                          float t_width,
+                          float t_height,
+                          float t_depth,
+                          float gridX,
+                          float gridY) {
 
-                                                        { 4, 0, 3 },
-                                                        { 3, 7, 4 },
+        float segmentWidth = t_width / gridX;
+        float segmentHeight = t_height / gridY;
+        float widthHalf = t_width / 2;
+        float heightHalf = t_height / 2;
+        float depthHalf = t_depth / 2;
+        float gridX1 = gridX + 1;
+        float gridY1 = gridY + 1;
+        int vertexCounter = 0;
+        int ix, iy;
 
-                                                        { 4, 5, 1 },
-                                                        { 1, 0, 4 },
+        for ( iy = 0; iy < gridY1; iy++ ) {
+            float y = iy * segmentHeight - heightHalf;
+            for ( ix = 0; ix < gridX1; ix++ ) {
+                float x = ix * segmentWidth - widthHalf;
 
-                                                        { 3, 2, 6 },
-                                                        { 6, 7, 3 } }),
-                              rend::make_vertex_buffer({ { -side, -side, side },
-                                                         { side, -side, side },
-                                                         { side, side, side },
-                                                         { -side, side, side },
+                Vertex8fg vertex;
 
-                                                         { -side, -side, -side },
-                                                         { side, -side, -side },
-                                                         { side, side, -side },
-                                                         { -side, side, -side } }));
+                vertex[ u ] = x * udir;
+                vertex[ v ] = y * vdir;
+                vertex[ w ] = depthHalf;
 
-    return buffers;
+                vertex[ 3 + u ] = 0;
+                vertex[ 3 + v ] = 0;
+                vertex[ 3 + w ] = t_depth > 0 ? 1 : - 1;
+
+                vertex[6] = ( ix / gridX );
+                vertex[7] = ( 1 - ( iy / gridY ) );
+
+                vertecies.push_back(vertex);
+
+                vertexCounter += 1;
+
+            };
+        }
+
+        for ( iy = 0; iy < gridY; iy++ ) {
+            for ( ix = 0; ix < gridX; ix++ ) {
+                size_t a = numberOfVertices + ix + gridX1 * iy;
+                size_t b = numberOfVertices + ix + gridX1 * ( iy + 1 );
+                size_t c = numberOfVertices + ( ix + 1 ) + gridX1 * ( iy + 1 );
+                size_t d = numberOfVertices + ( ix + 1 ) + gridX1 * iy;
+                indices.push_back({ a, b, d });
+                indices.push_back({ b, c, d });
+
+            }
+        }
+
+        numberOfVertices += vertexCounter;
+    };
+
+
+    buildPlane( 2, 1, 0, -1, -1, depth, height, width, depthSegments, heightSegments); // px
+    buildPlane( 2, 1, 0,  1, -1, depth, height, -width, depthSegments, heightSegments); // nx
+
+    buildPlane( 0, 2, 1,  1, 1, width, depth, height, widthSegments, depthSegments); // py
+    buildPlane( 0, 2, 1,   1, -1, width, depth, -height, widthSegments, depthSegments); // ny
+
+    buildPlane( 0, 1, 2,  1, -1, width, height, depth, widthSegments, heightSegments); // pz
+    buildPlane( 0, 1, 2,  -1, -1, width, height, -depth, widthSegments, heightSegments); // nz
+
+    return rend::make_vertex_array(rend::make_index_buffer(indices),
+                                   rend::make_buffer(vertecies));
 }
 
 
 rend::VertexArrayPtr
-  plane_geometry(size_t width, size_t height, float width_segments, float height_segments)
+plane_geometry(size_t width, size_t height, float width_segments, float height_segments)
 {
 
     const auto half_width  = width / 2.0f;
@@ -57,7 +115,7 @@ rend::VertexArrayPtr
     const float segment_height = height / grid_y;
 
     std::vector<Index3i> indices;
-    std::vector<Vertex3f> vertecies;
+    std::vector<Vertex8fg> vertecies;
 
     for (size_t iy = 0; iy < grid_y1; iy++)
     {
@@ -65,16 +123,11 @@ rend::VertexArrayPtr
         for (size_t ix = 0; ix < grid_x1; ix++)
         {
             auto x = ix * segment_width - half_width;
-            vertecies.push_back({ x, -y, 0 });
-
-            // normals.push( 0, 0, 1 );
-            // uvs.push( ix / gridX );
-            // uvs.push( 1 - ( iy / gridY ) );
+            vertecies.push_back({ x, -y, 0,  0, 0, 1,  ix / grid_x,  1 - ( iy / grid_y )  });
         }
     }
 
-    // indices
-
+    
     for (size_t iy = 0; iy < grid_y; iy++)
     {
         for (size_t ix = 0; ix < grid_x; ix++)
@@ -83,14 +136,14 @@ rend::VertexArrayPtr
             auto b = static_cast<size_t>(ix + grid_x1 * (iy + 1));
             auto c = static_cast<size_t>((ix + 1) + grid_x1 * (iy + 1));
             auto d = static_cast<size_t>((ix + 1) + grid_x1 * iy);
-
+            
             indices.push_back({ a, b, d });
             indices.push_back({ b, c, d });
         }
     }
 
     return rend::make_vertex_array(rend::make_index_buffer(indices),
-                                   rend::make_vertex_buffer(vertecies));
+                                   rend::make_buffer(vertecies));
 }
 
 
@@ -104,7 +157,7 @@ rend::VertexArrayPtr sphere_geometry(float radius,
 {
 
     std::vector<Index3i> indices;
-    std::vector<Vertex3f> vertices;
+    std::vector<Vertex8fg> vertices;
 
     radius = std::max(radius, 1.0f);
 
@@ -121,28 +174,28 @@ rend::VertexArrayPtr sphere_geometry(float radius,
         std::vector<size_t> verticesRow;
         float v = iy / height_segments;
 
-        // float uOffset = 0;
-        // if ( iy == 0 && theta_start == 0 )
-        // {
-        //     uOffset = 0.5 / width_segments;
-        // }
-        // else if ( iy == height_segments && theta_end == PI )
-        // {
-        //     uOffset = - 0.5 / width_segments;
-        // }
+        float uOffset = 0;
+        if ( iy == 0 && theta_start == 0 )
+        {
+            uOffset = 0.5 / width_segments;
+        }
+        else if ( iy == height_segments && theta_end == mth::PI )
+        {
+            uOffset = - 0.5 / width_segments;
+        }
 
         for (ix = 0; ix <= width_segments; ix++)
         {
             float u       = ix / width_segments;
             const float x = -radius * std::cos(phi_start + u * phi_length)
-                            * std::sin(theta_start + v * theta_length);
+                * std::sin(theta_start + v * theta_length);
             const float y = radius * std::cos(theta_start + v * theta_length);
             const float z = radius * std::sin(phi_start + u * phi_length)
-                            * std::sin(theta_start + v * theta_length);
-            vertices.push_back({ x, y, z });
-            // normal.copy( vertex ).normalize();
-            // normals.push( normal.x, normal.y, normal.z );
-            // uvs.push( u + uOffset, 1 - v );
+                * std::sin(theta_start + v * theta_length);
+
+            auto norm = glm::normalize(glm::vec3(x, y, z));
+            vertices.push_back({ x, y, z , norm.x, norm.y, norm.z, u + uOffset, 1 - v });
+            
             verticesRow.push_back(index++);
         }
         grid.push_back(verticesRow);
@@ -168,7 +221,7 @@ rend::VertexArrayPtr sphere_geometry(float radius,
 
 
     return rend::make_vertex_array(rend::make_index_buffer(indices),
-                                   rend::make_vertex_buffer(vertices));
+                                   rend::make_buffer(vertices));
 }
 
 
@@ -183,18 +236,17 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 {
 
     std::vector<Index3i> indices;
-    std::vector<Vertex3f> vertices;
+    std::vector<Vertex8fg> vertices;
 
     float index = 0;
     std::vector<std::vector<uint32_t>> indexArray;
     float halfHeight = height / 2;
-    // float groupStart = 0;
+    
 
     int x, y;
-    // int groupCount = 0;
 
     // this will be used to calculate the normal
-    // float slope = ( radiusBottom - radiusTop ) / height;
+    float slope = ( radiusBottom - radiusTop ) / height;
 
     for (y = 0; y <= heightSegments; y++)
     {
@@ -214,18 +266,15 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
             const float vert_x = radius * sinTheta;
             const float vert_y = -v * height + halfHeight;
             const float vert_z = radius * cosTheta;
-            vertices.push_back({ vert_x, vert_y, vert_z });
 
-            // normal
-            // normal.set( sinTheta, slope, cosTheta ).normalize();
-            // normals.push( normal.x, normal.y, normal.z );
-            // uvs.push( u, 1 - v );
-            // save index of vertex in respective row
-
+            auto norm = glm::normalize(glm::vec3( sinTheta, slope, cosTheta ));
+            
+            vertices.push_back({ vert_x, vert_y, vert_z,
+                                 norm.x, norm.y, norm.z,
+                                 u, 1 - v});
+            
             indexRow.push_back(index++);
         }
-
-        // now save vertices of the row in our index array
 
         indexArray.push_back(indexRow);
     }
@@ -247,20 +296,18 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 
 
     auto generate_cap = [&](bool top) {
-        int x, centerIndexStart, centerIndexEnd;
+        int p_x, centerIndexStart, centerIndexEnd;
         // int groupCount = 0;
         const float radius = (top) ? radiusTop : radiusBottom;
         const float sign   = (top) ? 1 : -1;
         // save the index of the first center vertex
         centerIndexStart = index;
 
-        for (x = 1; x <= radialSegments; x++)
+        for (p_x = 1; p_x <= radialSegments; p_x++)
         {
-            vertices.push_back({ 0, halfHeight * sign, 0 });
-            // normal
-            // normals.push( 0, sign, 0 );
-            // uv
-            // uvs.push( 0.5, 0.5 );
+            vertices.push_back({ 0, halfHeight * sign, 0,
+                                 0, sign, 0,
+                                 0.5, 0.5});
             index++;
         }
 
@@ -268,7 +315,7 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 
         for (x = 0; x <= radialSegments; x++)
         {
-            const float u        = x / radialSegments;
+            const float u        = p_x / radialSegments;
             const float theta    = u * thetaLength + thetaStart;
             const float cosTheta = std::cos(theta);
             const float sinTheta = std::sin(theta);
@@ -277,15 +324,9 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
             const float vert_x = radius * sinTheta;
             const float vert_y = halfHeight * sign;
             const float vert_z = radius * cosTheta;
-            vertices.push_back({ vert_x, vert_y, vert_z });
-
-            // // normal
-            // normals.push( 0, sign, 0 );
-            // // uv
-            // uv.x = ( cosTheta * 0.5 ) + 0.5;
-            // uv.y = ( sinTheta * 0.5 * sign ) + 0.5;
-            // uvs.push( uv.x, uv.y );
-            // increase index
+            vertices.push_back({ vert_x, vert_y, vert_z,
+                                 0, sign, 0,
+                                 ( cosTheta * 0.5f ) + 0.5f, ( sinTheta * 0.5f * sign ) + 0.5f });
             index++;
         }
 
@@ -317,7 +358,7 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 
 
     return make_vertex_array(rend::make_index_buffer(indices),
-                             rend::make_vertex_buffer(vertices));
+                             rend::make_buffer(vertices));
 }
 
 

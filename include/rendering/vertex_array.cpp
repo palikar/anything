@@ -1,4 +1,4 @@
-#
+
 #include "rendering/vertex_array.hpp"
 
 #include "util/gl_helpers.hpp"
@@ -36,7 +36,12 @@ void VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
     const auto &layout = vertex_buffer->get_layout();
     for (const auto &element : layout.elements())
     {
-
+        // std::cout << "index: " << m_index << "\n";
+        // std::cout << "elemnt_coutn: " << data_type_element_count(element.type) << "\n";
+        // std::cout << "stride: " << layout.get_stride() << "\n";
+        // std::cout << "offset: " << element.offset << "\n";
+        // std::cout << "--------------" << "\n";
+        
         GLCall(glEnableVertexAttribArray(m_index));
         GLCall(glVertexAttribPointer(m_index,
                                      data_type_element_count(element.type),

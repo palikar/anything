@@ -1,9 +1,70 @@
 #pragma once
 
+#include "rendering/buffers.hpp"
+
 #include "glm_header.hpp"
+#include "std_header.hpp"
 
 namespace ay
 {
+
+template <typename... T>
+struct Types {};
+
+template <rend::ShaderDataType... T>
+struct ShaderTypes {};
+
+template<size_t count, typename ... T>
+class Vertex3fGen;
+
+template<size_t count, typename ... T, rend::ShaderDataType ... T_shad>
+class Vertex3fGen<count,Types<T...>, ShaderTypes<T_shad...>>
+{
+  public:
+    using data_type                       = std::common_type_t<T ...>;
+    constexpr static size_t element_size  = sizeof(data_type) * count;
+    constexpr static size_t element_count = count;
+    
+    std::array<data_type, sizeof...(T)> elements;
+
+    Vertex3fGen() =  default;
+    
+    Vertex3fGen(T ... vals)  : elements{vals ...}
+    {}
+
+    template<size_t offset = 0, typename ... El>
+    void add_data(El ... el)
+    {
+        size_t i = offset;
+        ((elements[i++] = el), ...);
+    }
+
+    data_type& operator[](int index)
+    {
+        return elements[index];
+    }
+
+    data_type* data()
+    {
+        return elements.data();
+    }
+};
+
+
+using Vertex3fg =  Vertex3fGen<3,
+                               Types<float, float, float>,
+                               ShaderTypes<rend::ShaderDataType::Float3>>;
+
+using Vertex6fg =  Vertex3fGen<6,
+                               Types<float, float, float,
+                                     float, float, float>,
+                               ShaderTypes<rend::ShaderDataType::Float3, rend::ShaderDataType::Float3>>;
+
+using Vertex8fg =  Vertex3fGen<8,
+                               Types<float, float, float,
+                                     float, float, float,
+                                     float, float>,
+                               ShaderTypes<rend::ShaderDataType::Float3, rend::ShaderDataType::Float3, rend::ShaderDataType::Float2>>;
 
 class Vertex3f
 {

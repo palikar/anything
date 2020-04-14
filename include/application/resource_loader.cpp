@@ -12,6 +12,18 @@ void ResouceLoader::init(std::string t_root)
     m_shaders = m_root / "shaders";
 }
 
+std::string ResouceLoader::get_file_path(std::string_view t_file)
+{
+    fs::path path = m_root / t_file;
+    if (!fs::exists(path))
+    {
+        std::cout << "No such resource: " << path << "\n";
+    }
+
+    return path;
+
+}
+
 std::string ResouceLoader::get_file_text(std::string_view t_file)
 {
     fs::path path = m_root / t_file;

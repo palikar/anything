@@ -5,6 +5,7 @@
 #include "commons.hpp"
 
 #include "std_header.hpp"
+#include <string>
 
 namespace ay::rend
 {
@@ -13,6 +14,21 @@ enum class VetexType
 {
     POS
 };
+
+
+template<size_t count, typename... T, ShaderDataType... T_shader>
+inline VertexBufferPtr make_buffer(
+  std::vector<Vertex3fGen<count, Types<T...>, ShaderTypes<T_shader...>>> vertecies)
+{
+    auto buf = std::make_unique<VertexBuffer>(
+      vertecies.front().data(),
+      vertecies.size()
+        * Vertex3fGen<count, Types<T...>, ShaderTypes<T_shader...>>::element_size);
+
+    buf->set_layout(BufferLayout({  (BufferElement{"position", T_shader }) ...  }));
+
+    return buf;
+}
 
 
 inline VertexBufferPtr make_vertex_buffer(uint32_t size)
@@ -24,7 +40,10 @@ inline VertexBufferPtr make_vertex_buffer(std::vector<Vertex3f> vertecies)
 {
     auto buf = std::make_unique<VertexBuffer>(vertecies.front().data(),
                                               vertecies.size() * Vertex3f::element_size);
+
+
     buf->set_layout({ { "position", ShaderDataType::Float3 } });
+
     return buf;
 }
 

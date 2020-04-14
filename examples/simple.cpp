@@ -43,28 +43,37 @@ class SimpleGame : public gmt::GameBase {
                                      grph::solid_color({ 1.0f, 0.0f, 0.0f })}));
         
         cmp::mesh(plane).material()->set_wire_frame(true);
-
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        
 
-        cube_1 = main_scene->add(gmt::mesh_entity(
-                                     {grph::sphere_geometry(2, 20, 20),
-                                      grph::solid_color({ 0.0f, 1.0f, 0.0f })}));
+        // cube_2 = main_scene->add(gmt::mesh_entity(
+        //                              {grph::cube_geometry(2.0f, 2.0f, 2.0f),
+        //                               grph::solid_color({ 0.0f, 0.0f, 1.0f })}));
+
+
+
+        auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/happy_boo.png"));
         
-        cmp::mesh(cube_1).material()->set_wire_frame(true);
+        cube_2 = main_scene->add(gmt::mesh_entity(
+                                     {grph::cube_geometry(10,10,10, 100, 100, 100),
+                                      grph::texture_material(tex)}));
+        
+
+
         
         
-        cube_2 = main_scene->add(gmt::mesh_entity({
-                    grph::cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
-                    grph::solid_color({ 0.0f, 1.0f, 0.0f })}));
+        // cube_2 = main_scene->add(gmt::mesh_entity({
+        //             grph::cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
+        //             grph::solid_color({ 0.0f, 1.0f, 0.0f })}));
         
-        cmp::mesh(cube_2).material()->set_wire_frame(true);
+        // cmp::mesh(cube_2).material()->set_wire_frame(true);
         
     }
     
     void update(double dt) override
     {
         
-        cmp::transform(cube_2).rotateZ(glm::radians(50*dt));
+        // cmp::transform(cube_2).rotateZ(glm::radians(50*dt));
 
         main_scene->update(dt);
     }
