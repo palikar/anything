@@ -28,10 +28,9 @@ class TextureMaterial : public Material
         m_shader =  t_shader_lib.load("textured");
     }
 
-    void update_uniforms(rend::TextureBinder&) override
+    void update_uniforms(rend::TextureBinder& binder) override
     {
-        m_texture->bind(1);
-        m_shader->set_sampler("tex", 1);
+        m_shader->set_sampler("tex", binder.resolve(m_texture.get()));
     }
     
 };

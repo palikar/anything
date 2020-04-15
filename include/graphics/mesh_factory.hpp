@@ -41,4 +41,8 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
                                        float thetaLength    = 2.0f * mth::PI);
 
 
+rend::VertexArrayPtr circle_geometry(float radius = 1,
+                                     float segments = 8,
+                                       float thetaStart     = 0.0f,
+                                       float thetaLength    = 2.0f * mth::PI);
 }  // namespace ay::grph

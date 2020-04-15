@@ -362,4 +362,40 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 }
 
 
+rend::VertexArrayPtr circle_geometry(float radius,
+                                     float segments,
+                                     float thetaStart,
+                                     float thetaLength)
+{
+    std::vector<Index3i> indices;
+    std::vector<Vertex8fg> vertices;
+
+
+    segments = std::max(segments, 3.0f);
+    vertices.push_back({ 0, 0, 0,  0, 0, 1 , 0.5, 0.5  });
+
+    size_t i, s;
+    for ( s = 0, i = 3; s <= segments; s ++, i += 3 ) {
+        float segment = thetaStart + s / segments * thetaLength;
+        
+        vertices.push_back(
+            {radius * std::cos( segment ), radius * std::sin( segment ), 0.0f,
+             0, 0, 1,
+             (vertices[ s ][0] / radius + 1 ) / 2, ( vertices[ s ][1] / radius + 1 ) / 2
+            });
+    }
+
+    for ( i = 1; i <= segments; i ++ ) {
+
+        indices.push_back({ i, i + 1, 0 });
+
+    }
+    
+
+
+    return make_vertex_array(rend::make_index_buffer(indices),
+                             rend::make_buffer(vertices));
+}
+
+
 }  // namespace ay::grph

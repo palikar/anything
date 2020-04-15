@@ -31,7 +31,7 @@ Texture::Texture(uint32_t width, uint32_t height)
 Texture::Texture(const std::string& path)
 {
     m_path = path;
-    int width, height, channels;
+    int width{}, height{}, channels{};
     stbi_set_flip_vertically_on_load(1);
     stbi_uc* data = nullptr;
     data = stbi_load(path.c_str(), &width, &height, &channels, 0);
