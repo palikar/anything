@@ -289,8 +289,8 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
             size_t c = indexArray[y + 1][x + 1];
             size_t d = indexArray[y][x + 1];
 
-            indices.push_back({ a, b, d });
-            indices.push_back({ b, c, d });
+            indices.push_back({ d, b, a });
+            indices.push_back({ d, c, b });
         }
     }
 
@@ -458,7 +458,7 @@ rend::VertexArrayPtr ring_geometry(float innerRadius,
 
 
 rend::VertexArrayPtr torus_geometry(float radius,
-                                   float tube ,
+                                    float tube ,
                                    float radialSegments,
                                    float tubularSegments,
                                    float arc)
@@ -501,8 +501,8 @@ rend::VertexArrayPtr torus_geometry(float radius,
 			size_t c = ( tubularSegments + 1 ) * ( j - 1 ) + i;
 			size_t d = ( tubularSegments + 1 ) * j + i;
             
-			indices.push_back({ a, b, d });
-			indices.push_back({ b, c, d });
+			indices.push_back({ d, b, a });
+			indices.push_back({ d, c, b });
 
 		}
 
@@ -512,6 +512,18 @@ rend::VertexArrayPtr torus_geometry(float radius,
     return make_vertex_array(rend::make_index_buffer(indices),
                              rend::make_buffer(vertices));
 
+}
+
+
+rend::VertexArrayPtr cone_geometry(float radius,
+                                   float height,
+                                   float radialSegments,
+                                   float heightSegments,
+                                   bool openEnded,
+                                   float thetaStart,
+                                   float thetaLength)
+{
+    return cylinder_geometry(0, radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength);        
 }
 
 

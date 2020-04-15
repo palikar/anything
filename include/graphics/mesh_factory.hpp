@@ -8,13 +8,12 @@ namespace ay::grph
 {
 
 
-
-rend::VertexArrayPtr cube_geometry(float width = 1.0,
-                                   float height= 1.0,
-                                   float depth = 1.0,
-                                   float widthSegments = 1.0,
-                                   float heightSegments= 1.0,
-                                   float depthSegments = 1.0);
+rend::VertexArrayPtr cube_geometry(float width          = 1.0,
+                                   float height         = 1.0,
+                                   float depth          = 1.0,
+                                   float widthSegments  = 1.0,
+                                   float heightSegments = 1.0,
+                                   float depthSegments  = 1.0);
 
 
 rend::VertexArrayPtr plane_geometry(size_t width,
@@ -41,10 +40,10 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
                                        float thetaLength    = 2.0f * mth::PI);
 
 
-rend::VertexArrayPtr circle_geometry(float radius = 1,
-                                     float segments = 8,
-                                     float thetaStart     = 0.0f,
-                                     float thetaLength    = 2.0f * mth::PI);
+rend::VertexArrayPtr circle_geometry(float radius      = 1,
+                                     float segments    = 8,
+                                     float thetaStart  = 0.0f,
+                                     float thetaLength = 2.0f * mth::PI);
 
 
 rend::VertexArrayPtr ring_geometry(float innerRadius   = 0.5,
@@ -54,11 +53,19 @@ rend::VertexArrayPtr ring_geometry(float innerRadius   = 0.5,
                                    float thetaStart    = 0.0f,
                                    float thetaLength   = 2.0f * mth::PI);
 
-rend::VertexArrayPtr torus_geometry(float radius = 1.0,
-                                    float tube = 0.4,
-                                    float radialSegments = 8,
+rend::VertexArrayPtr torus_geometry(float radius          = 1.0,
+                                    float tube            = 0.4,
+                                    float radialSegments  = 8,
                                     float tubularSegments = 6,
-                                    float arc = 2.0f * mth::PI);
+                                    float arc             = 2.0f * mth::PI);
 
+
+rend::VertexArrayPtr cone_geometry(float radius         = 1.0,
+                                   float height         = 2.0,
+                                   float radialSegments = 8.0f,
+                                   float heightSegments = 1.0f,
+                                   bool openEnded       = false,
+                                   float thetaStart     = 0.0f,
+                                   float thetaLength    = 2.0f * mth::PI);
 
 }  // namespace ay::grph
