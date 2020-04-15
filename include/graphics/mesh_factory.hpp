@@ -43,6 +43,22 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 
 rend::VertexArrayPtr circle_geometry(float radius = 1,
                                      float segments = 8,
-                                       float thetaStart     = 0.0f,
-                                       float thetaLength    = 2.0f * mth::PI);
+                                     float thetaStart     = 0.0f,
+                                     float thetaLength    = 2.0f * mth::PI);
+
+
+rend::VertexArrayPtr ring_geometry(float innerRadius   = 0.5,
+                                   float outerRadius   = 1,
+                                   float thetaSegments = 8,
+                                   float phiSegments   = 1,
+                                   float thetaStart    = 0.0f,
+                                   float thetaLength   = 2.0f * mth::PI);
+
+rend::VertexArrayPtr torus_geometry(float radius = 1.0,
+                                    float tube = 0.4,
+                                    float radialSegments = 8,
+                                    float tubularSegments = 6,
+                                    float arc = 2.0f * mth::PI);
+
+
 }  // namespace ay::grph
