@@ -83,9 +83,9 @@ void RendererScene3D::render_entity(gmt::Entity *object)
 
         mat->update_uniforms(m_binder);
 
-        mesh_comp->mesh.geometry()->bind();
+        mesh_comp->mesh.buffers()->bind();
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
-        m_api->draw_indexed(mesh_comp->mesh.geometry());
+        m_api->draw_indexed(mesh_comp->mesh.buffers());
 
         if (mat->blending_setup().blending)
         {

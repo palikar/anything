@@ -47,14 +47,33 @@ class RenderAPI
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
 
+    void draw_mutli_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
+    {
+        vertex_array->bind();
+        
+        for (size_t i = 0; i < vertex_array->index_cnt(); ++i)
+        {
+            vertex_array->bind_index(i);
+            uint32_t count =
+                index_count <= 0 ? vertex_array->index_buffer(i)->count() : index_count;
+            GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
+        }
+
+    }
+    
     void draw_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
     {
+        
+        if (vertex_array->multi_indexed())
+        {
+            draw_mutli_indexed(vertex_array);
+        }
 
         vertex_array->bind();
         uint32_t count =
-          index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
-        
+            index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
+        
     }
 
     void enable_wireframe()

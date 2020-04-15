@@ -11,6 +11,13 @@ void VertexArray::bind() const
     GLCall(glBindVertexArray(m_vao));
 }
 
+void VertexArray::bind_index(size_t index) const
+{
+    GLCall(glBindVertexArray(m_vao));
+    m_index_buffers.at(index)->bind();
+    
+}
+
 void VertexArray::unbind() const
 {
     GLCall(glBindVertexArray(0));
@@ -36,6 +43,7 @@ void VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
     const auto &layout = vertex_buffer->get_layout();
     for (const auto &element : layout.elements())
     {
+        
         // std::cout << "index: " << m_index << "\n";
         // std::cout << "elemnt_coutn: " << data_type_element_count(element.type) << "\n";
         // std::cout << "stride: " << layout.get_stride() << "\n";
@@ -54,11 +62,11 @@ void VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
     m_vertex_buffers.push_back(std::move(vertex_buffer));
 }
 
-void VertexArray::set_index_buffer(IndexBufferPtr index_buffer)
+void VertexArray::set_index_buffer(IndexBufferPtr index_buffer, size_t index)
 {
     glBindVertexArray(m_vao);
     index_buffer->bind();
-    m_index_buffer = std::move(index_buffer);
+    m_index_buffers.insert(std::begin(m_index_buffers) + index, std::move(index_buffer));
     glBindVertexArray(0);
 }
 

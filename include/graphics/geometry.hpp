@@ -12,13 +12,13 @@
 namespace ay::grph
 {
 
-rend::ShaderDataType stride_to_data_type(size_t s)
+inline rend::ShaderDataType stride_to_data_type(size_t s)
 {
     switch (s)
     {
       case 2: return rend::ShaderDataType::Float2;
       case 3: return rend::ShaderDataType::Float3;
-    case 4: return rend::ShaderDataType::Float4;
+      case 4: return rend::ShaderDataType::Float4;
     }
     return rend::ShaderDataType::None;
 }
@@ -27,19 +27,22 @@ class Geometry
 {
 
   private:
-    std::unordered_map<std::string, std::tuple<std::vector<float>, size_t>> m_buffers;
     std::vector<uint32_t> m_index;
+    std::unordered_map<std::string, std::tuple<std::vector<float>, size_t>> m_buffers;
+    std::vector<std::tuple<int32_t, int32_t>> m_groups;
+    rend::VertexArrayPtr m_glbuffers;
 
-    std::vector<uint32_t> m_groups;
+    bool m_dirty{true};
 
-    std::vector<rend::VertexArrayPtr> m_glbuffers;
-
-    bool m_dirty;
-
-    
   public:
+    
     Geometry()
     {
+    }
+
+    auto& buffers()
+    {
+        return m_buffers;
     }
 
     void set_attribute(std::string name, std::vector<float> buffer, size_t stride)
@@ -125,8 +128,33 @@ class Geometry
         apply(glm::lookAt(glm::vec3(1, 0, 0), t_pos, glm::vec3(0, 1, 0)));
     }
 
-    void merge(Geometry &)
+    void merge(Geometry& other)
     {
+        auto& oth = other.m_buffers;
+        auto offset = std::get<0>(m_buffers.at("position")).size() / 3;
+        
+        for (auto& [name, buff] : oth)
+        {
+            if (m_buffers.count(name) > 0 )
+            {
+                if(std::get<1>(buff) != std::get<1>(m_buffers.at(name)))
+                {
+                    continue;
+                }
+
+                auto& src = std::get<0>(buff);
+                auto& target = std::get<0>(m_buffers.at(name));
+                target.insert(target.end(), src.begin(), src.end());
+            }
+            
+        }
+        
+        for (auto i : other.m_index)
+        {
+            m_index.push_back(i + offset);
+        }
+        m_dirty = true;
+
     }
 
     void normalize_normals()
@@ -157,30 +185,107 @@ class Geometry
     {
         apply(glm::translate(glm::mat4(1), glm::vec3(t_x, t_y, t_z)));
     }
-    
-    void pack(bool tight = true)
-    {
-        
 
-    }
-    
-    rend::VertexArrayPtr to_vertex_buffer()
+    void pack_vertex_buffers()
     {
-        auto arr = std::make_unique<rend::VertexArray>();
-        arr->set_index_buffer(rend::make_index_buffer(m_index));
+        bool standard = false;
+        m_glbuffers = std::make_unique<rend::VertexArray>();
 
-        for (auto &[name, buff] : m_buffers)
+        if (m_buffers.count("position") > 0
+            && m_buffers.count("normal") > 0
+            && m_buffers.count("uv") > 0)
         {
-            auto &data  = std::get<0>(buff);
-            auto stride = std::get<1>(buff);
+            standard = true;
+            auto& pos = std::get<0>(m_buffers.at("position"));
+            auto& norm = std::get<0>(m_buffers.at("normal"));
+            auto& uv = std::get<0>(m_buffers.at("uv"));
+            std::vector<Vertex8fg> verts;
+
+            for (size_t i = 0, j = 0; i < pos.size() - 2; i += 3, j += 2)
+            {
+                verts.push_back({
+                        pos[i], pos[i + 1], pos[i + 2],
+                        norm[i], norm[i + 1], norm[i + 2],
+                        uv[j], uv[j + 1]
+                    });
+            }
+            
+            m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
+        }
+
+        for (auto& [name, buf] : m_buffers)
+        {
+            if (standard
+                && (name.compare("position") == 0 || name.compare("normal") == 0
+                    || name.compare("uv") == 0))
+            {
+                continue;
+            }
+
+            auto &data  = std::get<0>(buf);
+            auto stride = std::get<1>(buf);
 
             auto vert = std::make_unique<rend::VertexBuffer>(data.data(), data.size());
             vert->set_layout({ { name, stride_to_data_type(stride) } });
 
-            arr->add_vertex_buffer(std::move(vert));
+            m_glbuffers->add_vertex_buffer(std::move(vert));
+        }        
+
+    }
+    
+    void pack_group(uint32_t start, uint32_t count, size_t index = 0)
+    {
+        m_glbuffers->set_index_buffer(std::make_unique<rend::IndexBuffer>(m_index.data() + start, count), index);
+    }
+
+    void pack()
+    {
+
+        pack_vertex_buffers();
+            
+        if (m_groups.empty())
+        {
+            pack_group(0, m_index.size());
+        }
+        
+        size_t last_start;
+        size_t last_count;
+        size_t i{0};
+        
+        for (auto& [start, count] : m_groups)
+        {
+            pack_group(start, count, i++);
+            last_start = start;
+            last_count = count;
         }
 
-        return arr;
+        m_dirty = false;
+
+    }
+
+    void add_group(uint32_t start, uint32_t count)
+    {
+        m_groups.push_back({start, count});
+    }
+
+    const rend::VertexArray* gl_buffers() const
+    {
+        return m_glbuffers.get();
+    }
+
+    rend::VertexArrayPtr take_buffers()
+    {
+        if (m_dirty)
+        {
+            pack();
+        }
+        m_dirty = true;
+        return std::move(m_glbuffers);
+    }
+
+    bool is_dirty() const
+    {
+        return m_dirty;
     }
 };
 

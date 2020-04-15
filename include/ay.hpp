@@ -38,6 +38,7 @@
 #include "application/window.hpp"
 
 #include "graphics/geometry.hpp"
+#include "graphics/geometry_factory.hpp"
 #include "graphics/mesh.hpp"
 #include "graphics/material.hpp"
 #include "graphics/material_builder.hpp"

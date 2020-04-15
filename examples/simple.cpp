@@ -19,7 +19,7 @@ class SimpleGame : public gmt::GameBase {
     gmt::Entity* plane;
 
     cmp::OrbitalCameraComponent* camera_controller;
-    
+
   public:
 
     SimpleGame()
@@ -43,47 +43,36 @@ class SimpleGame : public gmt::GameBase {
 
 
         auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
-        
         plane = main_scene->add(gmt::mesh_entity(
                                     {grph::plane_geometry(200, 200, 20, 20),
                                      grph::texture_material(tex)}));
-        
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
-        
+
 
         auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
-
         grph::MaterialBuilder::from_existing(cube_mat.get())
-            // .wire_frame(true)
             .alpha_blending()
             .alpha_test(0.1)
             .opacity(0.2)
-            .transparent(false);
-            
+            .transparent(false);                
+
+        
 
         cube_2 = main_scene->add(gmt::mesh_entity(
-                                     {grph::cone_geometry(),
-                                      std::move(cube_mat)}));
-
+                                     {grph::sphere_geometry(2, 20, 20),
+                                      std::move(cube_mat)}));        
         cmp::transform(cube_2).translateY(3.0f);
 
         // auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/happy_boo.png"));
-        
-
         // cube_2 = main_scene->add(gmt::mesh_entity(
         //                              {grph::cube_geometry(10,10,10, 100, 100, 100),
         //                               grph::texture_material(tex)}));
 
-        // cube_2 = main_scene->add(gmt::mesh_entity({
-        //             grph::cylinder_geometry(1.0, 1.0, 4.0, 10.0f, 5.0f, true),
-        //             grph::solid_color({ 0.0f, 1.0f, 0.0f })}));        
-        // cmp::mesh(cube_2).material()->set_wire_frame(true);
-        
     }
-    
+
     void update(double dt) override
     {
-        
+
         // cmp::transform(cube_2).rotateZ(glm::radians(50*dt));
 
         main_scene->update(dt);

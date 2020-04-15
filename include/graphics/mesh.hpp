@@ -4,6 +4,7 @@
 #include "rendering/vertex_array.hpp"
 
 #include "graphics/material.hpp"
+#include "graphics/geometry.hpp"
 
 #include "std_header.hpp"
 
@@ -13,7 +14,7 @@ namespace ay::grph
 class Mesh
 {
   private:
-    rend::VertexArrayPtr m_geometry;
+    Geometry m_geometry;
     MaterialPtr m_material;
 
   public:
@@ -21,19 +22,29 @@ class Mesh
     {
     }
 
-    Mesh(rend::VertexArrayPtr t_geometry, MaterialPtr t_material)
+    Mesh(Geometry t_geometry, MaterialPtr t_material)
       : m_geometry(std::move(t_geometry)), m_material(std::move(t_material))
     {
     }
 
-    void set_geometry(rend::VertexArrayPtr t_geometry)
+    void set_geometry(Geometry t_geometry)
     {
         m_geometry = std::move(t_geometry);
     }
 
-    const rend::VertexArray *geometry() const
+    Geometry& geometry()
     {
-        return m_geometry.get();
+        return m_geometry;
+    }
+
+    
+    const rend::VertexArray *buffers()
+    {
+        if (m_geometry.is_dirty())
+        {
+            m_geometry.pack();
+        }
+        return m_geometry.gl_buffers();
     }
 
     Material *material() const

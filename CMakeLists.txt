@@ -156,6 +156,7 @@ add_library(anything_engine
 
     ./include/graphics/materials/solid_color.cpp
     ./include/graphics/mesh_factory.cpp
+    ./include/graphics/geometry_factory.cpp
 
     ./include/application/resource_loader.cpp
     ./include/application/application.cpp

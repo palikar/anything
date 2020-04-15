@@ -10,7 +10,7 @@ namespace ay::grph
 {
 
 
-rend::VertexArrayPtr cube_geometry(float width,
+rend::VertexArrayPtr cube_buffers(float width,
                                    float height,
                                    float depth,
                                    float widthSegments,
@@ -101,7 +101,7 @@ rend::VertexArrayPtr cube_geometry(float width,
 
 
 rend::VertexArrayPtr
-plane_geometry(size_t width, size_t height, float width_segments, float height_segments)
+plane_buffers(size_t width, size_t height, float width_segments, float height_segments)
 {
 
     const auto half_width  = width / 2.0f;
@@ -147,7 +147,7 @@ plane_geometry(size_t width, size_t height, float width_segments, float height_s
 }
 
 
-rend::VertexArrayPtr sphere_geometry(float radius,
+rend::VertexArrayPtr sphere_buffers(float radius,
                                      float width_segments,
                                      float height_segments,
                                      float phi_start,
@@ -225,7 +225,7 @@ rend::VertexArrayPtr sphere_geometry(float radius,
 }
 
 
-rend::VertexArrayPtr cylinder_geometry(float radiusTop,
+rend::VertexArrayPtr cylinder_buffers(float radiusTop,
                                        float radiusBottom,
                                        float height,
                                        float radialSegments,
@@ -362,7 +362,7 @@ rend::VertexArrayPtr cylinder_geometry(float radiusTop,
 }
 
 
-rend::VertexArrayPtr circle_geometry(float radius,
+rend::VertexArrayPtr circle_buffers(float radius,
                                      float segments,
                                      float thetaStart,
                                      float thetaLength)
@@ -399,7 +399,7 @@ rend::VertexArrayPtr circle_geometry(float radius,
 
 
 
-rend::VertexArrayPtr ring_geometry(float innerRadius,
+rend::VertexArrayPtr ring_buffers(float innerRadius,
                                    float outerRadius,
                                    float thetaSegments,
                                    float phiSegments,
@@ -457,7 +457,7 @@ rend::VertexArrayPtr ring_geometry(float innerRadius,
 }
 
 
-rend::VertexArrayPtr torus_geometry(float radius,
+rend::VertexArrayPtr torus_buffers(float radius,
                                     float tube ,
                                    float radialSegments,
                                    float tubularSegments,
@@ -508,22 +508,21 @@ rend::VertexArrayPtr torus_geometry(float radius,
 
 	}
 
-
     return make_vertex_array(rend::make_index_buffer(indices),
                              rend::make_buffer(vertices));
 
 }
 
 
-rend::VertexArrayPtr cone_geometry(float radius,
-                                   float height,
+rend::VertexArrayPtr cone_buffers(float radius,
+                                  float height,
                                    float radialSegments,
                                    float heightSegments,
                                    bool openEnded,
                                    float thetaStart,
                                    float thetaLength)
 {
-    return cylinder_geometry(0, radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength);        
+    return cylinder_buffers(0, radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength);        
 }
 
 
