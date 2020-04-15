@@ -1,8 +1,13 @@
 #pragma once
 
 #include "rendering/texture_binder.hpp"
+#include "rendering/shaders.hpp"
+
+#include "graphics/material.hpp"
 
 #include "engine/entity.hpp"
+
+#include "math/transform.hpp"
 
 #include "glm_header.hpp"
 #include "std_header.hpp"
@@ -56,14 +61,25 @@ class RendererScene3D
 
     void handle_group(gmt::Entity *object, cmp::GroupComponent *group_comp);
 
-    template<typename T, typename Func>
+    void handle_material(grph::Material* material, Shader* shader);
+    
+    void switch_shader(Shader* shader);
+
+    void push_transform(glm::mat4 transform);
+
+    void switch_mvp(Shader* shader, glm::mat4 transform);
+
+    template<typename T, typename ... Ts, typename Func>
     void dispatch_component(gmt::Entity *object, Func && func)
     {
         auto comp  = object->component<T>();
-        if (comp != nullptr) {
-            func(object, comp);
-        }
+
+        bool valid = true;
+        valid = ((object->component<Ts>() != nullptr) && ...);
         
+        if (comp != nullptr && valid) {
+            func(object, comp);
+        }        
     }
 };
 

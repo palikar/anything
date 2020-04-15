@@ -76,6 +76,30 @@ class RenderAPI
         
     }
 
+    void depth_test(bool value)
+    {
+        if (value) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+
+    void depth_write(bool value)
+    {
+        glDepthMask(value ? GL_TRUE : GL_FALSE);
+    }
+                    
+    void wireframe(bool value)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, value ? GL_LINE : GL_FILL);
+    }
+
+    void depth_func(DepthFunc func)
+    {
+        glDepthFunc(static_cast<GLenum>(func));
+    }
+        
     void enable_wireframe()
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -85,7 +109,28 @@ class RenderAPI
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+
+    void blending(bool value)
+    {
+        if (value) {
+            glEnable(GL_BLEND);
+        } else {
+            glDisable(GL_BLEND);
+        }
+    }
+        
+    void submit_blending(BlendingSetup& setup)
+    {
+        glBlendEquation(static_cast<GLenum>(setup.blend_equation));
+        glBlendFuncSeparate(static_cast<GLenum>(setup.blend_src),
+                            static_cast<GLenum>(setup.blend_dst),
+                            static_cast<GLenum>(setup.blend_src_alpha),
+                            static_cast<GLenum>(setup.blend_dst_alpha));
+    }
+
 };
+
+
 
 struct EnableDisableWireframe
 {

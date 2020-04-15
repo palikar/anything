@@ -76,10 +76,10 @@ Geometry cube_geometry(float width,
                 uint32_t c = numberOfVertices + ( ix + 1 ) + gridX1 * ( iy + 1 );
                 uint32_t d = numberOfVertices + ( ix + 1 ) + gridX1 * iy;
 
-                indices.insert(indices.end(), {a, b, d, b, c, d });
-
-                // indices.push_back({ a, b, d });
-                // indices.push_back({ b, c, d });
+                indices.insert(indices.end(), {
+                        d, b, a,
+                        d, c, b
+                    });
 
             }
         }
@@ -96,8 +96,6 @@ Geometry cube_geometry(float width,
 
     buildPlane( 0, 1, 2,  1, -1, width, height, depth, widthSegments, heightSegments); // pz
     buildPlane( 0, 1, 2,  -1, -1, width, height, -depth, widthSegments, heightSegments); // nz
-
-
 
     Geometry geometry;
     geometry.set_attribute("position", pos, 3);
@@ -555,7 +553,6 @@ Geometry torus_geometry(float radius,
                         float arc)
 {
 
-
     std::vector<float> pos;
     std::vector<float> uv;
     std::vector<float> normals;
@@ -582,11 +579,6 @@ Geometry torus_geometry(float radius,
             normals.insert(normals.end(), {n.x, n.y, n.z});
             uv.insert(uv.end(), {i / tubularSegments,  j / radialSegments});
 
-            // vertices.push_back({
-            //         x, y, z,
-            //         n.x, n.y, n.z,
-            //         i / tubularSegments,  j / radialSegments});
-
         }
     }
 
@@ -598,11 +590,10 @@ Geometry torus_geometry(float radius,
             uint32_t c = ( tubularSegments + 1 ) * ( j - 1 ) + i;
             uint32_t d = ( tubularSegments + 1 ) * j + i;
 
-            indices.insert(indices.end(), { a, b, d,  b, c, d });
-
-            // indices.push_back({ d, b, a });
-            // indices.push_back({ d, c, b });
-
+            indices.insert(indices.end(), {
+                    d, b, a,
+                    d, c, b
+                });
         }
 
     }

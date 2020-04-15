@@ -57,6 +57,9 @@ class SimpleGame : public gmt::GameBase {
 
         grph::MaterialBuilder::from_existing(cube_mat.get())
             .wire_frame(true)
+            // .enable_lending()
+            // .alpha_blending()
+            // .opacity(0.5)
             .transparent(false);
 
 
@@ -64,9 +67,9 @@ class SimpleGame : public gmt::GameBase {
         cube_2 = main_scene->add(grph::axis());
         cmp::transform(cube_2).translateY(3.0f);
 
-        cube_1 = main_scene->add(gmt::mesh_entity({grph::cube_geometry(), grph::solid_color(1, 0, 0)}));
+        cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));
         cmp::transform(cube_1).translateX(3.0f);
-        cmp::transform(cube_1).translateY(1.0f);
+        cmp::transform(cube_1).translateY(2.0f);
 
         cube_3 = main_scene->add(gmt::mesh_entity({grph::cube_geometry(), grph::solid_color(0, 0, 1)}));
         cmp::transform(cube_3).translateZ(3.0f);
