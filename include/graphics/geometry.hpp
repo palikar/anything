@@ -71,13 +71,13 @@ class Geometry
         if (m_buffers.count("position"))
         {
             auto &pos = std::get<0>(m_buffers.at("position"));
-            for (size_t i = 0; i < pos.size() - 3; i += 3)
+            for (size_t i = 0; i < pos.size() - 2; i += 3)
             {
-                auto res = glm::vec4(pos[i], pos[i + 1], pos[i + 2], 1.0f) * t_mat;
+                auto res = t_mat * glm::vec4(pos[i], pos[i + 1], pos[i + 2], 1.0f);
 
-                pos[i]     = res.x / res.w;
-                pos[i + 1] = res.y / res.w;
-                pos[i + 2] = res.z / res.w;
+                pos[i]     = res.x ;
+                pos[i + 1] = res.y ;
+                pos[i + 2] = res.z ;
             }
         }
 
@@ -85,7 +85,7 @@ class Geometry
         {
             auto &norm      = std::get<0>(m_buffers.at("normal"));
             auto normal_mat = mth::normal(t_mat);
-            for (size_t i = 0; i < norm.size() - 3; i += 3)
+            for (size_t i = 0; i < norm.size() - 2; i += 3)
             {
                 auto res = glm::vec3(norm[i], norm[i + 1], norm[i + 2]) * normal_mat;
 
@@ -99,7 +99,7 @@ class Geometry
         {
             auto &tan       = std::get<0>(m_buffers.at("normal"));
             auto normal_mat = mth::normal(t_mat);
-            for (size_t i = 0; i < tan.size() - 3; i += 3)
+            for (size_t i = 0; i < tan.size() - 2; i += 3)
             {
                 auto res = glm::vec3(tan[i], tan[i + 1], tan[i + 2]) * normal_mat;
                 res      = glm::normalize(res);
@@ -186,6 +186,58 @@ class Geometry
         apply(glm::translate(glm::mat4(1), glm::vec3(t_x, t_y, t_z)));
     }
 
+    void pack()
+    {
+
+        pack_vertex_buffers();
+            
+        if (m_groups.empty())
+        {
+            pack_group(0, m_index.size());
+        }
+        
+        size_t last_start;
+        size_t last_count;
+        size_t i{0};
+        
+        for (auto& [start, count] : m_groups)
+        {
+            pack_group(start, count, i++);
+            last_start = start;
+            last_count = count;
+        }
+
+        m_dirty = false;
+
+    }
+
+    void add_group(uint32_t start, uint32_t count)
+    {
+        m_groups.push_back({start, count});
+    }
+
+    const rend::VertexArray* gl_buffers() const
+    {
+        return m_glbuffers.get();
+    }
+
+    rend::VertexArrayPtr take_buffers()
+    {
+        if (m_dirty)
+        {
+            pack();
+        }
+        m_dirty = true;
+        return std::move(m_glbuffers);
+    }
+
+    bool is_dirty() const
+    {
+        return m_dirty;
+    }
+
+  private:
+
     void pack_vertex_buffers()
     {
         bool standard = false;
@@ -238,55 +290,7 @@ class Geometry
         m_glbuffers->set_index_buffer(std::make_unique<rend::IndexBuffer>(m_index.data() + start, count), index);
     }
 
-    void pack()
-    {
-
-        pack_vertex_buffers();
-            
-        if (m_groups.empty())
-        {
-            pack_group(0, m_index.size());
-        }
-        
-        size_t last_start;
-        size_t last_count;
-        size_t i{0};
-        
-        for (auto& [start, count] : m_groups)
-        {
-            pack_group(start, count, i++);
-            last_start = start;
-            last_count = count;
-        }
-
-        m_dirty = false;
-
-    }
-
-    void add_group(uint32_t start, uint32_t count)
-    {
-        m_groups.push_back({start, count});
-    }
-
-    const rend::VertexArray* gl_buffers() const
-    {
-        return m_glbuffers.get();
-    }
-
-    rend::VertexArrayPtr take_buffers()
-    {
-        if (m_dirty)
-        {
-            pack();
-        }
-        m_dirty = true;
-        return std::move(m_glbuffers);
-    }
-
-    bool is_dirty() const
-    {
-        return m_dirty;
-    }
+    
 };
 
 

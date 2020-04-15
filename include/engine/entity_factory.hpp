@@ -29,4 +29,17 @@ inline EntityPtr group_entity(std::vector<EntityPtr> children)
 }
 
 
+template<typename ... Args>
+inline EntityPtr group_entity(Args ... children)
+{
+    EntityPtr new_ent = std::make_unique<Entity>();
+    new_ent->add_component(std::make_unique<cmp::TransformComponent>());
+    
+    new_ent->add_component(std::make_unique<cmp::GroupComponent>());
+    cmp::add_children(new_ent.get(), std::move(children) ...);
+    
+    return new_ent;
+}
+
+
 }  // namespace ay::gmt

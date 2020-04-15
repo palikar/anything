@@ -16,6 +16,10 @@ class SimpleGame : public gmt::GameBase {
 
     gmt::Entity* cube_1;
     gmt::Entity* cube_2;
+    gmt::Entity* cube_3;
+
+    gmt::Entity* cone;
+    
     gmt::Entity* plane;
 
     cmp::OrbitalCameraComponent* camera_controller;
@@ -32,7 +36,7 @@ class SimpleGame : public gmt::GameBase {
         renderer.init(engine()->api());
         main_scene = init_scene("main");
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
-        main_scene->camera().set_look_at(glm::vec3(10,10,10), glm::vec3(0.0f,0.0f,0.0f));
+        main_scene->camera().set_look_at(glm::vec3(0,10,1), glm::vec3(0.0f,0.0f,0.0f));
         camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
         camera_controller->set_max_radius(60.0f);
     }
@@ -50,23 +54,27 @@ class SimpleGame : public gmt::GameBase {
 
 
         auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
+
         grph::MaterialBuilder::from_existing(cube_mat.get())
-            .alpha_blending()
-            .alpha_test(0.1)
-            .opacity(0.2)
-            .transparent(false);                
+            .wire_frame(true)
+            .transparent(false);
 
-        
 
-        cube_2 = main_scene->add(gmt::mesh_entity(
-                                     {grph::sphere_geometry(2, 20, 20),
-                                      std::move(cube_mat)}));        
+
+        cube_2 = main_scene->add(grph::axis());
         cmp::transform(cube_2).translateY(3.0f);
 
-        // auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/happy_boo.png"));
-        // cube_2 = main_scene->add(gmt::mesh_entity(
-        //                              {grph::cube_geometry(10,10,10, 100, 100, 100),
-        //                               grph::texture_material(tex)}));
+        cube_1 = main_scene->add(gmt::mesh_entity({grph::cube_geometry(), grph::solid_color(1, 0, 0)}));
+        cmp::transform(cube_1).translateX(3.0f);
+        cmp::transform(cube_1).translateY(1.0f);
+
+        cube_3 = main_scene->add(gmt::mesh_entity({grph::cube_geometry(), grph::solid_color(0, 0, 1)}));
+        cmp::transform(cube_3).translateZ(3.0f);
+        cmp::transform(cube_3).translateY(1.0f);
+
+        // cone = main_scene->add(gmt::mesh_entity({grph::cylinder_geometry(2,2,2), grph::solid_color(0, 1, 1)}));
+        // cmp::transform(cone).translateY(6.0f);
+        
 
     }
 

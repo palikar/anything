@@ -66,6 +66,7 @@ int Application::run()
             m_window->render();
             ++frames;
         }
+        
     }
 
     m_window->dispose();

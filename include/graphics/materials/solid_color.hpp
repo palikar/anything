@@ -35,4 +35,10 @@ inline MaterialPtr solid_color(glm::vec3 color)
 }
 
 
+inline MaterialPtr solid_color(float r, float g, float b)
+{
+    return std::make_unique<SolidColorMaterial>(glm::vec3(r, g, b));
+}
+
+
 }  // namespace ay::grph

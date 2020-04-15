@@ -18,7 +18,7 @@ Geometry cube_geometry(float width,
     std::vector<uint32_t> indices;
 
     int numberOfVertices = 0;
-    
+
     auto buildPlane = [&](char u,
                           char v,
                           char w,
@@ -61,7 +61,7 @@ Geometry cube_geometry(float width,
                 pos.insert(pos.end(), {vertex[0], vertex[1], vertex[2]});
                 normals.insert(normals.end(), {vertex[3], vertex[4], vertex[5]});
                 uv.insert(uv.end(), { ix / gridX ,  1 - ( iy / gridY ) });
-                
+
                 // vertecies.push_back(vertex);
 
                 vertexCounter += 1;
@@ -77,7 +77,7 @@ Geometry cube_geometry(float width,
                 uint32_t d = numberOfVertices + ( ix + 1 ) + gridX1 * iy;
 
                 indices.insert(indices.end(), {a, b, d, b, c, d });
-                
+
                 // indices.push_back({ a, b, d });
                 // indices.push_back({ b, c, d });
 
@@ -319,10 +319,6 @@ Geometry cylinder_geometry(float radiusTop,
             normals.insert(normals.end(), {norm.x, norm.y, norm.z});
             uv.insert(uv.end(), {u, 1 - v});
 
-            // vertices.push_back({ vert_x, vert_y, vert_z,
-            //                      norm.x, norm.y, norm.z,
-            //                      u, 1 - v});
-
             indexRow.push_back(index++);
         }
 
@@ -338,18 +334,19 @@ Geometry cylinder_geometry(float radiusTop,
             uint32_t c = indexArray[y + 1][x + 1];
             uint32_t d = indexArray[y][x + 1];
 
-            // indices.push_back({ d, b, a });
-            // indices.push_back({ d, c, b });
-            indices.insert(indices.end(), { a, b, d,  b, c, d });
+            indices.insert(indices.end(), {
+                    b, a, d,
+                    c, b, d
+                });
         }
     }
 
-    auto generate_cap = [&](bool top) {
+    const auto generate_cap = [&](bool top) {
         int p_x, centerIndexStart, centerIndexEnd;
-        // int groupCount = 0;
+
         const float radius = (top) ? radiusTop : radiusBottom;
-        const float sign   = (top) ? 1 : -1;
-        // save the index of the first center vertex
+        const float sign   = (top) ? 1.0 : -1.0;
+
         centerIndexStart = index;
 
         for (p_x = 1; p_x <= radialSegments; p_x++)
@@ -359,63 +356,61 @@ Geometry cylinder_geometry(float radiusTop,
             uv.insert(uv.end(), {0.5, 0.5});
 
             // vertices.push_back({ 0, halfHeight * sign, 0,
-            //                      0, sign, 0,
-            //                      0.5, 0.5});
+             //                      0, sign, 0,
+             //                      0.5, 0.5});
 
-            index++;
-        }
+             ++index;
+         }
 
-        centerIndexEnd = index;
+         centerIndexEnd = index;
 
-        for (x = 0; x <= radialSegments; x++)
-        {
-            const float u        = p_x / radialSegments;
-            const float theta    = u * thetaLength + thetaStart;
-            const float cosTheta = std::cos(theta);
-            const float sinTheta = std::sin(theta);
+         for (p_x = 0; p_x <= radialSegments; p_x++)
+         {
+             const float u        = p_x / radialSegments;
+             const float theta    = u * thetaLength + thetaStart;
+             const float cosTheta = std::cos(theta);
+             const float sinTheta = std::sin(theta);
 
-            // vertex
-            const float vert_x = radius * sinTheta;
-            const float vert_y = halfHeight * sign;
-            const float vert_z = radius * cosTheta;
+             // vertex
+             const float vert_x = radius * sinTheta;
+             const float vert_y = halfHeight * sign;
+             const float vert_z = radius * cosTheta;
 
-            pos.insert(pos.end(), {vert_x, vert_y, vert_z});
-            normals.insert(normals.end(), {0, sign, 0});
-            uv.insert(uv.end(), {( cosTheta * 0.5f ) + 0.5f, ( sinTheta * 0.5f * sign ) + 0.5f});
+             pos.insert(pos.end(), {vert_x, vert_y, vert_z});
+             normals.insert(normals.end(), {0, sign, 0});
+             uv.insert(uv.end(), {( cosTheta * 0.5f ) + 0.5f, ( sinTheta * 0.5f * sign ) + 0.5f});
 
-            // vertices.push_back({ vert_x, vert_y, vert_z,
-            //                      0, sign, 0,
-            //                      ( cosTheta * 0.5f ) + 0.5f, ( sinTheta * 0.5f * sign ) + 0.5f });
+             index++;
+         }
 
-            index++;
-        }
+         for (p_x = 0; p_x < radialSegments; ++p_x)
+         {
 
-        for (x = 0; x < radialSegments; x++)
-        {
+             uint32_t c = centerIndexStart + p_x;
+             uint32_t i = centerIndexEnd + p_x;
 
-            uint32_t c = centerIndexStart + x;
-            uint32_t i = centerIndexEnd + x;
+             if (top)
+             {
+                 indices.insert(indices.end(), {c, i + 1, i });
 
-            if (top)
-            {
-                indices.insert(indices.end(), { i, i + 1, c });
-                // indices.push_back({ i, i + 1, c });
-            }
-            else
-            {
-                indices.insert(indices.end(), { i + 1, i, c });
-                // indices.push_back({ i + 1, i, c });
-            }
-        }
+             }
+             else
+             {                
+                 indices.insert(indices.end(), {i + 1, c, i });
+
+             }
+         }
     };
 
-    if (openEnded)
+    if (!openEnded)
     {
-        if (radiusTop > 0)
+        if (radiusTop > 0) {
             generate_cap(true);
-        ;
-        if (radiusBottom > 0)
+        }
+
+        if (radiusBottom > 0) {
             generate_cap(false);
+        }
     }
 
 

@@ -21,6 +21,15 @@ class GroupComponent : public gmt::Component
 
     GroupComponent(std::vector<gmt::EntityPtr> t_children)
       : children(std::move(t_children)){};
+
+    void init(gmt::GameBase *g) override
+    {
+        for(auto& c : children)
+        {
+            c->set_game(g);
+            c->init(g);
+        }
+    }
 };
 
 
@@ -43,8 +52,7 @@ inline gmt::Entity *add_children(gmt::Entity *t_entity, Args... t_children)
         t_entity->add_component(std::make_unique<GroupComponent>());
         p = t_entity->component<GroupComponent>();
     }
-
-    (t_children->set_game(t_entity->game()), ...);
+    
     (p->children.push_back(std::move(t_children)), ...);
 
     return t_entity;
@@ -63,7 +71,6 @@ inline gmt::Entity *add_children(gmt::Entity *t_entity,
 
     for (auto &ch : t_children)
     {
-        ch->set_game(t_entity->game());
         p->children.push_back(std::move(ch));
     }
 
