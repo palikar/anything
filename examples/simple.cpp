@@ -46,25 +46,26 @@ class SimpleGame : public gmt::GameBase {
         init_basic();
 
 
-        // auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
-        // plane = main_scene->add(gmt::mesh_entity(
-        //                             {grph::plane_geometry(200, 200, 20, 20),
-        //                              grph::texture_material(tex)}));
-        // cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
+        plane = main_scene->add(gmt::mesh_entity(
+                                    {grph::plane_geometry(200, 200, 20, 20),
+                                     grph::texture_material(tex)}));
+        cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+
+        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        
+        // auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
+        // grph::MaterialBuilder::from_existing(cube_mat.get())
+        //     .wire_frame(true)
+        //     // .enable_lending()
+        //     // .alpha_blending()
+        //     // .opacity(0.5)
+        //     .transparent(false);
 
 
-        auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
-        grph::MaterialBuilder::from_existing(cube_mat.get())
-            .wire_frame(true)
-            // .enable_lending()
-            // .alpha_blending()
-            // .opacity(0.5)
-            .transparent(false);
 
-
-
-        cube_2 = main_scene->add(grph::axis());
-        // cmp::transform(cube_2).translateY(3.0f);
+        // cube_2 = main_scene->add(grph::axis());
+        // // cmp::transform(cube_2).translateY(3.0f);
 
         // cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));
 
@@ -73,11 +74,11 @@ class SimpleGame : public gmt::GameBase {
         // cmp::transform(cube_3).translateY(1.0f);
 
         
-        // glm::mat4 orth = glm::ortho(-3.0f, 3.0f, -5.0f, 5.0f, 0.1f, 5.0f);
-        glm::mat4 orth = glm::perspective(glm::radians(32.0f), 1024.0f/768.0f, 0.001f, 100.0f);
+        // // glm::mat4 orth = glm::ortho(-3.0f, 3.0f, -5.0f, 5.0f, 0.1f, 5.0f);
+        // glm::mat4 orth = glm::perspective(glm::radians(32.0f), 1024.0f/768.0f, 0.001f, 100.0f);
         
 
-        main_scene->add(std::make_unique<gmt::CameraHelper>(orth));
+        // main_scene->add(std::make_unique<gmt::CameraHelper>(orth));
         
         
         // cone = main_scene->add(gmt::line_segments_entity( {grph::solid_color({ 0.0f, 1.0f, 1.0f })}));
@@ -91,6 +92,10 @@ class SimpleGame : public gmt::GameBase {
         // cmp::line_segments(cone).add_point({0.0f, 0.0f, 3.0f});
         
         // cmp::line_segments(cone).geometry().pack();
+
+
+        
+        
 
 
     }

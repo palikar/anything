@@ -5,8 +5,18 @@
 
 #include "std_header.hpp"
 
+
 namespace ay::rend
 {
+
+enum class TextureFormat : GLenum
+{
+    NONE = 0,
+    RGB = GL_RGB,
+    RGBA  = GL_RGBA,
+    LUMINANCE = GL_LUMINANCE,
+    LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA
+};
 
 
 class Texture

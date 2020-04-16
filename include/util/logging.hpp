@@ -1,5 +1,3 @@
-
-
 #include "std_header.hpp"
 
 namespace ay
@@ -129,9 +127,9 @@ using standard_logger = LogKeeper<NoopLog>;
 #endif
 
 
-#define AY_DEBUG(MSG) AL_LOG(MSG, DEBUG)
-#define AY_INFO(MSG) AL_LOG(MSG, INFO)
-#define AY_ERROR(MSG) AL_LOG(MSG, ERROR)
+#define AY_DEBUG(MSG) AY_LOG(MSG, DEBUG)
+#define AY_INFO(MSG) AY_LOG(MSG, INFO)
+#define AY_ERROR(MSG) AY_LOG(MSG, ERROR)
 
 void init_logging(bool debug = false, bool stand = true);
 

@@ -10,6 +10,7 @@
 #include "rendering/renderer3D.hpp"
 #include "rendering/shaders.hpp"
 #include "rendering/texture.hpp"
+#include "rendering/cube_texture.hpp"
 #include "rendering/vertex.hpp"
 #include "rendering/vertex_array.hpp"
 

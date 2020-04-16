@@ -36,6 +36,11 @@ class ResouceLoader
     std::pair<std::string, std::string> get_shader_files(std::string_view t_shader);
 
     std::pair<std::string, std::string> get_shader_sources(std::string_view t_shader);
+
+    static auto path(std::string_view t_path) { return get_instance()->get_file_path(t_path); }
+    
+    static auto text(std::string_view t_path) { return get_instance()->get_file_text(t_path); }
+    
 };
 
 
