@@ -21,6 +21,8 @@
 #include "engine/game_base.hpp"
 #include "engine/scene.hpp"
 
+#include "engine/entities/camera_helper.hpp"
+
 #include "engine/components/orbital_camera.hpp"
 #include "engine/components/mesh.hpp"
 #include "engine/components/line_segments.hpp"

@@ -52,14 +52,16 @@ class Entity
         return component_internal<T>();
     }
 
-    void add_component(ComponentPtr t_comp)
+    template<typename T>
+    auto add_component(std::unique_ptr<T> t_comp)
     {
         if (m_game != nullptr)
         {
             t_comp->init(m_game);
         }
 
-        m_components.insert({ t_comp->type(), std::move(t_comp) });
+        return static_cast<T*>(m_components.insert({ t_comp->type(), std::move(t_comp) }).first->second.get());
+        
     }
 
     void set_game(GameBase *t_game)

@@ -20,7 +20,6 @@ inline EntityPtr mesh_entity(grph::Mesh mesh, std::string name = {})
     return new_ent;
 }
 
-
 inline EntityPtr line_segments_entity(grph::LineSegments segs, std::string name = {})
 {
     EntityPtr new_ent = std::make_unique<Entity>(name);

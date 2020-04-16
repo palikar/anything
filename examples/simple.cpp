@@ -76,13 +76,18 @@ class SimpleGame : public gmt::GameBase {
         // 0.5f, -0.5f, 0.0f,
         // 0.0f,  0.5f, 0.0f
         
-
-        cone = main_scene->add(gmt::line_segments_entity( {grph::solid_color({ 0.0f, 1.0f, 1.0f })}));
-        cmp::line_segments(cone).add_point({0.0f, 0.0f, 0.0f});
-        cmp::line_segments(cone).add_point({0.0f, 3.0f, 0.0f});
-        cmp::line_segments(cone).add_point({3.0f, 0.0f, 3.0f});
-        cmp::line_segments(cone).add_point({0.0f, 3.0f, 0.0f});
-        cmp::line_segments(cone).geometry().pack();
+        
+        // cone = main_scene->add(gmt::line_segments_entity( {grph::solid_color({ 0.0f, 1.0f, 1.0f })}));
+        // cmp::line_segments(cone).add_point({0.0f, 0.0f, 0.0f});
+        // cmp::line_segments(cone).add_point({3.0f, 0.0f, 0.0f});
+        
+        // cmp::line_segments(cone).add_point({0.0f, 0.0f, 0.0f});
+        // cmp::line_segments(cone).add_point({0.0f, 3.0f, 0.0f});
+        
+        // cmp::line_segments(cone).add_point({0.0f, 0.0f, 0.0f});
+        // cmp::line_segments(cone).add_point({0.0f, 0.0f, 3.0f});
+        
+        // cmp::line_segments(cone).geometry().pack();
 
 
     }
