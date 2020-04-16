@@ -60,8 +60,8 @@ class Entity
             t_comp->init(m_game);
         }
 
-        return static_cast<T*>(m_components.insert({ t_comp->type(), std::move(t_comp) }).first->second.get());
-        
+        return static_cast<T *>(
+          m_components.insert({ t_comp->type(), std::move(t_comp) }).first->second.get());
     }
 
     void set_game(GameBase *t_game)

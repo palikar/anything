@@ -20,9 +20,9 @@ void RendererScene3D::init(RenderAPI *t_api)
     m_api = t_api;
 }
 
-void RendererScene3D::switch_shader(Shader* shader)
+void RendererScene3D::switch_shader(Shader *shader)
 {
-    
+
     if (current_shader != shader->id())
     {
         shader->bind();
@@ -30,9 +30,9 @@ void RendererScene3D::switch_shader(Shader* shader)
     }
 }
 
-void RendererScene3D::switch_mvp(Shader* shader, glm::mat4 transform)
+void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 {
-    
+
     shader->set("projection_matrix", m_projection);
     if (!m_mat_stack.empty())
     {
@@ -42,12 +42,11 @@ void RendererScene3D::switch_mvp(Shader* shader, glm::mat4 transform)
     {
         shader->set("model_matrix", transform);
     }
-    
 }
 
 void RendererScene3D::push_transform(glm::mat4 transform)
 {
-    
+
     if (m_mat_stack.empty())
     {
         m_mat_stack.push_back(transform);
@@ -56,17 +55,15 @@ void RendererScene3D::push_transform(glm::mat4 transform)
     {
         m_mat_stack.push_back(m_mat_stack.back() * transform);
     }
-
-    
 }
 
-void RendererScene3D::handle_material(grph::Material* material, Shader* shader)
+void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 {
 
     m_api->depth_func(material->depth_func());
     m_api->depth_test(material->depth_test());
-    m_api->depth_write (material->depth_write());
-    
+    m_api->depth_write(material->depth_write());
+
     m_api->blending(material->blending_setup().blending);
 
     shader->set("opacity", material->opacity());
@@ -80,23 +77,22 @@ void RendererScene3D::handle_material(grph::Material* material, Shader* shader)
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)
 {
     auto transform = cmp::transform(object);
-    auto shader = mesh_comp->mesh.material()->shader();
-    auto mat = mesh_comp->mesh.material();
+    auto shader    = mesh_comp->mesh.material()->shader();
+    auto mat       = mesh_comp->mesh.material();
 
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
     handle_material(mat, shader);
-    
+
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
 
     mesh_comp->mesh.buffers()->bind();
 
     m_api->draw_indexed(mesh_comp->mesh.buffers());
-
 }
 
-void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent*)
+void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent *)
 {
     auto transform = cmp::transform(object);
     push_transform(transform.get_tranformation());
@@ -108,15 +104,15 @@ void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent*)
     }
 
     m_mat_stack.pop_back();
-
 }
 
-void RendererScene3D::handle_line_segments(gmt::Entity *object, cmp::LineSegmentsComponent *line)
+void RendererScene3D::handle_line_segments(gmt::Entity *object,
+                                           cmp::LineSegmentsComponent *line)
 {
 
     auto transform = cmp::transform(object);
-    auto shader = line->segments.material()->shader();
-    auto mat = line->segments.material();
+    auto shader    = line->segments.material()->shader();
+    auto mat       = line->segments.material();
 
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
@@ -131,13 +127,13 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object, cmp::LineSegment
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
 {
 
-    dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_mesh));
+    dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj,
+                                                                    HANDLER(handle_mesh));
 
-    dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_line_segments));
-    
+    dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>(
+      t_obj, HANDLER(handle_line_segments));
+
     dispatch_component<cmp::GroupComponent>(t_obj, HANDLER(handle_group));
-
-
 }
 
 

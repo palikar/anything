@@ -201,7 +201,6 @@ class VertexBuffer
     {
         m_layout = std::move(t_layout);
     };
-
 };
 
 class IndexBuffer

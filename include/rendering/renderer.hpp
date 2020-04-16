@@ -27,7 +27,7 @@ class RenderAPI
         GLCall(glEnable(GL_DEPTH_TEST));
 
         // GLCall(glEnable(GL_CULL_FACE));
-        
+
         GLCall(glCullFace(GL_BACK));
         GLCall(glFrontFace(GL_CW));
     }
@@ -50,20 +50,19 @@ class RenderAPI
     void draw_mutli_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
     {
         vertex_array->bind();
-        
+
         for (size_t i = 0; i < vertex_array->index_cnt(); ++i)
         {
             vertex_array->bind_index(i);
             uint32_t count =
-                index_count <= 0 ? vertex_array->index_buffer(i)->count() : index_count;
+              index_count <= 0 ? vertex_array->index_buffer(i)->count() : index_count;
             GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
         }
-
     }
-    
+
     void draw_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
     {
-        
+
         if (vertex_array->multi_indexed())
         {
             draw_mutli_indexed(vertex_array);
@@ -71,16 +70,18 @@ class RenderAPI
 
         vertex_array->bind();
         uint32_t count =
-            index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
+          index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
-        
     }
 
     void depth_test(bool value)
     {
-        if (value) {
+        if (value)
+        {
             glEnable(GL_DEPTH_TEST);
-        } else {
+        }
+        else
+        {
             glDisable(GL_DEPTH_TEST);
         }
     }
@@ -89,7 +90,7 @@ class RenderAPI
     {
         glDepthMask(value ? GL_TRUE : GL_FALSE);
     }
-                    
+
     void wireframe(bool value)
     {
         glPolygonMode(GL_FRONT_AND_BACK, value ? GL_LINE : GL_FILL);
@@ -99,7 +100,7 @@ class RenderAPI
     {
         glDepthFunc(static_cast<GLenum>(func));
     }
-        
+
     void enable_wireframe()
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -112,14 +113,17 @@ class RenderAPI
 
     void blending(bool value)
     {
-        if (value) {
+        if (value)
+        {
             glEnable(GL_BLEND);
-        } else {
+        }
+        else
+        {
             glDisable(GL_BLEND);
         }
     }
-        
-    void submit_blending(BlendingSetup& setup)
+
+    void submit_blending(BlendingSetup &setup)
     {
         glBlendEquation(static_cast<GLenum>(setup.blend_equation));
         glBlendFuncSeparate(static_cast<GLenum>(setup.blend_src),
@@ -127,9 +131,7 @@ class RenderAPI
                             static_cast<GLenum>(setup.blend_src_alpha),
                             static_cast<GLenum>(setup.blend_dst_alpha));
     }
-
 };
-
 
 
 struct EnableDisableWireframe

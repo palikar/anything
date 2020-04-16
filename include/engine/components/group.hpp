@@ -24,7 +24,7 @@ class GroupComponent : public gmt::Component
 
     void init(gmt::GameBase *g) override
     {
-        for(auto& c : children)
+        for (auto &c : children)
         {
             c->set_game(g);
             c->init(g);
@@ -52,7 +52,7 @@ inline gmt::Entity *add_children(gmt::Entity *t_entity, Args... t_children)
         t_entity->add_component(std::make_unique<GroupComponent>());
         p = t_entity->component<GroupComponent>();
     }
-    
+
     (p->children.push_back(std::move(t_children)), ...);
 
     return t_entity;

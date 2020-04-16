@@ -29,20 +29,19 @@ class Material
   protected:
     rend::ShaderPtr m_shader;
 
-    float m_opacity{1.0};
+    float m_opacity{ 1.0 };
     rend::BlendingSetup m_blending{};
-    
+
     rend::Side m_side;
 
-    
-    
-    bool m_wire_frame{false};
-    bool m_visible{true};
-    bool m_transparent{false};
 
-    rend::DepthFunc m_depth_func{GL_LESS};
-    bool m_depth_test{true};
-    bool m_depth_write{true};
+    bool m_wire_frame{ false };
+    bool m_visible{ true };
+    bool m_transparent{ false };
+
+    rend::DepthFunc m_depth_func{ GL_LESS };
+    bool m_depth_test{ true };
+    bool m_depth_write{ true };
 
   public:
     Material()
@@ -54,7 +53,7 @@ class Material
     }
 
     virtual void init_shader(rend::ShaderLibrary &t_shader_lib) = 0;
-    virtual void update_uniforms(rend::TextureBinder&)  = 0;
+    virtual void update_uniforms(rend::TextureBinder &)         = 0;
 
     void set_wire_frame(bool value)
     {
@@ -65,7 +64,7 @@ class Material
     {
         return m_wire_frame;
     }
-    
+
     rend::Shader *shader()
     {
         return m_shader.get();
@@ -77,29 +76,62 @@ class Material
         return static_cast<T *>(this);
     }
 
-    bool& transparent() { return m_transparent; }
+    bool &transparent()
+    {
+        return m_transparent;
+    }
 
-    bool& visible() { return m_visible; }
+    bool &visible()
+    {
+        return m_visible;
+    }
 
-    rend::Side& side() { return m_side; }
-    
-    void set_opacity(float val) { m_opacity = val;  }
-    
-    float opacity() { return m_opacity; }
+    rend::Side &side()
+    {
+        return m_side;
+    }
 
-    bool depth_test() { return m_depth_test; }
+    void set_opacity(float val)
+    {
+        m_opacity = val;
+    }
 
-    void set_depth_test(bool value) { m_depth_test = value; }
+    float opacity()
+    {
+        return m_opacity;
+    }
 
-    bool depth_write() { return m_depth_write; }
+    bool depth_test()
+    {
+        return m_depth_test;
+    }
 
-    void set_depth_write(bool value) { m_depth_write = value; }
+    void set_depth_test(bool value)
+    {
+        m_depth_test = value;
+    }
 
-    rend::DepthFunc depth_func() { return m_depth_func; }
+    bool depth_write()
+    {
+        return m_depth_write;
+    }
 
-    void set_depth_func(rend::DepthFunc value) { m_depth_func = value; }
+    void set_depth_write(bool value)
+    {
+        m_depth_write = value;
+    }
 
-    rend::BlendingSetup& blending_setup()
+    rend::DepthFunc depth_func()
+    {
+        return m_depth_func;
+    }
+
+    void set_depth_func(rend::DepthFunc value)
+    {
+        m_depth_func = value;
+    }
+
+    rend::BlendingSetup &blending_setup()
     {
         return m_blending;
     }

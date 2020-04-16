@@ -14,24 +14,23 @@ namespace ay::grph
 class LineSegments
 {
   private:
-
     MaterialPtr m_material;
     Geometry m_geometry;
-    uint32_t m_count{0};
-    
+    uint32_t m_count{ 0 };
+
   public:
     LineSegments(MaterialPtr t_mat) : m_material(std::move(t_mat)), m_geometry()
     {
         m_geometry.set_attribute("position", {}, 3);
-        
     }
 
 
-    LineSegments(std::vector<glm::vec3> points, MaterialPtr t_mat) : m_material(std::move(t_mat)), m_geometry()
+    LineSegments(std::vector<glm::vec3> points, MaterialPtr t_mat)
+      : m_material(std::move(t_mat)), m_geometry()
     {
         std::vector<float> pts;
         pts.reserve(points.size());
-        for (auto& p : points)
+        for (auto &p : points)
         {
             pts.emplace_back(p.x);
             pts.emplace_back(p.y);
@@ -43,21 +42,21 @@ class LineSegments
 
     void add_point(glm::vec3 point)
     {
-        auto& pos = m_geometry.attribute("position");
+        auto &pos = m_geometry.attribute("position");
         pos.push_back(point.x);
         pos.push_back(point.y);
         pos.push_back(point.z);
         ++m_count;
     }
 
-    
+
     void add_point()
     {
         ++m_count;
     }
 
-    
-    Geometry& geometry()
+
+    Geometry &geometry()
     {
         return m_geometry;
     }
@@ -70,7 +69,7 @@ class LineSegments
         }
         return m_geometry.gl_buffers();
     }
-    
+
     uint32_t count() const
     {
         return m_count;
@@ -80,7 +79,6 @@ class LineSegments
     {
         return m_material.get();
     }
-    
 };
 
-}
+}  // namespace ay::grph

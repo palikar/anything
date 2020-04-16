@@ -21,7 +21,7 @@ Application::Application(int t_width, int t_height, gmt::GameBase *t_game)
 int Application::run()
 {
     using namespace std::chrono_literals;
-    
+
     init();
 
     double t             = 0.0;
@@ -71,7 +71,6 @@ int Application::run()
             ++frames;
         }
         std::this_thread::sleep_for(5ms);
-        
     }
 
     m_window->dispose();

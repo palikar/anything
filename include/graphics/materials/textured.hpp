@@ -13,9 +13,8 @@ namespace ay::grph
 class TextureMaterial : public Material
 {
   private:
-
     rend::TexturePtr m_texture;
-    
+
   public:
     TextureMaterial(rend::TexturePtr tex) : m_texture(std::move(tex))
     {
@@ -25,14 +24,13 @@ class TextureMaterial : public Material
 
     void init_shader(rend::ShaderLibrary &t_shader_lib) override
     {
-        m_shader =  t_shader_lib.load("textured");
+        m_shader = t_shader_lib.load("textured");
     }
 
-    void update_uniforms(rend::TextureBinder& binder) override
+    void update_uniforms(rend::TextureBinder &binder) override
     {
         m_shader->set_sampler("tex", binder.resolve(m_texture.get()));
     }
-    
 };
 
 

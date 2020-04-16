@@ -21,7 +21,6 @@ std::string ResouceLoader::get_file_path(std::string_view t_file)
     }
 
     return path;
-
 }
 
 std::string ResouceLoader::get_file_text(std::string_view t_file)

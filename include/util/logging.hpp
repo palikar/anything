@@ -20,14 +20,15 @@ struct LogEntry
     std::string message;
 };
 
-template<LogCategory t_category> struct StdLog
+template<LogCategory t_category>
+struct StdLog
 {
     static const LogCategory category = t_category;
 
     void log(LogEntry t_entry)
     {
-        std::cout << '[' << t_entry.file_name << ':' << t_entry.function_name << ':' << t_entry.line_number << "] "
-                  << t_entry.message << "\n";
+        std::cout << '[' << t_entry.file_name << ':' << t_entry.function_name << ':'
+                  << t_entry.line_number << "] " << t_entry.message << "\n";
     }
 };
 
@@ -35,54 +36,69 @@ struct NoopLog
 {
     static const LogCategory category = LogCategory::ANY;
 
-    void log(LogEntry) {}
-};
-
-template<LogCategory t_category> struct ErrLog
-{
-    static const LogCategory category = t_category;
-
-    void log(LogEntry t_entry)
+    void log(LogEntry)
     {
-        std::cerr << '[' << t_entry.file_name << ':' << t_entry.function_name << ':' << t_entry.line_number << "] "
-                  << t_entry.message << "\n";
     }
 };
 
-template<LogCategory t_category> struct FatalLog
+template<LogCategory t_category>
+struct ErrLog
 {
     static const LogCategory category = t_category;
 
     void log(LogEntry t_entry)
     {
-        std::cerr << '[' << t_entry.file_name << ':' << t_entry.function_name << ':' << t_entry.line_number << "] "
-                  << t_entry.message << "\n";
+        std::cerr << '[' << t_entry.file_name << ':' << t_entry.function_name << ':'
+                  << t_entry.line_number << "] " << t_entry.message << "\n";
+    }
+};
+
+template<LogCategory t_category>
+struct FatalLog
+{
+    static const LogCategory category = t_category;
+
+    void log(LogEntry t_entry)
+    {
+        std::cerr << '[' << t_entry.file_name << ':' << t_entry.function_name << ':'
+                  << t_entry.line_number << "] " << t_entry.message << "\n";
         exit(1);
     }
 };
 
-template<typename... Logs> class LogKeeper : Logs...
+template<typename... Logs>
+class LogKeeper : Logs...
 {
   private:
     bool m_debug    = false;
     bool m_standard = false;
 
   public:
-    LogKeeper(bool t_debug = false, bool t_standard = true) : m_debug(t_debug), m_standard(t_standard) {}
+    LogKeeper(bool t_debug = false, bool t_standard = true)
+      : m_debug(t_debug), m_standard(t_standard)
+    {
+    }
 
     template<typename MSG>
-    void create_entry(MSG msg, const char *file, const char *function, int line_number, LogCategory category)
+    void create_entry(MSG msg,
+                      const char *file,
+                      const char *function,
+                      int line_number,
+                      LogCategory category)
     {
         const char *last_slash = strrchr(file, '/');
         last_slash             = last_slash ? last_slash + 1 : file;
 
-        LogEntry entry{ std::string(last_slash), std::string(function), line_number, msg };
+        LogEntry entry{
+            std::string(last_slash), std::string(function), line_number, msg
+        };
 
         (do_log(static_cast<Logs &>(*this), entry, category), ...);
     }
 
 
-    template<typename Logger> void do_log(Logger &&logger, LogEntry t_entry, LogCategory t_category)
+    template<typename Logger>
+    void do_log(Logger &&logger, LogEntry t_entry, LogCategory t_category)
     {
         if (logger.category == t_category || logger.category == LogCategory::ANY)
         {
@@ -108,8 +124,8 @@ using standard_logger = LogKeeper<StdLog<LogCategory::DEBUG>,
 inline standard_logger LOGGER;
 
 
-#define AY_LOG(MSG, TAG)                                                \
-    do                                                                  \
+#define AY_LOG(MSG, TAG)                                                              \
+    do                                                                                \
     {                                                                                 \
         ::alisp::logging::LOGGER.create_entry(                                        \
           MSG, __FILE__, __FUNCTION__, __LINE__, ::alisp::logging::LogCategory::TAG); \
@@ -134,5 +150,4 @@ using standard_logger = LogKeeper<NoopLog>;
 void init_logging(bool debug = false, bool stand = true);
 
 
-
-}
+}  // namespace ay

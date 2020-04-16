@@ -53,6 +53,8 @@ class SimpleGame : public gmt::GameBase {
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
         auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+
+        auto fbo = rend::create_fbo(512, 512);
         
         // auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
         // grph::MaterialBuilder::from_existing(cube_mat.get())

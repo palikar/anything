@@ -16,9 +16,9 @@ inline rend::ShaderDataType stride_to_data_type(size_t s)
 {
     switch (s)
     {
-      case 2: return rend::ShaderDataType::Float2;
-      case 3: return rend::ShaderDataType::Float3;
-      case 4: return rend::ShaderDataType::Float4;
+    case 2: return rend::ShaderDataType::Float2;
+    case 3: return rend::ShaderDataType::Float3;
+    case 4: return rend::ShaderDataType::Float4;
     }
     return rend::ShaderDataType::None;
 }
@@ -32,15 +32,14 @@ class Geometry
     std::vector<std::tuple<int32_t, int32_t>> m_groups;
     rend::VertexArrayPtr m_glbuffers;
 
-    bool m_dirty{true};
+    bool m_dirty{ true };
 
   public:
-    
     Geometry()
     {
     }
 
-    auto& buffers()
+    auto &buffers()
     {
         return m_buffers;
     }
@@ -75,9 +74,9 @@ class Geometry
             {
                 auto res = t_mat * glm::vec4(pos[i], pos[i + 1], pos[i + 2], 1.0f);
 
-                pos[i]     = res.x ;
-                pos[i + 1] = res.y ;
-                pos[i + 2] = res.z ;
+                pos[i]     = res.x;
+                pos[i + 1] = res.y;
+                pos[i + 2] = res.z;
             }
         }
 
@@ -128,33 +127,31 @@ class Geometry
         apply(glm::lookAt(glm::vec3(1, 0, 0), t_pos, glm::vec3(0, 1, 0)));
     }
 
-    void merge(Geometry& other)
+    void merge(Geometry &other)
     {
-        auto& oth = other.m_buffers;
+        auto &oth   = other.m_buffers;
         auto offset = std::get<0>(m_buffers.at("position")).size() / 3;
-        
-        for (auto& [name, buff] : oth)
+
+        for (auto &[name, buff] : oth)
         {
-            if (m_buffers.count(name) > 0 )
+            if (m_buffers.count(name) > 0)
             {
-                if(std::get<1>(buff) != std::get<1>(m_buffers.at(name)))
+                if (std::get<1>(buff) != std::get<1>(m_buffers.at(name)))
                 {
                     continue;
                 }
 
-                auto& src = std::get<0>(buff);
-                auto& target = std::get<0>(m_buffers.at(name));
+                auto &src    = std::get<0>(buff);
+                auto &target = std::get<0>(m_buffers.at(name));
                 target.insert(target.end(), src.begin(), src.end());
             }
-            
         }
-        
+
         for (auto i : other.m_index)
         {
             m_index.push_back(i + offset);
         }
         m_dirty = true;
-
     }
 
     void normalize_normals()
@@ -190,17 +187,17 @@ class Geometry
     {
 
         pack_vertex_buffers();
-            
+
         if (m_groups.empty())
         {
             pack_group(0, m_index.size());
         }
-        
+
         size_t last_start;
         size_t last_count;
-        size_t i{0};
-        
-        for (auto& [start, count] : m_groups)
+        size_t i{ 0 };
+
+        for (auto &[start, count] : m_groups)
         {
             pack_group(start, count, i++);
             last_start = start;
@@ -208,15 +205,14 @@ class Geometry
         }
 
         m_dirty = false;
-
     }
 
     void add_group(uint32_t start, uint32_t count)
     {
-        m_groups.push_back({start, count});
+        m_groups.push_back({ start, count });
     }
 
-    const rend::VertexArray* gl_buffers() const
+    const rend::VertexArray *gl_buffers() const
     {
         return m_glbuffers.get();
     }
@@ -237,35 +233,36 @@ class Geometry
     }
 
   private:
-
     void pack_vertex_buffers()
     {
         bool standard = false;
-        m_glbuffers = std::make_unique<rend::VertexArray>();
+        m_glbuffers   = std::make_unique<rend::VertexArray>();
 
-        if (m_buffers.count("position") > 0
-            && m_buffers.count("normal") > 0
+        if (m_buffers.count("position") > 0 && m_buffers.count("normal") > 0
             && m_buffers.count("uv") > 0)
         {
-            standard = true;
-            auto& pos = std::get<0>(m_buffers.at("position"));
-            auto& norm = std::get<0>(m_buffers.at("normal"));
-            auto& uv = std::get<0>(m_buffers.at("uv"));
+            standard   = true;
+            auto &pos  = std::get<0>(m_buffers.at("position"));
+            auto &norm = std::get<0>(m_buffers.at("normal"));
+            auto &uv   = std::get<0>(m_buffers.at("uv"));
             std::vector<Vertex8fg> verts;
 
             for (size_t i = 0, j = 0; i < pos.size() - 2; i += 3, j += 2)
             {
-                verts.push_back({
-                        pos[i], pos[i + 1], pos[i + 2],
-                        norm[i], norm[i + 1], norm[i + 2],
-                        uv[j], uv[j + 1]
-                    });
+                verts.push_back({ pos[i],
+                                  pos[i + 1],
+                                  pos[i + 2],
+                                  norm[i],
+                                  norm[i + 1],
+                                  norm[i + 2],
+                                  uv[j],
+                                  uv[j + 1] });
             }
-            
+
             m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
         }
 
-        for (auto& [name, buf] : m_buffers)
+        for (auto &[name, buf] : m_buffers)
         {
             if (standard
                 && (name.compare("position") == 0 || name.compare("normal") == 0
@@ -273,10 +270,10 @@ class Geometry
             {
                 continue;
             }
-            
+
             auto &data  = std::get<0>(buf);
             auto stride = std::get<1>(buf);
-            
+
             std::vector<Vertex3fg> verts;
 
             // std::cout << name << "\n";
@@ -289,22 +286,20 @@ class Geometry
             auto data_type = stride_to_data_type(stride);
             // auto vert      = std::make_unique<rend::VertexBuffer>(
             //     data.data(), data.size() * rend::data_type_size(data_type));
-            auto vert      = std::make_unique<rend::VertexBuffer>(
-                data.data(), data.size() * sizeof(float));
+            auto vert = std::make_unique<rend::VertexBuffer>(data.data(),
+                                                             data.size() * sizeof(float));
 
             vert->set_layout({ { name, data_type } });
 
             m_glbuffers->add_vertex_buffer(std::move(vert));
-        }        
-
+        }
     }
-    
+
     void pack_group(uint32_t start, uint32_t count, size_t index = 0)
     {
-        m_glbuffers->set_index_buffer(std::make_unique<rend::IndexBuffer>(m_index.data() + start, count), index);
+        m_glbuffers->set_index_buffer(
+          std::make_unique<rend::IndexBuffer>(m_index.data() + start, count), index);
     }
-
-    
 };
 
 

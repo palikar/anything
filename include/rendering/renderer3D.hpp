@@ -27,10 +27,10 @@ class MeshComponent;
 class GroupComponent;
 class LineSegmentsComponent;
 
-}
+}  // namespace ay::cmp
 
 
-#define HANDLER(fun) [this](auto obj, auto comp){this->fun(obj, comp);}
+#define HANDLER(fun) [this](auto obj, auto comp) { this->fun(obj, comp); }
 
 namespace ay::rend
 {
@@ -43,7 +43,7 @@ class RendererScene3D
     RenderAPI *m_api;
 
     TextureBinder m_binder;
-    
+
     uint32_t current_shader = 0;
 
     std::vector<glm::mat4> m_mat_stack;
@@ -64,25 +64,26 @@ class RendererScene3D
 
     void handle_group(gmt::Entity *object, cmp::GroupComponent *group_comp);
 
-    void handle_material(grph::Material* material, Shader* shader);
-    
-    void switch_shader(Shader* shader);
+    void handle_material(grph::Material *material, Shader *shader);
+
+    void switch_shader(Shader *shader);
 
     void push_transform(glm::mat4 transform);
 
-    void switch_mvp(Shader* shader, glm::mat4 transform);
+    void switch_mvp(Shader *shader, glm::mat4 transform);
 
-    template<typename T, typename ... Ts, typename Func>
-    void dispatch_component(gmt::Entity *object, Func && func)
+    template<typename T, typename... Ts, typename Func>
+    void dispatch_component(gmt::Entity *object, Func &&func)
     {
-        auto comp  = object->component<T>();
+        auto comp = object->component<T>();
 
         bool valid = true;
-        valid = ((object->component<Ts>() != nullptr) && ...);
-        
-        if (comp != nullptr && valid) {
+        valid      = ((object->component<Ts>() != nullptr) && ...);
+
+        if (comp != nullptr && valid)
+        {
             func(object, comp);
-        }        
+        }
     }
 };
 

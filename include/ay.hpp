@@ -13,6 +13,7 @@
 #include "rendering/cube_texture.hpp"
 #include "rendering/vertex.hpp"
 #include "rendering/vertex_array.hpp"
+#include "rendering/frame_buffer.hpp"
 
 #include "engine/camera.hpp"
 #include "engine/engine.hpp"

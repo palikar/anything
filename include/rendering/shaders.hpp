@@ -34,7 +34,7 @@ class Shader
     }
 
     void set(const std::string &name, bool value);
-    
+
     void set(const std::string &name, int value);
 
     void set(const std::string &name, int *values, uint32_t count);
@@ -59,7 +59,7 @@ class Shader
 
     void bind();
 
-void unbind();
+    void unbind();
 
   private:
     void compile_program(const std::unordered_map<GLenum, std::string> &shader_sources);

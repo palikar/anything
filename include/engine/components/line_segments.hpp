@@ -20,7 +20,8 @@ class LineSegmentsComponent : public gmt::Component
   public:
     AY_COMPONENT(LineSegments)
 
-    LineSegmentsComponent(grph::LineSegments t_segments) : segments(std::move(t_segments)){};
+    LineSegmentsComponent(grph::LineSegments t_segments)
+      : segments(std::move(t_segments)){};
 
     void init(gmt::GameBase *t_game) override
     {

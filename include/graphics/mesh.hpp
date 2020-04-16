@@ -32,7 +32,7 @@ class Mesh
         m_geometry = std::move(t_geometry);
     }
 
-    Geometry& geometry()
+    Geometry &geometry()
     {
         return m_geometry;
     }

@@ -15,50 +15,54 @@ namespace ay::rend
 class TextureBinder
 {
   private:
-
     std::unordered_map<uint32_t, uint32_t> m_slots;
     std::vector<uint32_t> m_free_list;
-    uint32_t m_free_slot{1};
+    uint32_t m_free_slot{ 1 };
 
 
   public:
-    TextureBinder(){
-
+    TextureBinder()
+    {
     }
 
-    void force_resolve(rend::Texture* t_texture, uint32_t slot)
+    void force_resolve(rend::Texture *t_texture, uint32_t slot)
     {
         m_slots[t_texture->id()] = slot;
         t_texture->bind(slot);
     }
 
-    uint32_t resolve(rend::Texture* t_texture)
+    uint32_t resolve(rend::Texture *t_texture)
     {
 
-        if (m_slots.count(t_texture->id()) !=0 ) {
+        if (m_slots.count(t_texture->id()) != 0)
+        {
             return m_slots.at(t_texture->id());
         };
 
-        if (m_slots.size() > 20) {}
-        
-        if (!m_free_list.empty()) {
+        if (m_slots.size() > 20)
+        {
+        }
+
+        if (!m_free_list.empty())
+        {
             auto slot = m_free_list.back();
-            m_slots.insert({{t_texture->id(), slot}});
+            m_slots.insert({ { t_texture->id(), slot } });
             t_texture->bind(slot);
             return slot;
         }
 
         auto slot = m_free_slot++;
         t_texture->bind(slot);
-        m_slots.insert({{t_texture->id(), slot}});
-        
+        m_slots.insert({ { t_texture->id(), slot } });
+
         return slot;
     }
 
-    void free(rend::Texture* t_texture)
+    void free(rend::Texture *t_texture)
     {
 
-        if (m_slots.count(t_texture->id())) {
+        if (m_slots.count(t_texture->id()))
+        {
             m_free_list.push_back(m_slots.at(t_texture->id()));
             m_slots.erase(m_slots.find(t_texture->id()), m_slots.end());
         };
@@ -66,6 +70,4 @@ class TextureBinder
 };
 
 
-}
-
-
+}  // namespace ay::rend

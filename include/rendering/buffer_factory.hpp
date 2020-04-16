@@ -25,7 +25,7 @@ inline VertexBufferPtr make_buffer(
       vertecies.size()
         * Vertex3fGen<count, Types<T...>, ShaderTypes<T_shader...>>::element_size);
 
-    buf->set_layout(BufferLayout({  (BufferElement{"position", T_shader }) ...  }));
+    buf->set_layout(BufferLayout({ (BufferElement{ "position", T_shader })... }));
 
     return buf;
 }

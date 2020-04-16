@@ -11,10 +11,10 @@ namespace ay::rend
 
 enum class TextureFormat : GLenum
 {
-    NONE = 0,
-    RGB = GL_RGB,
-    RGBA  = GL_RGBA,
-    LUMINANCE = GL_LUMINANCE,
+    NONE            = 0,
+    RGB             = GL_RGB,
+    RGBA            = GL_RGBA,
+    LUMINANCE       = GL_LUMINANCE,
     LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA
 };
 
@@ -26,7 +26,7 @@ class Texture
     std::string m_path;
     uint32_t m_width;
     uint32_t m_height;
-    
+
     uint32_t m_id;
     GLenum m_internal_format;
     GLenum m_data_format;
@@ -34,7 +34,7 @@ class Texture
   public:
     Texture(uint32_t width, uint32_t height);
 
-    explicit Texture(const std::string& path);
+    explicit Texture(const std::string &path);
 
     ~Texture()
     {
@@ -56,10 +56,11 @@ class Texture
         return m_id;
     }
 
-    void set_data(void* data)
+    void set_data(void *data)
     {
         // uint32_t bpp = m_data_format == GL_RGBA ? 4 : 3;
-        glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage2D(
+          m_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, data);
     }
 
     void bind(uint32_t slot = 0)
@@ -67,17 +68,16 @@ class Texture
         glBindTextureUnit(slot, m_id);
     }
 
-    bool operator==(const Texture& other) const
+    bool operator==(const Texture &other) const
     {
         return m_id == (other).m_id;
     }
-
 };
 
 using TexturePtr = std::shared_ptr<Texture>;
 
 
-inline TexturePtr create_texture(const std::string& path)
+inline TexturePtr create_texture(const std::string &path)
 {
     return std::make_shared<Texture>(path);
 }
@@ -88,4 +88,4 @@ inline TexturePtr create_texture(uint32_t width, uint32_t heigh)
 }
 
 
-}
+}  // namespace ay::rend
