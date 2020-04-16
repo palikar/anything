@@ -276,17 +276,21 @@ class Geometry
             
             auto &data  = std::get<0>(buf);
             auto stride = std::get<1>(buf);
+            
+            std::vector<Vertex3fg> verts;
 
-            // std::vector<Vertex3fg> verts;
+            // std::cout << name << "\n";
             // for (size_t i = 0; i < data.size() - 2; i += 3)
             // {
-            //     verts.push_back({data[i], data[i + 1], data[i + 2]});
+            //     std::cout << data[i] << ", " << data[i+1] << ", " << data[i+2] << "\n";
             // }
-            // m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
+            // std::cout << "---------" << "\n";
 
             auto data_type = stride_to_data_type(stride);
+            // auto vert      = std::make_unique<rend::VertexBuffer>(
+            //     data.data(), data.size() * rend::data_type_size(data_type));
             auto vert      = std::make_unique<rend::VertexBuffer>(
-                data.data(), data.size() * rend::data_type_size(data_type));
+                data.data(), data.size() * sizeof(float));
 
             vert->set_layout({ { name, data_type } });
 

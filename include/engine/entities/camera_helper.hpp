@@ -26,32 +26,34 @@ class CameraHelper : public Entity
 {
   private:
 
-    std::unordered_map<std::string, float*> m_points_map;
+    std::unordered_map<std::string, std::vector<size_t>> m_points_map;
     std::vector<float> *m_point_data;
     
-    cmp::LineSegmentsComponent* m_line_segments;
-    cmp::TransformComponent* m_transform;
+    cmp::LineSegmentsComponent *m_line_segments;
+    cmp::TransformComponent *m_transform;
 
     glm::mat4 m_proj_mat;
     glm::mat4 m_proj_mat_inv;
 
-    void add_point(const std::string &a)
+    void add_point(std::string a)
     {
-        m_point_data->push_back(0.0f);
-        m_point_data->push_back(0.0f);
-        m_point_data->push_back(0.0f);
+        m_point_data->push_back(0);
+        m_point_data->push_back(0);
+        m_point_data->push_back(0);
+        m_points_map[a].push_back(m_point_data->size() - 2 - 1);
 
-        m_points_map[a] = m_point_data->data()  - 3;
+        m_line_segments->segments.add_point();
     }
 
     void set_point(const std::string &a, glm::vec3 value)
     {
-        const auto v = glm::vec4(value, 1) * m_proj_mat_inv;
+        const auto v =  m_proj_mat_inv*glm::vec4(value, 1);
 
-        float* loc = m_points_map[a];
-        *(loc) = v.x / v.w;
-        *(loc+1) = v.y / v.w;
-        *(loc+2) = v.z / v.w;
+        for (auto p : m_points_map.at(a) ) {
+            m_point_data->at(p) = v.x / v.w ;
+            m_point_data->at(p + 1) = v.y / v.w ;
+            m_point_data->at(p + 2) = v.z / v.w ;
+        }
     }
             
     void add_line(const std::string &a, const std::string &b)
@@ -62,18 +64,22 @@ class CameraHelper : public Entity
 
   public:
 
-    CameraHelper(glm::mat4 t_proj_mat) : m_proj_mat(t_proj_mat), m_proj_mat_inv(glm::inverse(t_proj_mat))
+    CameraHelper(glm::mat4 t_proj_mat) : m_proj_mat(t_proj_mat), m_proj_mat_inv(glm::inverse(m_proj_mat))
     {
         m_transform     = add_component(std::make_unique<cmp::TransformComponent>());
         m_line_segments = add_component(std::make_unique<cmp::LineSegmentsComponent>(
-                                            grph::LineSegments(grph::solid_color({ 0.0f, 1.0f, 1.0f }))));
+                                            grph::LineSegments(grph::solid_color({ 1.0f, 1.0f, 1.0f }))));
         m_point_data = &m_line_segments->segments.geometry().attribute("position");
 
+        
+        // m_view = glm::lookAt(m_pos, m_pos + glm::axis(m_rot), glm::vec3(0.0, 1.0, 0.0));
+        
         init_points();
     }
 
     void init_points()
     {
+     
         add_line( "n1", "n2");
         add_line( "n2", "n4");
         add_line( "n4", "n3");
@@ -166,6 +172,7 @@ class CameraHelper : public Entity
         set_point( "cn3", glm::vec3( 0, - h, - 1 ));
         set_point( "cn4", glm::vec3( 0, h, - 1 ));
 
+        m_line_segments->segments.geometry().pack();
         
     }
 

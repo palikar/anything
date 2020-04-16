@@ -50,6 +50,13 @@ class LineSegments
         ++m_count;
     }
 
+    
+    void add_point()
+    {
+        ++m_count;
+    }
+
+    
     Geometry& geometry()
     {
         return m_geometry;

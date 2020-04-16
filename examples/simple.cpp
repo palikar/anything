@@ -72,9 +72,12 @@ class SimpleGame : public gmt::GameBase {
         // cmp::transform(cube_3).translateZ(3.0f);
         // cmp::transform(cube_3).translateY(1.0f);
 
-        //    -0.5f, -0.5f, 0.0f,
-        // 0.5f, -0.5f, 0.0f,
-        // 0.0f,  0.5f, 0.0f
+        
+        // glm::mat4 orth = glm::ortho(-3.0f, 3.0f, -5.0f, 5.0f, 0.1f, 5.0f);
+        glm::mat4 orth = glm::perspective(glm::radians(32.0f), 1024.0f/768.0f, 0.001f, 100.0f);
+        
+
+        main_scene->add(std::make_unique<gmt::CameraHelper>(orth));
         
         
         // cone = main_scene->add(gmt::line_segments_entity( {grph::solid_color({ 0.0f, 1.0f, 1.0f })}));

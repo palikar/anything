@@ -121,8 +121,8 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object, cmp::LineSegment
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
     handle_material(mat, shader);
-    
 
+    // std::cout <<line->segments.count()  << "\n";
     line->segments.buffers()->bind();
 
     GLCall(glDrawArrays(GL_LINES, 0, line->segments.count()));
