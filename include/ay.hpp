@@ -23,6 +23,7 @@
 
 #include "engine/components/orbital_camera.hpp"
 #include "engine/components/mesh.hpp"
+#include "engine/components/line_segments.hpp"
 #include "engine/components/transform.hpp"
 #include "engine/components/group.hpp"
 #include "engine/components/clock.hpp"
@@ -40,6 +41,7 @@
 #include "graphics/geometry.hpp"
 #include "graphics/geometry_factory.hpp"
 #include "graphics/mesh.hpp"
+#include "graphics/line_segments.hpp"
 #include "graphics/material.hpp"
 #include "graphics/material_builder.hpp"
 #include "graphics/mesh_factory.hpp"

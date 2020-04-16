@@ -10,7 +10,7 @@
 #include "engine/components/transform.hpp"
 #include "engine/components/mesh.hpp"
 #include "engine/components/group.hpp"
-
+#include "engine/components/line_segments.hpp"
 
 namespace ay::rend
 {
@@ -111,12 +111,32 @@ void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent*)
 
 }
 
+void RendererScene3D::handle_line_segments(gmt::Entity *object, cmp::LineSegmentsComponent *line)
+{
+
+    auto transform = cmp::transform(object);
+    auto shader = line->segments.material()->shader();
+    auto mat = line->segments.material();
+
+    switch_shader(shader);
+    switch_mvp(shader, transform.get_tranformation());
+    handle_material(mat, shader);
+    
+
+    line->segments.buffers()->bind();
+
+    GLCall(glDrawArrays(GL_LINES, 0, line->segments.count()));
+}
+
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
 {
 
     dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_mesh));
+
+    dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_line_segments));
     
     dispatch_component<cmp::GroupComponent>(t_obj, HANDLER(handle_group));
+
 
 }
 

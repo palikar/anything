@@ -50,7 +50,7 @@ class Geometry
         m_buffers.insert({ std::move(name), { std::move(buffer), stride } });
     }
 
-    std::vector<float> attribute(std::string name)
+    std::vector<float> &attribute(const std::string &name)
     {
         return std::get<0>(m_buffers.at(name));
     }
@@ -273,12 +273,22 @@ class Geometry
             {
                 continue;
             }
-
+            
             auto &data  = std::get<0>(buf);
             auto stride = std::get<1>(buf);
 
-            auto vert = std::make_unique<rend::VertexBuffer>(data.data(), data.size());
-            vert->set_layout({ { name, stride_to_data_type(stride) } });
+            // std::vector<Vertex3fg> verts;
+            // for (size_t i = 0; i < data.size() - 2; i += 3)
+            // {
+            //     verts.push_back({data[i], data[i + 1], data[i + 2]});
+            // }
+            // m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
+
+            auto data_type = stride_to_data_type(stride);
+            auto vert      = std::make_unique<rend::VertexBuffer>(
+                data.data(), data.size() * rend::data_type_size(data_type));
+
+            vert->set_layout({ { name, data_type } });
 
             m_glbuffers->add_vertex_buffer(std::move(vert));
         }        

@@ -46,15 +46,14 @@ class SimpleGame : public gmt::GameBase {
         init_basic();
 
 
-        auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
-        plane = main_scene->add(gmt::mesh_entity(
-                                    {grph::plane_geometry(200, 200, 20, 20),
-                                     grph::texture_material(tex)}));
-        cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        // auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
+        // plane = main_scene->add(gmt::mesh_entity(
+        //                             {grph::plane_geometry(200, 200, 20, 20),
+        //                              grph::texture_material(tex)}));
+        // cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
 
 
         auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
-
         grph::MaterialBuilder::from_existing(cube_mat.get())
             .wire_frame(true)
             // .enable_lending()
@@ -65,19 +64,26 @@ class SimpleGame : public gmt::GameBase {
 
 
         cube_2 = main_scene->add(grph::axis());
-        cmp::transform(cube_2).translateY(3.0f);
+        // cmp::transform(cube_2).translateY(3.0f);
 
-        cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));
-        cmp::transform(cube_1).translateX(3.0f);
-        cmp::transform(cube_1).translateY(2.0f);
+        // cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));
 
-        cube_3 = main_scene->add(gmt::mesh_entity({grph::cube_geometry(), grph::solid_color(0, 0, 1)}));
-        cmp::transform(cube_3).translateZ(3.0f);
-        cmp::transform(cube_3).translateY(1.0f);
+        // cube_3 = main_scene->add(gmt::mesh_entity({grph::cube_geometry(), grph::solid_color(0, 0, 1)}));
+        // cmp::transform(cube_3).translateZ(3.0f);
+        // cmp::transform(cube_3).translateY(1.0f);
 
-        // cone = main_scene->add(gmt::mesh_entity({grph::cylinder_geometry(2,2,2), grph::solid_color(0, 1, 1)}));
-        // cmp::transform(cone).translateY(6.0f);
+        //    -0.5f, -0.5f, 0.0f,
+        // 0.5f, -0.5f, 0.0f,
+        // 0.0f,  0.5f, 0.0f
         
+
+        cone = main_scene->add(gmt::line_segments_entity( {grph::solid_color({ 0.0f, 1.0f, 1.0f })}));
+        cmp::line_segments(cone).add_point({0.0f, 0.0f, 0.0f});
+        cmp::line_segments(cone).add_point({0.0f, 3.0f, 0.0f});
+        cmp::line_segments(cone).add_point({3.0f, 0.0f, 3.0f});
+        cmp::line_segments(cone).add_point({0.0f, 3.0f, 0.0f});
+        cmp::line_segments(cone).geometry().pack();
+
 
     }
 

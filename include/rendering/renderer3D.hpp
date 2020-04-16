@@ -25,6 +25,7 @@ namespace ay::cmp
 
 class MeshComponent;
 class GroupComponent;
+class LineSegmentsComponent;
 
 }
 
@@ -58,6 +59,8 @@ class RendererScene3D
     void render_scene(gmt::Scene3D &scene);
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
+
+    void handle_line_segments(gmt::Entity *object, cmp::LineSegmentsComponent *line);
 
     void handle_group(gmt::Entity *object, cmp::GroupComponent *group_comp);
 

@@ -37,7 +37,6 @@ class Mesh
         return m_geometry;
     }
 
-    
     const rend::VertexArray *buffers()
     {
         if (m_geometry.is_dirty())
