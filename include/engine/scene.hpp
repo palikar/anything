@@ -7,6 +7,7 @@
 #include "engine/entity.hpp"
 #include "engine/camera.hpp"
 
+
 #include "application/event.hpp"
 
 #include "std_header.hpp"
@@ -15,12 +16,16 @@ namespace ay::gmt
 {
 
 class GameBase;
+class Skybox;
+// using SkyboxPtr;
 
 class Scene3D
 {
   private:
     std::vector<EntityPtr> m_entities;
     std::vector<ComponentPtr> m_game_components;
+    Skybox* m_skybox; 
+
     Camera m_camera;
 
     GameBase *m_game;
@@ -67,6 +72,10 @@ class Scene3D
         }
     }
 
+    Skybox* set_skybox(EntityPtr t_sky);
+    
+    Skybox* skybox();
+    
     Camera &camera()
     {
         return m_camera;

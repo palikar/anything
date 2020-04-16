@@ -14,6 +14,7 @@ namespace ay::gmt
 {
 
 class GameEngine;
+class Scene3D;
 
 class GameBase
 {

@@ -48,13 +48,17 @@ class SimpleGame : public gmt::GameBase {
 
         auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
         plane = main_scene->add(gmt::mesh_entity(
-                                    {grph::plane_geometry(200, 200, 20, 20),
+                                    {grph::plane_geometry(100, 100, 20, 20),
                                      grph::texture_material(tex)}));
+
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        cmp::transform(plane).translateY(-3);
 
-        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        // auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        // auto fbo = rend::create_fbo(512, 512);
 
-        auto fbo = rend::create_fbo(512, 512);
+
+        auto sky = main_scene->set_skybox(std::make_unique<gmt::Skybox>());
         
         // auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
         // grph::MaterialBuilder::from_existing(cube_mat.get())
@@ -66,7 +70,7 @@ class SimpleGame : public gmt::GameBase {
 
 
 
-        // cube_2 = main_scene->add(grph::axis());
+        cube_2 = main_scene->add(grph::axis());
         // // cmp::transform(cube_2).translateY(3.0f);
 
         // cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));

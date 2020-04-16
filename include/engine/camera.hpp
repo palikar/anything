@@ -52,6 +52,16 @@ class Camera
         m_projection = glm::ortho(left, right, bottom, top, near, far);
     }
 
+    glm::mat4 projection()
+    {
+        return m_projection;
+    }
+
+    glm::mat4 view()
+    {
+        return m_view;
+    }
+        
     glm::mat4 view_projection()
     {
         return m_projection * m_view;
@@ -90,10 +100,10 @@ class Camera
 
     void set_look_at(glm::vec3 position, glm::vec3 point)
     {
-
+        
         m_pos = position;
         m_rot = glm::angleAxis(glm::radians(180.0f),
-                               glm::normalize(position - point) - position);
+                               glm::normalize(point - position));
         update();
     }
 

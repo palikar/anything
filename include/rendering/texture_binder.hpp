@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "util/gl_helpers.hpp"
@@ -31,12 +30,15 @@ class TextureBinder
         t_texture->bind(slot);
     }
 
-    uint32_t resolve(rend::Texture *t_texture)
+    template<typename T>
+    uint32_t resolve(T *t_texture)
     {
 
         if (m_slots.count(t_texture->id()) != 0)
         {
-            return m_slots.at(t_texture->id());
+            auto slot = m_slots.at(t_texture->id());
+            t_texture->bind(slot);
+            return slot;
         };
 
         if (m_slots.size() > 20)

@@ -151,6 +151,7 @@ add_library(anything_engine
 
     ./include/rendering/texture.cpp
     ./include/rendering/frame_buffer.cpp
+    ./include/rendering/depth_texture.cpp    
     ./include/rendering/cube_texture.cpp
     ./include/rendering/renderer3D.cpp
     ./include/rendering/shaders.cpp

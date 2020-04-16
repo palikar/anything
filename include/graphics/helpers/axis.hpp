@@ -22,8 +22,8 @@ auto axis()
     constexpr float cone_height      = 0.33;
     constexpr float translate_offset = -0.2;
 
-    Geometry final_geom = cylinder_geometry(0.05, 0.05, cyl_height);
-    ;
+    grph::Geometry final_geom = cylinder_geometry(0.05, 0.05, cyl_height);
+    
     auto cone_1 = cone_geometry(0.1, cone_height);
 
     cone_1.translate(0.0, (cyl_height + cone_height) / 2, 0.f);

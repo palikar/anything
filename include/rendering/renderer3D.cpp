@@ -7,6 +7,8 @@
 
 #include "rendering/renderer.hpp"
 
+#include "engine/entities/skybox.hpp"
+
 #include "engine/components/transform.hpp"
 #include "engine/components/mesh.hpp"
 #include "engine/components/group.hpp"
@@ -33,7 +35,7 @@ void RendererScene3D::switch_shader(Shader *shader)
 void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 {
 
-    shader->set("projection_matrix", m_projection);
+    shader->set("projection_matrix", m_view_projection);
     if (!m_mat_stack.empty())
     {
         shader->set("model_matrix", m_mat_stack.back() * transform);
@@ -124,6 +126,30 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     GLCall(glDrawArrays(GL_LINES, 0, line->segments.count()));
 }
 
+
+void RendererScene3D::handle_sky(gmt::Skybox *sky)
+{
+    auto shader    = sky->shader();
+    auto tex       = sky->texture();
+    auto buffers   = sky->buffers();
+
+    switch_shader(shader);
+    auto slot = m_binder.resolve(tex);
+    shader->set_sampler("skybox", slot);
+    
+    auto sky_view = m_view;
+    sky_view[3] = glm::vec4(0, 0, 0, 1);
+    
+    shader->set("projection_matrix", m_projection * sky_view);
+    
+    
+    
+    buffers->bind();
+    
+    m_api->draw_indexed(buffers);
+
+}
+
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
 {
 
@@ -140,7 +166,13 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
 void RendererScene3D::render_scene(gmt::Scene3D &scene)
 {
 
-    m_projection = scene.camera().view_projection();
+    m_projection = scene.camera().projection();
+    m_view = scene.camera().view();
+
+    m_view_projection = m_projection * m_view;
+
+    handle_sky(scene.skybox());
+    
 
     for (auto &object : scene.entities())
     {

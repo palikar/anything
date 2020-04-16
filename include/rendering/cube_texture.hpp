@@ -52,6 +52,8 @@ class CubeTexture
         GLCall(glActiveTexture(GL_TEXTURE0 + slot));
         GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
     }
+
+    uint32_t id() { return m_id; }
 };
 
 using CubeTexturePtr = std::shared_ptr<CubeTexture>;

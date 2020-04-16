@@ -121,6 +121,39 @@ class OrbitalCameraComponent : public gmt::Component
             }
             m_last_mouse_pos = pos;
         }
+
+        if (app::Input::is_pressed(KeyCode::W))
+        {
+            m_pos.x += m_camera->at().x * 1.0;
+            m_pos.z += m_camera->at().z * 1.0;
+            update_rotation();
+        }
+
+        if (app::Input::is_pressed(KeyCode::S))
+        {
+            m_pos.x -= m_camera->at().x * 1.0;
+            m_pos.z -= m_camera->at().z * 1.0;
+            update_rotation();
+        }
+        if (app::Input::is_pressed(KeyCode::A))
+        {
+            auto dir = glm::cross(glm::vec3(0.0, 1.0, 0.0),
+                                  glm::vec3(m_camera->at().x, 0, m_camera->at().z));
+            m_pos.x += dir.x * 1.0;
+            m_pos.z += dir.z * 1.0;
+            update_rotation();
+        }
+
+        if (app::Input::is_pressed(KeyCode::D))
+        {
+            auto dir = glm::cross(glm::vec3(0.0, 1.0, 0.0),
+                                  glm::vec3(m_camera->at().x, 0, m_camera->at().z));
+            m_pos.x -= dir.x * 1.0;
+            m_pos.z -= dir.z * 1.0;
+            update_rotation();
+        }
+
+
     }
 
     bool event(app::Event &e) override

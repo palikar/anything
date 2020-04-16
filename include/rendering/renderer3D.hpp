@@ -17,6 +17,7 @@ namespace ay::gmt
 class Entity;
 class Entity;
 class Scene3D;
+class Skybox;
 }  // namespace ay::gmt
 
 
@@ -47,6 +48,8 @@ class RendererScene3D
     uint32_t current_shader = 0;
 
     std::vector<glm::mat4> m_mat_stack;
+    glm::mat4 m_view;
+    glm::mat4 m_view_projection;
     glm::mat4 m_projection;
 
     void render_entity(gmt::Entity *object);
@@ -58,6 +61,8 @@ class RendererScene3D
 
     void render_scene(gmt::Scene3D &scene);
 
+    void handle_sky(gmt::Skybox *sky);
+
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
 
     void handle_line_segments(gmt::Entity *object, cmp::LineSegmentsComponent *line);
@@ -68,10 +73,10 @@ class RendererScene3D
 
     void switch_shader(Shader *shader);
 
-    void push_transform(glm::mat4 transform);
-
     void switch_mvp(Shader *shader, glm::mat4 transform);
 
+    void push_transform(glm::mat4 transform);
+    
     template<typename T, typename... Ts, typename Func>
     void dispatch_component(gmt::Entity *object, Func &&func)
     {

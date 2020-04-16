@@ -2,6 +2,8 @@
 
 #include "util/gl_helpers.hpp"
 
+#include "glm_header.hpp"
+
 namespace ay::rend
 {
 
@@ -61,7 +63,6 @@ enum class DepthFunc : GLenum
 
 };
 
-
 struct BlendingSetup
 {
     float alpha_test{ 0.0f };
@@ -78,6 +79,25 @@ struct BlendingSetup
     rend::BlenidngEquation blend_equation{ rend::BlenidngEquation::ADD };
 
     bool blending{ false };
+};
+
+
+struct Colors
+{
+
+    glm::vec3 black = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 white = glm::vec3(1.0f, 1.0f, 1.0f);
+    
+    glm::vec3 red = glm::vec3(1.0f, 0.0f, 0.0f);
+    glm::vec3 blue = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 green = glm::vec3(0.0f, 0.0f, 1.0f);
+
+    glm::vec3 cyan = glm::vec3(0.0f, 1.0f, 1.0f);
+    glm::vec3 yellow = glm::vec3(1.0f, 1.0f, 0.0f);
+    glm::vec3 magenta = glm::vec3(1.0f, 0.0f, 1.0f);
+
+    
+
 };
 
 

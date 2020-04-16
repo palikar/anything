@@ -49,6 +49,13 @@ class Geometry
         m_buffers.insert({ std::move(name), { std::move(buffer), stride } });
     }
 
+    
+    void drop_attribute(std::string name)
+    {
+        m_buffers.erase(m_buffers.find(name));
+    }
+
+
     std::vector<float> &attribute(const std::string &name)
     {
         return std::get<0>(m_buffers.at(name));
