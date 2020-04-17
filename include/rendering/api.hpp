@@ -81,7 +81,6 @@ struct BlendingSetup
     bool blending{ false };
 };
 
-
 struct Colors
 {
 
@@ -98,6 +97,13 @@ struct Colors
 
     
 
+};
+
+enum class Combine
+{
+    ADD = 0,
+    MULTIPLY,
+    MIX
 };
 
 

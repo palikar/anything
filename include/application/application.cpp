@@ -64,6 +64,10 @@ int Application::run()
         if (render)
         {
             m_engine.render();
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
             m_window->render();
             ++frames;
         }
