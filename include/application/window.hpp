@@ -62,6 +62,11 @@ class Window
     void render();
 
     bool closed();
+
+    GLFWwindow* native()
+    {
+        return m_window;
+    }
 };
 
 

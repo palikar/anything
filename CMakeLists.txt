@@ -179,7 +179,7 @@ target_include_directories(anything_engine
     )
 
 target_link_libraries(anything_engine PRIVATE project_options project_warnings
-    PUBLIC glfw OpenGL::GL GLEW::GLEW
+    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui
     )
 
 target_precompile_headers(anything_engine

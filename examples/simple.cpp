@@ -5,6 +5,10 @@
 
 #include "ay.hpp"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 using namespace ay;
 
 
@@ -52,7 +56,7 @@ class SimpleGame : public gmt::GameBase {
                                      grph::texture_material(tex)}));
 
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
-        cmp::transform(plane).translateY(-3);
+        cmp::transform(plane).translateY(-7.0);
 
         // auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
         // auto fbo = rend::create_fbo(512, 512);
@@ -100,16 +104,40 @@ class SimpleGame : public gmt::GameBase {
         // cmp::line_segments(cone).geometry().pack();
 
 
-        
-        
-
-
     }
 
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    int counter = 0;
+    float f;
+    
     void update(double dt) override
     {
 
         // cmp::transform(cube_2).rotateZ(glm::radians(50*dt));
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+
+        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+        ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox("Another Window", &show_another_window);
+
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
 
         main_scene->update(dt);
     }
@@ -122,6 +150,10 @@ class SimpleGame : public gmt::GameBase {
     void render(rend::RenderAPI&) override
     {
         renderer.render_scene(*main_scene);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
     }
 
 

@@ -1,6 +1,3 @@
-
-
-
 #include "application/application.hpp"
 
 #include <chrono>
@@ -73,6 +70,12 @@ int Application::run()
         std::this_thread::sleep_for(5ms);
     }
 
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+
     m_window->dispose();
     glfwTerminate();
 
@@ -89,6 +92,8 @@ void Application::init()
         return;
     }
 
+    ImGui::CreateContext();
+    
     m_window->init(m_width, m_height, "Anything");
     m_window->set_eventcall([this](Event &t_event) { this->on_event(t_event); });
 
@@ -103,6 +108,29 @@ void Application::init()
 
     ResouceLoader::get_instance()->init("../resources");
     std::cout << glGetString(GL_VERSION) << "\n";
+
+
+
+    IMGUI_CHECKVERSION();
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //io.ConfigViewportsNoAutoMerge = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
+    ImGui::StyleColorsDark();
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    ImGui_ImplGlfw_InitForOpenGL(m_window->native(), true);
+    ImGui_ImplOpenGL3_Init("#version 410");
 
     m_engine.init(m_width, m_height);
 }
