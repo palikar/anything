@@ -26,7 +26,7 @@ class RenderAPI
 
         GLCall(glEnable(GL_DEPTH_TEST));
 
-        // GLCall(glEnable(GL_CULL_FACE));
+        GLCall(glEnable(GL_CULL_FACE));
 
         GLCall(glCullFace(GL_BACK));
         GLCall(glFrontFace(GL_CW));

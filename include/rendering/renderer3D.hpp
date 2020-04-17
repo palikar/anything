@@ -1,6 +1,7 @@
 #pragma once
 
 #include "rendering/texture_binder.hpp"
+#include "rendering/render_context.hpp"
 #include "rendering/shaders.hpp"
 
 #include "graphics/material.hpp"
@@ -52,6 +53,8 @@ class RendererScene3D
     glm::mat4 m_view_projection;
     glm::mat4 m_projection;
 
+    RenderContext m_current_context;
+    
     void render_entity(gmt::Entity *object);
 
   public:

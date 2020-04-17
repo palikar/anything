@@ -133,4 +133,55 @@ class MaterialBuilder
 };
 
 
+class TexturedMaterialBuilder
+{
+  private:
+    TextureMaterial *m_mat;
+
+  public:
+    TexturedMaterialBuilder(TextureMaterial *t_mat) : m_mat(t_mat)
+    {
+    }
+
+    static TexturedMaterialBuilder from_existing(TextureMaterial *mat)
+    {
+        return TexturedMaterialBuilder(mat);
+    }
+
+    TexturedMaterialBuilder& reflectivity(float value)
+    {
+        m_mat->set_reflectivity(value);
+        return *this;
+    }
+
+    TexturedMaterialBuilder& refraction(float value)
+    {
+        m_mat->set_refraction(value);
+        return *this;
+    }
+    
+    TexturedMaterialBuilder& reflective(bool value = true)
+    {
+        m_mat->set_is_reflection(value);
+        return *this;
+    }
+
+    TexturedMaterialBuilder& ao_intensity(bool value = true)
+    {
+        m_mat->set_is_reflection(value);
+        return *this;
+    }
+
+    TexturedMaterialBuilder& color(glm::vec3 color)
+    {
+        m_mat->set_color(color);
+        return *this;
+    }
+
+    
+
+
+};
+
+
 }  // namespace ay::grph

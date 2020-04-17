@@ -7,6 +7,7 @@
 #include "std_header.hpp"
 
 #include "rendering/texture_binder.hpp"
+#include "rendering/render_context.hpp"
 
 
 namespace ay::grph
@@ -53,7 +54,7 @@ class Material
     }
 
     virtual void init_shader(rend::ShaderLibrary &t_shader_lib) = 0;
-    virtual void update_uniforms(rend::TextureBinder &)         = 0;
+    virtual void update_uniforms(rend::TextureBinder &, rend::RenderContext&)         = 0;
 
     void set_wire_frame(bool value)
     {

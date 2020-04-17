@@ -182,18 +182,24 @@ target_link_libraries(anything_engine PRIVATE project_options project_warnings
     PUBLIC glfw OpenGL::GL GLEW::GLEW imgui
     )
 
-target_precompile_headers(anything_engine
-    PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
 
 
 add_executable(simple_anything ./examples/simple.cpp)
 
 
+if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
+    
+    target_precompile_headers(anything_engine
+        PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
+    
+endif()
+
+
 target_link_libraries(simple_anything
     PRIVATE project_options project_warnings
     PUBLIC anything_engine
-
     )
+
 
 
 

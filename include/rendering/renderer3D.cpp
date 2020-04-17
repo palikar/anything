@@ -73,7 +73,7 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
     shader->set("visible", material->visible());
 
 
-    material->update_uniforms(m_binder);
+    material->update_uniforms(m_binder, m_current_context);
 }
 
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)
@@ -145,8 +145,10 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     
     
     buffers->bind();
-    
+
+    GLCall(glCullFace(GL_FRONT));
     m_api->draw_indexed(buffers);
+    GLCall(glCullFace(GL_BACK));
 
 }
 
@@ -170,6 +172,7 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
     m_view = scene.camera().view();
 
     m_view_projection = m_projection * m_view;
+    m_current_context.camera_pos = scene.camera().pos();
 
     handle_sky(scene.skybox());
     

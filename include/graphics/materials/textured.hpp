@@ -17,7 +17,7 @@ namespace ay::grph
 class TextureMaterial : public Material
 {
   private:
-    glm::vec3 m_color{1.0f, 1.0f, 1.0f};
+    glm::vec3 m_color{0.0f, 0.0f, 0.0f};
 
     rend::CubeTexturePtr m_env_map;
     rend::TexturePtr m_map;
@@ -28,8 +28,11 @@ class TextureMaterial : public Material
     float m_ao_intensity{0.0};
 
     rend::Combine m_combine{rend::Combine::MIX};
-    float m_reflectivity;
-    float m_refraction_ration;
+
+    bool m_is_reflection{true};
+    
+    float m_reflectivity{0.0f};
+    float m_refraction_ration{0.0};
 
   public:
 
@@ -44,11 +47,17 @@ class TextureMaterial : public Material
         m_shader = t_shader_lib.load("textured");
     }
 
-    void update_uniforms(rend::TextureBinder &binder) override
+    void update_uniforms(rend::TextureBinder &binder, rend::RenderContext& ctx) override
     {
         m_shader->set("mixing", static_cast<int>(m_combine));
         m_shader->set("reflectivity", m_reflectivity);
         m_shader->set("refraction_ration", m_refraction_ration);
+
+        m_shader->set("is_relfection", m_is_reflection);
+        
+        m_shader->set("color", m_color);
+
+        m_shader->set("camera_pos", ctx.camera_pos);
 
         m_shader->set_sampler("tex", binder.resolve(m_map.get()));
 
@@ -73,6 +82,59 @@ class TextureMaterial : public Material
         }
         
     }
+
+    void set_map(rend::TexturePtr tex)
+    {
+        m_map = std::move(tex);
+    }
+
+    void set_alpha_map(rend::TexturePtr tex)
+    {
+        m_alpha_map = std::move(tex);
+    }
+    
+    void set_ao_map(rend::TexturePtr tex)
+    {
+        m_ao_map = std::move(tex);
+    }
+    
+    void set_specular_map(rend::TexturePtr tex)
+    {
+        m_specular_map = std::move(tex);
+    }
+    
+    void set_env_map(rend::CubeTexturePtr tex, bool reflection = true)
+    {
+        m_is_reflection = reflection;
+        m_env_map = std::move(tex);
+    }
+
+    void set_color(glm::vec3 color)
+    {
+        m_color = color;
+    }
+    
+    void set_reflectivity(float value)
+    {
+        m_reflectivity = value;
+    }
+
+    void set_refraction(float value)
+    {
+        m_refraction_ration = value;
+    }
+
+    void set_ao_intensity(float value)
+    {
+        m_ao_intensity = value;
+    }
+
+    void set_is_reflection(bool reflection)
+    {
+        m_is_reflection = reflection;
+    }
+
+    
 };
 
 

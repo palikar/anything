@@ -49,20 +49,27 @@ class SimpleGame : public gmt::GameBase {
     {
         init_basic();
 
-
+        
         auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
         plane = main_scene->add(gmt::mesh_entity(
-                                    {grph::plane_geometry(100, 100, 20, 20),
+                                    {grph::sphere_geometry(2, 20, 20),
                                      grph::texture_material(tex)}));
 
-        cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
-        cmp::transform(plane).translateY(-7.0);
+        // cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
+        cmp::transform(plane).translateY(1.0);
 
-        // auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        
+
+        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
         // auto fbo = rend::create_fbo(512, 512);
 
 
-        auto sky = main_scene->set_skybox(std::make_unique<gmt::Skybox>());
+        main_scene->set_skybox(std::make_unique<gmt::Skybox>(sky));
+
+
+        // cmp::mesh(plane).material()->set_wire_frame(true);
+        static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material())->set_env_map(sky);
+        
         
         // auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
         // grph::MaterialBuilder::from_existing(cube_mat.get())
@@ -106,12 +113,6 @@ class SimpleGame : public gmt::GameBase {
 
     }
 
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    int counter = 0;
-    float f;
-    
     void update(double dt) override
     {
 
@@ -126,6 +127,12 @@ class SimpleGame : public gmt::GameBase {
         return false;
     }
 
+    glm::vec3 plane_color{1.0f, 0.0f, 1.0f};
+    float reflectivity;
+    float refraction;
+    bool reflective{true};
+    float rot{0};
+
     void render(rend::RenderAPI&) override
     {
         renderer.render_scene(*main_scene);
@@ -135,28 +142,31 @@ class SimpleGame : public gmt::GameBase {
 
 
         ImGui::NewFrame();
-        // ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-        // ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        // ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-        // ImGui::Checkbox("Another Window", &show_another_window);
+        ImGui::Begin("Hello, world!");
 
-        // ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        // ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+        ImGui::ColorEdit3("clear color", (float*)&plane_color);
+        ImGui::SliderFloat("reflectivity", &reflectivity, 0.0f, 1.0f);
+        ImGui::SliderFloat("refraction", &refraction, 0.0f, 1.0f);
+        ImGui::Checkbox("reflective", &reflective);
 
-        // if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        //     counter++;
-        // ImGui::SameLine();
-        // ImGui::Text("counter = %d", counter);
 
-        // ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::SliderFloat("rotatation", &rot, -90.0f, 90.0f);
+        cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(rot), glm::vec3(1,0,0));
+
+        
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
 
-        
+        grph::TexturedMaterialBuilder::from_existing(static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material()))
+            .color(plane_color)
+            .reflective(reflective)
+            .reflectivity(reflectivity)
+            .refraction(refraction);
         
     }
-
-
+    
 };
 
 

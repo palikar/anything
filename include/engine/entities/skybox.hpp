@@ -26,7 +26,7 @@ class Skybox : public Entity
     rend::ShaderPtr m_shader;
   public:
 
-    Skybox()
+    Skybox(rend::CubeTexturePtr tex)
     {
 
         m_cube = grph::cube_geometry(500, 500, 500);
@@ -34,7 +34,7 @@ class Skybox : public Entity
         m_cube.drop_attribute("uv");
         m_cube.pack();
 
-        m_texture = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        m_texture = std::move(tex);
         
 
     }

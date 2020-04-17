@@ -21,7 +21,7 @@ class SolidColorMaterial : public Material
 
     void init_shader(rend::ShaderLibrary &t_shader_lib) override;
 
-    void update_uniforms(rend::TextureBinder &) override;
+    void update_uniforms(rend::TextureBinder &, rend::RenderContext&) override;
 
     glm::vec3 &color();
 

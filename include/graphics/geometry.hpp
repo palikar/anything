@@ -198,10 +198,11 @@ class Geometry
         if (m_groups.empty())
         {
             pack_group(0, m_index.size());
+            return;
         }
 
-        size_t last_start;
-        size_t last_count;
+        size_t last_start{0};
+        size_t last_count{0};
         size_t i{ 0 };
 
         for (auto &[start, count] : m_groups)
@@ -211,6 +212,12 @@ class Geometry
             last_count = count;
         }
 
+        if (last_start + last_count < m_index.size())
+        {
+            pack_group(last_start + last_count,
+                       m_index.size() - (last_start + last_count));
+        }
+        
         m_dirty = false;
     }
 
