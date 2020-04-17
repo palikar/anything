@@ -3,6 +3,9 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include "application/keycodes.hpp"
 #include "std_header.hpp"
@@ -256,26 +259,27 @@ class Input
     {
         auto state =
           glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
-        return state == GLFW_PRESS || state == GLFW_REPEAT;
+        return (state == GLFW_PRESS || state == GLFW_REPEAT) and !ImGui::GetIO().WantCaptureMouse;
     }
 
     static bool is_pressed(KeyCode key)
     {
         auto state = glfwGetKey(get_instance()->window(), static_cast<int32_t>(key));
-        return state == GLFW_PRESS;
+        return state == GLFW_PRESS and !ImGui::GetIO().WantCaptureKeyboard;
     }
 
     static bool is_released(MouseCode key)
     {
         auto state =
-          glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
-        return state == GLFW_RELEASE;
+            glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
+        return state == GLFW_RELEASE and !ImGui::GetIO().WantCaptureMouse;
     }
 
     static bool is_released(KeyCode key)
     {
+        
         auto state = glfwGetKey(get_instance()->window(), static_cast<int32_t>(key));
-        return state == GLFW_RELEASE;
+        return state == GLFW_RELEASE and !ImGui::GetIO().WantCaptureKeyboard;
     }
 
     static glm::vec2 mouse_pos()

@@ -17,15 +17,10 @@ void main()
     if (opacity <= 0.0) {
         frag_color = vec4(color, 1.0);
     } else {
-        
         if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
             discard;
-        }
-
-        
+        }        
         frag_color = vec4(color, opacity);
     }
-
-    // frag_color = vec4(1.0, 1.0, 1.0 , 1.0f);
     
 }

@@ -52,7 +52,7 @@ class SimpleGame : public gmt::GameBase {
         
         auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
         plane = main_scene->add(gmt::mesh_entity(
-                                    {grph::sphere_geometry(2, 20, 20),
+                                    {grph::sphere_geometry(2, 10, 10),
                                      grph::texture_material(tex)}));
 
         // cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));

@@ -44,6 +44,20 @@ in vec3 normal;
 void main()
 {
 
+    if (!visible){
+        discard;
+    }
+
+    
+    float alpha_opacity = texture(alpha_map, uv).g;
+    if (alpha_opacity == 0.0) {
+        alpha_opacity = opacity;
+    }
+    if (alpha_threshold >= 0.0 && alpha_opacity < alpha_threshold){
+        discard;
+    }
+
+    
 
     // base color
     vec3 final_color = texture(tex, uv).rgb;
@@ -73,18 +87,8 @@ void main()
     
     final_color = mix(final_color, env_color, reflectivity * specular_strength);
 
-
-    float opacity = texture(alpha_map, uv).g;
-    if (opacity == 0.0) {
-        opacity = 1.0;
-    }
     
-    frag_color = vec4(final_color, 1.0);
+    frag_color = vec4(final_color, alpha_opacity);
+    // frag_color = vec4(normalize(normal)*0.5 + 0.5, alpha_opacity);
 
-
-
-
-
-    
-    
 }

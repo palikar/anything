@@ -146,7 +146,9 @@ void Application::on_event(Event &t_event)
     dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
     dispatch.dispatch<WindowResizeEvent>([this](auto &e) { return this->on_resize(e); });
 
-    m_engine.on_event(t_event);
+    if (!ImGui::GetIO().WantCaptureKeyboard) {
+        m_engine.on_event(t_event);
+    }
 }
 
 
