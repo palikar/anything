@@ -40,6 +40,13 @@ class LineSegments
         m_geometry.set_attribute("position", (pts), 3);
     }
 
+
+    LineSegments(Geometry t_geometry, MaterialPtr t_mat)
+        : m_material(std::move(t_mat)), m_geometry(std::move(t_geometry))
+    {
+        m_count = m_geometry.attribute("position").size()/3;
+    }
+
     void add_point(glm::vec3 point)
     {
         auto &pos = m_geometry.attribute("position");

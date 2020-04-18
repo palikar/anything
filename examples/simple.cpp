@@ -80,7 +80,7 @@ class SimpleGame : public gmt::GameBase {
 
 
 
-        cube_2 = main_scene->add(gmt::axis());
+        cube_2 = main_scene->add(gmt::plane_helper());
         // // cmp::transform(cube_2).translateY(3.0f);
 
         // cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));

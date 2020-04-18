@@ -25,6 +25,7 @@
 
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/axis_helper.hpp"
+#include "engine/entities/plane_helper.hpp"
 #include "engine/entities/skybox.hpp"
 
 #include "engine/components/orbital_camera.hpp"

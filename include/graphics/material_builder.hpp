@@ -31,11 +31,18 @@ class MaterialBuilder
         return MaterialBuilder(mat);
     }
 
-    MaterialBuilder &enable_lending()
+    MaterialBuilder &enable_blending()
     {
         m_mat->blending_setup().blending = true;
         return *this;
     }
+
+    MaterialBuilder &disable_blending()
+    {
+        m_mat->blending_setup().blending = true;
+        return *this;
+    }
+
 
     MaterialBuilder &alpha_test(float alpha_test)
     {

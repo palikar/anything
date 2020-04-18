@@ -66,11 +66,11 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
     m_api->depth_write(material->depth_write());
 
     m_api->blending(material->blending_setup().blending);
+    m_api->submit_blending(material->blending_setup());
 
     shader->set("opacity", material->opacity());
     shader->set("alpha_threshold", material->blending_setup().alpha_test);
     shader->set("visible", material->visible());
-
 
     material->update_uniforms(m_binder, m_current_context);
 }
@@ -89,7 +89,7 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 
 
     mesh_comp->mesh.buffers()->bind();
-
+    
     m_api->draw_indexed(mesh_comp->mesh.buffers());
 }
 
@@ -169,14 +169,17 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
 
     m_view_projection = m_projection * m_view;
     m_current_context.camera_pos = scene.camera().pos();
-
+    
     handle_sky(scene.skybox());
     
-
     for (auto &object : scene.entities())
     {
         render_entity(object.get());
     }
+
+    
+
+
 }
 
 }  // namespace ay::rend
