@@ -25,9 +25,7 @@ class RenderAPI
     {
 
         GLCall(glEnable(GL_DEPTH_TEST));
-
         GLCall(glEnable(GL_CULL_FACE));
-
         GLCall(glCullFace(GL_BACK));
         GLCall(glFrontFace(GL_CW));
     }
@@ -131,6 +129,27 @@ class RenderAPI
                             static_cast<GLenum>(setup.blend_src_alpha),
                             static_cast<GLenum>(setup.blend_dst_alpha));
     }
+
+    void culling(const Side &setup)
+    {
+        switch (setup) {
+          case Side::BACK:
+              GLCall(glEnable(GL_CULL_FACE));
+              GLCall(glCullFace(GL_BACK));
+              break;
+
+          case Side::FRONT:
+              GLCall(glEnable(GL_CULL_FACE));
+              GLCall(glCullFace(GL_FRONT));
+              break;
+
+          case Side::BOTH:
+              GLCall(glDisable(GL_CULL_FACE));
+              break;
+              
+        }
+    }
+    
 };
 
 

@@ -77,11 +77,11 @@ class PlaneHelper : public Entity
                                                0, 0, 0,
                                                0, 0, 1} , 3);
 
-
         auto mat = grph::solid_color(m_color);
         grph::MaterialBuilder::from_existing(mat.get())
             .opacity(0.2)
             .enable_blending()
+            .both_side()
             .alpha_blending();
 
         cmp::add_children(

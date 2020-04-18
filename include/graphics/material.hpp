@@ -33,8 +33,7 @@ class Material
     float m_opacity{ 1.0 };
     rend::BlendingSetup m_blending{};
 
-    rend::Side m_side;
-
+    rend::Side m_side{rend::Side::FRONT};
 
     bool m_wire_frame{ false };
     bool m_visible{ true };

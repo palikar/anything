@@ -68,9 +68,14 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
     m_api->blending(material->blending_setup().blending);
     m_api->submit_blending(material->blending_setup());
 
+    m_api->culling(material->side());
+
+    
     shader->set("opacity", material->opacity());
     shader->set("alpha_threshold", material->blending_setup().alpha_test);
     shader->set("visible", material->visible());
+
+    
 
     material->update_uniforms(m_binder, m_current_context);
 }

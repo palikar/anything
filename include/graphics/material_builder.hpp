@@ -43,7 +43,24 @@ class MaterialBuilder
         return *this;
     }
 
+    MaterialBuilder &back_side()
+    {
+        m_mat->side() = rend::Side::BACK;
+        return *this;
+    }
 
+    MaterialBuilder &front_side()
+    {
+        m_mat->side() = rend::Side::FRONT;
+        return *this;
+    }
+
+    MaterialBuilder &both_side()
+    {
+        m_mat->side() = rend::Side::BOTH;
+        return *this;
+    }    
+    
     MaterialBuilder &alpha_test(float alpha_test)
     {
         m_mat->blending_setup().alpha_test = alpha_test;
