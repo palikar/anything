@@ -61,10 +61,9 @@ class SimpleGame : public gmt::GameBase {
         
 
         auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
-        // auto fbo = rend::create_fbo(512, 512);
 
 
-        main_scene->set_skybox(std::make_unique<gmt::Skybox>(sky));
+        main_scene->set_skybox(gmt::skybox(sky));
 
 
         // cmp::mesh(plane).material()->set_wire_frame(true);
@@ -81,7 +80,7 @@ class SimpleGame : public gmt::GameBase {
 
 
 
-        cube_2 = main_scene->add(grph::axis());
+        cube_2 = main_scene->add(gmt::axis());
         // // cmp::transform(cube_2).translateY(3.0f);
 
         // cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));
@@ -154,6 +153,9 @@ class SimpleGame : public gmt::GameBase {
         ImGui::SliderFloat("rotatation", &rot, -90.0f, 90.0f);
         cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(rot), glm::vec3(1,0,0));
 
+
+        ImGui::SliderFloat("tranlate", glm::value_ptr(cmp::transform(plane).position()), -90.0f, 90.0f);
+        
         
 
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);

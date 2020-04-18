@@ -1,4 +1,3 @@
-
 #include "rendering/renderer3D.hpp"
 
 
@@ -126,7 +125,6 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     GLCall(glDrawArrays(GL_LINES, 0, line->segments.count()));
 }
 
-
 void RendererScene3D::handle_sky(gmt::Skybox *sky)
 {
     auto shader    = sky->shader();
@@ -141,9 +139,7 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     sky_view[3] = glm::vec4(0, 0, 0, 1);
     
     shader->set("projection_matrix", m_projection * sky_view);
-    
-    
-    
+
     buffers->bind();
 
     GLCall(glCullFace(GL_FRONT));

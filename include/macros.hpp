@@ -17,3 +17,19 @@
     TypeName &operator=(TypeName &&) = default;      \
     TypeName &operator=(const TypeName &) = default; \
     TypeName(const TypeName &)            = delete
+
+
+#define FACTORY_UNIQE(name, type)                                       \
+    template<typename ... Args>                                         \
+    type##Ptr name(Args && ... args)                                    \
+    {                                                                   \
+        return std::make_unique<type>(std::forward<Args>(args) ...);    \
+    }
+
+
+#define FACTORY_SHARED(name, type)                                      \
+    template<typename ... Args>                                         \
+    type##Ptr name(Args && ... args)                                    \
+    {                                                                   \
+        return std::make_shared<type>(std::forward<Args>(args) ...);    \
+    }

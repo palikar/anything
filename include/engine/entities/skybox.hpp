@@ -26,17 +26,15 @@ class Skybox : public Entity
     rend::ShaderPtr m_shader;
   public:
 
-    Skybox(rend::CubeTexturePtr tex)
+    Skybox(rend::CubeTexturePtr tex, size_t t_size = 500)
     {
 
-        m_cube = grph::cube_geometry(500, 500, 500);
+        m_cube = grph::cube_geometry(t_size, t_size, t_size);
         m_cube.drop_attribute("normal");
         m_cube.drop_attribute("uv");
         m_cube.pack();
 
         m_texture = std::move(tex);
-        
-
     }
 
     virtual void init(GameBase *t_game)
@@ -44,7 +42,6 @@ class Skybox : public Entity
         m_shader = t_game->shaders().load("skybox");
     };
 
-    
     rend::Shader* shader() const
     {
         return m_shader.get();
@@ -64,6 +61,10 @@ class Skybox : public Entity
 
 using SkyboxPtr = std::unique_ptr<Skybox>;
 
-
+template<typename ... Args>
+SkyboxPtr skybox(Args && ... args)
+{
+    return std::make_unique<Skybox>(std::forward<Args>(args) ...);
+}
 
 }

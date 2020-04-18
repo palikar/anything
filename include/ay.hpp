@@ -24,6 +24,7 @@
 #include "engine/scene.hpp"
 
 #include "engine/entities/camera_helper.hpp"
+#include "engine/entities/axis_helper.hpp"
 #include "engine/entities/skybox.hpp"
 
 #include "engine/components/orbital_camera.hpp"
@@ -50,8 +51,6 @@
 #include "graphics/material.hpp"
 #include "graphics/material_builder.hpp"
 #include "graphics/mesh_factory.hpp"
-
-#include "graphics/helpers/axis.hpp"
 
 #include "graphics/materials/solid_color.hpp"
 #include "graphics/materials/textured.hpp"
