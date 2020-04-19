@@ -56,6 +56,8 @@
 #include "graphics/materials/solid_color.hpp"
 #include "graphics/materials/textured.hpp"
 
+#include "graphics/loading/mesh_loader.hpp"
+
 
 #include "util/meta.hpp"
 #include "util/gl_helpers.hpp"

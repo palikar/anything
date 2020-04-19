@@ -9,6 +9,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 using namespace ay;
 
 
@@ -51,23 +55,27 @@ class SimpleGame : public gmt::GameBase {
 
         
         auto tex = rend::create_texture(app::ResouceLoader::get_instance()->get_file_path("textures/floor/floor-albedo.png"));
-        plane = main_scene->add(gmt::mesh_entity(
-                                    {grph::sphere_geometry(2, 10, 10),
-                                     grph::texture_material(tex)}));
+        // plane = main_scene->add(gmt::mesh_entity(
+        //                             {grph::sphere_geometry(2, 10, 10),
+        //                              grph::texture_material(tex)}));
 
         // cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(90.0f), glm::vec3(1,0,0));
-        cmp::transform(plane).translateY(1.0);
+        // cmp::transform(plane).translateY(1.0);
 
         
 
         auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
-
-
         main_scene->set_skybox(gmt::skybox(sky));
 
+        // cube_2 = main_scene->add(gmt::axis());
+
+        auto geom = load::Loader::load_geometry(app::ResouceLoader::path("objs/bunny.obj"));
+        geom.pack();
+
+        cone = main_scene->add(gmt::mesh_entity({std::move(geom), grph::solid_color(1, 0, 0.5)}));
 
         // cmp::mesh(plane).material()->set_wire_frame(true);
-        static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material())->set_env_map(sky);
+        // static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material())->set_env_map(sky);
         
         
         // auto cube_mat = grph::solid_color({ 0.0f, 0.0f, 1.0f });
@@ -80,7 +88,8 @@ class SimpleGame : public gmt::GameBase {
 
 
 
-        cube_2 = main_scene->add(gmt::plane_helper());
+        // cube_2 = main_scene->add(gmt::plane_helper());
+        
         // // cmp::transform(cube_2).translateY(3.0f);
 
         // cube_1 = main_scene->add(gmt::mesh_entity({grph::torus_geometry(), std::move(cube_mat)}));
@@ -142,30 +151,30 @@ class SimpleGame : public gmt::GameBase {
 
         ImGui::NewFrame();
 
-        ImGui::Begin("Hello, world!");
+        // ImGui::Begin("Hello, world!");
 
-        ImGui::ColorEdit3("clear color", (float*)&plane_color);
-        ImGui::SliderFloat("reflectivity", &reflectivity, 0.0f, 1.0f);
-        ImGui::SliderFloat("refraction", &refraction, 0.0f, 1.0f);
-        ImGui::Checkbox("reflective", &reflective);
-
-
-        ImGui::SliderFloat("rotatation", &rot, -90.0f, 90.0f);
-        cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(rot), glm::vec3(1,0,0));
+        // ImGui::ColorEdit3("clear color", (float*)&plane_color);
+        // ImGui::SliderFloat("reflectivity", &reflectivity, 0.0f, 1.0f);
+        // ImGui::SliderFloat("refraction", &refraction, 0.0f, 1.0f);
+        // ImGui::Checkbox("reflective", &reflective);
 
 
-        ImGui::SliderFloat("tranlate", glm::value_ptr(cmp::transform(plane).position()), -90.0f, 90.0f);
+        // ImGui::SliderFloat("rotatation", &rot, -90.0f, 90.0f);
+        // cmp::transform(plane).rotation() = glm::angleAxis(glm::radians(rot), glm::vec3(1,0,0));
+
+
+        // ImGui::SliderFloat("tranlate", glm::value_ptr(cmp::transform(plane).position()), -90.0f, 90.0f);
         
         
 
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::End();
 
-        grph::TexturedMaterialBuilder::from_existing(static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material()))
-            .color(plane_color)
-            .reflective(reflective)
-            .reflectivity(reflectivity)
-            .refraction(refraction);
+        // grph::TexturedMaterialBuilder::from_existing(static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material()))
+        //     .color(plane_color)
+        //     .reflective(reflective)
+        //     .reflectivity(reflectivity)
+        //     .refraction(refraction);
         
     }
     

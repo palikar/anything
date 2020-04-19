@@ -95,6 +95,8 @@ struct Colors
     glm::vec3 yellow = glm::vec3(1.0f, 1.0f, 0.0f);
     glm::vec3 magenta = glm::vec3(1.0f, 0.0f, 1.0f);
 
+    glm::vec3 orange = glm::vec3(1, 0.5, 0);
+    
     
 
 };

@@ -140,6 +140,10 @@ pkg_search_module(GLFW REQUIRED glfw3)
 
 find_package(GLEW REQUIRED)
 
+find_package(GLEW REQUIRED)
+
+find_package(ASSIMP REQUIRED)
+
 
 
 include_directories(${OPENGL_INCLUDE_DIR})
@@ -151,7 +155,7 @@ add_library(anything_engine
 
     ./include/rendering/texture.cpp
     ./include/rendering/frame_buffer.cpp
-    ./include/rendering/depth_texture.cpp    
+    ./include/rendering/depth_texture.cpp
     ./include/rendering/cube_texture.cpp
     ./include/rendering/renderer3D.cpp
     ./include/rendering/shaders.cpp
@@ -179,7 +183,7 @@ target_include_directories(anything_engine
     )
 
 target_link_libraries(anything_engine PRIVATE project_options project_warnings
-    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui
+    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp
     )
 
 
@@ -187,11 +191,11 @@ target_link_libraries(anything_engine PRIVATE project_options project_warnings
 add_executable(simple_anything ./examples/simple.cpp)
 
 
-if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
-    
+if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
+
     target_precompile_headers(anything_engine
         PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
-    
+
 endif()
 
 

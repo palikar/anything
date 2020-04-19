@@ -249,13 +249,13 @@ class Geometry
   private:
     void pack_vertex_buffers()
     {
-        bool standard = false;
         m_glbuffers   = std::make_unique<rend::VertexArray>();
 
         if (m_buffers.count("position") > 0 && m_buffers.count("normal") > 0
             && m_buffers.count("uv") > 0)
         {
-            standard   = true;
+            
+            
             auto &pos  = std::get<0>(m_buffers.at("position"));
             auto &norm = std::get<0>(m_buffers.at("normal"));
             auto &uv   = std::get<0>(m_buffers.at("uv"));
@@ -276,37 +276,43 @@ class Geometry
             m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
         }
 
-        for (auto &[name, buf] : m_buffers)
-        {
-            if (standard
-                && (name.compare("position") == 0 || name.compare("normal") == 0
-                    || name.compare("uv") == 0))
-            {
-                continue;
-            }
 
+        auto handle_attr = [&](const std::string &name) {
+            auto buf    = m_buffers.at(name);
             auto &data  = std::get<0>(buf);
             auto stride = std::get<1>(buf);
-
-            std::vector<Vertex3fg> verts;
-
+            
             // std::cout << name << "\n";
-            // for (size_t i = 0; i < data.size() - 2; i += 3)
-            // {
-            //     std::cout << data[i] << ", " << data[i+1] << ", " << data[i+2] << "\n";
-            // }
-            // std::cout << "---------" << "\n";
+            const auto data_type = stride_to_data_type(stride);
 
-            auto data_type = stride_to_data_type(stride);
-            // auto vert      = std::make_unique<rend::VertexBuffer>(
-            //     data.data(), data.size() * rend::data_type_size(data_type));
-            auto vert = std::make_unique<rend::VertexBuffer>(data.data(),
-                                                             data.size() * sizeof(float));
+            // for (size_t i = 0; i < data.size() - 2; ++i) {
+            //     std::cout << data[i] << "," << data[i +1] << "," << data[i + 2] << "," << "\n";
+            // }
+
+            
+            auto vert  = std::make_unique<rend::VertexBuffer>(data.data(),
+                                                              data.size() * sizeof(float));
 
             vert->set_layout({ { name, data_type } });
-
             m_glbuffers->add_vertex_buffer(std::move(vert));
+        };
+
+        if (m_buffers.count("position") > 0)
+        {
+            handle_attr("position");
         }
+
+        if (m_buffers.count("normal") > 0)
+        {
+            handle_attr("normal");
+        }
+
+        if (m_buffers.count("uv") > 0)
+        {
+            handle_attr("uv");
+        }
+
+        m_dirty = false;
     }
 
     void pack_group(uint32_t start, uint32_t count, size_t index = 0)
