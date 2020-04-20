@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
+#cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 
 
@@ -192,9 +192,9 @@ add_executable(simple_anything ./examples/simple.cpp)
 
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
-
+    
     target_precompile_headers(anything_engine
-        PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
+        PUBLIC ./include/std_header.hpp ./include/math_header.hpp ./include/glm_header.hpp)
 
 endif()
 

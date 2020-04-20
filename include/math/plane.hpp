@@ -60,14 +60,14 @@ class Plane
         return glm::dot(m_normal, point)  + m_constant;
     }
 
-    float distanceToSphere (Sphere& sphere )
+    float distance_to_sphere (Sphere& sphere )
     {
         return distance_to_point( sphere.center() ) - sphere.radius();
     }
 
     glm::vec3 project_point(glm::vec3 point )
     {
-        return m_normal * distanceToPoint(point) + point;
+        return m_normal * distance_to_point(point) + point;
     }
 
     

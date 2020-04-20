@@ -74,7 +74,6 @@ class Box3
         return *this;
     }
 
-
     glm::vec3 center() const
     {
         return (m_max + m_min) * 0.5f;
