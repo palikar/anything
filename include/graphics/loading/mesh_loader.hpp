@@ -109,7 +109,7 @@ class Loader
             return load_mesh(mesh);
         }
 
-        
+        return {};
 
     }
 

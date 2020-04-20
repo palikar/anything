@@ -69,10 +69,11 @@ class SimpleGame : public gmt::GameBase {
 
         // cube_2 = main_scene->add(gmt::axis());
 
-        auto geom = load::Loader::load_geometry(app::ResouceLoader::path("objs/bunny.obj"));
-        geom.pack();
+        // auto geom = load::Loader::load_geometry(app::ResouceLoader::path("objs/bunny.obj"));
+        // geom.pack();
 
-        cone = main_scene->add(gmt::mesh_entity({std::move(geom), grph::solid_color(1, 0, 0.5)}));
+        // cone = main_scene->add(gmt::mesh_entity({std::move(geom), grph::solid_color(1, 0, 0.5)}));
+        cone = main_scene->add(gmt::grid_helper(10, 10, rend::Colors::black));
 
         // cmp::mesh(plane).material()->set_wire_frame(true);
         // static_cast<grph::TextureMaterial*>(cmp::mesh(plane).material())->set_env_map(sky);
