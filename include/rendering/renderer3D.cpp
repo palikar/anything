@@ -93,8 +93,6 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
 
-    mesh_comp->mesh.buffers()->bind();
-    
     m_api->draw_indexed(mesh_comp->mesh.buffers());
 }
 
@@ -124,10 +122,8 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     switch_mvp(shader, transform.get_tranformation());
     handle_material(mat, shader);
 
-    // std::cout <<line->segments.count()  << "\n";
-    line->segments.buffers()->bind();
-
-    GLCall(glDrawArrays(GL_LINES, 0, line->segments.count()));
+    m_api->draw_lines(line->segments.buffers(), line->segments.count());
+    
 }
 
 void RendererScene3D::handle_sky(gmt::Skybox *sky)
@@ -145,7 +141,6 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     
     shader->set("projection_matrix", m_projection * sky_view);
 
-    buffers->bind();
 
     GLCall(glCullFace(GL_FRONT));
     m_api->draw_indexed(buffers);

@@ -22,6 +22,7 @@
 #include "engine/entity_factory.hpp"
 #include "engine/game_base.hpp"
 #include "engine/scene.hpp"
+#include "engine/raycaster.hpp"
 
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/axis_helper.hpp"

@@ -16,8 +16,6 @@ class Ray
 
     Ray(glm::vec3 t_origin, glm::vec3 t_dir) : m_origin(t_origin), m_dir(t_dir)
     {}
-
-
     
     glm::vec3& origin() { return m_origin; }
 

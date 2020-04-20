@@ -71,6 +71,20 @@ class RenderAPI
           index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
+    
+    void draw_lines(const VertexArray *vertex_array, uint32_t element_count)
+    {
+
+        vertex_array->bind();
+        GLCall(glDrawArrays(GL_LINES, 0, element_count));
+    }
+
+    void draw_line_strip(const VertexArray *vertex_array, uint32_t element_count)
+    {
+
+        vertex_array->bind();
+        GLCall(glDrawArrays(GL_LINE_STRIP, 0, element_count));
+    }
 
     void depth_test(bool value)
     {
