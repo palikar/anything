@@ -33,7 +33,7 @@ class Material
     float m_opacity{ 1.0 };
     rend::BlendingSetup m_blending{};
 
-    rend::Side m_side{rend::Side::FRONT};
+    rend::Side m_side{ rend::Side::FRONT };
 
     bool m_wire_frame{ false };
     bool m_visible{ true };
@@ -52,8 +52,8 @@ class Material
     {
     }
 
-    virtual void init_shader(rend::ShaderLibrary &t_shader_lib) = 0;
-    virtual void update_uniforms(rend::TextureBinder &, rend::RenderContext&)         = 0;
+    virtual void init_shader(rend::ShaderLibrary &t_shader_lib)                = 0;
+    virtual void update_uniforms(rend::TextureBinder &, rend::RenderContext &) = 0;
 
     void set_wire_frame(bool value)
     {

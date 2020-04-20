@@ -259,7 +259,8 @@ class Input
     {
         auto state =
           glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
-        return (state == GLFW_PRESS || state == GLFW_REPEAT) and !ImGui::GetIO().WantCaptureMouse;
+        return (state == GLFW_PRESS || state == GLFW_REPEAT)
+               and !ImGui::GetIO().WantCaptureMouse;
     }
 
     static bool is_pressed(KeyCode key)
@@ -271,13 +272,13 @@ class Input
     static bool is_released(MouseCode key)
     {
         auto state =
-            glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
+          glfwGetMouseButton(get_instance()->window(), static_cast<int32_t>(key));
         return state == GLFW_RELEASE and !ImGui::GetIO().WantCaptureMouse;
     }
 
     static bool is_released(KeyCode key)
     {
-        
+
         auto state = glfwGetKey(get_instance()->window(), static_cast<int32_t>(key));
         return state == GLFW_RELEASE and !ImGui::GetIO().WantCaptureKeyboard;
     }

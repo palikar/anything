@@ -63,7 +63,7 @@ class Window
 
     bool closed();
 
-    GLFWwindow* native()
+    GLFWwindow *native()
     {
         return m_window;
     }

@@ -1,7 +1,7 @@
 #pragma once
 
-#define GLM_FORCE_SWIZZLE 
-#define GLM_SWIZZLE_XYZW 
+#define GLM_FORCE_SWIZZLE
+#define GLM_SWIZZLE_XYZW
 #define GLM_SWIZZLE_STQP
 
 #include <glm/glm.hpp>

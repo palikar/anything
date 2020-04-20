@@ -22,14 +22,8 @@ class Raycaster
     void update_viewport(size_t t_width, size_t t_height)
     {
         viewport_height = t_height;
-        viewport_width = t_width;
+        viewport_width  = t_width;
     }
-
-
-
-    
-
-
 };
 
-}
+}  // namespace ay::mth

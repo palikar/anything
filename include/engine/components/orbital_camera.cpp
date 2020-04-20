@@ -8,7 +8,7 @@ OrbitalCameraComponent::OrbitalCameraComponent(float t_radius) : m_radius(t_radi
 }
 
 OrbitalCameraComponent::OrbitalCameraComponent(gmt::Camera *t_camera, float t_radius)
-    : m_camera(t_camera), m_radius(t_radius)
+  : m_camera(t_camera), m_radius(t_radius)
 {
 }
 
@@ -33,7 +33,7 @@ void OrbitalCameraComponent::update_rotation()
         m_orbit.x -= 2 * mth::PI;
     }
 
-    if (m_orbit.x < - 2 * mth::PI)
+    if (m_orbit.x < -2 * mth::PI)
     {
         m_orbit.x += 2 * mth::PI;
     }
@@ -72,44 +72,43 @@ void OrbitalCameraComponent::update(double dt)
     if (app::Input::is_pressed(MouseCode::BUTTON_2))
     {
         const auto pos = app::Input::mouse_pos();
-        
+
         if (!m_initial_right_click)
         {
             m_initial_right_click = true;
-            m_last_mouse_pos = pos;
+            m_last_mouse_pos      = pos;
         }
         else
         {
             const auto diff = m_last_mouse_pos - pos;
 
-            m_pos.x += m_camera->at().x * 1.0 * - mth::clamp(diff.y, -1.0f, 1.0f);
-            m_pos.z += m_camera->at().z * 1.0 * -mth::clamp(diff.y, -1.0f, 1.0f) ;
+            m_pos.x += m_camera->at().x * 1.0 * -mth::clamp(diff.y, -1.0f, 1.0f);
+            m_pos.z += m_camera->at().z * 1.0 * -mth::clamp(diff.y, -1.0f, 1.0f);
 
             auto dir = glm::cross(glm::vec3(0.0, 1.0, 0.0),
                                   glm::vec3(m_camera->at().x, 0, m_camera->at().z));
             m_pos.x += dir.x * 1.0 * -mth::clamp(diff.x, -1.0f, 1.0f);
             m_pos.z += dir.z * 1.0 * -mth::clamp(diff.x, -1.0f, 1.0f);
-            
+
             update_rotation();
 
             m_last_mouse_pos = pos;
         }
         m_initial_right_click = true;
-        
     }
 
     if (app::Input::is_released(MouseCode::BUTTON_2))
     {
         m_initial_right_click = false;
     }
-        
+
     if (app::Input::is_pressed(KeyCode::W))
     {
         m_pos.x += m_camera->at().x * 1.0;
         m_pos.z += m_camera->at().z * 1.0;
         update_rotation();
     }
-    
+
     if (app::Input::is_pressed(KeyCode::S))
     {
         m_pos.x -= m_camera->at().x * 1.0;
@@ -134,17 +133,15 @@ void OrbitalCameraComponent::update(double dt)
         m_pos.z -= dir.z * 1.0;
         update_rotation();
     }
-
-
 }
 
 bool OrbitalCameraComponent::event(app::Event &e)
 {
     app::Dispatcher dispatch{ e };
     dispatch.dispatch<app::MouseScrolledEvent>(
-        [this](auto &ev) { return scroll_radius(ev); });
+      [this](auto &ev) { return scroll_radius(ev); });
     return false;
 }
 
 
-}
+}  // namespace ay::cmp

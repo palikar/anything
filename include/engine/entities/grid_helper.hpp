@@ -24,7 +24,6 @@ namespace ay::gmt
 class GridHelper : public Entity
 {
   private:
-
     cmp::LineSegmentsComponent *m_line_segments;
     cmp::TransformComponent *m_transform;
 
@@ -34,12 +33,15 @@ class GridHelper : public Entity
 
 
   public:
-    GridHelper(size_t size=10, size_t divisions=10, glm::vec3 color = {0.7f, 0.7f, 0.7f});
+    GridHelper(size_t size      = 10,
+               size_t divisions = 10,
+               glm::vec3 color  = { 0.7f, 0.7f, 0.7f });
 
     void init_points();
 
     void update(double) override
-    {}
+    {
+    }
 
     bool event(app::Event &) override
     {
@@ -52,10 +54,10 @@ class GridHelper : public Entity
 
 using GridHelperPtr = std::unique_ptr<GridHelper>;
 
-template<typename ... T>
-inline GridHelperPtr grid_helper(T && ... args)
+template<typename... T>
+inline GridHelperPtr grid_helper(T &&... args)
 {
-    return std::make_unique<GridHelper>(args ...);
+    return std::make_unique<GridHelper>(args...);
 }
 
 

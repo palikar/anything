@@ -86,7 +86,7 @@ int Application::run()
 
 void Application::render_engine()
 {
-    
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -110,7 +110,7 @@ void Application::init()
     }
 
     ImGui::CreateContext();
-    
+
     m_window->init(m_width, m_height, "Anything");
     m_window->set_eventcall([this](Event &t_event) { this->on_event(t_event); });
 
@@ -127,22 +127,24 @@ void Application::init()
     std::cout << glGetString(GL_VERSION) << "\n";
 
 
-
     IMGUI_CHECKVERSION();
 
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
+    // Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
+    io.ConfigFlags |=
+      ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+    // io.ConfigViewportsNoAutoMerge = true;
+    // io.ConfigViewportsNoTaskBarIcon = true;
     ImGui::StyleColorsDark();
 
-    ImGuiStyle& style = ImGui::GetStyle();
+    ImGuiStyle &style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        style.WindowRounding = 0.0f;
+        style.WindowRounding              = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
@@ -159,7 +161,8 @@ void Application::on_event(Event &t_event)
     dispatch.dispatch<WindowResizeEvent>([this](auto &e) { return this->on_resize(e); });
     dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
 
-    if (!ImGui::GetIO().WantCaptureKeyboard) {
+    if (!ImGui::GetIO().WantCaptureKeyboard)
+    {
         m_engine.on_event(t_event);
     }
 }

@@ -24,14 +24,14 @@ inline rend::ShaderDataType stride_to_data_type(size_t s)
 }
 
 class Geometry
-{ 
+{
 
     struct Attriubute
     {
         std::vector<float> data;
         size_t stride;
-        int max_size{-1};
-        int buffer_index{-1};
+        int max_size{ -1 };
+        int buffer_index{ -1 };
     };
 
   private:
@@ -44,7 +44,6 @@ class Geometry
     bool m_dynamic{ false };
 
   public:
-    
     Geometry(bool t_dynamic = false) : m_dynamic(t_dynamic)
     {
     }
@@ -56,14 +55,14 @@ class Geometry
 
     void set_attribute(std::string name, std::vector<float> buffer, size_t stride)
     {
-        m_buffers.insert({ std::move(name), { std::move(buffer), stride, -1, -1}});
+        m_buffers.insert({ std::move(name), { std::move(buffer), stride, -1, -1 } });
     }
 
     void declare_attribute(std::string name, size_t stride, int max_size)
     {
-        m_buffers.insert({ std::move(name), { {}, stride, max_size, -1}});
+        m_buffers.insert({ std::move(name), { {}, stride, max_size, -1 } });
     }
-    
+
     void drop_attribute(std::string name)
     {
         m_buffers.erase(m_buffers.find(name));
@@ -85,7 +84,7 @@ class Geometry
     }
 
     void apply(glm::mat4 t_mat);
-    
+
 
     void compute_bounding_box()
     {
@@ -105,7 +104,7 @@ class Geometry
     }
 
     void merge(Geometry &other);
-    
+
     void normalize_normals()
     {
     }
@@ -136,7 +135,7 @@ class Geometry
     }
 
     void pack();
-    
+
 
     void add_group(uint32_t start, uint32_t count)
     {
@@ -169,13 +168,11 @@ class Geometry
     }
 
   private:
-
     void pack_vertex_buffers();
 
     void pack_vertex_buffers_dynamic();
 
     void pack_group(uint32_t start, uint32_t count, size_t index = 0);
-    
 };
 
 

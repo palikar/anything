@@ -25,7 +25,6 @@
 #endif
 
 
-
 #ifdef _WIN32
 inline constexpr auto AY_OS_NAME = "windows-32";
 #elif _WIN64
@@ -79,19 +78,31 @@ constexpr static const bool debug_build       = AY_DEBUG_BUILD;
 struct BuildInfo
 {
 
-    [[nodiscard]] constexpr static int version_major() noexcept { return ay::version_major; }
+    [[nodiscard]] constexpr static int version_major() noexcept
+    {
+        return ay::version_major;
+    }
 
-    [[nodiscard]] constexpr static int version_minor() noexcept { return ay::version_minor; }
+    [[nodiscard]] constexpr static int version_minor() noexcept
+    {
+        return ay::version_minor;
+    }
 
-    [[nodiscard]] constexpr static int version_patch() noexcept { return ay::version_patch; }
+    [[nodiscard]] constexpr static int version_patch() noexcept
+    {
+        return ay::version_patch;
+    }
 
-    [[nodiscard]] constexpr static bool debug_build() noexcept { return ay::debug_build; }
+    [[nodiscard]] constexpr static bool debug_build() noexcept
+    {
+        return ay::debug_build;
+    }
 
     [[nodiscard]] static std::string version()
     {
-        return std::to_string(version_major()) + '.' + std::to_string(version_minor()) + '.'
-            + std::to_string(version_patch());
+        return std::to_string(version_major()) + '.' + std::to_string(version_minor())
+               + '.' + std::to_string(version_patch());
     }
 };
 
-}
+}  // namespace ay

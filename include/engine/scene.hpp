@@ -24,12 +24,12 @@ class Scene3D
   private:
     std::vector<EntityPtr> m_entities;
     std::vector<ComponentPtr> m_game_components;
-    Skybox* m_skybox; 
+    Skybox *m_skybox;
 
     Camera m_camera;
 
     Raycaster m_raycaster;
-    
+
     GameBase *m_game;
 
   public:
@@ -68,7 +68,7 @@ class Scene3D
             m_raycaster.update_viewport(e.width(), e.height());
             return false;
         });
-        
+
         for (auto &object : m_entities)
         {
             object->event(t_ev);
@@ -85,10 +85,10 @@ class Scene3D
         return m_raycaster;
     }
 
-    Skybox* set_skybox(EntityPtr t_sky);
-    
-    Skybox* skybox();
-    
+    Skybox *set_skybox(EntityPtr t_sky);
+
+    Skybox *skybox();
+
     Camera &camera()
     {
         return m_camera;

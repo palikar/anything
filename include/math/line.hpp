@@ -11,13 +11,13 @@ namespace ay::mth
 class Line
 {
   private:
-
     glm::vec3 m_start;
     glm::vec3 m_end;
 
   public:
-
-    Line(glm::vec3 t_min = {}, glm::vec3 t_max = {}) : m_start(t_min), m_end(t_max){}
+    Line(glm::vec3 t_min = {}, glm::vec3 t_max = {}) : m_start(t_min), m_end(t_max)
+    {
+    }
 
 
     glm::vec3 &start()
@@ -54,10 +54,7 @@ class Line
     {
         return delta() * t + m_start;
     }
-    
-    
 };
 
 
-
-}
+}  // namespace ay::mth

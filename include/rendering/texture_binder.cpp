@@ -21,5 +21,4 @@ void TextureBinder::force_resolve(rend::Texture *t_texture, uint32_t slot)
 }
 
 
-
-}
+}  // namespace ay::rend

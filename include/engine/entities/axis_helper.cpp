@@ -4,10 +4,10 @@
 namespace ay::gmt
 {
 
-AxisHelper::AxisHelper() 
+AxisHelper::AxisHelper()
 {
-    m_transform     = add_component(std::make_unique<cmp::TransformComponent>());
-    m_children = add_component(std::make_unique<cmp::GroupComponent>());
+    m_transform = add_component(std::make_unique<cmp::TransformComponent>());
+    m_children  = add_component(std::make_unique<cmp::GroupComponent>());
 
     init_meshes();
 }
@@ -16,14 +16,14 @@ void AxisHelper::init_meshes()
 {
 
     auto arrow_1 = grph::cylinder_geometry(0.05, 0.05, cyl_height);
-    auto cone_1 = grph::cone_geometry(0.1, cone_height);
+    auto cone_1  = grph::cone_geometry(0.1, cone_height);
     cone_1.translate(0.0, (cyl_height + cone_height) / 2, 0.f);
     arrow_1.merge(cone_1);
     arrow_1.translate(0.0, (cyl_height) / 2, 0.f);
 
 
-    auto arrow_2  = grph::cylinder_geometry(0.05, 0.05, cyl_height);
-    auto cone_2 = grph::cone_geometry(0.1, cone_height);
+    auto arrow_2 = grph::cylinder_geometry(0.05, 0.05, cyl_height);
+    auto cone_2  = grph::cone_geometry(0.1, cone_height);
     cone_2.translate(0.0, (cyl_height + cone_height) / 2, 0.f);
 
     arrow_2.merge(cone_2);
@@ -33,8 +33,8 @@ void AxisHelper::init_meshes()
                       (cyl_height + cone_height) / 2.0 + translate_offset);
     arrow_2.translate(0.0, (cyl_height) / 2, 0.f);
 
-    auto arrow_3  = grph::cylinder_geometry(0.05, 0.05, cyl_height);
-    auto cone_3 = grph::cone_geometry(0.1, cone_height);
+    auto arrow_3 = grph::cylinder_geometry(0.05, 0.05, cyl_height);
+    auto cone_3  = grph::cone_geometry(0.1, cone_height);
     cone_3.translate(0.0, (cyl_height + cone_height) / 2, 0.f);
 
     arrow_3.merge(cone_3);
@@ -45,14 +45,13 @@ void AxisHelper::init_meshes()
     arrow_3.translate(0.0, (cyl_height) / 2, 0.f);
 
 
-    cmp::add_children(this,
-                      mesh_entity({ std::move(arrow_1), grph::solid_color(glm::vec3(0.0f, 1.0f, 0.0f)) }),
-                      mesh_entity({ std::move(arrow_2), grph::solid_color(glm::vec3(0.0f, 0.0f, 1.0f)) }),
-                      mesh_entity({ std::move(arrow_3), grph::solid_color(glm::vec3(1.0f, 0.0f, 0.0f)) })
-        );
-
-        
+    cmp::add_children(
+      this,
+      mesh_entity({ std::move(arrow_1), grph::solid_color(glm::vec3(0.0f, 1.0f, 0.0f)) }),
+      mesh_entity({ std::move(arrow_2), grph::solid_color(glm::vec3(0.0f, 0.0f, 1.0f)) }),
+      mesh_entity(
+        { std::move(arrow_3), grph::solid_color(glm::vec3(1.0f, 0.0f, 0.0f)) }));
 }
 
 
-}
+}  // namespace ay::gmt

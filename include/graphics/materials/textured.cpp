@@ -14,14 +14,15 @@ void TextureMaterial::init_shader(rend::ShaderLibrary &t_shader_lib)
 }
 
 
-void TextureMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderContext& ctx)
+void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
+                                      rend::RenderContext &ctx)
 {
     m_shader->set("mixing", static_cast<int>(m_combine));
     m_shader->set("reflectivity", m_reflectivity);
     m_shader->set("refraction_ration", m_refraction_ration);
 
     m_shader->set("is_relfection", m_is_reflection);
-        
+
     m_shader->set("color", m_color);
 
     m_shader->set("camera_pos", ctx.camera_pos);
@@ -40,17 +41,14 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderC
 
     if (m_alpha_map)
     {
-        m_shader->set_sampler("alpha_map", binder.resolve(m_alpha_map.get()));            
+        m_shader->set_sampler("alpha_map", binder.resolve(m_alpha_map.get()));
     }
 
     if (m_env_map)
     {
         m_shader->set_sampler("env_map", binder.resolve(m_env_map.get()));
     }
-        
 }
-
-    
 
 
 }  // namespace ay::grph

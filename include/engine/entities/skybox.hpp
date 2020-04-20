@@ -24,8 +24,8 @@ class Skybox : public Entity
     grph::Geometry m_cube;
     rend::CubeTexturePtr m_texture;
     rend::ShaderPtr m_shader;
-  public:
 
+  public:
     Skybox(rend::CubeTexturePtr tex, size_t t_size = 500)
     {
 
@@ -42,29 +42,28 @@ class Skybox : public Entity
         m_shader = t_game->shaders().load("skybox");
     };
 
-    rend::Shader* shader() const
+    rend::Shader *shader() const
     {
         return m_shader.get();
     }
 
-    rend::CubeTexture* texture()
+    rend::CubeTexture *texture()
     {
         return m_texture.get();
     }
 
-    const rend::VertexArray* buffers() const
+    const rend::VertexArray *buffers() const
     {
         return m_cube.gl_buffers();
     }
-    
 };
 
 using SkyboxPtr = std::unique_ptr<Skybox>;
 
-template<typename ... Args>
-SkyboxPtr skybox(Args && ... args)
+template<typename... Args>
+SkyboxPtr skybox(Args &&... args)
 {
-    return std::make_unique<Skybox>(std::forward<Args>(args) ...);
+    return std::make_unique<Skybox>(std::forward<Args>(args)...);
 }
 
-}
+}  // namespace ay::gmt

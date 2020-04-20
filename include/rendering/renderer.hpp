@@ -71,7 +71,7 @@ class RenderAPI
           index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
-    
+
     void draw_lines(const VertexArray *vertex_array, uint32_t element_count)
     {
 
@@ -146,24 +146,21 @@ class RenderAPI
 
     void culling(const Side &setup)
     {
-        switch (setup) {
-          case Side::BACK:
-              GLCall(glEnable(GL_CULL_FACE));
-              GLCall(glCullFace(GL_BACK));
-              break;
+        switch (setup)
+        {
+        case Side::BACK:
+            GLCall(glEnable(GL_CULL_FACE));
+            GLCall(glCullFace(GL_BACK));
+            break;
 
-          case Side::FRONT:
-              GLCall(glEnable(GL_CULL_FACE));
-              GLCall(glCullFace(GL_FRONT));
-              break;
+        case Side::FRONT:
+            GLCall(glEnable(GL_CULL_FACE));
+            GLCall(glCullFace(GL_FRONT));
+            break;
 
-          case Side::BOTH:
-              GLCall(glDisable(GL_CULL_FACE));
-              break;
-              
+        case Side::BOTH: GLCall(glDisable(GL_CULL_FACE)); break;
         }
     }
-    
 };
 
 

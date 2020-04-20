@@ -59,8 +59,8 @@ class MaterialBuilder
     {
         m_mat->side() = rend::Side::BOTH;
         return *this;
-    }    
-    
+    }
+
     MaterialBuilder &alpha_test(float alpha_test)
     {
         m_mat->blending_setup().alpha_test = alpha_test;
@@ -172,39 +172,35 @@ class TexturedMaterialBuilder
         return TexturedMaterialBuilder(mat);
     }
 
-    TexturedMaterialBuilder& reflectivity(float value)
+    TexturedMaterialBuilder &reflectivity(float value)
     {
         m_mat->set_reflectivity(value);
         return *this;
     }
 
-    TexturedMaterialBuilder& refraction(float value)
+    TexturedMaterialBuilder &refraction(float value)
     {
         m_mat->set_refraction(value);
         return *this;
     }
-    
-    TexturedMaterialBuilder& reflective(bool value = true)
+
+    TexturedMaterialBuilder &reflective(bool value = true)
     {
         m_mat->set_is_reflection(value);
         return *this;
     }
 
-    TexturedMaterialBuilder& ao_intensity(bool value = true)
+    TexturedMaterialBuilder &ao_intensity(bool value = true)
     {
         m_mat->set_is_reflection(value);
         return *this;
     }
 
-    TexturedMaterialBuilder& color(glm::vec3 color)
+    TexturedMaterialBuilder &color(glm::vec3 color)
     {
         m_mat->set_color(color);
         return *this;
     }
-
-    
-
-
 };
 
 

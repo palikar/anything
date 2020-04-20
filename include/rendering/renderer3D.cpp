@@ -70,12 +70,11 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 
     m_api->culling(material->side());
 
-    
+
     shader->set("opacity", material->opacity());
     shader->set("alpha_threshold", material->blending_setup().alpha_test);
     shader->set("visible", material->visible());
 
-    
 
     material->update_uniforms(m_binder, m_current_context);
 }
@@ -123,29 +122,27 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     handle_material(mat, shader);
 
     m_api->draw_lines(line->segments.buffers(), line->segments.count());
-    
 }
 
 void RendererScene3D::handle_sky(gmt::Skybox *sky)
 {
-    auto shader    = sky->shader();
-    auto tex       = sky->texture();
-    auto buffers   = sky->buffers();
+    auto shader  = sky->shader();
+    auto tex     = sky->texture();
+    auto buffers = sky->buffers();
 
     switch_shader(shader);
     auto slot = m_binder.resolve(tex);
     shader->set_sampler("skybox", slot);
-    
+
     auto sky_view = m_view;
-    sky_view[3] = glm::vec4(0, 0, 0, 1);
-    
+    sky_view[3]   = glm::vec4(0, 0, 0, 1);
+
     shader->set("projection_matrix", m_projection * sky_view);
 
 
     GLCall(glCullFace(GL_FRONT));
     m_api->draw_indexed(buffers);
     GLCall(glCullFace(GL_BACK));
-
 }
 
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
@@ -165,21 +162,17 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
 {
 
     m_projection = scene.camera().projection();
-    m_view = scene.camera().view();
+    m_view       = scene.camera().view();
 
-    m_view_projection = m_projection * m_view;
+    m_view_projection            = m_projection * m_view;
     m_current_context.camera_pos = scene.camera().pos();
-    
+
     handle_sky(scene.skybox());
-    
+
     for (auto &object : scene.entities())
     {
         render_entity(object.get());
     }
-
-    
-
-
 }
 
 }  // namespace ay::rend

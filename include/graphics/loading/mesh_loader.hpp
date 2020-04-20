@@ -21,7 +21,6 @@ class Loader
 {
 
   private:
-
     static grph::Geometry load_mesh(aiMesh *t_mesh)
     {
         grph::Geometry geometry;
@@ -32,14 +31,14 @@ class Loader
             std::vector<float> verts;
             verts.reserve(t_mesh->mNumVertices);
 
-            for(unsigned int j = 0; j < t_mesh->mNumVertices; j++)
+            for (unsigned int j = 0; j < t_mesh->mNumVertices; j++)
             {
 
                 verts.push_back(t_mesh->mVertices[j].x);
                 verts.push_back(t_mesh->mVertices[j].y);
                 verts.push_back(t_mesh->mVertices[j].z);
             }
-            
+
             geometry.set_attribute("position", std::move(verts), 3);
         }
 
@@ -47,8 +46,8 @@ class Loader
         {
             std::vector<float> norms;
             norms.reserve(t_mesh->mNumVertices);
-            
-            for(unsigned int j = 0; j < t_mesh->mNumVertices; j++)
+
+            for (unsigned int j = 0; j < t_mesh->mNumVertices; j++)
             {
                 norms.push_back(t_mesh->mNormals[j].x);
                 norms.push_back(t_mesh->mNormals[j].y);
@@ -62,7 +61,7 @@ class Loader
             std::vector<float> uvs;
             uvs.reserve(t_mesh->mNumVertices);
 
-            for(unsigned int j = 0; j < t_mesh->mNumVertices; j++)
+            for (unsigned int j = 0; j < t_mesh->mNumVertices; j++)
             {
                 uvs.push_back(t_mesh->mTextureCoords[0][j].x);
                 uvs.push_back(t_mesh->mTextureCoords[0][j].y);
@@ -73,34 +72,31 @@ class Loader
         if (t_mesh->HasFaces())
         {
             std::vector<uint32_t> indices;
-            for(unsigned int i = 0; i < t_mesh->mNumFaces; i++)
+            for (unsigned int i = 0; i < t_mesh->mNumFaces; i++)
             {
                 aiFace face = t_mesh->mFaces[i];
-                for(unsigned int j = 0; j < face.mNumIndices; j++)
+                for (unsigned int j = 0; j < face.mNumIndices; j++)
                     indices.push_back(face.mIndices[j]);
             }
             geometry.set_index(std::move(indices));
-
         }
-        
-        return geometry;
 
+        return geometry;
     }
 
   public:
-
     static grph::Geometry load_geometry(std::string_view t_path)
-    {    
+    {
 
         Assimp::Importer importer;
         const aiScene *scene =
-            importer.ReadFile(t_path.data(), aiProcess_Triangulate | aiProcess_FlipUVs);
+          importer.ReadFile(t_path.data(), aiProcess_Triangulate | aiProcess_FlipUVs);
 
-        if ( !scene)
+        if (!scene)
         {
-            std::cout << "No mesh found!" << "\n";
-            std::cout <<  importer.GetErrorString() << "\n";
-
+            std::cout << "No mesh found!"
+                      << "\n";
+            std::cout << importer.GetErrorString() << "\n";
         }
 
         if (scene->mNumMeshes > 0)
@@ -110,13 +106,8 @@ class Loader
         }
 
         return {};
-
     }
-
 };
 
 
-
-
-
-}
+}  // namespace ay::load

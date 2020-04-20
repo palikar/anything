@@ -24,9 +24,8 @@ namespace ay::gmt
 class AxisHelper : public Entity
 {
   private:
-
     cmp::TransformComponent *m_transform;
-    cmp::GroupComponent* m_children;
+    cmp::GroupComponent *m_children;
 
 
     static constexpr float cyl_height       = 1.5;
@@ -37,9 +36,10 @@ class AxisHelper : public Entity
     AxisHelper();
 
     void init_meshes();
-    
+
     void update(double) override
-    {}
+    {
+    }
 
     bool event(app::Event &) override
     {
@@ -47,8 +47,8 @@ class AxisHelper : public Entity
     }
 
     void init(GameBase *) override
-    {}
-    
+    {
+    }
 };
 
 

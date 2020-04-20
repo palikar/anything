@@ -54,7 +54,7 @@ class RendererScene3D
     glm::mat4 m_projection;
 
     RenderContext m_current_context;
-    
+
     void render_entity(gmt::Entity *object);
 
   public:
@@ -79,7 +79,7 @@ class RendererScene3D
     void switch_mvp(Shader *shader, glm::mat4 transform);
 
     void push_transform(glm::mat4 transform);
-    
+
     template<typename T, typename... Ts, typename Func>
     void dispatch_component(gmt::Entity *object, Func &&func)
     {

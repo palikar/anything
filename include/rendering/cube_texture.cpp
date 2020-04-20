@@ -31,7 +31,7 @@ void CubeTexture::load_from_files(const std::vector<std::string> &t_files,
     GLCall(glGenTextures(1, &m_id));
     GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, m_id));
     GLCall(glTexParameteri(
-               GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+      GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
@@ -112,7 +112,7 @@ void CubeTexture::load_from_files(const std::vector<std::string> &t_files,
 
         GLCall(glGenerateMipmap(GL_TEXTURE_CUBE_MAP));
 
-        
+
         stbi_image_free(xp_data);
         stbi_image_free(xn_data);
         stbi_image_free(yp_data);

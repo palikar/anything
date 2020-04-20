@@ -55,7 +55,6 @@ class TextureBinder
     }
 
     void free(rend::Texture *t_texture);
-    
 };
 
 

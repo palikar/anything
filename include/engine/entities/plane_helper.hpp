@@ -26,18 +26,19 @@ class PlaneHelper : public Entity
 {
   private:
     cmp::TransformComponent *m_transform;
-    cmp::GroupComponent* m_children;
+    cmp::GroupComponent *m_children;
 
     glm::vec3 m_color;
     size_t m_size;
 
   public:
-    PlaneHelper(glm::vec3 color = {1.0f, 0.0f, 0.0f}, size_t size = 5);
+    PlaneHelper(glm::vec3 color = { 1.0f, 0.0f, 0.0f }, size_t size = 5);
 
     void init_points();
 
     void update(double) override
-    {}
+    {
+    }
 
     bool event(app::Event &) override
     {

@@ -4,7 +4,6 @@ namespace ay::gmt
 {
 
 
-
 void CameraHelper::add_point(std::string a)
 {
     m_point_data->push_back(0);
@@ -35,11 +34,11 @@ void CameraHelper::add_line(const std::string &a, const std::string &b)
 
 
 CameraHelper::CameraHelper(glm::mat4 t_proj_mat)
-    : m_proj_mat(t_proj_mat), m_proj_mat_inv(glm::inverse(m_proj_mat))
+  : m_proj_mat(t_proj_mat), m_proj_mat_inv(glm::inverse(m_proj_mat))
 {
     m_transform     = add_component(std::make_unique<cmp::TransformComponent>());
     m_line_segments = add_component(std::make_unique<cmp::LineSegmentsComponent>(
-                                        grph::LineSegments(grph::solid_color({ 1.0f, 1.0f, 1.0f }))));
+      grph::LineSegments(grph::solid_color({ 1.0f, 1.0f, 1.0f }))));
     m_point_data    = &m_line_segments->segments.geometry().attribute("position");
 
 
@@ -86,17 +85,17 @@ void CameraHelper::init_points()
 
     // target
 
-add_line("c", "t");
-        add_line("p", "c");
+    add_line("c", "t");
+    add_line("p", "c");
 
-        // cross
+    // cross
 
-        add_line("cn1", "cn2");
-        add_line("cn3", "cn4");
+    add_line("cn1", "cn2");
+    add_line("cn3", "cn4");
 
-        add_line("cf1", "cf2");
-        add_line("cf3", "cf4");
-    }
+    add_line("cf1", "cf2");
+    add_line("cf3", "cf4");
+}
 
 void CameraHelper::update(double dt)
 {
@@ -106,46 +105,45 @@ void CameraHelper::update(double dt)
     }
 
     const float w = 1;
-        const float h = 1;
+    const float h = 1;
 
-        set_point("c", glm::vec3(0, 0, -1));
-        set_point("t", glm::vec3(0, 0, 1));
+    set_point("c", glm::vec3(0, 0, -1));
+    set_point("t", glm::vec3(0, 0, 1));
 
-        // near
+    // near
 
-        set_point("n1", glm::vec3(-w, -h, -1));
-        set_point("n2", glm::vec3(w, -h, -1));
-        set_point("n3", glm::vec3(-w, h, -1));
-        set_point("n4", glm::vec3(w, h, -1));
+    set_point("n1", glm::vec3(-w, -h, -1));
+    set_point("n2", glm::vec3(w, -h, -1));
+    set_point("n3", glm::vec3(-w, h, -1));
+    set_point("n4", glm::vec3(w, h, -1));
 
-        // far
+    // far
 
-        set_point("f1", glm::vec3(-w, -h, 1));
-        set_point("f2", glm::vec3(w, -h, 1));
-        set_point("f3", glm::vec3(-w, h, 1));
-        set_point("f4", glm::vec3(w, h, 1));
+    set_point("f1", glm::vec3(-w, -h, 1));
+    set_point("f2", glm::vec3(w, -h, 1));
+    set_point("f3", glm::vec3(-w, h, 1));
+    set_point("f4", glm::vec3(w, h, 1));
 
-        // up
+    // up
 
-        set_point("u1", glm::vec3(w * 0.7, h * 1.1, -1));
-        set_point("u2", glm::vec3(-w * 0.7, h * 1.1, -1));
-        set_point("u3", glm::vec3(0, h * 2, -1));
+    set_point("u1", glm::vec3(w * 0.7, h * 1.1, -1));
+    set_point("u2", glm::vec3(-w * 0.7, h * 1.1, -1));
+    set_point("u3", glm::vec3(0, h * 2, -1));
 
-        // cross
+    // cross
 
-        set_point("cf1", glm::vec3(-w, 0, 1));
-        set_point("cf2", glm::vec3(w, 0, 1));
-        set_point("cf3", glm::vec3(0, -h, 1));
-        set_point("cf4", glm::vec3(0, h, 1));
+    set_point("cf1", glm::vec3(-w, 0, 1));
+    set_point("cf2", glm::vec3(w, 0, 1));
+    set_point("cf3", glm::vec3(0, -h, 1));
+    set_point("cf4", glm::vec3(0, h, 1));
 
-        set_point("cn1", glm::vec3(-w, 0, -1));
-        set_point("cn2", glm::vec3(w, 0, -1));
-        set_point("cn3", glm::vec3(0, -h, -1));
-        set_point("cn4", glm::vec3(0, h, -1));
+    set_point("cn1", glm::vec3(-w, 0, -1));
+    set_point("cn2", glm::vec3(w, 0, -1));
+    set_point("cn3", glm::vec3(0, -h, -1));
+    set_point("cn4", glm::vec3(0, h, -1));
 
-        m_line_segments->segments.geometry().pack();
-    }
-
-
-
+    m_line_segments->segments.geometry().pack();
 }
+
+
+}  // namespace ay::gmt

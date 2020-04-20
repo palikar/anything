@@ -11,7 +11,6 @@ struct RenderContext
 {
 
     glm::vec3 camera_pos;
-
 };
 
-}
+}  // namespace ay::rend

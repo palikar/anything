@@ -17,7 +17,7 @@ void SolidColorMaterial::init_shader(rend::ShaderLibrary &t_shader_lib)
     m_shader = t_shader_lib.load("solid_color");
 }
 
-void SolidColorMaterial::update_uniforms(rend::TextureBinder &, rend::RenderContext&)
+void SolidColorMaterial::update_uniforms(rend::TextureBinder &, rend::RenderContext &)
 {
     m_shader->set("color", m_color);
 }
