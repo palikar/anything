@@ -8,7 +8,7 @@
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
-namespace ay::mth
+namespace ay::gmt
 {
 
 class Raycaster
@@ -17,11 +17,12 @@ class Raycaster
     size_t viewport_width;
     size_t viewport_height;
 
+    Camera* camera;
+
   public:
     Raycaster()
     {
     }
-
 
     void update_viewport(size_t t_width, size_t t_height)
     {
@@ -29,32 +30,16 @@ class Raycaster
         viewport_width = t_width;
     }
 
-    mth::Ray from_mouse(gmt::Camera& camera)
+    void update_camera(Camera* t_camera)
     {
-        
-        
-        auto coord = app::Input::mouse_pos();
-
-        const glm::vec3 norm_coord = {2.0f * coord.x / viewport_width - 1.0f,
-                                      1.0f - 2.0f * coord.y / viewport_height,
-                                      1.0f};
-        
-        const glm::vec4 clip_coord = {norm_coord.xy(), -1.0f, 1.0f};
-        
-        const glm::vec4 eye_coord = {(glm::inverse(camera.projection())*clip_coord).xy(), -1.0f, 0.0f};
-
-        const glm::vec3 world_coord = (glm::inverse(camera.view()) * eye_coord).xyz();
-
-        return mth::Ray{camera.pos(), glm::normalize(world_coord)};
+        camera = t_camera;
     }
     
+    mth::Ray camera_to_mouse();
 
-  private:
-    
-    
-    
-    
-
+    mth::Ray from_position(glm::vec2 pos);
+        
+    mth::Ray from_position(glm::vec2 pos, glm::mat4 proj, glm::mat4 view);
 
 };
 

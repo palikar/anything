@@ -1,6 +1,4 @@
-#cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
-
-
+cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 project(anything LANGUAGES CXX)
@@ -18,6 +16,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 add_library(project_warnings INTERFACE)
 add_library(project_options INTERFACE)
+add_library(project_defines INTERFACE)
 
 target_compile_features(project_options INTERFACE cxx_std_17)
 
@@ -117,10 +116,9 @@ endif()
 file(READ "${PROJECT_SOURCE_DIR}/version" VERSION NEWLINE_CONSUME)
 string(REPLACE "\n" "" VERSION "${VERSION}")
 string(REPLACE "." ";" VERSION_LIST ${VERSION})
-list(GET VERSION_LIST 0 CTG_VERSION_MAJOR)
-list(GET VERSION_LIST 1 CTG_VERSION_MINOR)
-list(GET VERSION_LIST 2 CTG_VERSION_PATCH)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+list(GET VERSION_LIST 0 VERSION_MAJOR)
+list(GET VERSION_LIST 1 VERSION_MINOR)
+list(GET VERSION_LIST 2 VERSION_PATCH)
 
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -146,6 +144,17 @@ find_package(ASSIMP REQUIRED)
 
 
 
+option(GLCALLS_CHECKS "Check all OpenGL calls for errors" TRUE)
+if (${GLCALLS_CHECKS})
+    target_compile_definitions(project_defines INTERFACE OPENGL_CHECKS)
+endif()
+
+option(DEBUG_LOGGING "Debug logging" TRUE)
+if (${GLCALLS_CHECKS})
+    target_compile_definitions(project_defines INTERFACE DEBUG_LOGGING)
+endif()
+
+
 include_directories(${OPENGL_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIRS})
 include_directories(${GLFW_INCLUDE_DIRS})
@@ -160,9 +169,12 @@ add_library(anything_engine
     ./include/rendering/renderer3D.cpp
     ./include/rendering/shaders.cpp
     ./include/rendering/vertex_array.cpp
+    ./include/rendering/texture_binder.cpp
 
     ./include/graphics/materials/solid_color.cpp
+    ./include/graphics/materials/textured.cpp
     ./include/graphics/mesh_factory.cpp
+    ./include/graphics/geometry.cpp
     ./include/graphics/geometry_factory.cpp
 
     ./include/application/resource_loader.cpp
@@ -172,6 +184,14 @@ add_library(anything_engine
     ./include/engine/game_base.cpp
     ./include/engine/engine.cpp
     ./include/engine/scene.cpp
+    ./include/engine/raycaster.cpp
+
+    ./include/engine/entities/axis_helper.cpp
+    ./include/engine/entities/camera_helper.cpp
+    ./include/engine/entities/grid_helper.cpp
+    ./include/engine/entities/plane_helper.cpp
+
+    ./include/engine/components/orbital_camera.cpp
 
     ./include/util/gl_helpers.cpp
     ./include/util/files.cpp
@@ -182,7 +202,7 @@ target_include_directories(anything_engine
     PUBLIC
     )
 
-target_link_libraries(anything_engine PRIVATE project_options project_warnings
+target_link_libraries(anything_engine PRIVATE project_options project_warnings project_defines
     PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp
     )
 
@@ -194,13 +214,13 @@ add_executable(simple_anything ./examples/simple.cpp)
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
     
     target_precompile_headers(anything_engine
-        PUBLIC ./include/std_header.hpp ./include/math_header.hpp ./include/glm_header.hpp)
-
+        PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
+    
 endif()
 
 
 target_link_libraries(simple_anything
-    PRIVATE project_options project_warnings
+    PRIVATE project_options project_warnings project_defines
     PUBLIC anything_engine
     )
 
@@ -209,27 +229,27 @@ target_link_libraries(simple_anything
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-# install(TARGETS anything
-#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-#     RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
-#     LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
-#     INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-#     ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
+install(TARGETS anything_engine
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+    RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+    ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
 
-# install(DIRECTORY ./include/ DESTINATION include)
+install(DIRECTORY ./include/ DESTINATION include)
 
-# set(CPACK_PACKAGE_VENDOR "Stanislav Arnaudov")
-# set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A small project of a compile-time graph library in C++17 ")
-# set(CPACK_PACKAGE_VERSION_MAJOR ${CTG_VERSION_MAJOR})
-# set(CPACK_PACKAGE_VERSION_MINOR ${CTG_VERSION_MINOR})
-# set(CPACK_PACKAGE_VERSION_PATCH ${CTG_VERSION_PATCH})
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-# set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
-# set(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
-# set(CPACK_SOURCE_IGNORE_FILES
-#     /.git
-#     /.github
-#     /dist
-#     /.*build.*
-#     /\\\\.DS_Store)
-# include(CPack)
+set(CPACK_PACKAGE_VENDOR "Stanislav Arnaudov")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A small project of a compile-time graph library in C++17 ")
+set(CPACK_PACKAGE_VERSION_MAJOR ${CTG_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${CTG_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${CTG_VERSION_PATCH})
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+set(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
+set(CPACK_SOURCE_IGNORE_FILES
+    /.git
+    /.github
+    /dist
+    /.*build.*
+    /\\\\.DS_Store)
+include(CPack)

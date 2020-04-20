@@ -6,7 +6,7 @@
 #include "engine/component.hpp"
 #include "engine/entity.hpp"
 #include "engine/camera.hpp"
-
+#include "engine/raycaster.hpp"
 
 #include "application/event.hpp"
 
@@ -28,6 +28,8 @@ class Scene3D
 
     Camera m_camera;
 
+    Raycaster m_raycaster;
+    
     GameBase *m_game;
 
   public:
@@ -61,6 +63,12 @@ class Scene3D
 
     void event(app::Event &t_ev)
     {
+        app::Dispatcher dispatch{ t_ev };
+        dispatch.dispatch<app::WindowResizeEvent>([this](auto &e) {
+            m_raycaster.update_viewport(e.width(), e.height());
+            return false;
+        });
+        
         for (auto &object : m_entities)
         {
             object->event(t_ev);
@@ -70,6 +78,11 @@ class Scene3D
         {
             comp->event(t_ev);
         }
+    }
+
+    Raycaster raycaster()
+    {
+        return m_raycaster;
     }
 
     Skybox* set_skybox(EntityPtr t_sky);

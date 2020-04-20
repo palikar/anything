@@ -44,14 +44,13 @@ class Application
   private:
     void init();
 
+    void render_engine();
+
     void on_event(Event &t_event);
 
     bool on_close(WindowCloseEvent &)
     {
         m_running = false;
-
-        
-        
         return true;
     }
 

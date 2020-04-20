@@ -63,11 +63,7 @@ int Application::run()
 
         if (render)
         {
-            m_engine.render();
-
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+            render_engine();
             m_window->render();
             ++frames;
         }
@@ -86,6 +82,23 @@ int Application::run()
 
     return 0;
 }
+
+
+void Application::render_engine()
+{
+    
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    m_engine.render();
+
+    ImGui::End();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 
 void Application::init()
 {
@@ -143,8 +156,8 @@ void Application::init()
 void Application::on_event(Event &t_event)
 {
     Dispatcher dispatch{ t_event };
-    dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
     dispatch.dispatch<WindowResizeEvent>([this](auto &e) { return this->on_resize(e); });
+    dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
 
     if (!ImGui::GetIO().WantCaptureKeyboard) {
         m_engine.on_event(t_event);
