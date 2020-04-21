@@ -75,8 +75,10 @@ class SimpleGame : public gmt::GameBase {
 
         static constexpr float offset = 2.5f;
         static constexpr float radius = 0.5f;
-        for (int i = 0; i < ball_grid_x; ++i) {
-            for (int j = 0; j < ball_grid_y; ++j) {
+        for (int i = 0; i < ball_grid_x; ++i)
+        {
+            for (int j = 0; j < ball_grid_y; ++j)
+            {
 
                 entities[i][j] = main_scene->add(
                     gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
@@ -93,6 +95,9 @@ class SimpleGame : public gmt::GameBase {
             }
         }
 
+
+        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0));
+        
 
 
 

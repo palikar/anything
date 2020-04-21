@@ -15,13 +15,13 @@ mth::Ray Raycaster::camera_to_mouse()
                                 1.0f };
 
 
-    const glm::vec4 clip_coord{ norm_coord.xy(), -1.0f, 1.0f };
+    const glm::vec4 clip_coord{ glm::xy(norm_coord), -1.0f, 1.0f };
 
-    const glm::vec4 eye_coord{ (glm::inverse(camera->projection()) * clip_coord).xy(),
+    const glm::vec4 eye_coord{ glm::xy(glm::inverse(camera->projection()) * clip_coord),
                                -1.0f,
                                0.0f };
 
-    const glm::vec3 world_coord{ (glm::inverse(camera->view()) * eye_coord).xyz() };
+    const glm::vec3 world_coord{ glm::xyz(glm::inverse(camera->view()) * eye_coord) };
 
     return mth::Ray{ camera->pos(), glm::normalize(world_coord) };
 }
@@ -31,13 +31,13 @@ mth::Ray Raycaster::from_position(glm::vec2 pos)
 
     const glm::vec3 norm_coord{ pos.x, pos.y, 1.0f };
 
-    const glm::vec4 clip_coord{ norm_coord.xy(), -1.0f, 1.0f };
+    const glm::vec4 clip_coord{ glm::xy(norm_coord), -1.0f, 1.0f };
 
-    const glm::vec4 eye_coord{ (glm::inverse(camera->projection()) * clip_coord).xy(),
+    const glm::vec4 eye_coord{ glm::xy(glm::inverse(camera->projection()) * clip_coord),
                                -1.0f,
                                0.0f };
 
-    const glm::vec3 world_coord{ (glm::inverse(camera->view()) * eye_coord).xyz() };
+    const glm::vec3 world_coord{ glm::xyz(glm::inverse(camera->view()) * eye_coord) };
 
     return mth::Ray{ camera->pos(), glm::normalize(world_coord) };
 }
@@ -47,11 +47,11 @@ mth::Ray Raycaster::from_position(glm::vec2 pos, glm::mat4 proj, glm::mat4 view)
 
     const glm::vec3 norm_coord{ pos.x, pos.y, 1.0f };
 
-    const glm::vec4 clip_coord{ norm_coord.xy(), -1.0f, 1.0f };
+    const glm::vec4 clip_coord{ glm::xy(norm_coord), -1.0f, 1.0f };
 
-    const glm::vec4 eye_coord{ (glm::inverse(proj) * clip_coord).xy(), -1.0f, 0.0f };
+    const glm::vec4 eye_coord{ glm::xy(glm::inverse(proj) * clip_coord) , -1.0f, 0.0f };
 
-    const glm::vec3 world_coord{ (glm::inverse(view) * eye_coord).xyz() };
+    const glm::vec3 world_coord{ glm::xyz(glm::inverse(view) * eye_coord) };
 
     return mth::Ray{ camera->pos(), glm::normalize(world_coord) };
 }

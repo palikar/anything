@@ -5,6 +5,7 @@
 #include "rendering/shaders.hpp"
 
 #include "graphics/material.hpp"
+#include "graphics/light.hpp"
 
 #include "engine/entity.hpp"
 
@@ -56,6 +57,8 @@ class RendererScene3D
     RenderContext m_current_context;
 
     void render_entity(gmt::Entity *object);
+
+    void bind_lighting(Shader *shader);
 
   public:
     RendererScene3D() = default;

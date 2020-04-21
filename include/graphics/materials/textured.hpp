@@ -35,6 +35,7 @@ class TextureMaterial : public Material
     float m_refraction_ration{ 0.0 };
 
   public:
+    
     TextureMaterial(rend::TexturePtr tex);
 
     virtual ~TextureMaterial() = default;

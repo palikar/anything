@@ -21,6 +21,19 @@ void RendererScene3D::init(RenderAPI *t_api)
     m_api = t_api;
 }
 
+
+void RendererScene3D::bind_lighting(Shader *shader)
+{
+
+    shader->set("lighting.dir_light.act", m_current_context.light_setup->directional_light.active);
+    shader->set("lighting.dir_light.direction", m_current_context.light_setup->directional_light.dir);
+    shader->set("lighting.dir_light.color", m_current_context.light_setup->directional_light.color);
+    shader->set("lighting.dir_light.intensity", m_current_context.light_setup->directional_light.intensity);
+
+    shader->set("camera_pos", m_current_context.camera_pos);
+    
+}
+
 void RendererScene3D::switch_shader(Shader *shader)
 {
 
@@ -88,6 +101,9 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
     handle_material(mat, shader);
+
+    bind_lighting(shader);
+    
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
@@ -165,7 +181,9 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
     m_view       = scene.camera().view();
 
     m_view_projection            = m_projection * m_view;
+
     m_current_context.camera_pos = scene.camera().pos();
+    m_current_context.light_setup = &scene.light_setup();
 
     handle_sky(scene.skybox());
 
