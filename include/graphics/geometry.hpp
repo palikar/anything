@@ -40,6 +40,9 @@ class Geometry
     std::vector<std::tuple<int32_t, int32_t>> m_groups;
     rend::VertexArrayPtr m_glbuffers;
 
+    mth::Sphere m_bounding_sphere;
+    mth::Box3 m_bounding_box;
+
     bool m_dirty{ true };
     bool m_dynamic{ false };
 
@@ -86,12 +89,46 @@ class Geometry
     void apply(glm::mat4 t_mat);
 
 
+    mth::Box3 &bounding_box()
+    {
+        return m_bounding_box;
+    }
+
+    mth::Sphere &bounding_sphere()
+    {
+        return m_bounding_sphere;
+    }
+
     void compute_bounding_box()
     {
+        if (m_buffers.count("position") > 0)
+        {
+            const auto &verts = m_buffers.at("position").data;
+            for (size_t i = 0; i < verts.size() - 2; i += 2)
+            {
+                m_bounding_box.expand_by_point({ verts[i], verts[i + 1], verts[i + 2] });
+            }
+        }
     }
 
     void compute_bounding_sphere()
     {
+
+        compute_bounding_box();
+        auto c                     = m_bounding_box.center();
+        m_bounding_sphere.center() = c;
+        m_bounding_sphere.radius() = 0;
+
+        if (m_buffers.count("position") > 0)
+        {
+            const auto &verts = m_buffers.at("position").data;
+
+            for (size_t i = 0; i < verts.size() - 2; i += 2)
+            {
+                m_bounding_sphere.expand_by_point(
+                  { verts[i], verts[i + 1], verts[i + 2] });
+            }
+        }
     }
 
     void compute_vertex_normals()
