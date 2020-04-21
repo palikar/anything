@@ -137,10 +137,23 @@ class SimpleGame : public gmt::GameBase {
 
     void render(rend::RenderAPI&) override
     {
-        
-        renderer.render_scene(*main_scene);
 
+
+        if (ImGui::CollapsingHeader("Ligting"))
+        {
+            if (ImGui::TreeNode("Directional light"))
+            {
+                ImGui::Text("Color");
+                ImGui::SameLine();
+                ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().directional_light.color);
+                ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().directional_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
+            }
+
+        }
         
+        
+
+        renderer.render_scene(*main_scene);
     }
 
 };
