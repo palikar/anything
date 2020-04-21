@@ -88,6 +88,8 @@ class SimpleGame : public gmt::GameBase {
                     glm::vec3(i * offset - (ball_grid_x * offset / 2),
                               1.5f,
                               j * 2.5f - (ball_grid_y * offset / 2));
+
+                cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
             }
         }
 
