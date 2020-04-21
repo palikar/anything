@@ -93,9 +93,9 @@ void Application::render_engine()
 
     ImGui::NewFrame();
     ImGui::SetNextWindowPos(
-        { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
+      { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
     ImGui::SetNextWindowSize(
-        { static_cast<float>(m_window->width()), static_cast<float>(m_window->height()) });
+      { static_cast<float>(m_window->width()), static_cast<float>(m_window->height()) });
     ImGuizmo::SetRect(static_cast<float>(m_window->xpos()),
                       static_cast<float>(m_window->ypos()),
                       static_cast<float>(m_window->width()),
@@ -105,7 +105,7 @@ void Application::render_engine()
     ImGuizmo::BeginFrame();
     m_engine.render();
 
-    ImGui::End();    
+    ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -171,7 +171,8 @@ void Application::on_event(Event &t_event)
     Dispatcher dispatch{ t_event };
     dispatch.dispatch<WindowResizeEvent>([this](auto &e) { return this->on_resize(e); });
     dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
-    dispatch.dispatch<WindowPositionEvent>([this](auto &e) { return this->on_resposition(e); });
+    dispatch.dispatch<WindowPositionEvent>(
+      [this](auto &e) { return this->on_resposition(e); });
 
     if (!ImGui::GetIO().WantCaptureKeyboard)
     {

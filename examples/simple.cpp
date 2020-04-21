@@ -79,46 +79,28 @@ class SimpleGame : public gmt::GameBase {
 
         static constexpr float offset = 2.5f;
         static constexpr float radius = 0.5f;
-        // for (int i = 0; i < ball_grid_x; ++i)
-        // {
-        //     for (int j = 0; j < ball_grid_y; ++j)
-        //     {
+        for (int i = 0; i < ball_grid_x; ++i)
+        {
+            for (int j = 0; j < ball_grid_y; ++j)
+            {
 
-        //         entities[i][j] = main_scene->add(
-        //             gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
-        //                                grph::solid_color((1.0f * i) / ball_grid_x,
-        //                                                  (1.0f * j) / ball_grid_y,
-        //                                                  0.4f) }));
+                entities[i][j] = main_scene->add(
+                    gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
+                                       grph::solid_color((1.0f * i) / ball_grid_x,
+                                                         (1.0f * j) / ball_grid_y,
+                                                         0.4f) }));
 
-        //         cmp::transform(entities[i][j]).position() =
-        //             glm::vec3(i * offset - (ball_grid_x * offset / 2),
-        //                       1.5f,
-        //                       j * 2.5f - (ball_grid_y * offset / 2));
+                cmp::transform(entities[i][j]).position() =
+                    glm::vec3(i * offset - (ball_grid_x * offset / 2),
+                              1.5f,
+                              j * 2.5f - (ball_grid_y * offset / 2));
 
-        //         cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
-        //     }
-        // }
+                cmp::transform(entities[i][j]).update();
+                cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
+            }
+        }
 
-        
-        int i = 10;
-        int j = 10;
-        entities[i][j] = main_scene->add(
-            gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
-                               grph::solid_color((1.0f * i) / ball_grid_x,
-                                                 (1.0f * j) / ball_grid_y,
-                                                 0.4f) }));
-
-        cmp::transform(entities[i][j]).position() =
-            glm::vec3(i * offset - (ball_grid_x * offset / 2),
-                      0.0f,
-                      j * 2.5f - (ball_grid_y * offset / 2));
-        
-        // cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
-
-                
-
-        // main_scene->directional_light(glm::vec3(0.5, 0.5f, 0));
-
+      // main_scene->directional_light(glm::vec3(0.5, 0.5f, 0));
 
 
 
@@ -155,49 +137,33 @@ class SimpleGame : public gmt::GameBase {
 
         return false;
     }
-
-    glm::mat4 tran{1.0f};
-    glm::mat4 delta{1.0f};
-
-    glm::mat4 proj{1.0f};
-    glm::mat4 vw{1.0f};
     
     void render(rend::RenderAPI&) override
     {
         
-        // if (ImGui::CollapsingHeader("Ligting"))
-        // {
-        //     if (ImGui::TreeNode("Directional light"))
-        //     {
-        //         ImGui::Text("Color");
-        //         ImGui::SameLine();
-        //         ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().directional_light.color);
-        //         ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().directional_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
-        //     }
+        if (ImGui::CollapsingHeader("Ligting"))
+        {
+            if (ImGui::TreeNode("Directional light"))
+            {
+                ImGui::Text("Color");
+                ImGui::SameLine();
+                ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().directional_light.color);
+                ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().directional_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
+            }
 
-        // }
+        }
 
         ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
         ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
         
         ImGuizmo::SetOrthographic(false);
-        ImGuizmo::Enable(true);
-        
-        // ImGuizmo::DrawCube(glm::value_ptr(vw),
-        //                    glm::value_ptr(proj),
-        //                    glm::value_ptr(tran));
-
-        // ImGuizmo::DrawGrid(glm::value_ptr(main_scene->camera().view()),
-        //                    glm::value_ptr(main_scene->camera().projection()),
-        //                    glm::value_ptr(tran), 10.0f);
-        
+        ImGuizmo::Enable(true);        
 
         ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
                              glm::value_ptr(main_scene->camera().projection()),
                              mCurrentGizmoOperation,
                              mCurrentGizmoMode,
-                             glm::value_ptr(cmp::transform(entities[10][10]).transform()),
-                             glm::value_ptr(delta));
+                             glm::value_ptr(cmp::transform(entities[10][10]).transform()));
 
 
         

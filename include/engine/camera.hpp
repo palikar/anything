@@ -52,13 +52,13 @@ class Camera
         m_projection = glm::ortho(left, right, bottom, top, near, far);
     }
 
-    glm::mat4& projection()
+    glm::mat4 &projection()
     {
         update();
         return m_projection;
     }
 
-    glm::mat4& view()
+    glm::mat4 &view()
     {
         update();
         return m_view;

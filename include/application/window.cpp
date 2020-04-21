@@ -41,17 +41,16 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
     glfwSetWindowSizeCallback(m_window, [](GLFWwindow *window, int width, int height) {
         auto &win = *(Window *)glfwGetWindowUserPointer(window);
         WindowResizeEvent event(width, height);
-        win.m_width = width;
+        win.m_width  = width;
         win.m_height = height;
         win.m_callback(event);
     });
 
     glfwSetWindowPosCallback(m_window, [](GLFWwindow *window, int xpos, int ypos) {
-        
-        auto &win = *(Window *)glfwGetWindowUserPointer(window);
+        auto &win  = *(Window *)glfwGetWindowUserPointer(window);
         win.m_xpos = xpos;
         win.m_ypos = ypos;
-        
+
         WindowPositionEvent event(xpos, ypos);
         win.m_callback(event);
     });

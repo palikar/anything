@@ -12,7 +12,7 @@ struct RenderContext
 {
 
     glm::vec3 camera_pos;
-    grph::LightSetup* light_setup;
+    grph::LightSetup *light_setup;
 };
 
 }  // namespace ay::rend

@@ -60,9 +60,9 @@ class Application
         return true;
     }
 
-    bool on_resposition(WindowPositionEvent&)
+    bool on_resposition(WindowPositionEvent &)
     {
-        
+
         return true;
     }
 };

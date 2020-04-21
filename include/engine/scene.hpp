@@ -132,14 +132,12 @@ class Scene3D
         return m_light_setup;
     }
 
-    void directional_light(glm::vec3 dir, glm::vec3 color = {0.3f, 0.0f, 0.0f})
+    void directional_light(glm::vec3 dir, glm::vec3 color = { 0.3f, 0.0f, 0.0f })
     {
-        m_light_setup.directional_light.dir = dir;
-        m_light_setup.directional_light.color = color;
+        m_light_setup.directional_light.dir    = dir;
+        m_light_setup.directional_light.color  = color;
         m_light_setup.directional_light.active = true;
     }
-
-    
 };
 
 

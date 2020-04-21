@@ -49,7 +49,7 @@ mth::Ray Raycaster::from_position(glm::vec2 pos, glm::mat4 proj, glm::mat4 view)
 
     const glm::vec4 clip_coord{ glm::xy(norm_coord), -1.0f, 1.0f };
 
-    const glm::vec4 eye_coord{ glm::xy(glm::inverse(proj) * clip_coord) , -1.0f, 0.0f };
+    const glm::vec4 eye_coord{ glm::xy(glm::inverse(proj) * clip_coord), -1.0f, 0.0f };
 
     const glm::vec3 world_coord{ glm::xyz(glm::inverse(view) * eye_coord) };
 

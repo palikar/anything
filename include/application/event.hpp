@@ -82,9 +82,7 @@ class WindowResizeEvent : public Event
 class WindowPositionEvent : public Event
 {
   public:
-
-    WindowPositionEvent(unsigned int xpos, unsigned int ypos)
-        : m_xpos(xpos), m_ypos(ypos)
+    WindowPositionEvent(unsigned int xpos, unsigned int ypos) : m_xpos(xpos), m_ypos(ypos)
     {
     }
 
@@ -100,7 +98,7 @@ class WindowPositionEvent : public Event
 
     EVENT_TYPE(WINDOWPOSITION)
 
-    private:
+  private:
     unsigned int m_xpos, m_ypos;
 };
 

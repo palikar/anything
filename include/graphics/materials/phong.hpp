@@ -16,19 +16,19 @@ namespace ay::grph
 struct PhongParameters
 {
 
-    float m_ao_intensity{0.0};
+    float m_ao_intensity{ 0.0 };
     rend::TexturePtr m_ao_map;
 
-    float m_bump_scale{0.0};
+    float m_bump_scale{ 0.0 };
     rend::TexturePtr m_bump_map;
 
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
 
-    float m_displ_scale{0.0};
-    float m_displ_bias{0.0};
+    float m_displ_scale{ 0.0 };
+    float m_displ_bias{ 0.0 };
     rend::TexturePtr m_displ_map;
 
-    float m_emissive_scale{0.0};
+    float m_emissive_scale{ 0.0 };
     glm::vec3 m_emissive{ 0.0f, 0.0f, 0.0f };
     rend::TexturePtr m_emissive_map;
 
@@ -36,8 +36,7 @@ struct PhongParameters
 
     rend::TexturePtr m_map;
 
-    rend::TexturePtr m_normal_map;    
-    
+    rend::TexturePtr m_normal_map;
 };
 
 class PhongMaterial : public Material
@@ -46,11 +45,8 @@ class PhongMaterial : public Material
     PhongParameters m_parameters;
 
   public:
-
     PhongMaterial()
     {
-
-
     }
 
 
@@ -62,17 +58,12 @@ class PhongMaterial : public Material
 
     void init_shader(rend::ShaderLibrary &t_shader_lib) override
     {
-
     }
 
     void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override
     {
-
     }
-    
-
 };
 
 
-
-}
+}  // namespace ay::grph

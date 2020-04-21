@@ -71,14 +71,25 @@ class Window
         return m_window;
     }
 
-    int width() const  { return m_width; }
+    int width() const
+    {
+        return m_width;
+    }
 
-    int height() const  { return m_height; }
+    int height() const
+    {
+        return m_height;
+    }
 
-    int xpos() const  { return m_xpos; }
+    int xpos() const
+    {
+        return m_xpos;
+    }
 
-    int ypos() const  { return m_ypos; }
-    
+    int ypos() const
+    {
+        return m_ypos;
+    }
 };
 
 

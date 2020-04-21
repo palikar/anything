@@ -10,24 +10,7 @@ namespace ay::mth
 class Transform
 {
   private:
-    
-    void update()
-    {
-        auto trans = glm::translate(glm::mat4(1.0f), m_position);
-        auto rot   = glm::toMat4(m_rotation);
-        auto scal  = glm::scale(glm::mat4(1.0f), m_scale);
-
-        if (parent)
-        {
-            m_tranform =  parent_mat * (trans * rot * scal);
-        }
-        m_tranform = trans * rot * scal;
-
-    }
-    
-    
   public:
-    
     Transform(glm::vec3 t_position, glm::quat t_rotation, glm::vec3 t_scale)
       : m_position(t_position), m_rotation(t_rotation), m_scale(t_scale)
     {
@@ -46,8 +29,9 @@ class Transform
 
     void rotate(glm::vec3 axis, float angle)
     {
-        m_rotation = glm::rotate(m_rotation, angle, axis);
-        update();
+        // m_rotation = glm::rotate(m_rotation, angle, axis);
+        glm::rotate(m_tranform, angle, axis);
+        // update();
     }
 
     void rotateX(float angle)
@@ -98,7 +82,7 @@ class Transform
         m_rotation = glm::quat(m);
         update();
     }
-    
+
     glm::mat4 get_tranformation()
     {
         return m_tranform;
@@ -162,13 +146,26 @@ class Transform
         update();
     }
 
+    void update()
+    {
+        auto trans = glm::translate(glm::mat4(1.0f), m_position);
+        auto rot   = glm::toMat4(m_rotation);
+        auto scal  = glm::scale(glm::mat4(1.0f), m_scale);
+
+        if (parent)
+        {
+            m_tranform = parent_mat * (trans * rot * scal);
+        }
+        m_tranform = trans * rot * scal;
+    }
+
 
   private:
     Transform *parent{ nullptr };
     glm::mat4 parent_mat;
 
     glm::mat4 m_tranform;
-    
+
     glm::vec3 m_position;
     glm::quat m_rotation;
     glm::vec3 m_scale;
