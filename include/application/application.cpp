@@ -3,6 +3,8 @@
 #include <chrono>
 #include <thread>
 
+#include "ImGuizmo.h"
+
 namespace ay::app
 {
 
@@ -86,15 +88,24 @@ int Application::run()
 
 void Application::render_engine()
 {
-
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
 
+    ImGui::NewFrame();
+    ImGui::SetNextWindowPos(
+        { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
+    ImGui::SetNextWindowSize(
+        { static_cast<float>(m_window->width()), static_cast<float>(m_window->height()) });
+    ImGuizmo::SetRect(static_cast<float>(m_window->xpos()),
+                      static_cast<float>(m_window->ypos()),
+                      static_cast<float>(m_window->width()),
+                      static_cast<float>(m_window->height()));
+    ImGuizmo::SetDrawlist();
+
+    ImGuizmo::BeginFrame();
     m_engine.render();
 
-    ImGui::End();
-
+    ImGui::End();    
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -134,7 +145,7 @@ void Application::init()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
     // Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
+    // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
     io.ConfigFlags |=
       ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
     // io.ConfigViewportsNoAutoMerge = true;
@@ -160,6 +171,7 @@ void Application::on_event(Event &t_event)
     Dispatcher dispatch{ t_event };
     dispatch.dispatch<WindowResizeEvent>([this](auto &e) { return this->on_resize(e); });
     dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
+    dispatch.dispatch<WindowPositionEvent>([this](auto &e) { return this->on_resposition(e); });
 
     if (!ImGui::GetIO().WantCaptureKeyboard)
     {

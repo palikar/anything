@@ -59,6 +59,12 @@ class Application
         m_engine.resize(e);
         return true;
     }
+
+    bool on_resposition(WindowPositionEvent&)
+    {
+        
+        return true;
+    }
 };
 
 

@@ -27,7 +27,8 @@ enum class EventType
     MOUSEBUTTONPRESSED,
     MOUSEBUTTONRELEASED,
     MOUSEMOVED,
-    MOUSESCROLLED
+    MOUSESCROLLED,
+    WINDOWPOSITION
 };
 
 
@@ -76,6 +77,31 @@ class WindowResizeEvent : public Event
 
   private:
     unsigned int m_width, m_height;
+};
+
+class WindowPositionEvent : public Event
+{
+  public:
+
+    WindowPositionEvent(unsigned int xpos, unsigned int ypos)
+        : m_xpos(xpos), m_ypos(ypos)
+    {
+    }
+
+    inline unsigned int xpos() const
+    {
+        return m_xpos;
+    }
+    inline unsigned int ypos() const
+    {
+        return m_ypos;
+    }
+
+
+    EVENT_TYPE(WINDOWPOSITION)
+
+    private:
+    unsigned int m_xpos, m_ypos;
 };
 
 class WindowCloseEvent : public Event

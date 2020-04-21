@@ -67,15 +67,9 @@ void main()
         frag_color = vec4(color, opacity);
     }
 
-    vec3 normal = normalize(norm);
-    vec3 to_camera = normalize(pos - camera_pos);
-    frag_color = vec4(apply_dir_light(lighting.dir_light, frag_color, normal , pos, to_camera).xyz, opacity);
-
-    
+    // vec3 normal = normalize(norm);
+    // vec3 to_camera = normalize(pos - camera_pos);
+    // frag_color = vec4(apply_dir_light(lighting.dir_light, frag_color, normal , pos, to_camera).xyz, opacity);
 
 
-    
-
-    
-    
 }

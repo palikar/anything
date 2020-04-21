@@ -1,5 +1,3 @@
-
-
 set(inst_src_dir include/imgui_src)
 set(root ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 
@@ -12,17 +10,20 @@ set(srcs
     ${root}/imgui_draw.cpp    
     )
 
-# set(inst_srcs ${inst_src_dir}/imgui.cpp)
-
 add_library(imgui ${srcs})
-
-
-
-# target_sources(imgui INTERFACE    
-#     $<BUILD_INTERFACE:${srcs}>
-#     $<INSTALL_INTERFACE:${inst_srcs}>)
-
-
-
-target_include_directories(imgui INTERFACE ./imgui)
+target_include_directories(imgui PUBLIC ./imgui)
 set_property(TARGET imgui PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+
+add_library(imguizmo
+    ./imguizmo/ImCurveEdit.cpp
+    ./imguizmo/ImGradient.cpp
+    ./imguizmo/ImGuizmo.cpp
+    ./imguizmo/ImSequencer.cpp)
+
+target_link_libraries(imguizmo PUBLIC imgui)
+
+target_include_directories(imguizmo PUBLIC ./imguizmo )
+set_property(TARGET imguizmo PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+
