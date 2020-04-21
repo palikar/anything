@@ -65,6 +65,11 @@ class FloatingCameraComponent : public gmt::Component
 
         if (app::Input::is_released(MouseCode::BUTTON_1))
         {
+            if (m_initial_click)
+            {
+                app::Input::normal_cursor();
+            }
+
             m_initial_click = false;
         }
 
@@ -75,6 +80,7 @@ class FloatingCameraComponent : public gmt::Component
             if (!m_initial_click)
             {
                 m_initial_click = true;
+                app::Input::camera_cursor();
             }
             else
             {

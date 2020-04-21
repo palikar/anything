@@ -291,6 +291,18 @@ class Input
         return { (float)xpos, (float)ypos };
     }
 
+    static void camera_cursor()
+    {
+        auto window = static_cast<GLFWwindow *>(get_instance()->window());
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+
+    static void normal_cursor()
+    {
+        auto window = static_cast<GLFWwindow *>(get_instance()->window());
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+
     static void set_mouse_pos(glm::vec2 pos)
     {
         auto window = static_cast<GLFWwindow *>(get_instance()->window());

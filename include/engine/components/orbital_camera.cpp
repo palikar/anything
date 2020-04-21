@@ -49,6 +49,10 @@ void OrbitalCameraComponent::update(double dt)
 {
     if (app::Input::is_released(MouseCode::BUTTON_1))
     {
+        if (m_initial_click)
+        {
+            app::Input::normal_cursor();
+        }
         m_initial_click = false;
     }
 
@@ -59,6 +63,7 @@ void OrbitalCameraComponent::update(double dt)
         if (!m_initial_click)
         {
             m_initial_click = true;
+            app::Input::camera_cursor();
         }
         else
         {
@@ -77,6 +82,7 @@ void OrbitalCameraComponent::update(double dt)
         {
             m_initial_right_click = true;
             m_last_mouse_pos      = pos;
+            app::Input::camera_cursor();
         }
         else
         {
@@ -99,6 +105,10 @@ void OrbitalCameraComponent::update(double dt)
 
     if (app::Input::is_released(MouseCode::BUTTON_2))
     {
+        if (m_initial_right_click)
+        {
+            app::Input::normal_cursor();
+        }
         m_initial_right_click = false;
     }
 

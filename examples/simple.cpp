@@ -25,6 +25,8 @@ class SimpleGame : public gmt::GameBase {
     cmp::OrbitalCameraComponent *oribital_camera_controller;
     cmp::FloatingCameraComponent *floating_camera_controller;
 
+    gmt::Entity* entities[20][20];
+
   public:
 
     SimpleGame()
@@ -68,7 +70,17 @@ class SimpleGame : public gmt::GameBase {
         main_scene->add(gmt::axis());
         main_scene->add(gmt::grid_helper(40, 20, rend::Colors::black));
 
-        
+        for (int i = 0; i < 20; ++i) {
+            for (int j = 0; j < 20; ++j) {
+
+                entities[i][j] = main_scene->add(
+                  gmt::mesh_entity({ grph::sphere_geometry(0.5, 10, 10),
+                                     grph::solid_color(0.9, 0.1f, 0.1f) }));
+
+                cmp::transform(entities[i][j]).position() = glm::vec3(i * 0.5f , 0.5f , j * 0.5f );
+            }
+        }
+
 
 
 
