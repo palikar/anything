@@ -18,6 +18,9 @@ using namespace ay;
 
 class SimpleGame : public gmt::GameBase {
 
+    static constexpr int ball_grid_x = 20;
+    static constexpr int ball_grid_y = 20;
+
   private:
     gmt::Scene3D* main_scene;
     rend::RendererScene3D renderer;
@@ -25,7 +28,7 @@ class SimpleGame : public gmt::GameBase {
     cmp::OrbitalCameraComponent *oribital_camera_controller;
     cmp::FloatingCameraComponent *floating_camera_controller;
 
-    gmt::Entity* entities[20][20];
+    gmt::Entity* entities[ball_grid_x][ball_grid_y];
 
   public:
 
@@ -68,16 +71,23 @@ class SimpleGame : public gmt::GameBase {
         main_scene->set_skybox(gmt::skybox(sky));
         
         main_scene->add(gmt::axis());
-        main_scene->add(gmt::grid_helper(40, 20, rend::Colors::black));
+        main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
 
-        for (int i = 0; i < 20; ++i) {
-            for (int j = 0; j < 20; ++j) {
+        static constexpr float offset = 2.5f;
+        static constexpr float radius = 0.5f;
+        for (int i = 0; i < ball_grid_x; ++i) {
+            for (int j = 0; j < ball_grid_y; ++j) {
 
                 entities[i][j] = main_scene->add(
-                  gmt::mesh_entity({ grph::sphere_geometry(0.5, 10, 10),
-                                     grph::solid_color(0.9, 0.1f, 0.1f) }));
+                    gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
+                                       grph::solid_color((1.0f * i) / ball_grid_x,
+                                                         (1.0f * j) / ball_grid_y,
+                                                         0.4f) }));
 
-                cmp::transform(entities[i][j]).position() = glm::vec3(i * 0.5f , 0.5f , j * 0.5f );
+                cmp::transform(entities[i][j]).position() =
+                    glm::vec3(i * offset - (ball_grid_x * offset / 2),
+                              1.5f,
+                              j * 2.5f - (ball_grid_y * offset / 2));
             }
         }
 
