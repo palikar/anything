@@ -30,6 +30,7 @@
 #include "engine/entities/skybox.hpp"
 #include "engine/entities/grid_helper.hpp"
 
+#include "engine/components/fps_camera.hpp"
 #include "engine/components/orbital_camera.hpp"
 #include "engine/components/mesh.hpp"
 #include "engine/components/line_segments.hpp"

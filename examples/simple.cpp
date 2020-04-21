@@ -20,8 +20,10 @@ class SimpleGame : public gmt::GameBase {
 
   private:
     gmt::Scene3D* main_scene;
-
     rend::RendererScene3D renderer;
+
+    cmp::OrbitalCameraComponent *oribital_camera_controller;
+    cmp::FloatingCameraComponent *floating_camera_controller;
 
   public:
 
@@ -36,8 +38,12 @@ class SimpleGame : public gmt::GameBase {
         main_scene = init_scene("main");
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(0,10,1), glm::vec3(0.0f,0.0f,0.0f));
-        auto camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
-        camera_controller->set_max_radius(60.0f);
+
+        // oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
+        // oribital_camera_controller->set_max_radius(60.0f);
+
+        floating_camera_controller = main_scene->add_component<cmp::FloatingCameraComponent>(&main_scene->camera(), glm::vec3(0,10,1));
+        
     }
 
     void init() override
