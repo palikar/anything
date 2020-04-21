@@ -41,8 +41,6 @@ class FloatingCameraComponent : public gmt::Component
             m_orbit.x += 2 * mth::PI;
         }
 
-        // m_camera->rotate(m_camera->right(), m_orbit.y);
-
         const float camX = -2.0f * sin(m_orbit.x) * cos(m_orbit.y);
         const float camY = -2.0f * sin(m_orbit.y);
         const float camZ = -2.0f * cos(m_orbit.x) * cos(m_orbit.y);
@@ -52,9 +50,14 @@ class FloatingCameraComponent : public gmt::Component
   public:
     AY_COMPONENT(FloatingCamera)
 
-    FloatingCameraComponent(gmt::Camera *t_camera, glm::vec3 t_pos = { 0.0f, 0.0f, 0.0f })
-      : m_camera(t_camera), m_pos(t_pos)
+    FloatingCameraComponent(gmt::Camera *t_camera)
+      : m_camera(t_camera), m_pos(t_camera->pos())
     {
+
+        m_orbit.x = std::atan2(m_camera->at().y, m_camera->at().x);
+        m_orbit.y = std::atan(
+          m_camera->at().z
+          / (m_camera->at().x * m_camera->at().z + m_camera->at().y * m_camera->at().y));
     }
 
     void update(double dt) override

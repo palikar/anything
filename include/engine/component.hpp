@@ -22,8 +22,23 @@ class Component
 
   protected:
     Entity *m_entity;
+    GameBase *m_game;
+
+    uint32_t m_id;
 
   public:
+    void set_game(GameBase *t_game, uint32_t t_id)
+    {
+        m_game = t_game;
+        m_id   = t_id;
+    }
+
+
+    uint32_t id()
+    {
+        return m_id;
+    }
+
     virtual ~Component()
     {
     }

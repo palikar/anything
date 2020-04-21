@@ -8,7 +8,7 @@ OrbitalCameraComponent::OrbitalCameraComponent(float t_radius) : m_radius(t_radi
 }
 
 OrbitalCameraComponent::OrbitalCameraComponent(gmt::Camera *t_camera, float t_radius)
-  : m_camera(t_camera), m_radius(t_radius)
+  : m_camera(t_camera), m_radius(t_radius), m_pos(t_camera->pos())
 {
 }
 

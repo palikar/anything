@@ -32,6 +32,8 @@ class Scene3D
 
     GameBase *m_game;
 
+    uint32_t temp_id{ 0 };
+
   public:
     Scene3D()
     {
@@ -45,7 +47,28 @@ class Scene3D
     T *add_component(Args... args)
     {
         m_game_components.push_back(std::make_unique<T>(args...));
+        m_game_components.back().get()->set_game(m_game, temp_id++);
         return static_cast<T *>(m_game_components.back().get());
+    }
+
+    void remove(Entity *t_ent)
+    {
+        auto it = std::remove_if(m_entities.begin(), m_entities.end(), [t_ent](auto &el) {
+            return el.get()->id() == t_ent->id();
+        });
+        m_entities.erase(it, m_entities.end());
+    }
+
+    void remove_component(Component *t_comp)
+    {
+
+        auto it = std::remove_if(
+          m_game_components.begin(), m_game_components.end(), [t_comp](auto &el) {
+              std::cout << (el.get()->id() == t_comp->id()) << "\n";
+              return el.get()->id() == t_comp->id();
+          });
+
+        m_game_components.erase(it, m_game_components.end());
     }
 
     void update(double dt)

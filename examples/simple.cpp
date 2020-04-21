@@ -39,11 +39,22 @@ class SimpleGame : public gmt::GameBase {
         main_scene->camera().init_prescpective_projection(glm::radians(55.0f), 1024.0/768.0, 0.001, 1000.0);
         main_scene->camera().set_look_at(glm::vec3(0,10,1), glm::vec3(0.0f,0.0f,0.0f));
 
-        // oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
-        // oribital_camera_controller->set_max_radius(60.0f);
+        init_orbital_camera();
+    }
 
-        floating_camera_controller = main_scene->add_component<cmp::FloatingCameraComponent>(&main_scene->camera(), glm::vec3(0,10,1));
-        
+    void init_floating_camera()
+    {
+        main_scene->remove_component(oribital_camera_controller);
+        oribital_camera_controller = nullptr;
+        floating_camera_controller = main_scene->add_component<cmp::FloatingCameraComponent>(&main_scene->camera());
+    }
+
+    void init_orbital_camera()
+    {
+        main_scene->remove_component(floating_camera_controller);
+        floating_camera_controller = nullptr;
+        oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
+        oribital_camera_controller->set_max_radius(60.0f);
     }
 
     void init() override
@@ -74,12 +85,33 @@ class SimpleGame : public gmt::GameBase {
     {
         main_scene->event(e);
 
+        app::Dispatcher dispatch{ e };
+        dispatch.dispatch<app::KeyReleasedEvent>([this](auto &event) {
+            if (event.key_code() == KeyCode::F7)
+            {
+                
+                if (oribital_camera_controller != nullptr)
+                {
+                    init_floating_camera();
+                }
+                else
+                {
+                    init_orbital_camera();
+                }
+            }
+
+            return true;
+        });
+
         return false;
     }
 
     void render(rend::RenderAPI&) override
-    {   
+    {
+        
         renderer.render_scene(*main_scene);
+
+        
     }
 
 };

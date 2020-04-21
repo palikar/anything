@@ -16,7 +16,7 @@ class Entity
 
   protected:
     std::unordered_map<ComponentType *, ComponentPtr> m_components;
-    std::string m_id;
+    uint32_t m_id;
     GameBase *m_game{ nullptr };
 
     bool m_update_components{ true };
@@ -32,7 +32,7 @@ class Entity
     }
 
   public:
-    Entity(std::string t_id = {}) : m_id(t_id)
+    Entity(uint32_t t_id = {}) : m_id(t_id)
     {
     }
 
@@ -64,11 +64,14 @@ class Entity
           m_components.insert({ t_comp->type(), std::move(t_comp) }).first->second.get());
     }
 
-    void set_game(GameBase *t_game)
+    void set_game(GameBase *t_game, uint32_t t_id)
     {
         m_game = t_game;
+        m_id   = t_id;
+
         for (auto &[t, comp] : m_components)
         {
+            comp->set_game(m_game, t_id + (m_components.size() + (1 << 16)));
             comp->init(m_game);
         }
     };
@@ -77,6 +80,11 @@ class Entity
     {
         return m_game;
     };
+
+    uint32_t id() const
+    {
+        return m_id;
+    }
 
 
     virtual void update(double dt)

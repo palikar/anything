@@ -31,7 +31,7 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
     }
 
     glfwMakeContextCurrent(m_window);
-    glfwSetInputMode(m_window, GLFW_STICKY_KEYS, GLFW_TRUE);
+    // glfwSetInputMode(m_window, GLFW_STICKY_KEYS, GLFW_TRUE);
     glfwShowWindow(m_window);
     glfwSwapInterval(1);
 
@@ -63,6 +63,7 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
         }
         case GLFW_RELEASE:
         {
+
             KeyReleasedEvent event(static_cast<KeyCode>(key));
             win.m_callback(event);
             break;

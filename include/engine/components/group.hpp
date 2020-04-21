@@ -26,7 +26,7 @@ class GroupComponent : public gmt::Component
     {
         for (auto &c : children)
         {
-            c->set_game(g);
+            c->set_game(g, 23);
             c->init(g);
         }
     }

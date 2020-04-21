@@ -12,17 +12,17 @@
 namespace ay::gmt
 {
 
-inline EntityPtr mesh_entity(grph::Mesh mesh, std::string name = {})
+inline EntityPtr mesh_entity(grph::Mesh mesh)
 {
-    EntityPtr new_ent = std::make_unique<Entity>(name);
+    EntityPtr new_ent = std::make_unique<Entity>();
     new_ent->add_component(std::make_unique<cmp::TransformComponent>());
     new_ent->add_component(std::make_unique<cmp::MeshComponent>(std::move(mesh)));
     return new_ent;
 }
 
-inline EntityPtr line_segments_entity(grph::LineSegments segs, std::string name = {})
+inline EntityPtr line_segments_entity(grph::LineSegments segs)
 {
-    EntityPtr new_ent = std::make_unique<Entity>(name);
+    EntityPtr new_ent = std::make_unique<Entity>();
     new_ent->add_component(std::make_unique<cmp::TransformComponent>());
     new_ent->add_component(std::make_unique<cmp::LineSegmentsComponent>(std::move(segs)));
     return new_ent;

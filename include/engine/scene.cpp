@@ -19,7 +19,7 @@ void Scene3D::init(GameBase *t_game)
 
 Entity *Scene3D::add(EntityPtr t_entity)
 {
-    t_entity->set_game(m_game);
+    t_entity->set_game(m_game, temp_id++);
     t_entity->init(m_game);
     m_entities.push_back(std::move(t_entity));
 
@@ -29,7 +29,7 @@ Entity *Scene3D::add(EntityPtr t_entity)
 
 Skybox *Scene3D::set_skybox(EntityPtr t_sky)
 {
-    t_sky->set_game(m_game);
+    t_sky->set_game(m_game, temp_id++);
     t_sky->init(m_game);
     m_entities.push_back(std::move(t_sky));
 
