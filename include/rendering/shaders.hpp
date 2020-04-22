@@ -62,6 +62,23 @@ class Shader
     void unbind();
 
   private:
+
+    GLint get_uniform(const std::string &name)
+    {
+        auto f = m_uniforms.find(name);
+        if (f != m_uniforms.end()) {
+            return f->second;
+        }
+
+        GLint location = glGetUniformLocation(m_id, name.c_str());
+        m_uniforms.insert({name, location});
+        return location;
+
+    }
+
+    std::unordered_map<std::string, GLint> m_uniforms;
+
+
     void compile_program(const std::unordered_map<GLenum, std::string> &shader_sources);
     GLuint compile_shader(const GLchar *t_src, GLenum type);
 };
@@ -89,6 +106,7 @@ class ShaderLibrary
     bool exists(const std::string &name) const;
 
   private:
+
     std::unordered_map<std::string, ShaderPtr> m_shaders;
 };
 

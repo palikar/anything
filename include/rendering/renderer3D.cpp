@@ -1,6 +1,5 @@
 #include "rendering/renderer3D.hpp"
 
-
 #include "engine/scene.hpp"
 #include "engine/entity.hpp"
 
@@ -12,6 +11,8 @@
 #include "engine/components/mesh.hpp"
 #include "engine/components/group.hpp"
 #include "engine/components/line_segments.hpp"
+
+#include <fmt/format.h>
 
 namespace ay::rend
 {
@@ -42,11 +43,41 @@ void RendererScene3D::bind_lighting(Shader *shader)
     shader->set("lighting.ambient_light.color",
                 m_current_context.light_setup->ambient_light.color);
 
+    for (size_t i = 0; i < grph::MAX_LIGHT; ++i) {
+        shader->set(fmt::format("lighting.point_lights[{}].act", i),
+                    m_current_context.light_setup->point_lights[i].active);
+        shader->set(fmt::format("lighting.point_lights[{}].color", i),
+                    m_current_context.light_setup->point_lights[i].color);
+        shader->set(fmt::format("lighting.point_lights[{}].position", i),
+                    m_current_context.light_setup->point_lights[i].position);
+        shader->set(fmt::format("lighting.point_lights[{}].constant", i),
+                    m_current_context.light_setup->point_lights[i].constant);
+        shader->set(fmt::format("lighting.point_lights[{}].linear", i),
+                    m_current_context.light_setup->point_lights[i].linear);
+        shader->set(fmt::format("lighting.point_lights[{}].quadratic", i),
+                    m_current_context.light_setup->point_lights[i].quadratic);
+    }
+
+    for (size_t i = 0; i < grph::MAX_LIGHT; ++i) {
+        shader->set(fmt::format("lighting.spot_lights[{}].act", i),
+                    m_current_context.light_setup->spot_lights[i].active);
+        shader->set(fmt::format("lighting.spot_lights[{}].color", i),
+                    m_current_context.light_setup->spot_lights[i].color);
+        shader->set(fmt::format("lighting.spot_lights[{}].position", i),
+                    m_current_context.light_setup->spot_lights[i].position);
+        shader->set(fmt::format("lighting.spot_lights[{}].direction", i),
+                    m_current_context.light_setup->spot_lights[i].dir);
+        shader->set(fmt::format("lighting.spot_lights[{}].cut_off", i),
+                    m_current_context.light_setup->spot_lights[i].cut_off);
+        shader->set(fmt::format("lighting.spot_lights[{}].outer_cut_off", i),
+                    m_current_context.light_setup->spot_lights[i].outer_cut_off);
+    }
+
 
     shader->set("camera_pos", m_current_context.camera_pos);
 
 
-    
+
 }
 
 void RendererScene3D::switch_shader(Shader *shader)
