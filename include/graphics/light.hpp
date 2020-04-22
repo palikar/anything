@@ -24,7 +24,7 @@ struct DirectinalLight
 struct AmbientLight
 {
     bool active{ false };
-    float intensity{1.0};
+    float intensity{ 1.0 };
     glm::vec3 color{ 0.0f, 0.0f, 0.0f };
 };
 
@@ -66,7 +66,7 @@ struct LightSetup
 
     std::array<SpotLight, MAX_LIGHT> spot_lights{};
 
-    bool needs_update{true};
+    bool needs_update{ true };
 };
 
 

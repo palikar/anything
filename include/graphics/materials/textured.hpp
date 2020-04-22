@@ -43,7 +43,10 @@ class TextureMaterial : public Material
 
     void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override;
 
-    bool needs_lighting() override { return false; }
+    bool needs_lighting() override
+    {
+        return false;
+    }
 
     inline void set_map(rend::TexturePtr tex)
     {

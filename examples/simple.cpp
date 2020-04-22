@@ -110,9 +110,11 @@ class SimpleGame : public gmt::GameBase {
         // main_scene->light_setup().point_lights[0].constant = 0.0;
         // main_scene->light_setup().point_lights[0].linear = 0.098;
         // main_scene->light_setup().point_lights[0].quadratic = 0.009;
-        // main_scene->light_setup().point_lights[0].position[1] = 10.0f;
+        // main_scene->light_setup().point_lights[0].quadratic = 0.009;
 
         main_scene->spot_light(0);
+        main_scene->light_setup().spot_lights[0].outer_cut_off = 1.05;
+        main_scene->light_setup().spot_lights[0].cut_off = 0.88;
 
 
 

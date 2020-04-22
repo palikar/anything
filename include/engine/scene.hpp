@@ -28,7 +28,7 @@ class Scene3D
 
     grph::LightSetup m_light_setup;
 
-    Skybox *m_skybox{nullptr};
+    Skybox *m_skybox{ nullptr };
 
     Camera m_camera;
 
@@ -145,26 +145,24 @@ class Scene3D
     }
 
     void point_light(size_t index,
-                     glm::vec3 color = { 0.3f, 0.0f, 0.0f },
-                    glm::vec3 position = { 0.0f, 3.0f, 0.0f })
+                     glm::vec3 color    = { 0.3f, 0.0f, 0.0f },
+                     glm::vec3 position = { 0.0f, 3.0f, 0.0f })
     {
-        m_light_setup.point_lights[index].active = true;
-        m_light_setup.point_lights[index].color = color;
+        m_light_setup.point_lights[index].active   = true;
+        m_light_setup.point_lights[index].color    = color;
         m_light_setup.point_lights[index].position = position;
     }
 
     void spot_light(size_t index,
-                    glm::vec3 color = { 0.3f, 0.0f, 0.0f },
-                    glm::vec3 dir = { 0.0f, -1.0f, 0.0f },
+                    glm::vec3 color    = { 0.3f, 0.0f, 0.0f },
+                    glm::vec3 dir      = { 0.0f, -1.0f, 0.0f },
                     glm::vec3 position = { 0.0f, 5.0f, 0.0f })
     {
-        m_light_setup.spot_lights[index].active = true;
-        m_light_setup.spot_lights[index].color = color;
-        m_light_setup.spot_lights[index].dir = dir;
+        m_light_setup.spot_lights[index].active   = true;
+        m_light_setup.spot_lights[index].color    = color;
+        m_light_setup.spot_lights[index].dir      = dir;
         m_light_setup.spot_lights[index].position = position;
     }
-
-    
 };
 
 

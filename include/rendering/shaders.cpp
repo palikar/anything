@@ -9,7 +9,7 @@ namespace ay::rend
 Shader::Shader(const std::string &t_name,
                const std::string &vertex_src,
                const std::string &fragment_src)
-    : m_name(t_name)
+  : m_name(t_name)
 {
 
     std::unordered_map<GLenum, std::string> sources{
@@ -89,16 +89,20 @@ void Shader::unbind()
 }
 
 void Shader::compile_program(
-    const std::unordered_map<GLenum, std::string> &shader_sources, bool reload)
+  const std::unordered_map<GLenum, std::string> &shader_sources,
+  bool reload)
 {
 
-    if (!reload) {
+    if (!reload)
+    {
         m_id = glCreateProgram();
-    } else {
-        glDeleteProgram(m_id);
-        m_id = glCreateProgram ();
     }
-    
+    else
+    {
+        glDeleteProgram(m_id);
+        m_id = glCreateProgram();
+    }
+
     std::vector<GLenum> shader_ids;
     for (const auto &[type, src] : shader_sources)
     {
