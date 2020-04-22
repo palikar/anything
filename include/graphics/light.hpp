@@ -65,6 +65,8 @@ struct LightSetup
     std::array<PointLight, MAX_LIGHT> point_lights{};
 
     std::array<SpotLight, MAX_LIGHT> spot_lights{};
+
+    bool needs_update{true};
 };
 
 

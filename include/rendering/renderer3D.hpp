@@ -48,6 +48,7 @@ class RendererScene3D
     TextureBinder m_binder;
 
     uint32_t current_shader = 0;
+    std::unordered_map<uint32_t, bool> lighting_updated;
 
     std::vector<glm::mat4> m_mat_stack;
     glm::mat4 m_view;

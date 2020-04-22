@@ -23,6 +23,8 @@ class SolidColorMaterial : public Material
 
     void update_uniforms(rend::TextureBinder &, rend::RenderContext &) override;
 
+    bool needs_lighting() override { return true; }
+
     glm::vec3 &color();
 
     void set_color(glm::vec3 t_color);

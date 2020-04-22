@@ -141,7 +141,7 @@ class SimpleGame : public gmt::GameBase {
 
     void render(rend::RenderAPI&) override
     {
-
+        bool changed = false;
         if (ImGui::CollapsingHeader("Ligting"))
         {
 
@@ -149,9 +149,9 @@ class SimpleGame : public gmt::GameBase {
             {
                 ImGui::Text("Color");
                 ImGui::SameLine();
-                ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().directional_light.color);
-                ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().directional_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
-                ImGui::SliderFloat("Angle:", (float*)&main_scene->light_setup().directional_light.dir[1], -1.0f, 3.0f, "Direction = %.3f");
+                changed |= ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().directional_light.color);
+                changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().directional_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
+                changed |=ImGui::SliderFloat("Angle:", (float*)&main_scene->light_setup().directional_light.dir[1], -1.0f, 3.0f, "Direction = %.3f");
                 ImGui::TreePop();
             }
 
@@ -159,8 +159,8 @@ class SimpleGame : public gmt::GameBase {
             {
                 ImGui::Text("Color");
                 ImGui::SameLine();
-                ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().ambient_light.color);
-                ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
+                changed |=ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().ambient_light.color);
+                changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
             }
 
         }
@@ -177,7 +177,7 @@ class SimpleGame : public gmt::GameBase {
                              mCurrentGizmoMode,
                              glm::value_ptr(cmp::transform(entities[10][10]).transform()));
 
-
+        main_scene->light_setup().needs_update = changed;
 
         renderer.render_scene(*main_scene);
 

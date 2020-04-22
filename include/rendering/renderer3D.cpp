@@ -26,6 +26,17 @@ void RendererScene3D::init(RenderAPI *t_api)
 void RendererScene3D::bind_lighting(Shader *shader)
 {
 
+
+    if (!m_current_context.light_setup->needs_update and lighting_updated[shader->id()])
+    {
+        return;
+    }
+
+    lighting_updated[shader->id()] = true;
+    m_current_context.light_setup->needs_update = false;
+
+    std::cout << "bind" << "\n";
+    
     shader->set("lighting.dir_light.act",
                 m_current_context.light_setup->directional_light.active);
     shader->set("lighting.dir_light.direction",
@@ -82,7 +93,9 @@ void RendererScene3D::bind_lighting(Shader *shader)
 
 void RendererScene3D::switch_shader(Shader *shader)
 {
-
+    if (lighting_updated.count(shader->id()) == 0) {
+        lighting_updated[shader->id()] = false;
+    }
     if (current_shader != shader->id())
     {
         shader->bind();
@@ -148,7 +161,9 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     switch_mvp(shader, transform.get_tranformation());
     handle_material(mat, shader);
 
-    bind_lighting(shader);
+    if (mat->needs_lighting()) {
+        bind_lighting(shader);
+    }
 
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
@@ -230,6 +245,12 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
 
     m_current_context.camera_pos  = scene.camera().pos();
     m_current_context.light_setup = &scene.light_setup();
+
+    if(m_current_context.light_setup->needs_update) {
+        for (auto& [_, val] : lighting_updated) {
+            val = false;
+        }
+    }
 
     handle_sky(scene.skybox());
 
