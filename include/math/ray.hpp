@@ -38,6 +38,18 @@ class Ray
         return glm::normalize(v - m_origin);
     }
 
+    float distance_sq_to_point(glm::vec3 p) const {
+        auto directionDistance = glm::dot( m_dir, p - m_origin);
+        
+		if ( directionDistance < 0 )
+        {
+			return glm::length2(p - m_origin );
+        }
+
+        return glm::length2(m_dir * directionDistance + m_origin);
+
+    }
+
     Ray &recast(float t)
     {
         m_origin = at(t);

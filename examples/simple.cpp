@@ -122,8 +122,6 @@ class SimpleGame : public gmt::GameBase {
     void update(double dt) override
     {
         main_scene->update(dt);
-
-        main_scene->raycaster().camera_to_mouse().dir();
     }
 
     bool event(app::Event& e) override
@@ -131,30 +129,35 @@ class SimpleGame : public gmt::GameBase {
         main_scene->event(e);
 
         app::Dispatcher dispatch{ e };
-        dispatch.dispatch<app::KeyReleasedEvent>([this](auto &event) {
-            if (event.key_code() == KeyCode::F7)
-            {
-                if (oribital_camera_controller != nullptr)
-                {
-                    init_floating_camera();
-                }
-                else
-                {
-                    init_orbital_camera();
-                }
-            }
-
-            if (event.key_code() == KeyCode::F5)
-            {
-                std::cout << "Realodign shaders" << "\n";
-                this->shaders().reload_all();
-                
-            }
-
-            return true;
-        });
+        dispatch.dispatch<app::KeyReleasedEvent>([this](auto &event) { return key_press(event); });
 
         return false;
+    }
+
+    bool key_press(app::KeyReleasedEvent& event)
+    {
+        
+        if (event.key_code() == KeyCode::F7)
+        {
+            if (oribital_camera_controller != nullptr)
+            {
+                init_floating_camera();
+            }
+            else
+            {
+                init_orbital_camera();
+            }
+        }
+
+        if (event.key_code() == KeyCode::F5)
+        {
+            std::cout << "Realodign shaders" << "\n";
+            this->shaders().reload_all();
+                
+        }
+
+        return true;
+        
     }
 
     float shining{1.0f};

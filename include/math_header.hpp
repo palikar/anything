@@ -1,5 +1,6 @@
 #pragma once
 
+#include "math/intersect.hpp"
 #include "math/box.hpp"
 #include "math/line.hpp"
 #include "math/plane.hpp"
