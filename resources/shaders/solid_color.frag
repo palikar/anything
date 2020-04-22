@@ -57,6 +57,8 @@ uniform float opacity;
 uniform float alpha_threshold;
 uniform bool visible;
 
+uniform float specular_exponent;
+
 uniform vec3 camera_pos;
 
 uniform LightSetup lighting;
@@ -91,7 +93,7 @@ vec3 apply_point_light(PointLight light, vec3 surface_color, vec3 normal, vec3 s
 
     float specular_coefficient = 0.0;
     if(diffuse_coefficient > 0.0)
-        specular_coefficient = pow(max(0.0, dot(surface_to_camera, reflect(-light_to_surface, normal))), 10.2);
+        specular_coefficient = pow(max(0.0, dot(surface_to_camera, reflect(-light_to_surface, normal))), specular_exponent);
     vec3 specular = specular_coefficient * surface_color.rgb * light.color;
 
     return (diffuse + specular) * attenuation;
@@ -112,7 +114,7 @@ vec3 apply_spot_light(SpotLight light, vec3 surface_color, vec3 normal, vec3 sur
         
         float specular_coefficient = 0.0;
         if(diffuse_coefficient > 0.0) {
-            specular_coefficient = pow(max(0.0, dot(surface_to_camera, reflect(-light_to_surface, normal))), 10.2);
+            specular_coefficient = pow(max(0.0, dot(surface_to_camera, reflect(-light_to_surface, normal))), specular_exponent);
         }
         vec3 specular = specular_coefficient * surface_color.rgb * light.color;
 

@@ -9,10 +9,16 @@ namespace ay::grph
 {
 
 
+struct SolidColorParameters
+{
+    glm::vec3 m_color;
+    float m_shininess;
+};
+
 class SolidColorMaterial : public Material
 {
   private:
-    glm::vec3 m_color;
+    SolidColorParameters m_params;
 
   public:
     SolidColorMaterial(glm::vec3 t_color, bool t_wireframe = false);
@@ -28,11 +34,15 @@ class SolidColorMaterial : public Material
         return true;
     }
 
+    SolidColorParameters &params()
+    {
+        return m_params;
+    }
+
     glm::vec3 &color();
 
     void set_color(glm::vec3 t_color);
 };
-
 
 inline MaterialPtr solid_color(glm::vec3 color)
 {

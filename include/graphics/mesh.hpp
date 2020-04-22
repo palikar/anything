@@ -46,6 +46,12 @@ class Mesh
         return m_geometry.gl_buffers();
     }
 
+    template<typename T>
+    T *material() const
+    {
+        return static_cast<T *>(m_material.get());
+    }
+
     Material *material() const
     {
         return m_material.get();

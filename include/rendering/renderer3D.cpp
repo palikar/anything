@@ -25,8 +25,6 @@ void RendererScene3D::init(RenderAPI *t_api)
 
 void RendererScene3D::bind_lighting(Shader *shader)
 {
-    shader->set("camera_pos", m_current_context.camera_pos);
-
     if (!m_current_context.light_setup->needs_update and lighting_updated[shader->id()])
     {
         return;

@@ -83,11 +83,6 @@ class SimpleGame : public gmt::GameBase {
         {
             for (int j = 0; j < ball_grid_y; ++j)
             {
-
-                // entities[i][j] = main_scene->add(
-                //     gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
-                //                        grph::solid_color(0.1f, 0.1f, 0.1f) }));
-
                 entities[i][j] = main_scene->add(gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
                                                                     grph::solid_color((1.0f * i) / ball_grid_x,
                                                                                       (1.0f * j) / ball_grid_y,
@@ -106,11 +101,15 @@ class SimpleGame : public gmt::GameBase {
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
 
-        // main_scene->point_light(0);
-        // main_scene->light_setup().point_lights[0].constant = 0.0;
-        // main_scene->light_setup().point_lights[0].linear = 0.098;
-        // main_scene->light_setup().point_lights[0].quadratic = 0.009;
-        // main_scene->light_setup().point_lights[0].quadratic = 0.009;
+        main_scene->light_setup().ambient_light.intensity = 0.15;
+        main_scene->light_setup().directional_light.intensity = 0.15;
+
+        main_scene->point_light(0);
+        main_scene->light_setup().point_lights[0].constant = 0.0;
+        main_scene->light_setup().point_lights[0].linear = 0.098;
+        main_scene->light_setup().point_lights[0].quadratic = 0.009;
+        main_scene->light_setup().point_lights[0].quadratic = 0.009;
+        main_scene->light_setup().point_lights[0].position[0] = 20;
 
         main_scene->spot_light(0);
         main_scene->light_setup().spot_lights[0].outer_cut_off = 1.05;
@@ -158,6 +157,8 @@ class SimpleGame : public gmt::GameBase {
         return false;
     }
 
+    float shining{1.0f};
+    
     void render(rend::RenderAPI&) override
     {
         bool changed = false;
@@ -206,13 +207,16 @@ class SimpleGame : public gmt::GameBase {
                 changed |=ImGui::SliderFloat("Inner:", (float*)&main_scene->light_setup().spot_lights[0].cut_off, 0.0f, 6.28f, "Value = %.3f");
                 changed |=ImGui::SliderFloat("Outer:", (float*)&main_scene->light_setup().spot_lights[0].outer_cut_off, 0.0f, 5.0f, "Value = %.3f");
 
-                changed |=ImGui::SliderFloat("X pos:", (float*)&main_scene->light_setup().spot_lights[0].position[0], 0.0f, 10.0f, "Value = %.3f");
+                // changed |=ImGui::SliderFloat("X pos:", (float*)&main_scene->light_setup().spot_lights[0].position[0], 0.0f, 10.0f, "Value = %.3f");
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().spot_lights[0].position[1], 0.0f, 20.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
             
 
         }
+
+        changed |=ImGui::SliderFloat("Specular", &shining, 0.1f, 20.0f, "Inesity = %.3f");
+        
 
         ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
         ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
@@ -230,11 +234,20 @@ class SimpleGame : public gmt::GameBase {
         float x = 10 * sin(glfwGetTime());
         float y = 10 * cos(glfwGetTime());
         
-        main_scene->light_setup().point_lights[0].position[0] = x;
+        main_scene->light_setup().spot_lights[0].position[0] = x;
+        main_scene->light_setup().spot_lights[0].position[2] = y;
 
-        main_scene->light_setup().point_lights[0].position[2] = y;
-        
+        main_scene->light_setup().point_lights[0].position[2] = 20 * sin(glfwGetTime());
+            
         main_scene->light_setup().needs_update = true;
+
+        for (int i = 0; i < ball_grid_x; ++i)
+        {
+            for (int j = 0; j < ball_grid_y; ++j)
+            {
+                cmp::mesh(entities[i][j]).material<grph::SolidColorMaterial>()->params().m_shininess = shining;
+            }
+        }
 
         renderer.render_scene(*main_scene);
 
