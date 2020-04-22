@@ -108,10 +108,10 @@ vec3 apply_spot_light(SpotLight light, vec3 surface_color, vec3 normal, vec3 sur
     // float attenuation = 1.0f / (1.0 + 0.5 + (distance_to_light * distance_to_light));
     float attenuation = 1.0f;
 
-    vec3 light_to_surface  = normalize(light.position - surface_pos);
+    vec3 light_to_surface  =  - normalize(surface_pos - light.position);
 
-    float light_to_surface_angle = dot(light_to_surface, light.dir);
-    if(light_to_surface_angle > light.cut_off) {
+    float light_to_surface_angle = acos(dot(light_to_surface, light.dir));
+    if(light_to_surface_angle < light.cut_off) {
         attenuation = 0.0;
     }
     
