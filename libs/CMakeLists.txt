@@ -27,3 +27,6 @@ target_include_directories(imguizmo PUBLIC ./imguizmo )
 set_property(TARGET imguizmo PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 
+add_subdirectory(fmt)
+
+

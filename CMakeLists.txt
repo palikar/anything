@@ -203,7 +203,7 @@ target_include_directories(anything_engine
     )
 
 target_link_libraries(anything_engine PRIVATE project_options project_warnings project_defines
-    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo
+    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo fmt
     )
 
 
