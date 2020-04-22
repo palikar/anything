@@ -17,28 +17,31 @@ namespace ay::mth
 inline std::optional<glm::vec3> intersect_ray(Ray ray, Sphere sphere)
 {
 
-    const auto v = ray.origin() - sphere.center();
-    const float tca = glm::dot( ray.dir(), v);
-    const float d2 = glm::dot(v, v) - tca * tca;
-    const float  radius2 = sphere.radius() * sphere.radius();
-    if ( d2 > radius2 ) return {};
+    const auto v        = ray.origin() - sphere.center();
+    const float tca     = glm::dot(ray.dir(), v);
+    const float d2      = glm::dot(v, v) - tca * tca;
+    const float radius2 = sphere.radius() * sphere.radius();
+    if (d2 > radius2)
+        return {};
 
     const float thc = std::sqrt(radius2 - d2);
-    const float t0 = tca - thc;
+    const float t0  = tca - thc;
 
     const float t1 = tca + thc;
 
-    if ( t0 < 0 && t1 < 0 ) return {};
+    if (t0 < 0 && t1 < 0)
+        return {};
 
-    if ( t0 < 0 ) return ray.at(t1);
+    if (t0 < 0)
+        return ray.at(t1);
 
     return ray.at(t0);
-
 }
 
 inline bool intersects_ray(Ray ray, Sphere sphere)
 {
-    return ray.distance_sq_to_point(sphere.center()) <= ( sphere.radius() * sphere.radius());
+    return ray.distance_sq_to_point(sphere.center())
+           <= (sphere.radius() * sphere.radius());
 }
 
 inline std::optional<glm::vec3> intersect_ray(Ray ray, Plane plane)
@@ -46,18 +49,21 @@ inline std::optional<glm::vec3> intersect_ray(Ray ray, Plane plane)
 
     // plane.distance_sq_to_point(ray.origin());
     float dist = 0;
-    float d = glm::dot(plane.normal(), ray.dir());
-    if (d == 0.0 ) {
-        if (plane.distance_to_point(ray.origin()) == 0) {
+    float d    = glm::dot(plane.normal(), ray.dir());
+    if (d == 0.0)
+    {
+        if (plane.distance_to_point(ray.origin()) == 0)
+        {
             dist = 0;
         }
         return {};
-    } else {
-        dist = - ( glm::dot(ray.origin(),  plane.normal() ) + plane.constant() ) / d;
+    }
+    else
+    {
+        dist = -(glm::dot(ray.origin(), plane.normal()) + plane.constant()) / d;
     }
 
-    return dist > 0 ? std::optional(ray.at(dist)) :  std::nullopt;
-
+    return dist > 0 ? std::optional(ray.at(dist)) : std::nullopt;
 }
 
 inline bool intersects_ray(Ray ray, Plane plane)
@@ -76,57 +82,67 @@ inline std::optional<glm::vec3> intersect_ray(Ray ray, Box3 box)
 
     const auto origin = ray.origin();
 
-    if ( invdirx >= 0 ) {
+    if (invdirx >= 0)
+    {
 
-        tmin = ( box.min().x - origin.x ) * invdirx;
-        tmax = ( box.max().x - origin.x ) * invdirx;
+        tmin = (box.min().x - origin.x) * invdirx;
+        tmax = (box.max().x - origin.x) * invdirx;
+    }
+    else
+    {
 
-    } else {
-
-        tmin = ( box.max().x - origin.x ) * invdirx;
-        tmax = ( box.min().x - origin.x ) * invdirx;
-
+        tmin = (box.max().x - origin.x) * invdirx;
+        tmax = (box.min().x - origin.x) * invdirx;
     }
 
-     if ( invdiry >= 0 ) {
+    if (invdiry >= 0)
+    {
 
-         tymin = ( box.min().y - origin.y ) * invdiry;
-         tymax = ( box.max().y - origin.y ) * invdiry;
+        tymin = (box.min().y - origin.y) * invdiry;
+        tymax = (box.max().y - origin.y) * invdiry;
+    }
+    else
+    {
 
-     } else {
+        tymin = (box.max().y - origin.y) * invdiry;
+        tymax = (box.min().y - origin.y) * invdiry;
+    }
 
-         tymin = ( box.max().y - origin.y ) * invdiry;
-         tymax = ( box.min().y - origin.y ) * invdiry;
+    if ((tmin > tymax) || (tymin > tmax))
+        return {};
 
-     }
+    if (tymin > tmin || tmin != tmin)
+        tmin = tymin;
 
-     if ( ( tmin > tymax ) || ( tymin > tmax ) ) return {};
+    if (tymax < tmax || tmax != tmax)
+        tmax = tymax;
 
-     if ( tymin > tmin || tmin != tmin ) tmin = tymin;
+    if (invdirz >= 0)
+    {
 
-     if ( tymax < tmax || tmax != tmax ) tmax = tymax;
+        tzmin = (box.min().z - origin.z) * invdirz;
+        tzmax = (box.max().z - origin.z) * invdirz;
+    }
+    else
+    {
 
-     if ( invdirz >= 0 ) {
+        tzmin = (box.max().z - origin.z) * invdirz;
+        tzmax = (box.min().z - origin.z) * invdirz;
+    }
 
-         tzmin = ( box.min().z - origin.z ) * invdirz;
-         tzmax = ( box.max().z - origin.z ) * invdirz;
+    if ((tmin > tzmax) || (tzmin > tmax))
+        return {};
 
-     } else {
+    if (tzmin > tmin || tmin != tmin)
+        tmin = tzmin;
 
-         tzmin = ( box.max().z - origin.z ) * invdirz;
-         tzmax = ( box.min().z - origin.z ) * invdirz;
+    if (tzmax < tmax || tmax != tmax)
+        tmax = tzmax;
 
-     }
+    if (tmax < 0)
+        return {};
 
-     if ( ( tmin > tzmax ) || ( tzmin > tmax ) ) return {};
-
-     if ( tzmin > tmin || tmin != tmin ) tmin = tzmin;
-
-     if ( tzmax < tmax || tmax != tmax ) tmax = tzmax;
-     
-     if ( tmax < 0 ) return {};
-
-     return ray.at( tmin >= 0 ? tmin : tmax);
+    return ray.at(tmin >= 0 ? tmin : tmax);
 }
 
 inline bool intersects_box(Ray ray, Box3 box)
@@ -141,54 +157,62 @@ inline std::optional<glm::vec3> intersect_ray(Ray ray,
                                               bool backfaceCulling = false)
 {
 
-    auto edge1 = ( b - a );
-    auto edge2 = ( c -  a );
+    auto edge1        = (b - a);
+    auto edge2        = (c - a);
     const auto normal = glm::cross(edge1, edge2);
 
-    float DdN = glm::dot( normal, ray.dir() );
+    float DdN = glm::dot(normal, ray.dir());
     float sign;
 
-    if ( DdN > 0 ) {
+    if (DdN > 0)
+    {
 
-        if ( backfaceCulling ) return {};
+        if (backfaceCulling)
+            return {};
         sign = 1;
+    }
+    else if (DdN < 0)
+    {
 
-    } else if ( DdN < 0 ) {
-
-        sign = - 1;
-        DdN = - DdN;
-
-    } else {
+        sign = -1;
+        DdN  = -DdN;
+    }
+    else
+    {
         return {};
     }
 
-    const auto diff = ( ray.origin() - a );
-    edge1 = glm::cross( diff, edge2 );
+    const auto diff = (ray.origin() - a);
+    edge1           = glm::cross(diff, edge2);
 
     float DdQxE2 = sign * glm::dot(ray.dir(), edge1);
 
-    if ( DdQxE2 < 0 ) {
+    if (DdQxE2 < 0)
+    {
         return {};
     }
 
     float DdE1xQ = sign * glm::dot(ray.dir(), glm::cross(edge1, diff));
 
-    if ( DdE1xQ < 0 ) {
+    if (DdE1xQ < 0)
+    {
         return {};
     }
 
-    if ( DdQxE2 + DdE1xQ > DdN ) {
+    if (DdQxE2 + DdE1xQ > DdN)
+    {
         return {};
     }
 
-    float QdN = - sign * glm::dot(diff, normal);
+    float QdN = -sign * glm::dot(diff, normal);
 
-    if ( QdN < 0 ) {
+    if (QdN < 0)
+    {
         return {};
     }
 
-    return ray.at( QdN / DdN );
+    return ray.at(QdN / DdN);
 }
 
 
-}
+}  // namespace ay::mth
