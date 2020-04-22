@@ -99,15 +99,11 @@ void main()
 
     vec3 final_color = vec3(0.0);
     
-    final_color += apply_dir_light(lighting.dir_light, frag_color.rgb, normal , pos, to_camera);
     final_color += apply_ambient_light(lighting.ambient_light, frag_color.rgb);
+    final_color += apply_dir_light(lighting.dir_light, frag_color.rgb, normal , pos, to_camera);
 
     
     frag_color = vec4(final_color.xzy, opacity);
 
-
-
-// vec3 gamma = vec3(1.0/2.2);
-    // frag_color = vec4(pow(frag_color.rgb, gamma), frag_color.a);
 
 }

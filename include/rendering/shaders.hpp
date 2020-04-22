@@ -14,7 +14,7 @@ class Shader
 {
   private:
     uint32_t m_id;
-    std::string m_name;
+    std::string m_name;    
 
   public:
     Shader(const std::string &t_name,
@@ -31,6 +31,22 @@ class Shader
     uint32_t id() const
     {
         return m_id;
+    }
+
+    const std::string& name() const
+    {
+        return m_name;
+    }
+
+    void reload(const std::string &vertex_src,
+                const std::string &fragment_src)
+    {
+        std::unordered_map<GLenum, std::string> sources{
+            { GL_VERTEX_SHADER, vertex_src }, { GL_FRAGMENT_SHADER, fragment_src }
+        };
+
+        compile_program(sources);
+
     }
 
     void set(const std::string &name, bool value);
@@ -79,7 +95,7 @@ class Shader
     std::unordered_map<std::string, GLint> m_uniforms;
 
 
-    void compile_program(const std::unordered_map<GLenum, std::string> &shader_sources);
+    void compile_program(const std::unordered_map<GLenum, std::string> &shader_sources, bool reaload = false);
     GLuint compile_shader(const GLchar *t_src, GLenum type);
 };
 
@@ -104,6 +120,22 @@ class ShaderLibrary
     ShaderPtr bind(const std::string &name);
 
     bool exists(const std::string &name) const;
+
+    void reload(const std::string &name)
+    {
+        auto [vert, frag] = app::ResouceLoader::get_instance()->get_shader_sources(name);
+        m_shaders[name]->reload(vert, frag);
+    }
+
+    void reload_all()
+    {
+        for (auto& [name, shader] : m_shaders)
+        {
+            auto [vert, frag] = app::ResouceLoader::get_instance()->get_shader_sources(name);
+            shader->reload(vert, frag);
+        }
+
+    }
 
   private:
 

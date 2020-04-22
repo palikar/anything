@@ -122,7 +122,6 @@ class SimpleGame : public gmt::GameBase {
         dispatch.dispatch<app::KeyReleasedEvent>([this](auto &event) {
             if (event.key_code() == KeyCode::F7)
             {
-
                 if (oribital_camera_controller != nullptr)
                 {
                     init_floating_camera();
@@ -131,6 +130,13 @@ class SimpleGame : public gmt::GameBase {
                 {
                     init_orbital_camera();
                 }
+            }
+
+            if (event.key_code() == KeyCode::F5)
+            {
+                std::cout << "Realodign shaders" << "\n";
+                this->shaders().reload_all();
+                
             }
 
             return true;

@@ -93,6 +93,7 @@ void RendererScene3D::bind_lighting(Shader *shader)
 
 void RendererScene3D::switch_shader(Shader *shader)
 {
+    
     if (lighting_updated.count(shader->id()) == 0) {
         lighting_updated[shader->id()] = false;
     }
