@@ -24,7 +24,7 @@ struct DirectinalLight
 struct AmbientLight
 {
     bool active{ false };
-
+    float intensity{1.0};
     glm::vec3 color{ 0.0f, 0.0f, 0.0f };
 };
 

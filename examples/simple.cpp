@@ -44,7 +44,7 @@ class SimpleGame : public gmt::GameBase {
 
         main_scene = init_scene("main");
 
-        main_scene->camera().init_prescpective_projection(glm::radians(45.0f), 1024.0/768.0, 0.001, 1000.0);
+        main_scene->camera().init_prescpective_projection(glm::radians(65.0f), 1024.0/768.0, 0.001, 1000.0);
 
         main_scene->camera().set_look_at(glm::vec3(10,10, 10), glm::vec3(0.0f,0.0f,0.0f));
 
@@ -100,7 +100,8 @@ class SimpleGame : public gmt::GameBase {
             }
         }
 
-      // main_scene->directional_light(glm::vec3(0.5, 0.5f, 0));
+        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
+        main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
 
 
 
@@ -137,27 +138,38 @@ class SimpleGame : public gmt::GameBase {
 
         return false;
     }
-    
+
     void render(rend::RenderAPI&) override
     {
-        
+
         if (ImGui::CollapsingHeader("Ligting"))
         {
+
             if (ImGui::TreeNode("Directional light"))
             {
                 ImGui::Text("Color");
                 ImGui::SameLine();
                 ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().directional_light.color);
                 ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().directional_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
+                ImGui::SliderFloat("Angle:", (float*)&main_scene->light_setup().directional_light.dir[1], -1.0f, 3.0f, "Direction = %.3f");
+                ImGui::TreePop();
+            }
+
+            if (ImGui::TreeNode("Ambient light"))
+            {
+                ImGui::Text("Color");
+                ImGui::SameLine();
+                ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().ambient_light.color);
+                ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
             }
 
         }
 
         ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
         ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
-        
+
         ImGuizmo::SetOrthographic(false);
-        ImGuizmo::Enable(true);        
+        ImGuizmo::Enable(true);
 
         ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
                              glm::value_ptr(main_scene->camera().projection()),
@@ -166,7 +178,7 @@ class SimpleGame : public gmt::GameBase {
                              glm::value_ptr(cmp::transform(entities[10][10]).transform()));
 
 
-        
+
         renderer.render_scene(*main_scene);
 
     }

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "rendering/renderer.hpp"
 
 #include "graphics/light.hpp"
@@ -137,6 +136,12 @@ class Scene3D
         m_light_setup.directional_light.dir    = dir;
         m_light_setup.directional_light.color  = color;
         m_light_setup.directional_light.active = true;
+    }
+
+    void ambient_light(glm::vec3 color = { 0.3f, 0.0f, 0.0f })
+    {
+        m_light_setup.ambient_light.color  = color;
+        m_light_setup.ambient_light.active = true;
     }
 };
 

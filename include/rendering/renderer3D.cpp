@@ -34,7 +34,19 @@ void RendererScene3D::bind_lighting(Shader *shader)
     shader->set("lighting.dir_light.intensity",
                 m_current_context.light_setup->directional_light.intensity);
 
+
+    shader->set("lighting.ambient_light.act",
+                m_current_context.light_setup->ambient_light.active);
+    shader->set("lighting.ambient_light.intensity",
+                m_current_context.light_setup->ambient_light.intensity);
+    shader->set("lighting.ambient_light.color",
+                m_current_context.light_setup->ambient_light.color);
+
+
     shader->set("camera_pos", m_current_context.camera_pos);
+
+
+    
 }
 
 void RendererScene3D::switch_shader(Shader *shader)
