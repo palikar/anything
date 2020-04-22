@@ -216,8 +216,8 @@ set(FMT_INC_DIR ${CMAKE_INSTALL_INCLUDEDIR}/fmt CACHE STRING
 set(FMT_PKGCONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig CACHE PATH
     "Installation directory for pkgconfig (.pc) files, relative to ${CMAKE_INSTALL_PREFIX}.")
 
-install(TARGETS fmt fmt-header-only
-    PUBLIC_HEADER DESTINATION ${FMT_INC_DIR}
-    INCLUDES DESTINATION ${FMT_INC_DIR}
-    LIBRARY DESTINATION  ${FMT_LIB_DIR}
-    )
+# install(TARGETS fmt fmt-header-only
+#     PUBLIC_HEADER DESTINATION ${FMT_INC_DIR}
+#     INCLUDES DESTINATION ${FMT_INC_DIR}
+#     LIBRARY DESTINATION  ${FMT_LIB_DIR}
+#     )

@@ -45,7 +45,7 @@ class Shader
             { GL_VERTEX_SHADER, vertex_src }, { GL_FRAGMENT_SHADER, fragment_src }
         };
 
-        compile_program(sources);
+        compile_program(sources, true);
 
     }
 

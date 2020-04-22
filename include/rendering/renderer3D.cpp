@@ -25,7 +25,7 @@ void RendererScene3D::init(RenderAPI *t_api)
 
 void RendererScene3D::bind_lighting(Shader *shader)
 {
-
+    shader->set("camera_pos", m_current_context.camera_pos);
 
     if (!m_current_context.light_setup->needs_update and lighting_updated[shader->id()])
     {
@@ -35,8 +35,6 @@ void RendererScene3D::bind_lighting(Shader *shader)
     lighting_updated[shader->id()] = true;
     m_current_context.light_setup->needs_update = false;
 
-    std::cout << "bind" << "\n";
-    
     shader->set("lighting.dir_light.act",
                 m_current_context.light_setup->directional_light.active);
     shader->set("lighting.dir_light.direction",
@@ -55,6 +53,17 @@ void RendererScene3D::bind_lighting(Shader *shader)
                 m_current_context.light_setup->ambient_light.color);
 
     for (size_t i = 0; i < grph::MAX_LIGHT; ++i) {
+
+        // if (i == 0)
+        // {
+        //     std::cout << m_current_context.light_setup->point_lights[i].active << "\n";
+        //     std::cout << m_current_context.light_setup->point_lights[i].constant << "\n";
+        //     std::cout << m_current_context.light_setup->point_lights[i].linear << "\n";
+        //     std::cout << m_current_context.light_setup->point_lights[i].quadratic << "\n";
+        //     std::cout << glm::to_string(m_current_context.light_setup->point_lights[i].position) << "\n";
+        //     std::cout << glm::to_string(m_current_context.light_setup->point_lights[i].color) << "\n";
+        // }
+        
         shader->set(fmt::format("lighting.point_lights[{}].act", i),
                     m_current_context.light_setup->point_lights[i].active);
         shader->set(fmt::format("lighting.point_lights[{}].color", i),
@@ -70,23 +79,20 @@ void RendererScene3D::bind_lighting(Shader *shader)
     }
 
     for (size_t i = 0; i < grph::MAX_LIGHT; ++i) {
+        
         shader->set(fmt::format("lighting.spot_lights[{}].act", i),
                     m_current_context.light_setup->spot_lights[i].active);
         shader->set(fmt::format("lighting.spot_lights[{}].color", i),
                     m_current_context.light_setup->spot_lights[i].color);
         shader->set(fmt::format("lighting.spot_lights[{}].position", i),
                     m_current_context.light_setup->spot_lights[i].position);
-        shader->set(fmt::format("lighting.spot_lights[{}].direction", i),
+        shader->set(fmt::format("lighting.spot_lights[{}].dir", i),
                     m_current_context.light_setup->spot_lights[i].dir);
         shader->set(fmt::format("lighting.spot_lights[{}].cut_off", i),
                     m_current_context.light_setup->spot_lights[i].cut_off);
         shader->set(fmt::format("lighting.spot_lights[{}].outer_cut_off", i),
                     m_current_context.light_setup->spot_lights[i].outer_cut_off);
     }
-
-
-    shader->set("camera_pos", m_current_context.camera_pos);
-
 
 
 }
@@ -253,7 +259,11 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
         }
     }
 
-    handle_sky(scene.skybox());
+    auto* sky= scene.skybox();
+    if (sky != nullptr)
+    {
+        handle_sky(sky);
+    }
 
     for (auto &object : scene.entities())
     {
