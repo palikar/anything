@@ -110,8 +110,6 @@ if(ENABLE_CPPCHECK)
     endif()
 endif()
 
-
-
 # Project setup
 file(READ "${PROJECT_SOURCE_DIR}/version" VERSION NEWLINE_CONSUME)
 string(REPLACE "\n" "" VERSION "${VERSION}")
@@ -132,14 +130,9 @@ include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/libs/include")
 set(OpenGL_GL_PREFERENCE GLVND)
 
 find_package(OpenGL REQUIRED)
-
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
-
 find_package(GLEW REQUIRED)
-
-find_package(GLEW REQUIRED)
-
 find_package(ASSIMP REQUIRED)
 
 
@@ -198,38 +191,25 @@ add_library(anything_engine
     ./include/util/logging.cpp
     )
 
-target_include_directories(anything_engine
-    PUBLIC
-    )
+target_include_directories(anything_engine PUBLIC ./include)
 
-target_link_libraries(anything_engine PRIVATE project_options project_warnings project_defines
-    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo fmt
-    )
-
-
-
-add_executable(simple_anything ./examples/simple.cpp)
-
+target_link_libraries(anything_engine PUBLIC project_options project_warnings project_defines
+    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo fmt )
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
-    
     target_precompile_headers(anything_engine
         PUBLIC ./include/std_header.hpp ./include/glm_header.hpp)
-    
 endif()
 
 
-target_link_libraries(simple_anything
-    PRIVATE project_options project_warnings project_defines
-    PUBLIC anything_engine
-    )
-
+add_executable(balls_scene ./examples/ball_scene.cpp)
+target_link_libraries(balls_scene PUBLIC anything_engine)
 
 
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-install(TARGETS anything_engine
+install(TARGETS balls_scene
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
     RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
@@ -239,7 +219,7 @@ install(TARGETS anything_engine
 install(DIRECTORY ./include/ DESTINATION include)
 
 set(CPACK_PACKAGE_VENDOR "Stanislav Arnaudov")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A small project of a compile-time graph library in C++17 ")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Game engine written from scratch targeting linux and opengl4.")
 set(CPACK_PACKAGE_VERSION_MAJOR ${CTG_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${CTG_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${CTG_VERSION_PATCH})

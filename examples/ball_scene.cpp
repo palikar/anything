@@ -3,7 +3,7 @@
 using namespace ay;
 
 
-class SimpleGame : public gmt::GameBase
+class BallScene : public gmt::GameBase
 {
 
     static constexpr int ball_grid_x = 20;
@@ -25,21 +25,14 @@ class SimpleGame : public gmt::GameBase
 
   public:
 
-    SimpleGame()
-    {
-
-    }
-
+    BallScene() = default;
+    
     void init_basic()
     {
         renderer.init(engine()->api());
-
         main_scene = init_scene("main");
-
         main_scene->camera().init_prescpective_projection(glm::radians(65.0f), 1024.0/768.0, 0.001, 1000.0);
-
         main_scene->camera().set_look_at(glm::vec3(10,10, 10), glm::vec3(0.0f,0.0f,0.0f));
-
         init_orbital_camera();
     }
 
@@ -317,7 +310,7 @@ class SimpleGame : public gmt::GameBase
 
 int main()
 {
-    std::unique_ptr<SimpleGame> game = std::make_unique<SimpleGame>();
+    auto game = std::make_unique<BallScene>();
     ay::app::Application app{1024, 768, game.get()};
     return app.run();
 }

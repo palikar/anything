@@ -6,7 +6,7 @@ plain_build:
 	cd $(BUILD_DEBUG_DIR) && make -j4
 
 count_line:
-	@cloc CMakeLists.txt ./include/ ./examples/
+	@cloc CMakeLists.txt ./include/ ./examples/ ./resources/
 
 format_project:
 	@echo "Fromating the source directory..."
