@@ -25,6 +25,8 @@ class SimpleGame : public gmt::GameBase {
 
     gmt::Raycaster raycaster;
 
+    ImGuizmo::OPERATION current_gizmo_operation{ImGuizmo::TRANSLATE};
+
   public:
 
     SimpleGame()
@@ -90,8 +92,8 @@ class SimpleGame : public gmt::GameBase {
         auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
         main_scene->set_skybox(gmt::skybox(sky));
 
-        main_scene->add(gmt::axis());
-        main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
+        // main_scene->add(gmt::axis());
+        // main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
 
         static constexpr float offset = 2.5f;
         static constexpr float radius = 0.5f;
@@ -159,10 +161,26 @@ class SimpleGame : public gmt::GameBase {
 
         if (event.key_code() == KeyCode::F5)
         {
-            std::cout << "Realodign shaders" << "\n";
+            std::cout << "Realoading shaders" << "\n";
             this->shaders().reload_all();
                 
         }
+
+        if (event.key_code() == KeyCode::R)
+        {
+            current_gizmo_operation = ImGuizmo::ROTATE;
+        }
+
+        if (event.key_code() == KeyCode::T)
+        {
+            current_gizmo_operation = ImGuizmo::TRANSLATE;
+        }
+
+        if (event.key_code() == KeyCode::S)
+        {
+            current_gizmo_operation = ImGuizmo::SCALE;
+        }
+
 
         return true;        
     }
@@ -176,7 +194,11 @@ class SimpleGame : public gmt::GameBase {
     bool mouse_press(app::MouseButtonReleasedEvent& event)
     {
         if (event.ctrl()) {
-            auto ray = raycaster.camera_to_mouse();            
+            auto [obj, _] = raycaster.intersect_objects(&entities[0][0], ball_grid_y*ball_grid_x);
+            if (obj) {
+                selected = obj;
+            }
+            
         }
 
         return true;        
@@ -186,6 +208,7 @@ class SimpleGame : public gmt::GameBase {
     
     void render(rend::RenderAPI&) override
     {
+        
         bool changed = false;
         if (ImGui::CollapsingHeader("Ligting"))
         {
@@ -239,8 +262,6 @@ class SimpleGame : public gmt::GameBase {
 
         changed |=ImGui::SliderFloat("Specular", &shining, 0.1f, 20.0f, "Inesity = %.3f");
         
-
-        ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
         ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 
         ImGuizmo::SetOrthographic(false);
@@ -248,7 +269,7 @@ class SimpleGame : public gmt::GameBase {
 
         ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
                              glm::value_ptr(main_scene->camera().projection()),
-                             mCurrentGizmoOperation,
+                             current_gizmo_operation,
                              mCurrentGizmoMode,
                              glm::value_ptr(cmp::transform(selected).transform()));
 

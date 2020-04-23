@@ -59,7 +59,7 @@ class Sphere
     {
         auto l = glm::distance(m_center, p);
 
-        if (m_radius < l )
+        if (m_radius < l)
         {
             m_radius = l;
         }

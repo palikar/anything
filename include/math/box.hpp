@@ -14,7 +14,8 @@ class Box3
     glm::vec3 m_max;
 
   public:
-    Box3(glm::vec3 t_min = {0,0,0}, glm::vec3 t_max = {0,0,0}) : m_min(t_min), m_max(t_max)
+    Box3(glm::vec3 t_min = { 0, 0, 0 }, glm::vec3 t_max = { 0, 0, 0 })
+      : m_min(t_min), m_max(t_max)
     {
     }
 
@@ -104,7 +105,7 @@ class Box3
                  : true;
     }
 
-    bool contains_box(Box3 box)  const
+    bool contains_box(Box3 box) const
     {
 
         return m_min.x <= box.m_min.x && box.m_max.x <= m_max.x && m_min.y <= box.m_min.y

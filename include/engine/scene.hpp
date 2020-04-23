@@ -56,8 +56,8 @@ class Scene3D
     void remove(Entity *t_ent)
     {
         auto it = std::remove_if(m_entities.begin(), m_entities.end(), [t_ent](auto &el) {
-                                                                           return el.get()->id() == t_ent->id();
-                                                                       });
+            return el.get()->id() == t_ent->id();
+        });
         m_entities.erase(it, m_entities.end());
     }
 
@@ -65,10 +65,10 @@ class Scene3D
     {
 
         auto it = std::remove_if(
-            m_game_components.begin(), m_game_components.end(), [t_comp](auto &el) {
-                                                                    std::cout << (el.get()->id() == t_comp->id()) << "\n";
-                                                                    return el.get()->id() == t_comp->id();
-                                                                });
+          m_game_components.begin(), m_game_components.end(), [t_comp](auto &el) {
+              std::cout << (el.get()->id() == t_comp->id()) << "\n";
+              return el.get()->id() == t_comp->id();
+          });
 
         m_game_components.erase(it, m_game_components.end());
     }
@@ -90,8 +90,8 @@ class Scene3D
     {
         app::Dispatcher dispatch{ t_ev };
         // dispatch.dispatch<app::WindowResizeEvent>([this](auto &e) {
-        //                                               m_raycaster.update_viewport(e.width(), e.height());
-        //                                               return false;
+        //                                               m_raycaster.update_viewport(e.width(),
+        //                                               e.height()); return false;
         //                                           });
 
         for (auto &object : m_entities)

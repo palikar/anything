@@ -14,7 +14,7 @@
 namespace ay::mth
 {
 
-inline std::optional<glm::vec3> intersect_ray(const Ray& ray, const Sphere &sphere)
+inline std::optional<glm::vec3> intersect_ray(const Ray &ray, const Sphere &sphere)
 {
 
     const auto v        = sphere.center() - ray.origin();
@@ -26,7 +26,7 @@ inline std::optional<glm::vec3> intersect_ray(const Ray& ray, const Sphere &sphe
 
     const float thc = std::sqrt(radius2 - d2);
     const float t0  = tca - thc;
-    const float t1 = tca + thc;
+    const float t1  = tca + thc;
 
     if (t0 < 0 && t1 < 0)
         return {};

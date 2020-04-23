@@ -25,7 +25,7 @@ class Plane
         return m_normal;
     }
 
-     const float &constant() const
+    const float &constant() const
     {
         return m_constant;
     }

@@ -209,7 +209,7 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     handle_material(mat, shader);
 
     // std::cout << line->segments.count() << "\n";
-    
+
     m_api->draw_lines(line->segments.buffers(), line->segments.count());
 }
 
@@ -253,7 +253,7 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
     m_projection = scene.camera().projection();
     m_view       = scene.camera().view();
 
-    m_view_projection =  m_projection * m_view;
+    m_view_projection = m_projection * m_view;
 
     m_current_context.camera_pos  = scene.camera().pos();
     m_current_context.light_setup = &scene.light_setup();

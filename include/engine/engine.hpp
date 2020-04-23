@@ -49,9 +49,15 @@ class GameEngine
 
     bool resize(app::WindowResizeEvent &e);
 
-    int width() const { return m_width; }
+    int width() const
+    {
+        return m_width;
+    }
 
-    int height() const { return m_height; }
+    int height() const
+    {
+        return m_height;
+    }
 };
 
 

@@ -145,9 +145,11 @@ void Application::init()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
     // Controls
-    // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
+
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
     io.ConfigFlags |=
       ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+
     // io.ConfigViewportsNoAutoMerge = true;
     // io.ConfigViewportsNoTaskBarIcon = true;
     ImGui::StyleColorsDark();
@@ -169,13 +171,13 @@ void Application::init()
 void Application::on_event(Event &t_event)
 {
     Dispatcher dispatch{ t_event };
-   
+
     dispatch.dispatch<WindowResizeEvent>([this](auto &e) { return this->on_resize(e); });
     dispatch.dispatch<WindowCloseEvent>([this](auto &e) { return this->on_close(e); });
     dispatch.dispatch<WindowPositionEvent>(
-        [this](auto &e) { return this->on_resposition(e); });
+      [this](auto &e) { return this->on_resposition(e); });
 
-    
+
     if (!ImGui::GetIO().WantCaptureKeyboard)
     {
         m_engine.on_event(t_event);

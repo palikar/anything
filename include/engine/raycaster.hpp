@@ -2,6 +2,11 @@
 
 #include "engine/entity.hpp"
 
+#include "engine/camera.hpp"
+#include "engine/components/mesh.hpp"
+#include "engine/components/transform.hpp"
+
+
 #include "glm_header.hpp"
 #include "std_header.hpp"
 #include "math_header.hpp"
@@ -41,9 +46,16 @@ class Raycaster
 
     mth::Ray from_position(glm::vec2 pos, glm::mat4 proj, glm::mat4 view);
 
-    std::pair<Entity*, std::vector<Entity*>> intersect_objects(std::vector<EntityPtr> &t_objs);
+    std::pair<Entity *, std::vector<Entity *>>
+      intersect_objects(std::vector<EntityPtr> &t_objs);
 
-    
+    std::pair<Entity *, std::vector<Entity *>>
+      intersect_objects(std::vector<Entity *> &t_objs);
+
+    std::pair<Entity *, std::vector<Entity *>> intersect_objects(Entity **t_objs,
+                                                                 size_t cnt);
+
+    std::optional<std::pair<float, glm::vec3>> intersect(Entity *t_obj);
 };
 
 

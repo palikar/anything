@@ -215,12 +215,12 @@ class MouseButtonPressedEvent : public Event
     {
         return m_button;
     }
-    
+
     bool alt()
     {
         return (m_mod & GLFW_MOD_ALT) > 0;
     }
-    
+
     bool ctrl()
     {
         return (m_mod & GLFW_MOD_CONTROL) > 0;
@@ -233,7 +233,7 @@ class MouseButtonPressedEvent : public Event
 
     EVENT_TYPE(MOUSEBUTTONPRESSED)
 
-    private:
+  private:
     MouseCode m_button;
     int m_mod;
 };
@@ -254,7 +254,7 @@ class MouseButtonReleasedEvent : public Event
     {
         return (m_mod & GLFW_MOD_ALT) > 0;
     }
-    
+
     bool ctrl()
     {
         return (m_mod & GLFW_MOD_CONTROL) > 0;
