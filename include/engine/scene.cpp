@@ -13,7 +13,7 @@ namespace ay::gmt
 void Scene3D::init(GameBase *t_game)
 {
     m_game = t_game;
-    m_raycaster.update_camera(&m_camera);
+    // m_raycaster.update_camera(&m_camera);
 }
 
 

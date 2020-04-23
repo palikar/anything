@@ -175,49 +175,8 @@ class SimpleGame : public gmt::GameBase {
 
     bool mouse_press(app::MouseButtonReleasedEvent& event)
     {
-        // main_scene->add(gmt::line_segments_entity({
-        //             {ray.origin(),
-        //              ray.origin() + ray.dir() * 200.0f},
-        //             grph::solid_color(1.0f, 0.0f, 0.0f)}));
-        
         if (event.ctrl()) {
-
-            raycaster.update_camera(&main_scene->camera());
-            auto ray = raycaster.camera_to_mouse();
-
-            
-            float current = std::numeric_limits<float>::max();
-            int x = 0;
-            int y = 0;
-            
-            for (int i = 0; i < ball_grid_x; ++i)
-            {
-                
-                for (int j = 0; j < ball_grid_y; ++j)
-                {
-
-                    const auto& sp = cmp::mesh(entities[i][j]).geometry().bounding_sphere();
-                    const auto& tr = cmp::transform(entities[i][j]).transform();
-                    const auto local = ray.transform(glm::inverse(tr));
-
-                    if (auto p = mth::intersect_ray(local, sp); p)
-                    {
-                        float new_dist = glm::distance( p.value(), local.origin());
-
-                        if (new_dist < current)
-                        {
-                            current = new_dist;
-                            x = i;
-                            y = j;
-                        }
-                        
-                    };
-
-                }
-            }
-
-            selected = entities[x][y];
-            
+            auto ray = raycaster.camera_to_mouse();            
         }
 
         return true;        

@@ -7,7 +7,6 @@
 #include "engine/component.hpp"
 #include "engine/entity.hpp"
 #include "engine/camera.hpp"
-#include "engine/raycaster.hpp"
 
 #include "application/event.hpp"
 
@@ -18,6 +17,7 @@ namespace ay::gmt
 
 class GameBase;
 class Skybox;
+class Raycaster;
 // using SkyboxPtr;
 
 class Scene3D
@@ -31,8 +31,6 @@ class Scene3D
     Skybox *m_skybox{ nullptr };
 
     Camera m_camera;
-
-    Raycaster m_raycaster;
 
     GameBase *m_game;
 
@@ -58,8 +56,8 @@ class Scene3D
     void remove(Entity *t_ent)
     {
         auto it = std::remove_if(m_entities.begin(), m_entities.end(), [t_ent](auto &el) {
-            return el.get()->id() == t_ent->id();
-        });
+                                                                           return el.get()->id() == t_ent->id();
+                                                                       });
         m_entities.erase(it, m_entities.end());
     }
 
@@ -67,10 +65,10 @@ class Scene3D
     {
 
         auto it = std::remove_if(
-          m_game_components.begin(), m_game_components.end(), [t_comp](auto &el) {
-              std::cout << (el.get()->id() == t_comp->id()) << "\n";
-              return el.get()->id() == t_comp->id();
-          });
+            m_game_components.begin(), m_game_components.end(), [t_comp](auto &el) {
+                                                                    std::cout << (el.get()->id() == t_comp->id()) << "\n";
+                                                                    return el.get()->id() == t_comp->id();
+                                                                });
 
         m_game_components.erase(it, m_game_components.end());
     }
@@ -91,10 +89,10 @@ class Scene3D
     void event(app::Event &t_ev)
     {
         app::Dispatcher dispatch{ t_ev };
-        dispatch.dispatch<app::WindowResizeEvent>([this](auto &e) {
-            m_raycaster.update_viewport(e.width(), e.height());
-            return false;
-        });
+        // dispatch.dispatch<app::WindowResizeEvent>([this](auto &e) {
+        //                                               m_raycaster.update_viewport(e.width(), e.height());
+        //                                               return false;
+        //                                           });
 
         for (auto &object : m_entities)
         {
@@ -105,11 +103,6 @@ class Scene3D
         {
             comp->event(t_ev);
         }
-    }
-
-    Raycaster raycaster()
-    {
-        return m_raycaster;
     }
 
     Skybox *set_skybox(EntityPtr t_sky);

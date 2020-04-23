@@ -1,14 +1,15 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
 #include "application/keycodes.hpp"
+
 #include "std_header.hpp"
+#include "glm_header.hpp"
 
 namespace ay::app
 {

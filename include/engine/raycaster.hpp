@@ -1,15 +1,17 @@
 #pragma once
 
-#include "application/input.hpp"
+#include "engine/entity.hpp"
 
-#include "engine/camera.hpp"
-
-#include "math_header.hpp"
 #include "glm_header.hpp"
 #include "std_header.hpp"
+#include "math_header.hpp"
+
 
 namespace ay::gmt
 {
+
+class Camera;
+
 
 class Raycaster
 {
@@ -20,9 +22,7 @@ class Raycaster
     Camera *camera;
 
   public:
-    Raycaster()
-    {
-    }
+    Raycaster() = default;
 
     void update_viewport(size_t t_width, size_t t_height)
     {
@@ -40,6 +40,11 @@ class Raycaster
     mth::Ray from_position(glm::vec2 pos);
 
     mth::Ray from_position(glm::vec2 pos, glm::mat4 proj, glm::mat4 view);
+
+    std::pair<Entity*, std::vector<Entity*>> intersect_objects(std::vector<EntityPtr> &t_objs);
+
+    
 };
+
 
 }  // namespace ay::gmt

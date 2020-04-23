@@ -1,6 +1,18 @@
 #include "engine/raycaster.hpp"
 
 
+
+
+
+#include "engine/camera.hpp"
+#include "engine/components/mesh.hpp"
+#include "engine/components/transform.hpp"
+
+#include "math_header.hpp"
+#include "glm_header.hpp"
+
+#include "application/input.hpp"
+
 namespace ay::gmt
 {
 
@@ -58,5 +70,42 @@ mth::Ray Raycaster::from_position(glm::vec2 pos, glm::mat4 proj, glm::mat4 view)
     return mth::Ray{ camera->pos(), glm::normalize(world_coord) };
 }
 
+std::pair<Entity*, std::vector<Entity*>> Raycaster::intersect_objects(std::vector<EntityPtr> &t_objs)
+{
+    auto ray = camera_to_mouse();
+
+    float current_dist = std::numeric_limits<float>::max();
+    size_t index = 0;
+    size_t i = 0;
+    std::vector<Entity*> objs;
+    for (auto& obj : t_objs)
+    {
+        ++i;
+            
+        const auto& mesh_cmp = obj->component<cmp::MeshComponent>();
+        const auto& transform_cmp = obj->component<cmp::TransformComponent>();
+
+        if (!mesh_cmp or !transform_cmp) { continue; }
+
+        const auto& transform = transform_cmp->transform.transform();
+        const auto& sphere = mesh_cmp->mesh.geometry().bounding_sphere();
+
+        const auto local_ray = ray.transform(glm::inverse(transform));
+        if (auto p = mth::intersect_ray(local_ray, sphere)) {
+            float new_dist = glm::distance( p.value(), local_ray.origin());
+
+            objs.push_back(obj.get());
+                    
+            if (new_dist >= current_dist) { continue; }
+
+            current_dist = new_dist;
+            index = i;
+                
+        }            
+    }
+        
+    return std::make_pair(t_objs.at(index).get(), objs);
+
+}
 
 }  // namespace ay::gmt
