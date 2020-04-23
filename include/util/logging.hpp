@@ -1,8 +1,8 @@
 #include "std_header.hpp"
 
-namespace ay
+namespace ay::logging
 {
-
+using namespace std::string_literals;
 
 enum class LogCategory
 {
@@ -117,18 +117,18 @@ class LogKeeper : Logs...
 };
 
 
-#ifdef DEUBG_LOGGING
+#ifdef DEBUG_LOGGING
 using standard_logger = LogKeeper<StdLog<LogCategory::DEBUG>,
                                   StdLog<LogCategory::INFO>,
                                   FatalLog<LogCategory::ERROR>>;
 inline standard_logger LOGGER;
 
 
-#define AY_LOG(MSG, TAG)                                                              \
-    do                                                                                \
-    {                                                                                 \
-        ::alisp::logging::LOGGER.create_entry(                                        \
-          MSG, __FILE__, __FUNCTION__, __LINE__, ::alisp::logging::LogCategory::TAG); \
+#define AY_LOG(MSG, TAG)                                                           \
+    do                                                                             \
+    {                                                                              \
+        ::ay::logging::LOGGER.create_entry(                                        \
+          MSG, __FILE__, __FUNCTION__, __LINE__, ::ay::logging::LogCategory::TAG); \
     } while (false)
 #else
 
@@ -150,4 +150,4 @@ using standard_logger = LogKeeper<NoopLog>;
 void init_logging(bool debug = false, bool stand = true);
 
 
-}  // namespace ay
+}  // namespace ay::logging

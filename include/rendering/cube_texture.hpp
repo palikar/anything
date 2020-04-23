@@ -65,6 +65,7 @@ using CubeTexturePtr = std::shared_ptr<CubeTexture>;
 inline CubeTexturePtr create_cubetexture_pngs(std::filesystem::path t_folder)
 {
     namespace fs = std::filesystem;
+    using namespace std::string_literals;
     std::vector<std::string> files;
 
     files.push_back(fs::path(t_folder) /= "left.png");
@@ -80,7 +81,7 @@ inline CubeTexturePtr create_cubetexture_pngs(std::filesystem::path t_folder)
     {
         if (!fs::exists(f))
         {
-            AY_ERROR("Texture file does not exsits"s += f.str());
+            AY_ERROR("Texture file does not exsits"s += f);
             return nullptr;
         }
     }
@@ -91,6 +92,7 @@ inline CubeTexturePtr create_cubetexture_pngs(std::filesystem::path t_folder)
 inline CubeTexturePtr create_cubetexture_jpgs(std::filesystem::path t_folder)
 {
     namespace fs = std::filesystem;
+    using namespace std::string_literals;
     std::vector<std::string> files;
 
     files.push_back(fs::path(t_folder) /= "left.jpg");
@@ -106,7 +108,7 @@ inline CubeTexturePtr create_cubetexture_jpgs(std::filesystem::path t_folder)
     {
         if (!fs::exists(f))
         {
-            AY_ERROR("Texture file does not exsits"s += f.str());
+            AY_ERROR("Texture file does not exsits"s += f);
             return nullptr;
         }
     }

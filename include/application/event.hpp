@@ -103,10 +103,12 @@ class WindowCloseEvent : public Event
 class KeyPressedEvent : public Event
 {
   public:
-    KeyPressedEvent(KeyCode keycode, int repeatCount)
-      : m_keycode(keycode), m_repeat_count(repeatCount)
+    KeyPressedEvent(KeyCode keycode, int repeatCount, int mod = 0)
+      : m_keycode(keycode), m_repeat_count(repeatCount), m_mod(mod)
     {
     }
+
+    EVENT_TYPE(KEYPRESSED)
 
     inline KeyCode key_code() const
     {
@@ -118,17 +120,31 @@ class KeyPressedEvent : public Event
         return m_repeat_count;
     }
 
+    bool alt()
+    {
+        return (m_mod & GLFW_MOD_ALT) > 0;
+    }
 
-    EVENT_TYPE(KEYPRESSED)
+    bool ctrl()
+    {
+        return (m_mod & GLFW_MOD_CONTROL) > 0;
+    }
+
+    bool shift()
+    {
+        return (m_mod & GLFW_MOD_SHIFT) > 0;
+    }
+
   private:
     KeyCode m_keycode;
     int m_repeat_count;
+    int m_mod;
 };
 
 class KeyReleasedEvent : public Event
 {
   public:
-    KeyReleasedEvent(KeyCode keycode) : m_keycode(keycode)
+    KeyReleasedEvent(KeyCode keycode, int mod = 0) : m_keycode(keycode), m_mod(mod)
     {
     }
 
@@ -138,8 +154,26 @@ class KeyReleasedEvent : public Event
     }
 
     EVENT_TYPE(KEYRELEASED)
+
+    bool alt()
+    {
+        return (m_mod & GLFW_MOD_ALT) > 0;
+    }
+
+    bool ctrl()
+    {
+        return (m_mod & GLFW_MOD_CONTROL) > 0;
+    }
+
+    bool shift()
+    {
+        return (m_mod & GLFW_MOD_SHIFT) > 0;
+    }
+
+
   private:
     KeyCode m_keycode;
+    int m_mod;
 };
 
 class KeyTypedEvent : public Event

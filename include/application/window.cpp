@@ -61,32 +61,33 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
         win.m_callback(event);
     });
 
-    glfwSetKeyCallback(m_window, [](GLFWwindow *window, int key, int, int action, int) {
-        auto &win = *(Window *)glfwGetWindowUserPointer(window);
+    glfwSetKeyCallback(m_window,
+                       [](GLFWwindow *window, int key, int, int action, int mod) {
+                           auto &win = *(Window *)glfwGetWindowUserPointer(window);
 
-        switch (action)
-        {
-        case GLFW_PRESS:
-        {
-            KeyPressedEvent event(static_cast<KeyCode>(key), 0);
-            win.m_callback(event);
-            break;
-        }
-        case GLFW_RELEASE:
-        {
+                           switch (action)
+                           {
+                           case GLFW_PRESS:
+                           {
+                               KeyPressedEvent event(static_cast<KeyCode>(key), 0, mod);
+                               win.m_callback(event);
+                               break;
+                           }
+                           case GLFW_RELEASE:
+                           {
 
-            KeyReleasedEvent event(static_cast<KeyCode>(key));
-            win.m_callback(event);
-            break;
-        }
-        case GLFW_REPEAT:
-        {
-            KeyPressedEvent event(static_cast<KeyCode>(key), 1);
-            win.m_callback(event);
-            break;
-        }
-        }
-    });
+                               KeyReleasedEvent event(static_cast<KeyCode>(key), mod);
+                               win.m_callback(event);
+                               break;
+                           }
+                           case GLFW_REPEAT:
+                           {
+                               KeyPressedEvent event(static_cast<KeyCode>(key), 1);
+                               win.m_callback(event);
+                               break;
+                           }
+                           }
+                       });
 
     glfwSetCharCallback(m_window, [](GLFWwindow *window, unsigned int keycode) {
         auto &win = *(Window *)glfwGetWindowUserPointer(window);

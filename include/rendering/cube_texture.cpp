@@ -8,9 +8,11 @@ unsigned char *CubeTexture::load_image(const std::string &t_file)
 {
     int width{}, height{}, channels{};
     stbi_uc *data = nullptr;
-    data          = stbi_load(t_file.c_str(), &width, &height, &channels, 0);
-    m_width       = width;
-    m_height      = height;
+    stbi_set_flip_vertically_on_load(0);
+
+    data     = stbi_load(t_file.c_str(), &width, &height, &channels, 0);
+    m_width  = width;
+    m_height = height;
     return data;
 }
 
@@ -37,6 +39,7 @@ void CubeTexture::load_from_files(const std::vector<std::string> &t_files,
     GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
     {
+
         auto xp_data = load_image(xpos);
         auto xn_data = load_image(xneg);
         auto yp_data = load_image(ypos);

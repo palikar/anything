@@ -1,14 +1,10 @@
-#include <iostream>
-#include <memory>
-#include <utility>
-#include <cmath>
-
 #include "ay.hpp"
 
 using namespace ay;
 
 
-class SimpleGame : public gmt::GameBase {
+class SimpleGame : public gmt::GameBase
+{
 
     static constexpr int ball_grid_x = 20;
     static constexpr int ball_grid_y = 20;
@@ -66,10 +62,10 @@ class SimpleGame : public gmt::GameBase {
     {
 
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().directional_light.intensity = 1.15;
-        
+        main_scene->light_setup().directional_light.intensity = 0.08;
+
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().ambient_light.intensity = 1.15;
+        main_scene->light_setup().ambient_light.intensity = 0.08;
 
         main_scene->point_light(0);
         main_scene->light_setup().point_lights[0].constant = 0.0;
@@ -81,7 +77,7 @@ class SimpleGame : public gmt::GameBase {
         main_scene->spot_light(0);
         main_scene->light_setup().spot_lights[0].outer_cut_off = 1.05;
         main_scene->light_setup().spot_lights[0].cut_off = 0.88;
-        
+
     }
 
     void init() override
@@ -89,11 +85,12 @@ class SimpleGame : public gmt::GameBase {
         init_basic();
 
         auto tex = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
-        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
+
         main_scene->set_skybox(gmt::skybox(sky));
 
-        // main_scene->add(gmt::axis());
-        // main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
+        main_scene->add(gmt::axis());
+        main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
 
         static constexpr float offset = 2.5f;
         static constexpr float radius = 0.5f;
@@ -102,7 +99,7 @@ class SimpleGame : public gmt::GameBase {
         {
             for (int j = 0; j < ball_grid_y; ++j)
             {
-                
+
                 entities[i][j] = main_scene->add(gmt::mesh_entity({ grph::sphere_geometry(radius, 80, 80),
                                                                     grph::solid_color((1.0f * i) / ball_grid_x,
                                                                                       (1.0f * j) / ball_grid_y,
@@ -114,19 +111,24 @@ class SimpleGame : public gmt::GameBase {
                               j * offset - (ball_grid_y * offset * 0.5f)) ;
 
                 cmp::transform(entities[i][j]).update();
-                
+
                 cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
                 cmp::mesh(entities[i][j]).geometry().compute_bounding_sphere();
-                
+
             }
         }
-        
-        selected = entities[0][0];
+
+        selected = nullptr;
 
         raycaster.update_camera(&main_scene->camera());
         raycaster.update_viewport(engine()->width(), engine()->height());
 
         init_lighting();
+
+
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::Enable(true);
+
     }
 
     void update(double dt) override
@@ -136,17 +138,22 @@ class SimpleGame : public gmt::GameBase {
 
     bool event(app::Event& e) override
     {
-        main_scene->event(e);
+
         app::Dispatcher dispatch{ e };
         dispatch.dispatch<app::MouseButtonReleasedEvent>(MEMBER(mouse_press));
         dispatch.dispatch<app::KeyReleasedEvent>(MEMBER(key_press));
         dispatch.dispatch<app::WindowResizeEvent>(MEMBER(resizing));
+
+        if (!e.handled) {
+            main_scene->event(e);
+        }
+
         return false;
     }
 
     bool key_press(app::KeyReleasedEvent& event)
     {
-        
+
         if (event.key_code() == KeyCode::F7)
         {
             if (oribital_camera_controller != nullptr)
@@ -163,56 +170,63 @@ class SimpleGame : public gmt::GameBase {
         {
             std::cout << "Realoading shaders" << "\n";
             this->shaders().reload_all();
-                
+
         }
 
-        if (event.key_code() == KeyCode::R)
+        if (event.ctrl() and event.key_code() == KeyCode::R)
         {
             current_gizmo_operation = ImGuizmo::ROTATE;
         }
 
-        if (event.key_code() == KeyCode::T)
+        if (event.ctrl() and event.key_code() == KeyCode::T)
         {
             current_gizmo_operation = ImGuizmo::TRANSLATE;
         }
 
-        if (event.key_code() == KeyCode::S)
+        if (event.ctrl() and event.key_code() == KeyCode::S)
         {
             current_gizmo_operation = ImGuizmo::SCALE;
         }
 
+        if (event.ctrl() and event.key_code() == KeyCode::A)
+        {
+            selected = nullptr;
+        }
 
-        return true;        
+        return true;
     }
 
     bool resizing(app::WindowResizeEvent& event)
     {
         raycaster.update_viewport(event.width(), event.height());
-        return true;        
+        return true;
     }
 
     bool mouse_press(app::MouseButtonReleasedEvent& event)
     {
+
         if (event.ctrl()) {
             auto [obj, _] = raycaster.intersect_objects(&entities[0][0], ball_grid_y*ball_grid_x);
             if (obj) {
                 selected = obj;
             }
-            
+
         }
 
-        return true;        
+        return true;
     }
 
     float shining{1.0f};
-    
+
     void render(rend::RenderAPI&) override
     {
-        
+
         bool changed = false;
+        ImGui::SetNextItemOpen(true);
         if (ImGui::CollapsingHeader("Ligting"))
         {
 
+            ImGui::SetNextItemOpen(true);
             if (ImGui::TreeNode("Directional light"))
             {
                 ImGui::Text("Color");
@@ -223,6 +237,7 @@ class SimpleGame : public gmt::GameBase {
                 ImGui::TreePop();
             }
 
+            ImGui::SetNextItemOpen(true);
             if (ImGui::TreeNode("Ambient light"))
             {
                 ImGui::Text("Color");
@@ -231,7 +246,8 @@ class SimpleGame : public gmt::GameBase {
                 changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
                 ImGui::TreePop();
             }
-            
+
+            ImGui::SetNextItemOpen(true);
             if (ImGui::TreeNode("Point light"))
             {
                 ImGui::Text("Color");
@@ -243,7 +259,8 @@ class SimpleGame : public gmt::GameBase {
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().point_lights[0].position[1], 0.0f, 10.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
-            
+
+            ImGui::SetNextItemOpen(true);
             if (ImGui::TreeNode("Spot light"))
             {
                 ImGui::Text("Color");
@@ -256,32 +273,32 @@ class SimpleGame : public gmt::GameBase {
                 // changed |=ImGui::SliderFloat("X pos:", (float*)&main_scene->light_setup().spot_lights[0].position[0], 0.0f, 10.0f, "Value = %.3f");
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().spot_lights[0].position[1], 0.0f, 20.0f, "Value = %.3f");
                 ImGui::TreePop();
-            }            
+            }
 
         }
 
         changed |=ImGui::SliderFloat("Specular", &shining, 0.1f, 20.0f, "Inesity = %.3f");
-        
-        ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 
-        ImGuizmo::SetOrthographic(false);
-        ImGuizmo::Enable(true);
 
-        ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
-                             glm::value_ptr(main_scene->camera().projection()),
-                             current_gizmo_operation,
-                             mCurrentGizmoMode,
-                             glm::value_ptr(cmp::transform(selected).transform()));
+        if (selected ) {
+            ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
+            ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
+                                 glm::value_ptr(main_scene->camera().projection()),
+                                 current_gizmo_operation,
+                                 mCurrentGizmoMode,
+                                 glm::value_ptr(cmp::transform(selected).transform()));
+
+        }
 
 
         float x = 10 * sin(glfwGetTime());
         float y = 10 * cos(glfwGetTime());
-        
+
         main_scene->light_setup().spot_lights[0].position[0] = x;
         main_scene->light_setup().spot_lights[0].position[2] = y;
 
         main_scene->light_setup().point_lights[0].position[2] = 20 * sin(glfwGetTime());
-            
+
         main_scene->light_setup().needs_update = true;
 
         for (int i = 0; i < ball_grid_x; ++i)
@@ -298,14 +315,9 @@ class SimpleGame : public gmt::GameBase {
 
 };
 
-
-
-
 int main()
 {
     std::unique_ptr<SimpleGame> game = std::make_unique<SimpleGame>();
-
     ay::app::Application app{1024, 768, game.get()};
-
     return app.run();
 }
