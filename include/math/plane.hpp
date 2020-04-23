@@ -20,12 +20,12 @@ class Plane
     {
     }
 
-    glm::vec3 &normal()
+    const glm::vec3 &normal() const
     {
         return m_normal;
     }
 
-    float &constant()
+     const float &constant() const
     {
         return m_constant;
     }
@@ -58,17 +58,17 @@ class Plane
         return *this;
     }
 
-    float distance_to_point(glm::vec3 point)
+    float distance_to_point(glm::vec3 point) const
     {
         return glm::dot(m_normal, point) + m_constant;
     }
 
-    float distance_to_sphere(Sphere &sphere)
+    float distance_to_sphere(Sphere &sphere) const
     {
         return distance_to_point(sphere.center()) - sphere.radius();
     }
 
-    glm::vec3 project_point(glm::vec3 point)
+    glm::vec3 project_point(glm::vec3 point) const
     {
         return m_normal * distance_to_point(point) + point;
     }

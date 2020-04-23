@@ -19,27 +19,37 @@ class Sphere
     {
     }
 
-    glm::vec3 &center()
+    const glm::vec3 &center() const
     {
         return m_center;
     }
 
-    float &radius()
+    const float &radius() const
     {
         return m_radius;
     }
 
-    float distance_to_point(glm::vec3 point)
+    void set_radius(float r)
+    {
+        m_radius = r;
+    }
+
+    void set_center(glm::vec3 v)
+    {
+        m_center = v;
+    }
+
+    float distance_to_point(glm::vec3 point) const
     {
         return glm::length(m_center - point) - m_radius;
     }
 
-    bool contains_point(glm::vec3 point)
+    bool contains_point(glm::vec3 point) const
     {
         return glm::length2(point - m_center) <= m_radius * m_radius;
     }
 
-    bool intersects_sphere(Sphere sphere)
+    bool intersects_sphere(Sphere sphere) const
     {
         const float radiusSum = m_radius + sphere.m_radius;
         return glm::length2(sphere.m_center - m_center) <= (radiusSum * radiusSum);
@@ -47,8 +57,9 @@ class Sphere
 
     Sphere &expand_by_point(glm::vec3 p)
     {
-        auto l = glm::length(m_center - p);
-        if (l < m_radius)
+        auto l = glm::distance(m_center, p);
+
+        if (m_radius < l )
         {
             m_radius = l;
         }

@@ -14,7 +14,7 @@ class Box3
     glm::vec3 m_max;
 
   public:
-    Box3(glm::vec3 t_min = {}, glm::vec3 t_max = {}) : m_min(t_min), m_max(t_max)
+    Box3(glm::vec3 t_min = {0,0,0}, glm::vec3 t_max = {0,0,0}) : m_min(t_min), m_max(t_max)
     {
     }
 
@@ -25,12 +25,12 @@ class Box3
         m_max = t_max;
     }
 
-    glm::vec3 &min()
+    const glm::vec3 &min() const
     {
         return m_min;
     }
 
-    glm::vec3 &max()
+    const glm::vec3 &max() const
     {
         return m_max;
     }
@@ -95,7 +95,7 @@ class Box3
         return (m_max - m_min);
     }
 
-    bool contains_point(glm::vec3 point)
+    bool contains_point(glm::vec3 point) const
     {
 
         return point.x < m_min.x || point.x > m_max.x || point.y < m_min.y
@@ -104,7 +104,7 @@ class Box3
                  : true;
     }
 
-    bool contains_box(Box3 box)
+    bool contains_box(Box3 box)  const
     {
 
         return m_min.x <= box.m_min.x && box.m_max.x <= m_max.x && m_min.y <= box.m_min.y
@@ -112,7 +112,7 @@ class Box3
                && box.m_max.z <= m_max.z;
     }
 
-    bool intersects_box(Box3 box)
+    bool intersects_box(Box3 box) const
     {
 
         return box.m_max.x < m_min.x || box.m_min.x > m_max.x || box.m_max.y < m_min.y

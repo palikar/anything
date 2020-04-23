@@ -33,3 +33,21 @@
     {                                                               \
         return std::make_shared<type>(std::forward<Args>(args)...); \
     }
+
+
+#define EVENT_TYPE(t_type)                          \
+    static EventType static_type()                  \
+    {                                               \
+        return EventType::t_type;                   \
+    }                                               \
+    virtual EventType type() const override         \
+    {                                               \
+        return static_type();                       \
+    }                                               \
+    virtual const std::string name() const override \
+    {                                               \
+        return #t_type;                             \
+    }
+
+
+#define MEMBER(mem_fun) [this](auto &event) { return mem_fun(event); }

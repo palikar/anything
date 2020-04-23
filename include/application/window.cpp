@@ -95,24 +95,24 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
     });
 
     glfwSetMouseButtonCallback(
-      m_window, [](GLFWwindow *window, int button, int action, int) {
-          auto &win = *(Window *)glfwGetWindowUserPointer(window);
+        m_window, [](GLFWwindow *window, int button, int action, int mod) {
+            auto &win = *(Window *)glfwGetWindowUserPointer(window);
 
-          switch (action)
-          {
-          case GLFW_PRESS:
-          {
-              MouseButtonPressedEvent event(static_cast<MouseCode>(button));
-              win.m_callback(event);
-              break;
-          }
-          case GLFW_RELEASE:
-          {
-              MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
-              win.m_callback(event);
-              break;
-          }
-          }
+            switch (action)
+            {
+              case GLFW_PRESS:
+              {
+                  MouseButtonPressedEvent event(static_cast<MouseCode>(button), mod);
+                  win.m_callback(event);
+                  break;
+              }
+              case GLFW_RELEASE:
+              {
+                  MouseButtonReleasedEvent event(static_cast<MouseCode>(button), mod);
+                  win.m_callback(event);
+                  break;
+              }
+            }
       });
 
     glfwSetScrollCallback(m_window,

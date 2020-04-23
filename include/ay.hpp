@@ -45,6 +45,7 @@
 #include "math/sphere.hpp"
 #include "math/transform.hpp"
 #include "math/utils.hpp"
+#include "math/intersect.hpp"
 
 #include "application/application.hpp"
 #include "application/event.hpp"

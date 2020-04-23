@@ -30,6 +30,9 @@ class SimpleGame : public gmt::GameBase {
     cmp::FloatingCameraComponent *floating_camera_controller;
 
     gmt::Entity* entities[ball_grid_x][ball_grid_y];
+    gmt::Entity* selected;
+
+    gmt::Raycaster raycaster;
 
   public:
 
@@ -66,19 +69,42 @@ class SimpleGame : public gmt::GameBase {
         oribital_camera_controller->set_max_radius(60.0f);
     }
 
+    void init_lighting()
+    {
+
+        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
+        main_scene->light_setup().directional_light.intensity = 0.15;
+        
+        main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
+        main_scene->light_setup().ambient_light.intensity = 0.15;
+
+        main_scene->point_light(0);
+        main_scene->light_setup().point_lights[0].constant = 0.0;
+        main_scene->light_setup().point_lights[0].linear = 0.098;
+        main_scene->light_setup().point_lights[0].quadratic = 0.009;
+        main_scene->light_setup().point_lights[0].quadratic = 0.009;
+        main_scene->light_setup().point_lights[0].position[0] = 20;
+
+        main_scene->spot_light(0);
+        main_scene->light_setup().spot_lights[0].outer_cut_off = 1.05;
+        main_scene->light_setup().spot_lights[0].cut_off = 0.88;
+        
+    }
+
     void init() override
     {
         init_basic();
 
         // auto tex = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
-        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        // auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
         // main_scene->set_skybox(gmt::skybox(sky));
 
-        // main_scene->add(gmt::axis());
+        main_scene->add(gmt::axis());
         main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
 
         static constexpr float offset = 2.5f;
         static constexpr float radius = 0.5f;
+
         for (int i = 0; i < ball_grid_x; ++i)
         {
             for (int j = 0; j < ball_grid_y; ++j)
@@ -94,29 +120,18 @@ class SimpleGame : public gmt::GameBase {
                               j * 2.5f - (ball_grid_y * offset / 2));
 
                 cmp::transform(entities[i][j]).update();
+                
                 cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
+                cmp::mesh(entities[i][j]).geometry().compute_bounding_sphere();
             }
         }
+        
+        selected = entities[10][10];
 
-        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
+        raycaster.update_camera(&main_scene->camera());
+        raycaster.update_viewport(engine()->width(), engine()->height());
 
-        main_scene->light_setup().ambient_light.intensity = 0.15;
-        main_scene->light_setup().directional_light.intensity = 0.15;
-
-        main_scene->point_light(0);
-        main_scene->light_setup().point_lights[0].constant = 0.0;
-        main_scene->light_setup().point_lights[0].linear = 0.098;
-        main_scene->light_setup().point_lights[0].quadratic = 0.009;
-        main_scene->light_setup().point_lights[0].quadratic = 0.009;
-        main_scene->light_setup().point_lights[0].position[0] = 20;
-
-        main_scene->spot_light(0);
-        main_scene->light_setup().spot_lights[0].outer_cut_off = 1.05;
-        main_scene->light_setup().spot_lights[0].cut_off = 0.88;
-
-
-
+        init_lighting();
     }
 
     void update(double dt) override
@@ -127,10 +142,10 @@ class SimpleGame : public gmt::GameBase {
     bool event(app::Event& e) override
     {
         main_scene->event(e);
-
         app::Dispatcher dispatch{ e };
-        dispatch.dispatch<app::KeyReleasedEvent>([this](auto &event) { return key_press(event); });
-
+        dispatch.dispatch<app::MouseButtonReleasedEvent>(MEMBER(mouse_press));
+        dispatch.dispatch<app::KeyReleasedEvent>(MEMBER(key_press));
+        dispatch.dispatch<app::WindowResizeEvent>(MEMBER(resizing));
         return false;
     }
 
@@ -156,8 +171,46 @@ class SimpleGame : public gmt::GameBase {
                 
         }
 
-        return true;
-        
+        return true;        
+    }
+
+    bool resizing(app::WindowResizeEvent& event)
+    {
+        raycaster.update_viewport(event.width(), event.height());
+        return true;        
+    }
+
+    bool mouse_press(app::MouseButtonReleasedEvent& event)
+    {
+        if (event.ctrl()) {
+
+            auto ray = raycaster.camera_to_mouse();
+
+            for (int i = 0; i < ball_grid_x; ++i)
+            {
+                for (int j = 0; j < ball_grid_y; ++j)
+                {
+                    auto& sp = cmp::mesh(entities[i][j]).geometry().bounding_sphere();
+                    auto tr = cmp::transform(entities[i][j]).get_tranformation();
+
+                    auto local = ray.transform(glm::inverse(tr));
+                    
+                    // std::cout << sp.radius() << "\n";
+                    // std::cout << glm::to_string( tr * glm::vec4(sp.center(), 1.0)) << "\n";
+                    // std::cout << glm::to_string(local.dir()) << "\n";
+                    
+                    if (auto p = mth::intersect_ray(local, sp))
+                    {
+                        std::cout << "here: (" << i << ", " << j << ")" << "\n";
+                        return true;
+                    };
+
+                }
+            }            
+            
+        }
+
+        return true;        
     }
 
     float shining{1.0f};
@@ -186,7 +239,6 @@ class SimpleGame : public gmt::GameBase {
                 changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
                 ImGui::TreePop();
             }
-
             
             if (ImGui::TreeNode("Point light"))
             {
@@ -199,8 +251,7 @@ class SimpleGame : public gmt::GameBase {
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().point_lights[0].position[1], 0.0f, 10.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
-
-
+            
             if (ImGui::TreeNode("Spot light"))
             {
                 ImGui::Text("Color");
@@ -213,8 +264,7 @@ class SimpleGame : public gmt::GameBase {
                 // changed |=ImGui::SliderFloat("X pos:", (float*)&main_scene->light_setup().spot_lights[0].position[0], 0.0f, 10.0f, "Value = %.3f");
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().spot_lights[0].position[1], 0.0f, 20.0f, "Value = %.3f");
                 ImGui::TreePop();
-            }
-            
+            }            
 
         }
 
@@ -231,7 +281,7 @@ class SimpleGame : public gmt::GameBase {
                              glm::value_ptr(main_scene->camera().projection()),
                              mCurrentGizmoOperation,
                              mCurrentGizmoMode,
-                             glm::value_ptr(cmp::transform(entities[10][10]).transform()));
+                             glm::value_ptr(cmp::transform(selected).transform()));
 
 
         float x = 10 * sin(glfwGetTime());

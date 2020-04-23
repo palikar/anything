@@ -4,6 +4,8 @@
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
+#include <glm/gtc/matrix_inverse.hpp>
+
 namespace ay::mth
 {
 
@@ -18,22 +20,22 @@ class Ray
     {
     }
 
-    glm::vec3 &origin()
+    const glm::vec3 &origin() const
     {
         return m_origin;
     }
 
-    glm::vec3 &dir()
+    const glm::vec3 &dir() const
     {
         return m_dir;
     }
 
-    glm::vec3 at(float t)
+    glm::vec3 at(float t) const
     {
         return m_dir * t + m_origin;
     }
 
-    glm::vec3 lookAt(glm::vec3 v)
+    glm::vec3 lookAt(glm::vec3 v) const
     {
         return glm::normalize(v - m_origin);
     }
@@ -54,6 +56,13 @@ class Ray
     {
         m_origin = at(t);
         return *this;
+    }
+
+    Ray transform(glm::mat4 matr)
+    {
+        auto n = (glm::inverseTranspose(glm::mat3(matr)));
+
+        return { glm::xyz(matr * glm::vec4(m_origin, 1.0)), n * m_dir };
     }
 };
 

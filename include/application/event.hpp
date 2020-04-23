@@ -5,6 +5,8 @@
 #include "application/keycodes.hpp"
 #include "std_header.hpp"
 
+#include "macros.hpp"
+
 #include <GLFW/glfw3.h>
 
 namespace ay::app
@@ -31,20 +33,6 @@ enum class EventType
     WINDOWPOSITION
 };
 
-
-#define EVENT_TYPE(t_type)                          \
-    static EventType static_type()                  \
-    {                                               \
-        return EventType::t_type;                   \
-    }                                               \
-    virtual EventType type() const override         \
-    {                                               \
-        return static_type();                       \
-    }                                               \
-    virtual const std::string name() const override \
-    {                                               \
-        return #t_type;                             \
-    }
 
 class Event
 {
@@ -219,7 +207,7 @@ class MouseScrolledEvent : public Event
 class MouseButtonPressedEvent : public Event
 {
   public:
-    MouseButtonPressedEvent(MouseCode button) : m_button(button)
+    MouseButtonPressedEvent(MouseCode button, int mod) : m_button(button), m_mod(mod)
     {
     }
 
@@ -227,30 +215,61 @@ class MouseButtonPressedEvent : public Event
     {
         return m_button;
     }
+    
+    bool alt()
+    {
+        return (m_mod & GLFW_MOD_ALT) > 0;
+    }
+    
+    bool ctrl()
+    {
+        return (m_mod & GLFW_MOD_CONTROL) > 0;
+    }
+
+    bool shift()
+    {
+        return (m_mod & GLFW_MOD_SHIFT) > 0;
+    }
 
     EVENT_TYPE(MOUSEBUTTONPRESSED)
 
-  private:
+    private:
     MouseCode m_button;
+    int m_mod;
 };
 
 class MouseButtonReleasedEvent : public Event
 {
   public:
-    MouseButtonReleasedEvent(MouseCode button) : m_button(button)
+    MouseButtonReleasedEvent(MouseCode button, int mod) : m_button(button), m_mod(mod)
     {
     }
-
 
     MouseCode button()
     {
         return m_button;
     }
 
-    EVENT_TYPE(MOUSEBUTTONPRESSED)
+    bool alt()
+    {
+        return (m_mod & GLFW_MOD_ALT) > 0;
+    }
+    
+    bool ctrl()
+    {
+        return (m_mod & GLFW_MOD_CONTROL) > 0;
+    }
+
+    bool shift()
+    {
+        return (m_mod & GLFW_MOD_SHIFT) > 0;
+    }
+
+    EVENT_TYPE(MOUSEBUTTONRELEASED)
 
   private:
     MouseCode m_button;
+    int m_mod;
 };
 
 

@@ -14,7 +14,7 @@
 namespace ay::mth
 {
 
-inline std::optional<glm::vec3> intersect_ray(Ray ray, Sphere sphere)
+inline std::optional<glm::vec3> intersect_ray(const Ray& ray, const Sphere &sphere)
 {
 
     const auto v        = ray.origin() - sphere.center();
@@ -38,13 +38,13 @@ inline std::optional<glm::vec3> intersect_ray(Ray ray, Sphere sphere)
     return ray.at(t0);
 }
 
-inline bool intersects_ray(Ray ray, Sphere sphere)
+inline bool intersects_ray(const Ray &ray, const Sphere &sphere)
 {
     return ray.distance_sq_to_point(sphere.center())
            <= (sphere.radius() * sphere.radius());
 }
 
-inline std::optional<glm::vec3> intersect_ray(Ray ray, Plane plane)
+inline std::optional<glm::vec3> intersect_ray(const Ray &ray, const Plane &plane)
 {
 
     // plane.distance_sq_to_point(ray.origin());
@@ -66,12 +66,12 @@ inline std::optional<glm::vec3> intersect_ray(Ray ray, Plane plane)
     return dist > 0 ? std::optional(ray.at(dist)) : std::nullopt;
 }
 
-inline bool intersects_ray(Ray ray, Plane plane)
+inline bool intersects_ray(const Ray &ray, const Plane &plane)
 {
     return intersect_ray(ray, plane).has_value();
 }
 
-inline std::optional<glm::vec3> intersect_ray(Ray ray, Box3 box)
+inline std::optional<glm::vec3> intersect_ray(const Ray &ray, const Box3 &box)
 {
 
     float tmin, tmax, tymin, tymax, tzmin, tzmax;
@@ -145,12 +145,12 @@ inline std::optional<glm::vec3> intersect_ray(Ray ray, Box3 box)
     return ray.at(tmin >= 0 ? tmin : tmax);
 }
 
-inline bool intersects_box(Ray ray, Box3 box)
+inline bool intersects_box(const Ray &ray, const Box3 &box)
 {
     return intersect_ray(ray, box).has_value();
 }
 
-inline std::optional<glm::vec3> intersect_ray(Ray ray,
+inline std::optional<glm::vec3> intersect_ray(const Ray &ray,
                                               glm::vec3 a,
                                               glm::vec3 b,
                                               glm::vec3 c,

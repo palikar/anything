@@ -116,15 +116,16 @@ class Geometry
 
         compute_bounding_box();
         auto c                     = m_bounding_box.center();
-        m_bounding_sphere.center() = c;
-        m_bounding_sphere.radius() = 0;
+        m_bounding_sphere.set_center(c);
+        m_bounding_sphere.set_radius(0);
 
         if (m_buffers.count("position") > 0)
         {
             const auto &verts = m_buffers.at("position").data;
-
+            
             for (size_t i = 0; i < verts.size() - 2; i += 2)
             {
+                
                 m_bounding_sphere.expand_by_point(
                   { verts[i], verts[i + 1], verts[i + 2] });
             }

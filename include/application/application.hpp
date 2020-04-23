@@ -51,19 +51,19 @@ class Application
     bool on_close(WindowCloseEvent &)
     {
         m_running = false;
-        return true;
+        return false;
     }
 
     bool on_resize(WindowResizeEvent &e)
     {
         m_engine.resize(e);
-        return true;
+        return false;
     }
 
     bool on_resposition(WindowPositionEvent &)
     {
 
-        return true;
+        return false;
     }
 };
 
