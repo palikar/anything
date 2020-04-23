@@ -54,7 +54,6 @@ class Camera
 
     glm::mat4 &projection()
     {
-        update();
         return m_projection;
     }
 

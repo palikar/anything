@@ -5,15 +5,6 @@
 
 #include "ay.hpp"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "ImGuizmo.h"
-
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 using namespace ay;
 
 
@@ -73,10 +64,10 @@ class SimpleGame : public gmt::GameBase {
     {
 
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().directional_light.intensity = 0.15;
+        main_scene->light_setup().directional_light.intensity = 1.15;
         
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().ambient_light.intensity = 0.15;
+        main_scene->light_setup().ambient_light.intensity = 1.15;
 
         main_scene->point_light(0);
         main_scene->light_setup().point_lights[0].constant = 0.0;
@@ -95,9 +86,9 @@ class SimpleGame : public gmt::GameBase {
     {
         init_basic();
 
-        // auto tex = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
-        // auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
-        // main_scene->set_skybox(gmt::skybox(sky));
+        auto tex = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
+        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        main_scene->set_skybox(gmt::skybox(sky));
 
         main_scene->add(gmt::axis());
         main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
@@ -109,24 +100,26 @@ class SimpleGame : public gmt::GameBase {
         {
             for (int j = 0; j < ball_grid_y; ++j)
             {
-                entities[i][j] = main_scene->add(gmt::mesh_entity({ grph::sphere_geometry(radius, 10, 10),
+                
+                entities[i][j] = main_scene->add(gmt::mesh_entity({ grph::sphere_geometry(radius, 80, 80),
                                                                     grph::solid_color((1.0f * i) / ball_grid_x,
                                                                                       (1.0f * j) / ball_grid_y,
                                                                                       0.4f) }));
 
                 cmp::transform(entities[i][j]).position() =
-                    glm::vec3(i * offset - (ball_grid_x * offset / 2),
-                              1.5f,
-                              j * 2.5f - (ball_grid_y * offset / 2));
+                    glm::vec3(i * offset - (ball_grid_x * offset * 0.5f),
+                              0.0f,
+                              j * offset - (ball_grid_y * offset * 0.5f)) ;
 
                 cmp::transform(entities[i][j]).update();
                 
                 cmp::mesh(entities[i][j]).geometry().compute_bounding_box();
                 cmp::mesh(entities[i][j]).geometry().compute_bounding_sphere();
+                
             }
         }
         
-        selected = entities[10][10];
+        selected = entities[0][0];
 
         raycaster.update_camera(&main_scene->camera());
         raycaster.update_viewport(engine()->width(), engine()->height());
@@ -182,31 +175,48 @@ class SimpleGame : public gmt::GameBase {
 
     bool mouse_press(app::MouseButtonReleasedEvent& event)
     {
+        // main_scene->add(gmt::line_segments_entity({
+        //             {ray.origin(),
+        //              ray.origin() + ray.dir() * 200.0f},
+        //             grph::solid_color(1.0f, 0.0f, 0.0f)}));
+        
         if (event.ctrl()) {
 
+            raycaster.update_camera(&main_scene->camera());
             auto ray = raycaster.camera_to_mouse();
 
+            
+            float current = std::numeric_limits<float>::max();
+            int x = 0;
+            int y = 0;
+            
             for (int i = 0; i < ball_grid_x; ++i)
             {
+                
                 for (int j = 0; j < ball_grid_y; ++j)
                 {
-                    auto& sp = cmp::mesh(entities[i][j]).geometry().bounding_sphere();
-                    auto tr = cmp::transform(entities[i][j]).get_tranformation();
 
-                    auto local = ray.transform(glm::inverse(tr));
-                    
-                    // std::cout << sp.radius() << "\n";
-                    // std::cout << glm::to_string( tr * glm::vec4(sp.center(), 1.0)) << "\n";
-                    // std::cout << glm::to_string(local.dir()) << "\n";
-                    
-                    if (auto p = mth::intersect_ray(local, sp))
+                    const auto& sp = cmp::mesh(entities[i][j]).geometry().bounding_sphere();
+                    const auto& tr = cmp::transform(entities[i][j]).transform();
+                    const auto local = ray.transform(glm::inverse(tr));
+
+                    if (auto p = mth::intersect_ray(local, sp); p)
                     {
-                        std::cout << "here: (" << i << ", " << j << ")" << "\n";
-                        return true;
+                        float new_dist = glm::distance( p.value(), local.origin());
+
+                        if (new_dist < current)
+                        {
+                            current = new_dist;
+                            x = i;
+                            y = j;
+                        }
+                        
                     };
 
                 }
-            }            
+            }
+
+            selected = entities[x][y];
             
         }
 

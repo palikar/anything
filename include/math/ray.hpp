@@ -58,11 +58,12 @@ class Ray
         return *this;
     }
 
-    Ray transform(glm::mat4 matr)
+    Ray transform(const glm::mat4& matr)
     {
-        auto n = (glm::inverseTranspose(glm::mat3(matr)));
-
-        return { glm::xyz(matr * glm::vec4(m_origin, 1.0)), n * m_dir };
+        
+        auto n = glm::mat3(glm::inverseTranspose(matr));
+        auto o = matr * glm::vec4(m_origin, 1.0);
+        return {{o.x, o.y, o.z}, glm::normalize(n * m_dir) };
     }
 };
 

@@ -17,16 +17,15 @@ namespace ay::mth
 inline std::optional<glm::vec3> intersect_ray(const Ray& ray, const Sphere &sphere)
 {
 
-    const auto v        = ray.origin() - sphere.center();
-    const float tca     = glm::dot(ray.dir(), v);
-    const float d2      = glm::dot(v, v) - tca * tca;
+    const auto v        = sphere.center() - ray.origin();
+    const float tca     = glm::dot(v, ray.dir());
+    const float d2      = glm::dot(v, v) - (tca * tca);
     const float radius2 = sphere.radius() * sphere.radius();
     if (d2 > radius2)
         return {};
 
     const float thc = std::sqrt(radius2 - d2);
     const float t0  = tca - thc;
-
     const float t1 = tca + thc;
 
     if (t0 < 0 && t1 < 0)

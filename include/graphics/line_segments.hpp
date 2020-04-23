@@ -36,8 +36,9 @@ class LineSegments
             pts.emplace_back(p.y);
             pts.emplace_back(p.z);
         }
-
-        m_geometry.set_attribute("position", (pts), 3);
+        m_count = std::size(points);
+        m_geometry.set_attribute("position", std::move(pts), 3);
+        m_geometry.pack();
     }
 
 
