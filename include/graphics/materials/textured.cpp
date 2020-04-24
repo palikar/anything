@@ -25,7 +25,11 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
     m_shader->set("is_relfection", m_parameters.m_is_reflection);
 
     m_shader->set("color", m_parameters.m_color);
+    m_shader->set("color_intensity", m_parameters.m_color_intensity);
+    
 
+    m_shader->set("ao_intensity", m_parameters.m_ao_intensity);
+    
     m_shader->set("camera_pos", ctx.camera_pos);
 
     m_shader->set_sampler("tex", binder.resolve(m_parameters.m_map.get()));

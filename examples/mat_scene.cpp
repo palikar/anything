@@ -15,6 +15,8 @@ class MatScene : public gmt::GameBase
     gmt::Entity* cube;
     gmt::Entity* torus;
 
+    std::vector<rend::CubeTexturePtr> env_maps;
+    std::vector<rend::TexturePtr> texs;
 
   public:
 
@@ -42,13 +44,22 @@ class MatScene : public gmt::GameBase
     {
         init_basic();
         
-        auto floor = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
-        auto brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
-        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        rend::TexturePtr floor = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
+        rend::TexturePtr brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
+        rend::CubeTexturePtr sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        rend::CubeTexturePtr night_sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
 
+        texs.push_back(brick);
+        texs.push_back(floor);
+        env_maps.push_back(sky);
+        env_maps.push_back(night_sky);
+
+        rend::TexturePtr brick_ao = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_ao.jpg"));
+        texs.push_back(brick_ao);
+        
         main_scene->set_skybox(gmt::skybox(sky));
-
         main_scene->add(gmt::axis());
+
 
         auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(150, 150, 50, 50), grph::texture_material(floor)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
@@ -79,9 +90,9 @@ class MatScene : public gmt::GameBase
     void update(double dt) override
     {
 
-        cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
-        cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
-        cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
+        // cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
+        // cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
+        // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
         
         main_scene->update(dt);
     }
@@ -157,7 +168,39 @@ class MatScene : public gmt::GameBase
             ImGui::Text("Color");
             ImGui::SameLine();
             ImGui::ColorEdit3("Color", (float*)&cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_color);
-                
+            ImGui::SliderFloat("Color intesity", (float*)&cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_color_intensity, 0.0f, 1.0f, "Value = %.3f");
+
+            ImGui::Checkbox("Is Reflection", (bool*)&cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_is_reflection);
+            ImGui::SliderFloat("Reflectivity", (float*)&cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_reflectivity, 0.0f, 1.0f, "Value = %.3f");
+            ImGui::SliderFloat("Refraction ration", (float*)&cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_refraction_ration, 0.0f, 1.0f, "Value = %.3f");
+
+            ImGui::SliderFloat("AO intesity", (float*)&cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_ao_intensity, 0.0f, 1.0f, "Value = %.3f");
+
+            const char* maps[] = {"Bricks", "Floor"};
+            static int map_current = 0;
+            ImGui::SetNextItemWidth(100);
+            ImGui::Combo("Map", &map_current, maps, 2);
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_map = texs[map_current];
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_ao_map = texs[2];
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_specular_map = texs[2];
+
+            
+
+            const char* envs[] = {"Sky", "Night Sky"};
+            static int env_current = 0;
+
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(100);
+            ImGui::Combo("Env Map", &env_current, envs, 2);
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_env_map = env_maps[env_current];
+
+            const char* mixing[] = {"Add", "Multiply", "Mix"};
+            static int mixing_current = 0;
+            ImGui::Combo("Mixing", &mixing_current, mixing, 3);
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_combine = rend::Combine{mixing_current};
+            
+            
+            
             ImGui::TreePop();
         }
 

@@ -17,6 +17,8 @@ struct TextureParameters
 {
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
 
+    float m_color_intensity{0.5};
+
     rend::CubeTexturePtr m_env_map{ nullptr };
     rend::TexturePtr m_map{ nullptr };
     rend::TexturePtr m_alpha_map{ nullptr };
@@ -30,7 +32,7 @@ struct TextureParameters
     bool m_is_reflection{ true };
 
     float m_reflectivity{ 0.0f };
-    float m_refraction_ration{ 0.0 };
+    float m_refraction_ration{ 0.98f };
 };
 
 class TextureMaterial : public Material

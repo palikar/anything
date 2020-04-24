@@ -110,7 +110,7 @@ void Application::render_engine()
     ImGuizmo::BeginFrame();
     m_engine.render();
 
-    ImGui::End();
+    // ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

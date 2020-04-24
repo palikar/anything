@@ -5,6 +5,8 @@ out vec4 frag_color;
 // basic mesh material
 uniform vec3 color;
 
+uniform float color_intensity;
+
 uniform sampler2D tex;
 
 uniform sampler2D alpha_map;
@@ -57,15 +59,14 @@ void main()
         discard;
     }
 
-    
 
     // base color
     vec3 final_color = texture(tex, uv).rgb;
-    final_color = mix(final_color, color, 0.5);
+    final_color = mix(final_color, color, color_intensity);
 
     // Ambient occlusion
-    float ambient_strength = texture(ao_map, uv).r;
-    final_color += ao_intensity * ambient_strength;
+    float ambient_strength = (texture(ao_map, uv).r - 1.0) * ao_intensity + 1.0;
+    final_color *= ambient_strength;
 
     // Environment
     vec3 I = normalize(pos - camera_pos);
@@ -84,8 +85,18 @@ void main()
     if (specular_strength == 0.0) {
         specular_strength = 1.0;
     }
-    
-    final_color = mix(final_color, env_color, reflectivity * specular_strength);
+
+    if (mixing == 0) {
+        // add
+        final_color += env_color.xyz * reflectivity * specular_strength;
+    } else if (mixing == 1) {
+        // mult
+        final_color = mix(final_color, final_color * env_color.xyz, reflectivity * specular_strength);
+    } else {
+        // mix
+        final_color = mix(final_color, env_color, reflectivity * specular_strength);
+    }
+        
 
     
     frag_color = vec4(final_color, alpha_opacity);

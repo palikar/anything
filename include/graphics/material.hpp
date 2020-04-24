@@ -13,14 +13,13 @@
 namespace ay::grph
 {
 
-// bool m_depth_test;
-// bool m_depth_write;
 // int m_stencil_write;
 // int m_stencil_mask;
 // int m_stencil_func;
 // int m_stencil_ref;
 // int m_stencil_fail;
 // int m_stencil_zpass;
+
 // int m_flat_shading;
 // int m_fog;
 
