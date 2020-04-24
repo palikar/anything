@@ -29,45 +29,39 @@ class Transform
 
     void rotate(glm::vec3 axis, float angle)
     {
-        // m_rotation = glm::rotate(m_rotation, angle, axis);
-        glm::rotate(m_tranform, angle, axis);
-        // update();
+        m_rotation = glm::rotate(m_rotation, angle, axis);
+        // glm::rotate(m_tranform, angle, axis);
+        update();
     }
 
     void rotateX(float angle)
     {
         rotate(glm::vec3(1, 0, 0), angle);
-        update();
     }
 
     void rotateY(float angle)
     {
         rotate(glm::vec3(0, 1, 0), angle);
-        update();
     }
 
     void rotateZ(float angle)
     {
         rotate(glm::vec3(0, 0, 1), angle);
-        update();
     }
 
     void translateX(float amt)
     {
         move(glm::vec3(1, 0, 0), amt);
-        update();
     }
 
     void translateY(float amt)
     {
         move(glm::vec3(0, 1, 0), amt);
-        update();
     }
 
     void translateZ(float amt)
     {
         move(glm::vec3(0, 0, 1), amt);
-        update();
     }
 
     void move(glm::vec3 axis, float amt)
@@ -135,6 +129,7 @@ class Transform
         m_position = v;
         update();
     }
+    
     void set_rotation(glm::quat q)
     {
         m_rotation = q;

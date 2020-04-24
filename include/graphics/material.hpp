@@ -24,12 +24,8 @@ namespace ay::grph
 // int m_flat_shading;
 // int m_fog;
 
-
-class Material
+struct MaterialParameters
 {
-  protected:
-    rend::ShaderPtr m_shader;
-
     float m_opacity{ 1.0 };
     rend::BlendingSetup m_blending{};
 
@@ -42,6 +38,15 @@ class Material
     rend::DepthFunc m_depth_func{ GL_LESS };
     bool m_depth_test{ true };
     bool m_depth_write{ true };
+    
+};
+
+class Material
+{
+  protected:
+    rend::ShaderPtr m_shader;
+
+    MaterialParameters m_parameters;
 
   public:
     Material()
@@ -58,12 +63,12 @@ class Material
 
     void set_wire_frame(bool value)
     {
-        m_wire_frame = value;
+        m_parameters.m_wire_frame = value;
     }
 
     bool wire_frame() const
     {
-        return m_wire_frame;
+        return m_parameters.m_wire_frame;
     }
 
     rend::Shader *shader()
@@ -79,63 +84,69 @@ class Material
 
     bool &transparent()
     {
-        return m_transparent;
+        return m_parameters.m_transparent;
     }
 
     bool &visible()
     {
-        return m_visible;
+        return m_parameters.m_visible;
     }
 
     rend::Side &side()
     {
-        return m_side;
+        return m_parameters.m_side;
     }
 
     void set_opacity(float val)
     {
-        m_opacity = val;
+        m_parameters.m_opacity = val;
     }
 
     float opacity()
     {
-        return m_opacity;
+        return m_parameters.m_opacity;
     }
 
     bool depth_test()
     {
-        return m_depth_test;
+        return m_parameters.m_depth_test;
     }
 
     void set_depth_test(bool value)
     {
-        m_depth_test = value;
+        m_parameters.m_depth_test = value;
     }
 
     bool depth_write()
     {
-        return m_depth_write;
+        return m_parameters.m_depth_write;
     }
 
     void set_depth_write(bool value)
     {
-        m_depth_write = value;
+        m_parameters.m_depth_write = value;
     }
 
     rend::DepthFunc depth_func()
     {
-        return m_depth_func;
+        return m_parameters.m_depth_func;
     }
 
     void set_depth_func(rend::DepthFunc value)
     {
-        m_depth_func = value;
+        m_parameters.m_depth_func = value;
     }
 
     rend::BlendingSetup &blending_setup()
     {
-        return m_blending;
+        return m_parameters.m_blending;
     }
+
+    MaterialParameters &parameters()
+    {
+        return m_parameters;
+    }
+    
 };
 
 using MaterialPtr = std::unique_ptr<Material>;

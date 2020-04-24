@@ -44,6 +44,8 @@ class Application
   private:
     void init();
 
+    void init_imgui();
+
     void render_engine();
 
     void on_event(Event &t_event);

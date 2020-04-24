@@ -102,10 +102,17 @@ class TextureMaterial : public Material
     {
         m_parameters.m_is_reflection = reflection;
     }
+
+    TextureParameters &parameters()
+    {
+        return m_parameters;
+    }
 };
 
 
-inline MaterialPtr texture_material(rend::TexturePtr tex)
+using TextureMaterialPtr = std::unique_ptr<TextureMaterial>;
+
+inline TextureMaterialPtr texture_material(rend::TexturePtr tex)
 {
     return std::make_unique<TextureMaterial>(std::move(tex));
 }

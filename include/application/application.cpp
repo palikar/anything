@@ -152,20 +152,25 @@ void Application::init()
     AY_DEBUG(fmt::format("GLSL version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
 
+    init_imgui();
+
+    m_engine.init(m_width, m_height);
+}
+
+void Application::init_imgui()
+{
     IMGUI_CHECKVERSION();
 
     ImGuiIO &io = ImGui::GetIO();
-    (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
-    // Controls
+    
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
-    io.ConfigFlags |=
-      ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
-
-    // io.ConfigViewportsNoAutoMerge = true;
-    // io.ConfigViewportsNoTaskBarIcon = true;
+    io.ConfigDockingWithShift = true;
+    io.ConfigViewportsNoAutoMerge = true;
+    io.ConfigViewportsNoTaskBarIcon = true;
+    
     ImGui::StyleColorsDark();
 
     ImGuiStyle &style = ImGui::GetStyle();
@@ -178,9 +183,7 @@ void Application::init()
     ImGui_ImplGlfw_InitForOpenGL(m_window->native(), true);
     ImGui_ImplOpenGL3_Init("#version 410");
 
-    m_engine.init(m_width, m_height);
 }
-
 
 void Application::on_event(Event &t_event)
 {

@@ -46,7 +46,7 @@ enum class BlenidngDestination : GLenum
 
 enum class Side
 {
-    FRONT,
+    FRONT = 0,
     BACK,
     BOTH
 };

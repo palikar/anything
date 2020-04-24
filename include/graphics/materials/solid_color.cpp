@@ -8,7 +8,7 @@ namespace ay::grph
 SolidColorMaterial::SolidColorMaterial(glm::vec3 t_color, bool t_wireframe)
   : m_params{ t_color, 1.0 }
 {
-    m_wire_frame = t_wireframe;
+    m_parameters.m_wire_frame = t_wireframe;
 }
 
 

@@ -219,7 +219,6 @@ class BallScene : public gmt::GameBase
         if (ImGui::CollapsingHeader("Ligting"))
         {
 
-            ImGui::SetNextItemOpen(true);
             if (ImGui::TreeNode("Directional light"))
             {
                 ImGui::Text("Color");
@@ -230,17 +229,16 @@ class BallScene : public gmt::GameBase
                 ImGui::TreePop();
             }
 
-            ImGui::SetNextItemOpen(true);
+
             if (ImGui::TreeNode("Ambient light"))
             {
                 ImGui::Text("Color");
                 ImGui::SameLine();
                 changed |=ImGui::ColorEdit3("color", (float*)&main_scene->light_setup().ambient_light.color);
-                changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3f");
+                changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3fp");
                 ImGui::TreePop();
             }
 
-            ImGui::SetNextItemOpen(true);
             if (ImGui::TreeNode("Point light"))
             {
                 ImGui::Text("Color");
@@ -253,7 +251,7 @@ class BallScene : public gmt::GameBase
                 ImGui::TreePop();
             }
 
-            ImGui::SetNextItemOpen(true);
+            
             if (ImGui::TreeNode("Spot light"))
             {
                 ImGui::Text("Color");
