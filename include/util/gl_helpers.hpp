@@ -1,12 +1,17 @@
 #pragma once
 
+#include <string>
+
 #include <GL/glew.h>
+
 
 namespace ay::gl
 {
 
 extern GLenum GLCheckError();
 extern bool GLLogCall(const char *function, const char *file, int32_t line);
+
+void take_screenshot(const std::string& file_name );
 
 }  // namespace ay::gl
 

@@ -193,12 +193,14 @@ add_library(anything_engine
     ./include/util/gl_helpers.cpp
     ./include/util/files.cpp
     ./include/util/logging.cpp
+    
+    
     )
 
 target_include_directories(anything_engine PUBLIC ./include)
 
 target_link_libraries(anything_engine PUBLIC project_options project_warnings project_defines
-    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo fmt )
+    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo fmt stb)
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
     target_precompile_headers(anything_engine

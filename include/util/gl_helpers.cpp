@@ -3,6 +3,8 @@
 
 #include "util/gl_helpers.hpp"
 
+#include <stb_image_write.h>
+
 namespace ay::gl
 {
 
@@ -21,6 +23,20 @@ bool GLLogCall(const char *function, const char *file, int32_t line)
         return false;
     }
     return true;
+}
+
+void take_screenshot(const std::string& file_name)
+{
+    
+    GLint viewport[4];
+    GLCall(glGetIntegerv( GL_VIEWPORT, viewport ));
+    char* pixels = new char[3 * viewport[2] * viewport[3]];
+    GLCall(glReadPixels(viewport[0], viewport[1], viewport[2], viewport[3], GL_RGB, GL_UNSIGNED_BYTE, pixels));
+    
+    stbi_flip_vertically_on_write(1);
+    stbi_write_png(file_name.c_str(), viewport[2], viewport[3], 3, pixels, 0);
+    
+    delete [] pixels;
 }
 
 }  // namespace ay::gl

@@ -26,7 +26,10 @@ target_link_libraries(imguizmo PUBLIC imgui)
 target_include_directories(imguizmo PUBLIC ./imguizmo )
 set_property(TARGET imguizmo PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-
 add_subdirectory(fmt)
 
+
+add_library(stb ./src/stb.cpp)
+target_include_directories(stb PUBLIC ./include)
+set_property(TARGET stb PROPERTY POSITION_INDEPENDENT_CODE ON)
 

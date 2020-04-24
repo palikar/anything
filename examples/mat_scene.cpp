@@ -1,5 +1,7 @@
 #include "ay.hpp"
 
+#include <stb_image_write.h>
+
 using namespace ay;
 
 class MatScene : public gmt::GameBase
@@ -114,10 +116,16 @@ class MatScene : public gmt::GameBase
 
     bool key_press(app::KeyReleasedEvent& event)
     {
+
         if (event.key_code() == KeyCode::F5)
         {
             std::cout << "Realoading shaders" << "\n";
             this->shaders().reload_all();
+        }
+
+        if (event.key_code() == KeyCode::F10)
+        {
+            gl::take_screenshot("screen.png");
         }
         
         return true;
@@ -204,10 +212,6 @@ class MatScene : public gmt::GameBase
             ImGui::TreePop();
         }
 
-
-
-        
-        
         renderer.render_scene(*main_scene);
     }
 
