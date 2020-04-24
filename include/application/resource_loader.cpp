@@ -1,5 +1,5 @@
-
 #include "application/resource_loader.hpp"
+
 #include "util/files.hpp"
 
 namespace ay::app
@@ -17,7 +17,7 @@ std::string ResouceLoader::get_file_path(std::string_view t_file)
     fs::path path = m_root / t_file;
     if (!fs::exists(path))
     {
-        std::cout << "No such resource: " << path << "\n";
+        AY_DEBUG(fmt::format("Resource does not exist: {}", path.string()));
     }
 
     return path;
@@ -28,7 +28,7 @@ std::string ResouceLoader::get_file_text(std::string_view t_file)
     fs::path path = m_root / t_file;
     if (!fs::exists(path))
     {
-        std::cout << "No such resource: " << path << "\n";
+        AY_DEBUG(fmt::format("Resource does not exist: {}", path.string()));
     }
 
     return files::load_file(path);
@@ -42,12 +42,12 @@ std::pair<std::string, std::string>
 
     if (!fs::exists(vertex))
     {
-        std::cout << "No such resource: " << vertex << "\n";
+        AY_DEBUG(fmt::format("Vertex shader is not found: {}", vertex.string()));
     }
 
     if (!fs::exists(fragment))
     {
-        std::cout << "No such resource: " << fragment << "\n";
+        AY_DEBUG(fmt::format("Fragment shader is not found: {}", vertex.string()));
     }
 
     return { vertex, fragment };

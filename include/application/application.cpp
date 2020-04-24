@@ -3,6 +3,10 @@
 #include <chrono>
 #include <thread>
 
+#include "util/logging.hpp"
+
+#include "commons.hpp"
+
 #include "ImGuizmo.h"
 
 namespace ay::app
@@ -57,7 +61,7 @@ int Application::run()
 
         if (frame_counter >= 1.0)
         {
-            std::cout << "FPS: " << frames << " UPS: " << updates << "\n";
+            AY_INFO(fmt::format("FPS: {}; UPS: {}", frames, updates));
             frames        = 0;
             updates       = 0;
             frame_counter = 0;
@@ -69,6 +73,7 @@ int Application::run()
             m_window->render();
             ++frames;
         }
+
         std::this_thread::sleep_for(5ms);
     }
 
@@ -113,10 +118,13 @@ void Application::render_engine()
 
 void Application::init()
 {
+    logging::init_logging(true, true);
+
+    AY_DEBUG(fmt::format("Anything version: {}", BuildInfo::build()));
+
     if (!glfwInit())
     {
-        std::cout << "Cannot initialize GLFW!"
-                  << "\n";
+        AY_ERROR("Cannot initilize GLFW");
         return;
     }
 
@@ -129,13 +137,19 @@ void Application::init()
     GLenum err       = glewInit();
     if (GLEW_OK != err)
     {
-        std::cout << "Glew Error: " << glewGetErrorString(err) << std::endl;
+        AY_ERROR(
+          fmt::format("Cannot initilize Glew. Error: {}", glewGetErrorString(err)));
         glfwTerminate();
         return;
     }
 
+    AY_INFO(fmt::format("Using resource folder: {}", "../resources"));
     ResouceLoader::get_instance()->init("../resources");
-    std::cout << glGetString(GL_VERSION) << "\n";
+
+
+    AY_DEBUG(fmt::format("Vendor: {}", glGetString(GL_VENDOR)));
+    AY_DEBUG(fmt::format("OpenGL version: {}", glGetString(GL_VERSION)));
+    AY_DEBUG(fmt::format("GLSL version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
 
     IMGUI_CHECKVERSION();

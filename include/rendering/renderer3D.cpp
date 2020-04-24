@@ -52,20 +52,6 @@ void RendererScene3D::bind_lighting(Shader *shader)
 
     for (size_t i = 0; i < grph::MAX_LIGHT; ++i)
     {
-
-        // if (i == 0)
-        // {
-        //     std::cout << m_current_context.light_setup->point_lights[i].active << "\n";
-        //     std::cout << m_current_context.light_setup->point_lights[i].constant <<
-        //     "\n"; std::cout << m_current_context.light_setup->point_lights[i].linear <<
-        //     "\n"; std::cout << m_current_context.light_setup->point_lights[i].quadratic
-        //     << "\n"; std::cout <<
-        //     glm::to_string(m_current_context.light_setup->point_lights[i].position) <<
-        //     "\n"; std::cout <<
-        //     glm::to_string(m_current_context.light_setup->point_lights[i].color) <<
-        //     "\n";
-        // }
-
         shader->set(fmt::format("lighting.point_lights[{}].act", i),
                     m_current_context.light_setup->point_lights[i].active);
         shader->set(fmt::format("lighting.point_lights[{}].color", i),

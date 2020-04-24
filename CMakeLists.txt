@@ -118,6 +118,10 @@ list(GET VERSION_LIST 0 VERSION_MAJOR)
 list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
 
+target_compile_definitions(project_defines INTERFACE AY_VERSION_MAJOR=${VERSION_MAJOR})
+target_compile_definitions(project_defines INTERFACE AY_VERSION_MINOR=${VERSION_MINOR})
+target_compile_definitions(project_defines INTERFACE AY_VERSION_PATCH=${VERSION_PATCH})
+
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)

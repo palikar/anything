@@ -1,5 +1,6 @@
 #pragma once
 
+#include "util/logging.hpp"
 
 #include "std_header.hpp"
 

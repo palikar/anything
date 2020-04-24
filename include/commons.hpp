@@ -67,9 +67,9 @@ inline constexpr auto AY_ARCH_NAME = "unknow";
 namespace ay
 {
 
-constexpr static const int version_major = 0;
-constexpr static const int version_minor = 0;
-constexpr static const int version_patch = 1;
+constexpr static const int version_major = AY_VERSION_MAJOR;
+constexpr static const int version_minor = AY_VERSION_MINOR;
+constexpr static const int version_patch = AY_VERSION_PATCH;
 
 constexpr static const char *compiler_version = AY_COMPILER_VERSION;
 constexpr static const char *compiler_name    = AY_COMPILER_NAME;
@@ -102,6 +102,13 @@ struct BuildInfo
     {
         return std::to_string(version_major()) + '.' + std::to_string(version_minor())
                + '.' + std::to_string(version_patch());
+    }
+
+    [[nodiscard]] static std::string build()
+    {
+        return std::to_string(version_major()) + '.' + std::to_string(version_minor())
+               + '.' + std::to_string(version_patch()) + ':'
+               + (ay::debug_build ? " Debug" : " Release");
     }
 };
 

@@ -1,5 +1,6 @@
 #include "rendering/cube_texture.hpp"
 
+#include "util/logging.hpp"
 
 namespace ay::rend
 {
@@ -10,9 +11,16 @@ unsigned char *CubeTexture::load_image(const std::string &t_file)
     stbi_uc *data = nullptr;
     stbi_set_flip_vertically_on_load(0);
 
-    data     = stbi_load(t_file.c_str(), &width, &height, &channels, 0);
+    data = stbi_load(t_file.c_str(), &width, &height, &channels, 0);
+
+    if (!data)
+    {
+        AY_ERROR(fmt::format("Could not image: {}", t_file));
+    }
+
     m_width  = width;
     m_height = height;
+
     return data;
 }
 
@@ -28,7 +36,6 @@ void CubeTexture::load_from_files(const std::vector<std::string> &t_files,
     const std::string &yneg = t_files[3];
     const std::string &zpos = t_files[4];
     const std::string &zneg = t_files[5];
-
 
     GLCall(glGenTextures(1, &m_id));
     GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, m_id));

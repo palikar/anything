@@ -71,6 +71,7 @@ using Vertex8fg =
                           rend::ShaderDataType::Float3,
                           rend::ShaderDataType::Float2>>;
 
+
 class Vertex3f
 {
   public:

@@ -8,6 +8,8 @@
 
 #include "application/keycodes.hpp"
 
+#include "util/logging.hpp"
+
 #include "std_header.hpp"
 #include "glm_header.hpp"
 
@@ -253,6 +255,7 @@ class Input
 
     void init(GLFWwindow *t_window)
     {
+        AY_DEBUG("Initializing immediate input.");
         m_window = t_window;
     }
 

@@ -6,6 +6,8 @@
 #include "application/input.hpp"
 #include "application/event.hpp"
 
+#include "util/logging.hpp"
+
 #include "std_header.hpp"
 
 namespace ay::app

@@ -90,58 +90,58 @@ class RenderAPI
     {
         if (value)
         {
-            glEnable(GL_DEPTH_TEST);
+            GLCall(glEnable(GL_DEPTH_TEST));
         }
         else
         {
-            glDisable(GL_DEPTH_TEST);
+            GLCall(glDisable(GL_DEPTH_TEST));
         }
     }
 
     void depth_write(bool value)
     {
-        glDepthMask(value ? GL_TRUE : GL_FALSE);
+        GLCall(glDepthMask(value ? GL_TRUE : GL_FALSE));
     }
 
     void wireframe(bool value)
     {
-        glPolygonMode(GL_FRONT_AND_BACK, value ? GL_LINE : GL_FILL);
+        GLCall(glPolygonMode(GL_FRONT_AND_BACK, value ? GL_LINE : GL_FILL));
     }
 
     void depth_func(DepthFunc func)
     {
-        glDepthFunc(static_cast<GLenum>(func));
+        GLCall(glDepthFunc(static_cast<GLenum>(func)));
     }
 
     void enable_wireframe()
     {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
     }
 
     void disable_wireframe()
     {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
     }
 
     void blending(bool value)
     {
         if (value)
         {
-            glEnable(GL_BLEND);
+            GLCall(glEnable(GL_BLEND));
         }
         else
         {
-            glDisable(GL_BLEND);
+            GLCall(glDisable(GL_BLEND));
         }
     }
 
     void submit_blending(BlendingSetup &setup)
     {
-        glBlendEquation(static_cast<GLenum>(setup.blend_equation));
-        glBlendFuncSeparate(static_cast<GLenum>(setup.blend_src),
-                            static_cast<GLenum>(setup.blend_dst),
-                            static_cast<GLenum>(setup.blend_src_alpha),
-                            static_cast<GLenum>(setup.blend_dst_alpha));
+        GLCall(glBlendEquation(static_cast<GLenum>(setup.blend_equation)));
+        GLCall(glBlendFuncSeparate(static_cast<GLenum>(setup.blend_src),
+                                   static_cast<GLenum>(setup.blend_dst),
+                                   static_cast<GLenum>(setup.blend_src_alpha),
+                                   static_cast<GLenum>(setup.blend_dst_alpha)));
     }
 
     void culling(const Side &setup)

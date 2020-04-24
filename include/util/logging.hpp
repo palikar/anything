@@ -1,4 +1,7 @@
+#pragma once
 #include "std_header.hpp"
+
+#include <fmt/format.h>
 
 namespace ay::logging
 {

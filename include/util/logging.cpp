@@ -3,16 +3,16 @@
 #include "util/logging.hpp"
 
 
-namespace ay
+namespace ay::logging
 {
 
 
 void init_logging([[maybe_unused]] bool debug, [[maybe_unused]] bool stand)
 {
-#ifdef DEUBG_LOGGING
+#ifdef DEBUG_LOGGING
     LOGGER = standard_logger(debug, stand);
 #endif
 }
 
 
-}  // namespace ay
+}  // namespace ay::logging

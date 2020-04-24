@@ -50,12 +50,14 @@ class Application
 
     bool on_close(WindowCloseEvent &)
     {
+        AY_DEBUG(fmt::format("Closing window"));
         m_running = false;
         return false;
     }
 
     bool on_resize(WindowResizeEvent &e)
     {
+        AY_DEBUG(fmt::format("Resizing: {}x{}", e.width(), e.height()));
         m_engine.resize(e);
         return false;
     }

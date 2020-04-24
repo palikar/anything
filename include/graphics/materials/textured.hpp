@@ -13,17 +13,15 @@
 namespace ay::grph
 {
 
-
-class TextureMaterial : public Material
+struct TextureParameters
 {
-  private:
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
 
-    rend::CubeTexturePtr m_env_map;
-    rend::TexturePtr m_map;
-    rend::TexturePtr m_alpha_map;
-    rend::TexturePtr m_specular_map;
-    rend::TexturePtr m_ao_map;
+    rend::CubeTexturePtr m_env_map{ nullptr };
+    rend::TexturePtr m_map{ nullptr };
+    rend::TexturePtr m_alpha_map{ nullptr };
+    rend::TexturePtr m_specular_map{ nullptr };
+    rend::TexturePtr m_ao_map{ nullptr };
 
     float m_ao_intensity{ 0.0 };
 
@@ -33,6 +31,12 @@ class TextureMaterial : public Material
 
     float m_reflectivity{ 0.0f };
     float m_refraction_ration{ 0.0 };
+};
+
+class TextureMaterial : public Material
+{
+  private:
+    TextureParameters m_parameters;
 
   public:
     TextureMaterial(rend::TexturePtr tex);
@@ -50,53 +54,53 @@ class TextureMaterial : public Material
 
     inline void set_map(rend::TexturePtr tex)
     {
-        m_map = std::move(tex);
+        m_parameters.m_map = std::move(tex);
     }
 
     inline void set_alpha_map(rend::TexturePtr tex)
     {
-        m_alpha_map = std::move(tex);
+        m_parameters.m_alpha_map = std::move(tex);
     }
 
     inline void set_ao_map(rend::TexturePtr tex)
     {
-        m_ao_map = std::move(tex);
+        m_parameters.m_ao_map = std::move(tex);
     }
 
     inline void set_specular_map(rend::TexturePtr tex)
     {
-        m_specular_map = std::move(tex);
+        m_parameters.m_specular_map = std::move(tex);
     }
 
     inline void set_env_map(rend::CubeTexturePtr tex, bool reflection = true)
     {
-        m_is_reflection = reflection;
-        m_env_map       = std::move(tex);
+        m_parameters.m_is_reflection = reflection;
+        m_parameters.m_env_map       = std::move(tex);
     }
 
     inline void set_color(glm::vec3 color)
     {
-        m_color = color;
+        m_parameters.m_color = color;
     }
 
     inline void set_reflectivity(float value)
     {
-        m_reflectivity = value;
+        m_parameters.m_reflectivity = value;
     }
 
     inline void set_refraction(float value)
     {
-        m_refraction_ration = value;
+        m_parameters.m_refraction_ration = value;
     }
 
     inline void set_ao_intensity(float value)
     {
-        m_ao_intensity = value;
+        m_parameters.m_ao_intensity = value;
     }
 
     inline void set_is_reflection(bool reflection)
     {
-        m_is_reflection = reflection;
+        m_parameters.m_is_reflection = reflection;
     }
 };
 

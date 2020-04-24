@@ -24,8 +24,7 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
 
     if (!m_window)
     {
-        std::cout << "Cannot open glfw window"
-                  << "\n";
+        AY_ERROR("Cannot open GLFW window.");
         return;
     }
 
@@ -151,6 +150,7 @@ void Window::render()
 
 bool Window::closed()
 {
+    // AY_DEBUG("Closing the GLFW window.");
     return glfwWindowShouldClose(m_window);
 }
 
