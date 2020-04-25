@@ -49,20 +49,14 @@ class PhongMaterial : public Material
     {
     }
 
-
     PhongParameters &parameters()
     {
         return m_parameters;
     }
 
+    void init_shader(rend::ShaderLibrary &t_shader_lib) override;
 
-    void init_shader(rend::ShaderLibrary &t_shader_lib) override
-    {
-    }
-
-    void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override
-    {
-    }
+    void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override;
 };
 
 

@@ -8,6 +8,7 @@
 #include "engine/entities/skybox.hpp"
 
 #include "engine/components/transform.hpp"
+#include "engine/components/model.hpp"
 #include "engine/components/mesh.hpp"
 #include "engine/components/group.hpp"
 #include "engine/components/line_segments.hpp"
@@ -144,6 +145,13 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 
 
     material->update_uniforms(m_binder, m_current_context);
+}
+
+void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *model_comp)
+{
+
+    
+
 }
 
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)

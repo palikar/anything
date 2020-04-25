@@ -168,6 +168,7 @@ add_library(anything_engine
     ./include/rendering/vertex_array.cpp
     ./include/rendering/texture_binder.cpp
 
+    ./include/graphics/materials/phong.cpp
     ./include/graphics/materials/solid_color.cpp
     ./include/graphics/materials/textured.cpp
     ./include/graphics/mesh_factory.cpp

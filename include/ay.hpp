@@ -35,6 +35,8 @@
 #include "engine/components/fps_camera.hpp"
 #include "engine/components/orbital_camera.hpp"
 #include "engine/components/mesh.hpp"
+#include "engine/components/model.hpp"
+#include "engine/components/model.hpp"
 #include "engine/components/line_segments.hpp"
 #include "engine/components/transform.hpp"
 #include "engine/components/group.hpp"
@@ -65,6 +67,7 @@
 #include "graphics/mesh_factory.hpp"
 
 #include "graphics/materials/solid_color.hpp"
+#include "graphics/materials/phong.hpp"
 #include "graphics/materials/textured.hpp"
 
 #include "graphics/loading/mesh_loader.hpp"

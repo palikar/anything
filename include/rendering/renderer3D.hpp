@@ -26,6 +26,7 @@ class Skybox;
 namespace ay::cmp
 {
 
+class ModelComponent;
 class MeshComponent;
 class GroupComponent;
 class LineSegmentsComponent;
@@ -71,6 +72,8 @@ class RendererScene3D
     void handle_sky(gmt::Skybox *sky);
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
+
+    void handle_model(gmt::Entity *object, cmp::ModelComponent *mesh_comp);
 
     void handle_line_segments(gmt::Entity *object, cmp::LineSegmentsComponent *line);
 

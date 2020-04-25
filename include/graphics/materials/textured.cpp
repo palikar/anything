@@ -29,7 +29,7 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
     m_shader->set("color", m_parameters.m_color);
     m_shader->set("color_intensity", m_parameters.m_color_intensity);
 
-
+    
     m_shader->set("ao_intensity", m_parameters.m_ao_intensity);
 
     m_shader->set("camera_pos", ctx.camera_pos);
@@ -39,9 +39,11 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
     if (m_parameters.m_ao_map)
     {
         m_shader->set_sampler("ao_map", binder.resolve(m_parameters.m_ao_map.get()));
+        m_shader->set("has_ao_map", true);
     }
     else
     {
+        m_shader->set("has_ao_map", false);
         m_shader->set_sampler("ao_map", binder.free_2d_slot());
     }
 
@@ -49,20 +51,24 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
     {
         m_shader->set_sampler("specular_map",
                               binder.resolve(m_parameters.m_specular_map.get()));
+        m_shader->set("has_specular_map", true );
     }
     else
     {
         m_shader->set_sampler("specular_map", binder.free_2d_slot());
+        m_shader->set("has_specular_map", false);
     }
 
     if (m_parameters.m_alpha_map)
     {
         m_shader->set_sampler("alpha_map",
                               binder.resolve(m_parameters.m_alpha_map.get()));
+        m_shader->set("has_alpha_map", true);
     }
     else
     {
         m_shader->set_sampler("alpha_map", binder.free_2d_slot());
+        m_shader->set("has_alpha_map", false);
     }
 
 
