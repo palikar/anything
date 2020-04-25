@@ -22,8 +22,8 @@ class Model
     {
     }
 
-
     Model(const Model&) = default;
+
     Model(Model&&) = default;
 
     void add_mesh(Mesh t_mesh)
