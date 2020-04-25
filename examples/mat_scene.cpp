@@ -1,7 +1,5 @@
 #include "ay.hpp"
 
-#include <stb_image_write.h>
-
 using namespace ay;
 
 class MatScene : public gmt::GameBase
@@ -50,18 +48,17 @@ class MatScene : public gmt::GameBase
         rend::TexturePtr brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
         rend::CubeTexturePtr sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
         rend::CubeTexturePtr night_sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
+        rend::TexturePtr brick_ao = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_ao.jpg"));
 
         texs.push_back(brick);
         texs.push_back(floor);
         env_maps.push_back(sky);
         env_maps.push_back(night_sky);
 
-        rend::TexturePtr brick_ao = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_ao.jpg"));
         texs.push_back(brick_ao);
         
         main_scene->set_skybox(gmt::skybox(sky));
         main_scene->add(gmt::axis());
-
 
         auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(150, 150, 50, 50), grph::texture_material(floor)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
@@ -69,7 +66,6 @@ class MatScene : public gmt::GameBase
         auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(150, 150, 50, 50), grph::texture_material(floor)}));
         cmp::transform(wall_mesh).translateY(75.0f);
         cmp::transform(wall_mesh).translateZ(-75.0f);
-
 
         // Initing the cube
         cube = main_scene->add(gmt::mesh_entity({grph::cube_geometry(7, 7, 7, 40, 40, 40), grph::solid_color(rend::Colors::blue)}));
@@ -80,11 +76,12 @@ class MatScene : public gmt::GameBase
         cmp::transform(torus).set_position({0.0f , 10.0f, -15.0f});
 
         // Initing the sphere
+        
         auto brick_mat = grph::texture_material(brick);
         grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.0f, 0.6f, 0.0f});
-        
         sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
         cmp::transform(sphere).set_position({0.0f , 10.0f, 15.0f});
+        // cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_env_map = sky;
 
 
     }
@@ -95,6 +92,7 @@ class MatScene : public gmt::GameBase
         // cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
         // cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
         // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
+
         
         main_scene->update(dt);
     }
@@ -166,9 +164,7 @@ class MatScene : public gmt::GameBase
             const char* sides[] = {"Front", "Back", "Both"};
             static int current = 0;
             ImGui::Combo("Render side", &current, sides, 3);
-            cmp::mesh(sphere).material<grph::Material>()->parameters().m_side = rend::Side{current};
-
-            
+            cmp::mesh(sphere).material<grph::Material>()->parameters().m_side = rend::Side{current};            
 
             ImGui::Separator();
             ImGui::Text("Texture material");
@@ -192,8 +188,6 @@ class MatScene : public gmt::GameBase
             cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_ao_map = texs[2];
             cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_specular_map = texs[2];
 
-            
-
             const char* envs[] = {"Sky", "Night Sky"};
             static int env_current = 0;
 
@@ -205,9 +199,7 @@ class MatScene : public gmt::GameBase
             const char* mixing[] = {"Add", "Multiply", "Mix"};
             static int mixing_current = 0;
             ImGui::Combo("Mixing", &mixing_current, mixing, 3);
-            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_combine = rend::Combine{mixing_current};
-            
-            
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_combine = rend::Combine{mixing_current};            
             
             ImGui::TreePop();
         }

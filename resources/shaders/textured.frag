@@ -17,6 +17,8 @@ uniform float ao_intensity;
 
 uniform sampler2D ao_map;
 
+uniform bool has_env;
+
 uniform samplerCube env_map;
 
 uniform bool is_relfection;
@@ -70,33 +72,34 @@ void main()
 
     // Environment
     vec3 I = normalize(pos - camera_pos);
-    vec3 env_color;
+    vec3 env_color = vec3(1,0,0);
     
     if (is_relfection) {
         vec3 R = reflect(I, normalize(normal));
-        env_color = texture(env_map, R).rgb;
-        
+        env_color = texture(env_map, R).rgb;        
     } else {
         vec3 R = refract(I, normalize(normal), refraction_ration);
         env_color = texture(env_map, R).rgb;
     }
+
     
     float specular_strength = texture(specular_map, uv).r;
     if (specular_strength == 0.0) {
         specular_strength = 1.0;
     }
 
-    if (mixing == 0) {
-        // add
-        final_color += env_color.xyz * reflectivity * specular_strength;
-    } else if (mixing == 1) {
-        // mult
-        final_color = mix(final_color, final_color * env_color.xyz, reflectivity * specular_strength);
-    } else {
-        // mix
-        final_color = mix(final_color, env_color, reflectivity * specular_strength);
+    
+    if (has_env) {
+        if (mixing == 0) {
+            final_color += env_color.xyz * reflectivity * specular_strength;
+        } else if (mixing == 1) {
+            final_color = mix(final_color, final_color * env_color.xyz, reflectivity * specular_strength);
+        } else {            
+            final_color = mix(final_color, env_color.rgb, reflectivity * specular_strength) ;        
+        }
     }
-        
+    
+
 
     
     frag_color = vec4(final_color, alpha_opacity);

@@ -129,7 +129,7 @@ class Transform
         m_position = v;
         update();
     }
-    
+
     void set_rotation(glm::quat q)
     {
         m_rotation = q;

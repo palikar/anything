@@ -162,15 +162,15 @@ void Application::init_imgui()
     IMGUI_CHECKVERSION();
 
     ImGuiIO &io = ImGui::GetIO();
-    
+
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    io.ConfigDockingWithShift = true;
-    io.ConfigViewportsNoAutoMerge = true;
+    io.ConfigDockingWithShift       = true;
+    io.ConfigViewportsNoAutoMerge   = true;
     io.ConfigViewportsNoTaskBarIcon = true;
-    
+
     ImGui::StyleColorsDark();
 
     ImGuiStyle &style = ImGui::GetStyle();
@@ -182,7 +182,6 @@ void Application::init_imgui()
 
     ImGui_ImplGlfw_InitForOpenGL(m_window->native(), true);
     ImGui_ImplOpenGL3_Init("#version 410");
-
 }
 
 void Application::on_event(Event &t_event)

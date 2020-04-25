@@ -17,7 +17,7 @@ struct TextureParameters
 {
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
 
-    float m_color_intensity{0.5};
+    float m_color_intensity{ 0.5f };
 
     rend::CubeTexturePtr m_env_map{ nullptr };
     rend::TexturePtr m_map{ nullptr };

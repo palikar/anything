@@ -61,7 +61,7 @@ class Component
     {
         return false;
     }
-    
+
     virtual void init(GameBase *)
     {
     }

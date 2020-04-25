@@ -37,7 +37,6 @@ struct MaterialParameters
     rend::DepthFunc m_depth_func{ GL_LESS };
     bool m_depth_test{ true };
     bool m_depth_write{ true };
-    
 };
 
 class Material
@@ -145,7 +144,6 @@ class Material
     {
         return m_parameters;
     }
-    
 };
 
 using MaterialPtr = std::unique_ptr<Material>;

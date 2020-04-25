@@ -148,9 +148,13 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)
 {
+
+    m_binder.begin_draw_call();
+
     auto transform = cmp::transform(object);
     auto shader    = mesh_comp->mesh.material()->shader();
     auto mat       = mesh_comp->mesh.material();
+
 
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
@@ -170,6 +174,7 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 
 void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent *)
 {
+
     auto transform = cmp::transform(object);
     push_transform(transform.get_tranformation());
 
@@ -186,6 +191,8 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
                                            cmp::LineSegmentsComponent *line)
 {
 
+    m_binder.begin_draw_call();
+
     auto transform = cmp::transform(object);
     auto shader    = line->segments.material()->shader();
     auto mat       = line->segments.material();
@@ -201,12 +208,14 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
 
 void RendererScene3D::handle_sky(gmt::Skybox *sky)
 {
+    m_binder.begin_draw_call();
+
     auto shader  = sky->shader();
     auto tex     = sky->texture();
     auto buffers = sky->buffers();
 
     switch_shader(shader);
-    auto slot = m_binder.resolve(tex);
+    const auto slot = m_binder.resolve(tex);
     shader->set_sampler("skybox", slot);
 
     auto sky_view = m_view;
@@ -215,9 +224,9 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     shader->set("projection_matrix", m_projection * sky_view);
 
 
-    GLCall(glCullFace(GL_FRONT));
+    m_api->culling(Side::FRONT);
     m_api->draw_indexed(buffers);
-    GLCall(glCullFace(GL_BACK));
+    m_api->culling(Side::BACK);
 }
 
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
@@ -231,7 +240,6 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
 
     dispatch_component<cmp::GroupComponent>(t_obj, HANDLER(handle_group));
 }
-
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)
 {

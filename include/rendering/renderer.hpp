@@ -69,6 +69,7 @@ class RenderAPI
         vertex_array->bind();
         uint32_t count =
           index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
+
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
 

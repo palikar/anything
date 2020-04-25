@@ -11,8 +11,6 @@
 #include "macros.hpp"
 
 
-
-
 namespace ay::cmp
 {
 
@@ -20,25 +18,22 @@ namespace ay::cmp
 class MovementComponent : public gmt::Component
 {
   public:
+    mth::Transform &transform;
 
-    mth::Transform& transform;
-    
   public:
     AY_COMPONENT(Movement)
 
-    MovementComponent(mth::Transform& t_transform) : transform(t_transform)
+    MovementComponent(mth::Transform &t_transform) : transform(t_transform)
     {
-
     }
 
-    void init(gmt::GameBase*) override
-    {        
+    void init(gmt::GameBase *) override
+    {
     }
 
 
     bool event(app::Event &) override
     {
-
     }
 
     void update(double) override
@@ -47,5 +42,4 @@ class MovementComponent : public gmt::Component
 };
 
 
-
-}
+}  // namespace ay::cmp

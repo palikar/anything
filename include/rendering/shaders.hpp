@@ -65,32 +65,16 @@ class Shader
 
     void set(const std::string &name, const glm::mat4 &mat);
 
-    void set_sampler(const std::string &name, size_t unit)
-    {
-        auto location = glGetUniformLocation(m_id, name.c_str());
-        glUniform1i(location, unit);
-    }
+    void set_sampler(const std::string &name, size_t unit);
 
     void bind();
 
     void unbind();
 
   private:
-    GLint get_uniform(const std::string &name)
-    {
-        auto f = m_uniforms.find(name);
-        if (f != m_uniforms.end())
-        {
-            return f->second;
-        }
-
-        GLint location = glGetUniformLocation(m_id, name.c_str());
-        m_uniforms.insert({ name, location });
-        return location;
-    }
+    GLint get_uniform(const std::string &name);
 
     std::unordered_map<std::string, GLint> m_uniforms;
-
 
     void compile_program(const std::unordered_map<GLenum, std::string> &shader_sources,
                          bool reaload = false);

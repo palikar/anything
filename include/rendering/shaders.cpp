@@ -78,6 +78,25 @@ void Shader::set(const std::string &name, const glm::mat4 &mat)
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 }
 
+void Shader::set_sampler(const std::string &name, size_t unit)
+{
+    auto location = glGetUniformLocation(m_id, name.c_str());
+    glUniform1i(location, unit);
+}
+
+GLint Shader::get_uniform(const std::string &name)
+{
+    auto f = m_uniforms.find(name);
+    if (f != m_uniforms.end())
+    {
+        return f->second;
+    }
+
+    GLint location = glGetUniformLocation(m_id, name.c_str());
+    m_uniforms.insert({ name, location });
+    return location;
+}
+
 void Shader::bind()
 {
     glUseProgram(m_id);
