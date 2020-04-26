@@ -36,9 +36,11 @@ class Geometry
 
   private:
     std::vector<uint32_t> m_index;
+    bool m_indexed{false};
+    
     std::unordered_map<std::string, Attriubute> m_buffers;
     std::vector<std::tuple<int32_t, int32_t>> m_groups;
-    rend::VertexArrayPtr m_glbuffers;
+    mutable rend::VertexArrayPtr m_glbuffers;
 
     mth::Sphere m_bounding_sphere;
     mth::Box3 m_bounding_box;
@@ -78,12 +80,23 @@ class Geometry
 
     void set_index(std::vector<uint32_t> buffer)
     {
+        m_indexed = true;
         m_index = std::move(buffer);
     }
 
-    std::vector<uint32_t> &index()
+    void remove_index()
+    {
+        m_indexed = false;
+    }
+
+    const std::vector<uint32_t> &index() const
     {
         return m_index;
+    }
+
+    bool is_indexed() const
+    {
+        return m_indexed;
     }
 
     void apply(glm::mat4 t_mat);
@@ -181,7 +194,7 @@ class Geometry
     }
 
     const rend::VertexArray *gl_buffers() const
-    {
+    {        
         return m_glbuffers.get();
     }
 

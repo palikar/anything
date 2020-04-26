@@ -63,6 +63,8 @@ uniform vec3 camera_pos;
 
 uniform LightSetup lighting;
 
+uniform bool lighting_enabled;
+
 
 vec3 apply_dir_light(DirLight light, vec3 surface_color, vec3 normal, vec3 surface_pos, vec3 surface_to_camera)
 {
@@ -140,26 +142,31 @@ void main()
         frag_color = vec4(color, opacity);
     }
 
-    vec3 normal = normalize(norm);
-    vec3 to_camera = - normalize(pos - camera_pos);
+    if (lighting_enabled) {
+        vec3 normal = normalize(norm);
+        vec3 to_camera = - normalize(pos - camera_pos);
 
-    vec3 final_color = vec3(0.0);
+        vec3 final_color = vec3(0.0);
     
-    final_color += apply_ambient_light(lighting.ambient_light, frag_color.rgb);
-    final_color += apply_dir_light(lighting.dir_light, frag_color.rgb, normal , pos, to_camera);
+        final_color += apply_ambient_light(lighting.ambient_light, frag_color.rgb);
+        final_color += apply_dir_light(lighting.dir_light, frag_color.rgb, normal , pos, to_camera);
     
-    for (int i = 0; i < MAX_LIGHT; ++i) {
-        if(lighting.point_lights[i].act) {
-            final_color += apply_point_light(lighting.point_lights[i], frag_color.rgb, normal, pos, to_camera);   
+        for (int i = 0; i < MAX_LIGHT; ++i) {
+            if(lighting.point_lights[i].act) {
+                final_color += apply_point_light(lighting.point_lights[i], frag_color.rgb, normal, pos, to_camera);   
+            }
         }
-    }
 
         
-    for (int i = 0; i < MAX_LIGHT; ++i) {
-        if(lighting.spot_lights[i].act) {
-            final_color += apply_spot_light(lighting.spot_lights[i], frag_color.rgb, normal, pos, to_camera);   
+        for (int i = 0; i < MAX_LIGHT; ++i) {
+            if(lighting.spot_lights[i].act) {
+                final_color += apply_spot_light(lighting.spot_lights[i], frag_color.rgb, normal, pos, to_camera);   
+            }
         }
-    }
+        frag_color = vec4(final_color.xzy, opacity);
 
-    frag_color = vec4(final_color.xzy, opacity);
+        frag_color = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+    
+
 }

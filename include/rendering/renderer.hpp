@@ -6,6 +6,8 @@
 #include "rendering/buffers.hpp"
 #include "rendering/api.hpp"
 
+#include "graphics/geometry.hpp"
+
 #include "macros.hpp"
 #include "glm_header.hpp"
 
@@ -15,153 +17,40 @@ namespace ay::rend
 
 class RenderAPI
 {
-  private:
   public:
-    RenderAPI()
-    {
-    }
+    RenderAPI();
 
-    void init()
-    {
+    void init();
 
-        GLCall(glEnable(GL_DEPTH_TEST));
-        GLCall(glEnable(GL_CULL_FACE));
-        GLCall(glCullFace(GL_BACK));
-        GLCall(glFrontFace(GL_CW));
-    }
+    void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height);
 
-    void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
-    {
-        GLCall(glViewport(x, y, width, height));
-    }
+    void set_clear_color(glm::vec4 color);
 
-    void set_clear_color(glm::vec4 color)
-    {
-        GLCall(glClearColor(color.r, color.g, color.b, color.a));
-    }
+    void clear();
 
-    void clear()
-    {
-        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    }
+    void draw_mutli_indexed(const VertexArray *vertex_array, uint32_t index_count = 0);
 
-    void draw_mutli_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
-    {
-        vertex_array->bind();
+    void draw_lines(grph::Geometry& geometry, uint32_t element_count = 0);
 
-        for (size_t i = 0; i < vertex_array->index_cnt(); ++i)
-        {
-            vertex_array->bind_index(i);
-            uint32_t count =
-              index_count <= 0 ? vertex_array->index_buffer(i)->count() : index_count;
-            GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
-        }
-    }
+    void draw_triangles(grph::Geometry& geometry, uint32_t element_count = 0);
 
-    void draw_indexed(const VertexArray *vertex_array, uint32_t index_count = 0)
-    {
+    void depth_test(bool value);
 
-        if (vertex_array->multi_indexed())
-        {
-            draw_mutli_indexed(vertex_array);
-        }
+    void depth_write(bool value);
 
-        vertex_array->bind();
-        uint32_t count =
-          index_count <= 0 ? vertex_array->index_buffer()->count() : index_count;
+    void wireframe(bool value);
 
-        GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
-    }
+    void depth_func(DepthFunc func);
 
-    void draw_lines(const VertexArray *vertex_array, uint32_t element_count)
-    {
+    void enable_wireframe();
 
-        vertex_array->bind();
-        GLCall(glDrawArrays(GL_LINES, 0, element_count));
-    }
+    void disable_wireframe();
 
-    void draw_line_strip(const VertexArray *vertex_array, uint32_t element_count)
-    {
+    void blending(bool value);
 
-        vertex_array->bind();
-        GLCall(glDrawArrays(GL_LINE_STRIP, 0, element_count));
-    }
+    void submit_blending(BlendingSetup &setup);
 
-    void depth_test(bool value)
-    {
-        if (value)
-        {
-            GLCall(glEnable(GL_DEPTH_TEST));
-        }
-        else
-        {
-            GLCall(glDisable(GL_DEPTH_TEST));
-        }
-    }
-
-    void depth_write(bool value)
-    {
-        GLCall(glDepthMask(value ? GL_TRUE : GL_FALSE));
-    }
-
-    void wireframe(bool value)
-    {
-        GLCall(glPolygonMode(GL_FRONT_AND_BACK, value ? GL_LINE : GL_FILL));
-    }
-
-    void depth_func(DepthFunc func)
-    {
-        GLCall(glDepthFunc(static_cast<GLenum>(func)));
-    }
-
-    void enable_wireframe()
-    {
-        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
-    }
-
-    void disable_wireframe()
-    {
-        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
-    }
-
-    void blending(bool value)
-    {
-        if (value)
-        {
-            GLCall(glEnable(GL_BLEND));
-        }
-        else
-        {
-            GLCall(glDisable(GL_BLEND));
-        }
-    }
-
-    void submit_blending(BlendingSetup &setup)
-    {
-        GLCall(glBlendEquation(static_cast<GLenum>(setup.blend_equation)));
-        GLCall(glBlendFuncSeparate(static_cast<GLenum>(setup.blend_src),
-                                   static_cast<GLenum>(setup.blend_dst),
-                                   static_cast<GLenum>(setup.blend_src_alpha),
-                                   static_cast<GLenum>(setup.blend_dst_alpha)));
-    }
-
-    void culling(const Side &setup)
-    {
-        switch (setup)
-        {
-        case Side::BACK:
-            GLCall(glEnable(GL_CULL_FACE));
-            GLCall(glCullFace(GL_BACK));
-            break;
-
-        case Side::FRONT:
-            GLCall(glEnable(GL_CULL_FACE));
-            GLCall(glCullFace(GL_FRONT));
-            break;
-
-        case Side::BOTH: GLCall(glDisable(GL_CULL_FACE)); break;
-        }
-    }
+    void culling(const Side &setup);
 };
 
 

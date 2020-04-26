@@ -83,6 +83,8 @@ void RendererScene3D::bind_lighting(Shader *shader)
         shader->set(fmt::format("lighting.spot_lights[{}].outer_cut_off", i),
                     m_current_context.light_setup->spot_lights[i].outer_cut_off);
     }
+
+    shader->set("lighting_enabled", true);
 }
 
 void RendererScene3D::switch_shader(Shader *shader)
@@ -173,14 +175,13 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
         }
         
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
-        m_api->draw_indexed(mesh->buffers());
+        m_api->draw_triangles(mesh->geometry());
     }
 
 }
 
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)
 {
-
     m_binder.begin_draw_call();
 
     auto transform = cmp::transform(object);
@@ -201,7 +202,7 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
 
-    m_api->draw_indexed(mesh_comp->mesh.buffers());
+    m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 
 void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent *)
@@ -222,7 +223,6 @@ void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent *)
 void RendererScene3D::handle_line_segments(gmt::Entity *object,
                                            cmp::LineSegmentsComponent *line)
 {
-
     m_binder.begin_draw_call();
 
     auto transform = cmp::transform(object);
@@ -233,9 +233,9 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     switch_mvp(shader, transform.get_tranformation());
     handle_material(mat, shader);
 
-    // std::cout << line->segments.count() << "\n";
-
-    m_api->draw_lines(line->segments.buffers(), line->segments.count());
+    shader->set("lighting_enabled", false);
+    
+    m_api->draw_lines(line->segments.geometry());
 }
 
 void RendererScene3D::handle_sky(gmt::Skybox *sky)
@@ -244,7 +244,7 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
 
     auto shader  = sky->shader();
     auto tex     = sky->texture();
-    auto buffers = sky->buffers();
+    auto& geom = sky->geometry();
 
     switch_shader(shader);
     const auto slot = m_binder.resolve(tex);
@@ -254,10 +254,9 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     sky_view[3]   = glm::vec4(0, 0, 0, 1);
 
     shader->set("projection_matrix", m_projection * sky_view);
-
-
+    
     m_api->culling(Side::FRONT);
-    m_api->draw_indexed(buffers);
+    m_api->draw_triangles(geom);
     m_api->culling(Side::BACK);
 }
 

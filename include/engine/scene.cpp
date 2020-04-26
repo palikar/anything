@@ -17,14 +17,14 @@ void Scene3D::init(GameBase *t_game)
 }
 
 
-Entity *Scene3D::add(EntityPtr t_entity)
-{
-    t_entity->set_game(m_game, temp_id++);
-    t_entity->init(m_game);
-    m_entities.push_back(std::move(t_entity));
+// Entity *Scene3D::add(EntityPtr t_entity)
+// {
+//     t_entity->set_game(m_game, temp_id++);
+//     t_entity->init(m_game);
+//     m_entities.push_back(std::move(t_entity));
 
-    return m_entities.back().get();
-}
+//     return m_entities.back().get();
+// }
 
 
 Skybox *Scene3D::set_skybox(EntityPtr t_sky)

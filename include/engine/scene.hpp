@@ -43,7 +43,16 @@ class Scene3D
 
     void init(GameBase *t_game);
 
-    Entity *add(EntityPtr t_entity);
+    template<typename T>
+    T *add(std::unique_ptr<T> t_entity)
+    {
+        t_entity->set_game(m_game, temp_id++);
+        t_entity->init(m_game);
+        m_entities.push_back(std::move(t_entity));
+
+        return static_cast<T*>(m_entities.back().get());
+    }
+
 
     template<typename T, typename... Args>
     T *add_component(Args... args)

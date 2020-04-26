@@ -15,6 +15,8 @@ class MatScene : public gmt::GameBase
     gmt::Entity* cube;
     gmt::Entity* torus;
 
+    gmt::BoxHelper* box;
+
     std::vector<rend::CubeTexturePtr> env_maps;
     std::vector<rend::TexturePtr> texs;
 
@@ -56,16 +58,17 @@ class MatScene : public gmt::GameBase
         env_maps.push_back(night_sky);
 
         texs.push_back(brick_ao);
-        
         main_scene->set_skybox(gmt::skybox(sky));
+        
+        
         main_scene->add(gmt::axis());
 
-        auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(150, 150, 50, 50), grph::texture_material(floor)}));
+        auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::texture_material(floor)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
         
-        auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(150, 150, 50, 50), grph::texture_material(floor)}));
-        cmp::transform(wall_mesh).translateY(75.0f);
-        cmp::transform(wall_mesh).translateZ(-75.0f);
+        auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::texture_material(floor)}));
+        cmp::transform(wall_mesh).translateY(50.0f);
+        cmp::transform(wall_mesh).translateZ(-50.0f);
 
         // Initing the cube
         cube = main_scene->add(gmt::mesh_entity({grph::cube_geometry(7, 7, 7, 40, 40, 40), grph::solid_color(rend::Colors::blue)}));
@@ -82,6 +85,8 @@ class MatScene : public gmt::GameBase
         sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
         cmp::transform(sphere).set_position({0.0f , 10.0f, 15.0f});
         // cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_env_map = sky;
+
+        box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f,-50.0f,-50.0f}, {50.0f, 50.0f, 50.0f}}));
 
 
     }

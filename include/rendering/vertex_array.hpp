@@ -24,7 +24,7 @@ class VertexArray
     void add_vertex_buffer(VertexBufferPtr vertex_buffer);
 
     void set_index_buffer(IndexBufferPtr index_buffer, size_t index = 0);
-
+    
     bool multi_indexed() const
     {
         return m_index_buffers.size() > 1;
