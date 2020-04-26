@@ -198,10 +198,9 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
         bind_lighting(shader);
     }
 
-
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
-
+    m_api->culling(Side::BOTH);
     m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 

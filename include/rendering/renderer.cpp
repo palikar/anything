@@ -61,7 +61,6 @@ void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
                            ? geometry.gl_buffers()->index_buffer()->count()
                            : element_count;
 
-
         GLCall(glDrawElements(GL_LINES, count, GL_UNSIGNED_INT, nullptr));
     }
     else

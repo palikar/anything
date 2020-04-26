@@ -191,7 +191,7 @@ Geometry sphere_geometry(float radius,
     float index = 0;
     std::vector<std::vector<size_t>> grid;
 
-    for (iy = 0; iy <= height_segments; iy++)
+    for (iy = 0; iy <= height_segments; ++iy)
     {
         std::vector<size_t> verticesRow;
         float v = iy / height_segments;
@@ -199,11 +199,11 @@ Geometry sphere_geometry(float radius,
         float uOffset = 0;
         if (iy == 0 && theta_start == 0)
         {
-            uOffset = 0.5 / width_segments;
+            uOffset = 0.5f / width_segments;
         }
         else if (iy == height_segments && theta_end == mth::PI)
         {
-            uOffset = -0.5 / width_segments;
+            uOffset = -0.5f / width_segments;
         }
 
         for (ix = 0; ix <= width_segments; ix++)
@@ -215,10 +215,11 @@ Geometry sphere_geometry(float radius,
             const float z = radius * std::sin(phi_start + u * phi_length)
                             * std::sin(theta_start + v * theta_length);
 
-            auto norm = glm::normalize(glm::vec3(x, y, z));
-
             pos.insert(pos.end(), { x, y, z });
+
+            auto norm = glm::normalize(glm::vec3(x, y, z));
             normals.insert(normals.end(), { norm.x, norm.y, norm.z });
+            
             uv.insert(uv.end(), { u + uOffset, 1 - v });
 
             // vertices.push_back({ x, y, z , norm.x, norm.y, norm.z, u + uOffset, 1 - v
@@ -226,13 +227,14 @@ Geometry sphere_geometry(float radius,
 
             verticesRow.push_back(index++);
         }
+        
         grid.push_back(verticesRow);
     }
 
-    for (iy = 0; iy < height_segments; iy++)
+    for (iy = 0; iy < height_segments; ++iy)
     {
 
-        for (ix = 0; ix < width_segments; ix++)
+        for (ix = 0; ix < width_segments; ++ix)
         {
 
             uint32_t a = grid[iy][ix + 1];

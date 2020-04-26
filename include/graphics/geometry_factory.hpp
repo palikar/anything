@@ -26,12 +26,12 @@ Geometry plane_geometry(size_t width,
 
 
 Geometry sphere_geometry(float radius,
-                         float width_segments,
-                         float height_segments,
+                         float width_segments = 8.0,
+                         float height_segments = 6.0,
                          float phi_start    = 0.0f,
                          float phi_length   = 2.0f * mth::PI,
                          float theta_start  = 0.0f,
-                         float theta_length = 2.0f * mth::PI);
+                         float theta_length = 1.0f * mth::PI);
 
 Geometry cylinder_geometry(float radiusTop,
                            float radiusBottom,

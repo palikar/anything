@@ -163,9 +163,8 @@ void main()
                 final_color += apply_spot_light(lighting.spot_lights[i], frag_color.rgb, normal, pos, to_camera);   
             }
         }
+        
         frag_color = vec4(final_color.xzy, opacity);
-
-        frag_color = vec4(1.0, 1.0, 1.0, 1.0);
     }
     
 

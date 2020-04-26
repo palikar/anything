@@ -9,13 +9,13 @@ class MatScene : public gmt::GameBase
     gmt::Scene3D* main_scene;
     rend::RendererScene3D renderer;
     cmp::OrbitalCameraComponent *oribital_camera_controller;
-
-
+    
     gmt::Entity* sphere;
     gmt::Entity* cube;
     gmt::Entity* torus;
 
     gmt::BoxHelper* box;
+    gmt::PointlightHelper* pointlight;
 
     std::vector<rend::CubeTexturePtr> env_maps;
     std::vector<rend::TexturePtr> texs;
@@ -23,7 +23,7 @@ class MatScene : public gmt::GameBase
   public:
 
     MatScene() = default;
-    
+
     void init_basic()
     {
         renderer.init(engine()->api());
@@ -36,7 +36,7 @@ class MatScene : public gmt::GameBase
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::Enable(true);
     }
-    
+
     void init_lighting()
     {
 
@@ -45,7 +45,7 @@ class MatScene : public gmt::GameBase
     void init() override
     {
         init_basic();
-        
+
         rend::TexturePtr floor = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
         rend::TexturePtr brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
         rend::CubeTexturePtr sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
@@ -58,14 +58,13 @@ class MatScene : public gmt::GameBase
         env_maps.push_back(night_sky);
 
         texs.push_back(brick_ao);
+
         main_scene->set_skybox(gmt::skybox(sky));
-        
-        
         main_scene->add(gmt::axis());
 
         auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::texture_material(floor)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
-        
+
         auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::texture_material(floor)}));
         cmp::transform(wall_mesh).translateY(50.0f);
         cmp::transform(wall_mesh).translateZ(-50.0f);
@@ -79,15 +78,18 @@ class MatScene : public gmt::GameBase
         cmp::transform(torus).set_position({0.0f , 10.0f, -15.0f});
 
         // Initing the sphere
-        
+
         auto brick_mat = grph::texture_material(brick);
         grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.0f, 0.6f, 0.0f});
         sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
         cmp::transform(sphere).set_position({0.0f , 10.0f, 15.0f});
-        // cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_env_map = sky;
+        cmp::mesh(sphere).geometry().compute_bounding_box();
 
-        box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f,-50.0f,-50.0f}, {50.0f, 50.0f, 50.0f}}));
+        box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f, -50.0f, -50.0f}, {50.0f, 50.0f, 50.0f}}));
+        box = main_scene->add(gmt::box_helper(cmp::mesh(sphere).geometry().bounding_box()));
 
+        pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
+        cmp::transform(pointlight).set_position({0.0f, 10.0f, 15.0f});
 
     }
 
@@ -96,9 +98,14 @@ class MatScene : public gmt::GameBase
 
         // cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
         // cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
-        // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
 
-        
+        // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
+        // cmp::transform(box).set_position(cmp::transform(sphere).position());
+
+        cmp::transform(pointlight)
+            .set_position({ 20 * std::sin(glfwGetTime()), 20.0, 20 * std::cos(glfwGetTime())});
+
+
         main_scene->update(dt);
     }
 
@@ -130,7 +137,7 @@ class MatScene : public gmt::GameBase
         {
             gl::take_screenshot("screen.png");
         }
-        
+
         return true;
     }
 
@@ -156,8 +163,8 @@ class MatScene : public gmt::GameBase
             ImGui::Checkbox("Transparent", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_transparent);
             ImGui::SameLine();
             ImGui::Checkbox("Wire Frame", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_wire_frame);
-            
-            
+
+
             ImGui::Checkbox("Enable blending", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_blending.blending);
             ImGui::SliderFloat("Opacity", (float*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_opacity, 0.0f, 1.0f, "Value = %.3f");
             ImGui::SliderFloat("Alpha test", (float*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_blending.alpha_test, 0.0f, 1.0f, "Value = %.3f");
@@ -169,7 +176,7 @@ class MatScene : public gmt::GameBase
             const char* sides[] = {"Front", "Back", "Both"};
             static int current = 0;
             ImGui::Combo("Render side", &current, sides, 3);
-            cmp::mesh(sphere).material<grph::Material>()->parameters().m_side = rend::Side{current};            
+            cmp::mesh(sphere).material<grph::Material>()->parameters().m_side = rend::Side{current};
 
             ImGui::Separator();
             ImGui::Text("Texture material");
@@ -204,8 +211,8 @@ class MatScene : public gmt::GameBase
             const char* mixing[] = {"Add", "Multiply", "Mix"};
             static int mixing_current = 0;
             ImGui::Combo("Mixing", &mixing_current, mixing, 3);
-            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_combine = rend::Combine{mixing_current};            
-            
+            cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_combine = rend::Combine{mixing_current};
+
             ImGui::TreePop();
         }
 

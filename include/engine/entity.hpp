@@ -64,6 +64,21 @@ class Entity
           m_components.insert({ t_comp->type(), std::move(t_comp) }).first->second.get());
     }
 
+    
+    template<typename T, typename ... Args>
+    auto add_component(Args && ... args )
+    {
+        auto t_comp = std::make_unique<T>( typename T::construct_type(std::forward<Args>(args) ...));
+
+        if (m_game != nullptr)
+        {
+            t_comp->init(m_game);
+        }
+        
+        return static_cast<T *>(
+            m_components.insert({ t_comp->type(), std::move(t_comp) }).first->second.get());
+    }
+
     void set_game(GameBase *t_game, uint32_t t_id)
     {
         m_game = t_game;
