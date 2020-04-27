@@ -63,7 +63,6 @@ void main()
         discard;
     }
 
-
     // base color
     vec3 final_color = texture(tex, uv).rgb;
     final_color = mix(final_color, color, color_intensity);

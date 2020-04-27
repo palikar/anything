@@ -27,6 +27,7 @@
 #include "engine/raycaster.hpp"
 
 #include "engine/entities/camera_helper.hpp"
+#include "engine/entities/spotlight_helper.hpp"
 #include "engine/entities/pointlight_helper.hpp"
 #include "engine/entities/axis_helper.hpp"
 #include "engine/entities/plane_helper.hpp"

@@ -30,8 +30,7 @@ void BoxHelper::init_points()
     const std::vector<float> verts{ 1, 1, 1,
                                     - 1, 1, 1,
                                     - 1, - 1, 1,
-                                    1, - 1, 1,
-                                    
+                                    1, - 1, 1,                                    
                                     1, 1, - 1,
                                     - 1, 1, - 1,
                                     - 1, - 1, - 1,

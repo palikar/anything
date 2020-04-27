@@ -192,8 +192,9 @@ add_library(anything_engine
     ./include/engine/entities/grid_helper.cpp
     ./include/engine/entities/plane_helper.cpp
     ./include/engine/entities/axis_helper.cpp
-    ./include/engine/entities/pointlight_helper.cpp
     ./include/engine/entities/box_helper.cpp
+    ./include/engine/entities/pointlight_helper.cpp
+    ./include/engine/entities/spotlight_helper.cpp
 
     ./include/engine/components/orbital_camera.cpp
 

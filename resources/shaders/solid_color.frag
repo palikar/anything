@@ -61,9 +61,8 @@ uniform float specular_exponent;
 
 uniform vec3 camera_pos;
 
-uniform LightSetup lighting;
-
 uniform bool lighting_enabled;
+uniform LightSetup lighting;
 
 
 vec3 apply_dir_light(DirLight light, vec3 surface_color, vec3 normal, vec3 surface_pos, vec3 surface_to_camera)
@@ -143,6 +142,7 @@ void main()
     }
 
     if (lighting_enabled) {
+
         vec3 normal = normalize(norm);
         vec3 to_camera = - normalize(pos - camera_pos);
 
@@ -157,7 +157,6 @@ void main()
             }
         }
 
-        
         for (int i = 0; i < MAX_LIGHT; ++i) {
             if(lighting.spot_lights[i].act) {
                 final_color += apply_spot_light(lighting.spot_lights[i], frag_color.rgb, normal, pos, to_camera);   
@@ -165,7 +164,7 @@ void main()
         }
         
         frag_color = vec4(final_color.xzy, opacity);
+
     }
-    
 
 }

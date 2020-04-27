@@ -17,6 +17,8 @@ class LineSegmentsComponent : public gmt::Component
   public:
     grph::LineSegments segments;
 
+    using construct_type = grph::LineSegments;
+    
   public:
     AY_COMPONENT(LineSegments)
 

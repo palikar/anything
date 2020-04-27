@@ -83,8 +83,6 @@ void RendererScene3D::bind_lighting(Shader *shader)
         shader->set(fmt::format("lighting.spot_lights[{}].outer_cut_off", i),
                     m_current_context.light_setup->spot_lights[i].outer_cut_off);
     }
-
-    shader->set("lighting_enabled", true);
 }
 
 void RendererScene3D::switch_shader(Shader *shader)
@@ -195,6 +193,7 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 
     if (mat->needs_lighting())
     {
+        shader->set("lighting_enabled", true);
         bind_lighting(shader);
     }
 
@@ -233,7 +232,7 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     handle_material(mat, shader);
 
     shader->set("lighting_enabled", false);
-    
+
     m_api->draw_lines(line->segments.geometry());
 }
 

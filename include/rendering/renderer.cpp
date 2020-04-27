@@ -51,7 +51,6 @@ void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
     {
         geometry.pack();
     }
-
     
     geometry.gl_buffers()->bind();
     
@@ -65,13 +64,15 @@ void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
     }
     else
     {
-
-        GLCall(glDrawArrays(GL_LINES, 0, element_count));
+        
+        GLCall(glDrawArrays(GL_LINES, 0, geometry.attribute("position").size() / 2));
+        
     }
 }
 
 void RenderAPI::draw_triangles(grph::Geometry &geometry, uint32_t element_count)
 {
+    
     if (geometry.is_dirty())
     {
         geometry.pack();

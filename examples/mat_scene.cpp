@@ -9,13 +9,14 @@ class MatScene : public gmt::GameBase
     gmt::Scene3D* main_scene;
     rend::RendererScene3D renderer;
     cmp::OrbitalCameraComponent *oribital_camera_controller;
-    
+
     gmt::Entity* sphere;
     gmt::Entity* cube;
     gmt::Entity* torus;
 
     gmt::BoxHelper* box;
     gmt::PointlightHelper* pointlight;
+    gmt::SpotlightHelper* spotlight;
 
     std::vector<rend::CubeTexturePtr> env_maps;
     std::vector<rend::TexturePtr> texs;
@@ -59,8 +60,8 @@ class MatScene : public gmt::GameBase
 
         texs.push_back(brick_ao);
 
-        main_scene->set_skybox(gmt::skybox(sky));
         main_scene->add(gmt::axis());
+        main_scene->set_skybox(gmt::skybox(sky));
 
         auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::texture_material(floor)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
@@ -91,6 +92,9 @@ class MatScene : public gmt::GameBase
         pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
         cmp::transform(pointlight).set_position({0.0f, 10.0f, 15.0f});
 
+        spotlight = main_scene->add(gmt::spotlight_helper(20));
+        cmp::transform(spotlight).set_position({-20.0f, 10.0f, -20.0f});
+
     }
 
     void update(double dt) override
@@ -102,8 +106,8 @@ class MatScene : public gmt::GameBase
         // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
         // cmp::transform(box).set_position(cmp::transform(sphere).position());
 
-        cmp::transform(pointlight)
-            .set_position({ 20 * std::sin(glfwGetTime()), 20.0, 20 * std::cos(glfwGetTime())});
+        // cmp::transform(pointlight)
+        //     .set_position({ 20 * std::sin(glfwGetTime()), 20.0, 20 * std::cos(glfwGetTime())});
 
 
         main_scene->update(dt);

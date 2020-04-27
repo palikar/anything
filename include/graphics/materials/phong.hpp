@@ -17,47 +17,64 @@ struct PhongParameters
 {
 
     float m_ao_intensity{ 0.0 };
-    rend::TexturePtr m_ao_map;
+    rend::TexturePtr m_ao_map{nullptr};
 
     float m_bump_scale{ 0.0 };
-    rend::TexturePtr m_bump_map;
+    rend::TexturePtr m_bump_map{nullptr};
 
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
+
+    float m_shininess{ 0.0f, 0.0f, 0.0f };
+    glm::vec3 m_specular{ 0.0f, 0.0f, 0.0f };
+    rend::TexturePtr m_specular_map{nullptr};
 
     float m_displ_scale{ 0.0 };
     float m_displ_bias{ 0.0 };
     rend::TexturePtr m_displ_map;
 
-    float m_emissive_scale{ 0.0 };
     glm::vec3 m_emissive{ 0.0f, 0.0f, 0.0f };
-    rend::TexturePtr m_emissive_map;
+    float m_emissive_scale{ 0.0 };
+    rend::TexturePtr m_emissive_map{nullptr};
 
-    rend::CubeTexturePtr m_env_map;
+    float m_reflectivity{0.0f};
+    rend::CubeTexturePtr m_env_map{nullptr};
 
-    rend::TexturePtr m_map;
+    rend::TexturePtr m_map{nullptr};
 
-    rend::TexturePtr m_normal_map;
+    glm::vec2 m_normal_scle{1.0, 1.0};
+    rend::TexturePtr m_normal_map{nullptr};
+
 };
 
 class PhongMaterial : public Material
 {
+    
   private:
     PhongParameters m_parameters;
 
   public:
-    PhongMaterial()
+
+    PhongMaterial(glm::vec3 color) : m_parameters()
     {
+        m_parameters.m_color = color;
     }
 
-    PhongParameters &parameters()
-    {
-        return m_parameters;
-    }
+    PhongParameters &parameters();
 
     void init_shader(rend::ShaderLibrary &t_shader_lib) override;
 
     void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override;
+
+    bool needs_lighting() override;
+    
 };
+
+using PhongMaterialPtr = std::unique_ptr<PhongMaterial>;
+
+inline PhongMaterialPtr phong_material(float r, float g, float b)
+{
+    return std::make_unique<PhongMaterial>(glm::vec3(r, g, b));
+}
 
 
 }  // namespace ay::grph
