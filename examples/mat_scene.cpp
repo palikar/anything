@@ -64,18 +64,21 @@ class MatScene : public gmt::GameBase
 
         texs.push_back(brick_ao);
 
-        // main_scene->add(gmt::axis());
-        // main_scene->set_skybox(gmt::skybox(sky));
+        main_scene->add(gmt::axis());
+        main_scene->set_skybox(gmt::skybox(sky));
 
         auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.01, 0.01, 0.01)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
         cmp::mesh(floor_mesh).geometry().calculate_tangents();
-        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
-        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
+        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = rocks;
+        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
 
-        // auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::texture_material(floor)}));
-        // cmp::transform(wall_mesh).translateY(50.0f);
-        // cmp::transform(wall_mesh).translateZ(-50.0f);
+        auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.01, 0.01, 0.01)}));
+        cmp::transform(wall_mesh).translateY(50.0f);
+        cmp::transform(wall_mesh).translateZ(-50.0f);
+        cmp::mesh(wall_mesh).geometry().calculate_tangents();
+        cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
+        cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
 
         
 
@@ -86,20 +89,20 @@ class MatScene : public gmt::GameBase
         
 
         // Initing the torus
-        // auto phong_mat = grph::phong_material(1.0, 0.2, 0.2);
-        // torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), std::move(phong_mat)}));
-        // cmp::transform(torus).set_position({0.0f , 10.0f, 0.0f});
-        // cmp::mesh(torus).geometry().calculate_tangents();
-        // cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_map = rocks;
-        // cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
+        auto rock_mat = grph::phong_material(0.2f, 0.2f, 0.2f);
+        torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), std::move(rock_mat)}));
+        cmp::transform(torus).set_position({-10.0f , 13.0f, 0.0f});
+        cmp::mesh(torus).geometry().calculate_tangents();
+        cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_map = rocks;
+        cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
 
         // Initing the sphere
 
-        // auto brick_mat = grph::texture_material(brick);
-        // grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.0f, 0.6f, 0.0f});
-        // sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
-        // cmp::transform(sphere).set_position({0.0f , 10.0f, 15.0f});
-        // cmp::mesh(sphere).geometry().compute_bounding_box();
+        auto brick_mat = grph::texture_material(brick);
+        grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.1f, 0.1f, 0.1f});
+        sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
+        cmp::transform(sphere).set_position({10.0f , 10.0f, 0.0f});
+        cmp::mesh(sphere).geometry().compute_bounding_box();
 
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().directional_light.intensity = 0.08f;
