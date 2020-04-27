@@ -13,7 +13,6 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
 {
     m_shader->set("camera_pos", ctx.camera_pos);
 
-
     m_shader->set("ao_intensity", m_parameters.m_ao_intensity);
     if (m_parameters.m_ao_map) {
         m_shader->set_sampler("ao_map", binder.resolve(m_parameters.m_ao_map.get()));
@@ -64,20 +63,23 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
     if (m_parameters.m_specular_map) {
         m_shader->set_sampler("specular_map", binder.resolve(m_parameters.m_specular_map.get()));
         m_shader->set("has_specular_map", true);
-} else {
-            m_shader->set("has_specular_map", false);
-        }
+    } else {
+        m_shader->set("has_specular_map", false);
+    }
     
-        if (m_parameters.m_map) {
-            m_shader->set_sampler("map", binder.resolve(m_parameters.m_map.get()));
-            m_shader->set("has_map", true);
-        } else {
-            m_shader->set("has_map", false);
-        }
+    if (m_parameters.m_map) {
+        m_shader->set_sampler("map", binder.resolve(m_parameters.m_map.get()));
+        m_shader->set("has_map", true);
+    } else {
+        m_shader->set("has_map", false);
+    }
 
-        if (m_parameters.m_normal_map) {
-            m_shader->set_sampler("normal_map", binder.resolve(m_parameters.m_normal_map.get()));
-        }
+    if (m_parameters.m_normal_map) {
+        m_shader->set_sampler("normal_map", binder.resolve(m_parameters.m_normal_map.get()));
+        m_shader->set("has_normal_map", true);
+    } else {
+        m_shader->set("has_normal_map", false);
+    }
 
 }
 

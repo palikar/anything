@@ -23,11 +23,11 @@ struct PhongParameters
     rend::TexturePtr m_bump_map{nullptr};
 
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
-    glm::vec3 m_ambient{ 0.0f, 0.0f, 0.0f };
+    glm::vec3 m_ambient{ 0.2f, 0.2f, 0.2f };
 
     bool has_specular_map{false};
-    float m_shininess{0.0f};
-    glm::vec3 m_specular{ 0.0f, 0.0f, 0.0f };
+    float m_shininess{30.0f};
+    glm::vec3 m_specular{ 0.8f, 0.8f, 0.8f };
     rend::TexturePtr m_specular_map{nullptr};
 
     float m_displ_scale{ 0.0 };
