@@ -23,8 +23,10 @@ struct PhongParameters
     rend::TexturePtr m_bump_map{nullptr};
 
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
+    glm::vec3 m_ambient{ 0.0f, 0.0f, 0.0f };
 
-    float m_shininess{ 0.0f, 0.0f, 0.0f };
+    bool has_specular_map{false};
+    float m_shininess{0.0f};
     glm::vec3 m_specular{ 0.0f, 0.0f, 0.0f };
     rend::TexturePtr m_specular_map{nullptr};
 
@@ -36,8 +38,10 @@ struct PhongParameters
     float m_emissive_scale{ 0.0 };
     rend::TexturePtr m_emissive_map{nullptr};
 
-    float m_reflectivity{0.0f};
-    rend::CubeTexturePtr m_env_map{nullptr};
+    bool m_is_reflection{ true };
+    float m_reflectivity{ 0.0f };
+    float m_refraction_ration{ 0.98f };
+    rend::CubeTexturePtr m_env_map{ nullptr };
 
     rend::TexturePtr m_map{nullptr};
 

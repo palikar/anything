@@ -74,8 +74,10 @@ class MatScene : public gmt::GameBase
         cube = main_scene->add(gmt::mesh_entity({grph::cube_geometry(7, 7, 7, 40, 40, 40), grph::solid_color(rend::Colors::blue)}));
         cmp::transform(cube).set_position({0.0f , 10.0f, 0.0f});
 
+
         // Initing the torus
-        torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), grph::solid_color(rend::Colors::green)}));
+        auto phong_mat = grph::phong_material(1.0, 0.2, 0.2);
+        torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), std::move(phong_mat)}));
         cmp::transform(torus).set_position({0.0f , 10.0f, -15.0f});
 
         // Initing the sphere
@@ -86,14 +88,14 @@ class MatScene : public gmt::GameBase
         cmp::transform(sphere).set_position({0.0f , 10.0f, 15.0f});
         cmp::mesh(sphere).geometry().compute_bounding_box();
 
-        box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f, -50.0f, -50.0f}, {50.0f, 50.0f, 50.0f}}));
-        box = main_scene->add(gmt::box_helper(cmp::mesh(sphere).geometry().bounding_box()));
+        // box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f, -50.0f, -50.0f}, {50.0f, 50.0f, 50.0f}}));
+        // box = main_scene->add(gmt::box_helper(cmp::mesh(sphere).geometry().bounding_box()));
 
-        pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
-        cmp::transform(pointlight).set_position({0.0f, 10.0f, 15.0f});
+        // pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
+        // cmp::transform(pointlight).set_position({0.0f, 10.0f, 15.0f});
 
-        spotlight = main_scene->add(gmt::spotlight_helper(20));
-        cmp::transform(spotlight).set_position({-20.0f, 10.0f, -20.0f});
+        // spotlight = main_scene->add(gmt::spotlight_helper(20));
+        // cmp::transform(spotlight).set_position({-20.0f, 10.0f, -20.0f});
 
     }
 
@@ -218,6 +220,18 @@ class MatScene : public gmt::GameBase
             cmp::mesh(sphere).material<grph::TextureMaterial>()->parameters().m_combine = rend::Combine{mixing_current};
 
             ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("Torus"))
+        {
+            ImGui::Text("Texture material");
+
+            ImGui::Text("Color");
+            ImGui::SameLine();
+            ImGui::ColorEdit3("Color", (float*)&cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_color);
+
+            ImGui::TreePop();
+            
         }
 
         renderer.render_scene(*main_scene);
