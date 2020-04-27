@@ -3,7 +3,6 @@
 
 namespace ay::grph
 {
-
 void Geometry::apply(glm::mat4 t_mat)
 {
 
@@ -121,7 +120,6 @@ void Geometry::pack_vertex_buffers()
         && m_buffers.count("uv") > 0)
     {
 
-
         auto &pos  = (m_buffers.at("position")).data;
         auto &norm = (m_buffers.at("normal")).data;
         auto &uv   = (m_buffers.at("uv")).data;
@@ -142,25 +140,40 @@ void Geometry::pack_vertex_buffers()
         m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
     }
 
+    if (m_buffers.count("tangents") > 0 && m_buffers.count("bitangents") > 0)
+    {
+
+        auto &tan  = (m_buffers.at("tangents")).data;
+        auto &bi = (m_buffers.at("bitangents")).data;
+        
+        std::vector<Vertex6fg> verts;
+
+        for (size_t i = 0; i < tan.size() - 2; i += 3)
+        {
+            verts.push_back({ tan[i + 0],
+                              tan[i + 1],
+                              tan[i + 2],
+                              bi[i + 0],
+                              bi[i + 1],
+                              bi[i + 2]});
+        }
+
+        m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
+    }
 
     auto handle_attr = [&](const std::string &name) {
-        auto buf    = m_buffers.at(name);
-        auto &data  = (buf).data;
-        auto stride = (buf).stride;
+                           auto buf    = m_buffers.at(name);
+                           auto &data  = (buf).data;
+                           auto stride = (buf).stride;
 
-        const auto data_type = stride_to_data_type(stride);
+                           const auto data_type = stride_to_data_type(stride);
+        
+                           auto vert =
+                               std::make_unique<rend::VertexBuffer>(data.data(), data.size() * sizeof(float));
 
-        // std::cout << name << "\n";
-        // for (size_t i = 0; i < data.size() - 2; ++i) {
-        //     std::cout << data[i] << "," << data[i +1] << "," << data[i + 2] << "," <<
-        //     "\n";
-        // }
-        auto vert =
-          std::make_unique<rend::VertexBuffer>(data.data(), data.size() * sizeof(float));
-
-        vert->set_layout({ { name, data_type } });
-        m_glbuffers->add_vertex_buffer(std::move(vert));
-    };
+                           vert->set_layout({ { name, data_type } });
+                           m_glbuffers->add_vertex_buffer(std::move(vert));
+                       };
 
     if (m_buffers.count("position") > 0)
     {
@@ -177,9 +190,18 @@ void Geometry::pack_vertex_buffers()
         handle_attr("uv");
     }
 
+    if (m_buffers.count("tangents") > 0)
+    {
+        handle_attr("tangents");
+    }
+    
+    if (m_buffers.count("bitangents") > 0)
+    {
+        handle_attr("bitangents");
+    }
+
     m_dirty = false;
 }
-
 
 void Geometry::pack_vertex_buffers_dynamic()
 {
@@ -271,11 +293,86 @@ void Geometry::pack_vertex_buffers_dynamic()
     m_dirty = false;
 }
 
-
 void Geometry::pack_group(uint32_t start, uint32_t count, size_t index)
 {
     m_glbuffers->set_index_buffer(
       std::make_unique<rend::IndexBuffer>(m_index.data() + start, count), index);
+}
+
+void Geometry::calculate_tangents()
+{
+
+    if (m_buffers.count("position") > 0 and m_buffers.count("uv") > 0)
+    {
+        
+        auto& pos = m_buffers.at("position").data;
+        auto& uv = m_buffers.at("uv").data;
+        // auto& normal = m_buffers.at("normal").data;
+
+        std::vector<float> tangents;
+        tangents.resize(std::size(pos), 0.0);
+        std::vector<float> bi_tangents;
+        bi_tangents.resize(std::size(pos), 0.0);
+
+        for (size_t i = 0; i < std::size(m_index) - 2; i+=3) {
+
+            auto index0 = m_index[i];
+            auto index1 = m_index[i+1];
+            auto index2 = m_index[i+2];
+            
+            const glm::vec3 v0 = {pos[3*(index0)], pos[3*(index0) + 1], pos[3*(index0) + 2]};
+            const glm::vec3 v1 = {pos[3*(index1)], pos[3*(index1) + 1], pos[3*(index1) + 2]};
+            const glm::vec3 v2 = {pos[3*(index2)], pos[3*(index2) + 1], pos[3*(index2) + 2]};
+
+            const glm::vec2 uv0 = {uv[2*(index0)], uv[2*(index0) + 1]};
+            const glm::vec2 uv1 = {uv[2*(index1)], uv[2*(index1) + 1]};
+            const glm::vec2 uv2 = {uv[2*(index2)], uv[2*(index2) + 1]};
+
+            const glm::vec3 deltaPos1 = v1-v0;
+            const glm::vec3 deltaPos2 = v2-v0;
+
+            const glm::vec2 deltaUV1 = uv1-uv0;
+            const glm::vec2 deltaUV2 = uv2-uv0;
+
+            const float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+
+            const glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
+            const glm::vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
+
+            tangents[3*(index0) + 0] = tangent.x;
+            tangents[3*(index0) + 1] = tangent.y;
+            tangents[3*(index0) + 2] = tangent.z;
+
+            tangents[3*(index1) + 0] = tangent.x;
+            tangents[3*(index1) + 1] = tangent.y;
+            tangents[3*(index1) + 2] = tangent.z;
+
+            tangents[3*(index2) + 0] = tangent.x;
+            tangents[3*(index2) + 1] = tangent.y;
+            tangents[3*(index2) + 2] = tangent.z;
+            
+
+            bi_tangents[3*(index0) + 0] = bitangent.x;
+            bi_tangents[3*(index0) + 1] = bitangent.y;
+            bi_tangents[3*(index0) + 2] = bitangent.z;
+
+            bi_tangents[3*(index1) + 0] = bitangent.x;
+            bi_tangents[3*(index1) + 1] = bitangent.y;
+            bi_tangents[3*(index1) + 2] = bitangent.z;
+
+            bi_tangents[3*(index2) + 0] = bitangent.x;
+            bi_tangents[3*(index2) + 1] = bitangent.y;
+            bi_tangents[3*(index2) + 2] = bitangent.z;
+            
+
+        }
+
+        set_attribute("tangents", std::move(tangents), 3);
+        set_attribute("bitangents", std::move(bi_tangents), 3);
+        
+    }
+
+    pack();
 }
 
 }  // namespace ay::grph

@@ -218,6 +218,8 @@ class Geometry
         return !m_index.empty();
     }
 
+    void calculate_tangents();
+
   private:
     void pack_vertex_buffers();
 
