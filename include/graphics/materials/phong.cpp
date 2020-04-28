@@ -23,29 +23,28 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
         m_shader->set("has_ao_map", false);
     }
 
-    m_shader->set("bump_scale", m_parameters.m_bump_scale);
+    m_shader->set("height_scale", m_parameters.m_height_scale);
 
-    if (m_parameters.m_bump_map) {
-        const auto slot = binder.resolve(m_parameters.m_bump_map.get());
+    if (m_parameters.m_height_map) {
+        const auto slot = binder.resolve(m_parameters.m_height_map.get());
         // std::cout << "bump: " << slot << "\n";
-        m_shader->set_sampler("bump_map", slot);
-        m_shader->set("has_bump_map", true);
+        m_shader->set_sampler("height_map", slot);
+        m_shader->set("has_height_map", true);
     } else {
-        m_shader->set_sampler("bump_map", binder.free_2d_slot());
-        m_shader->set("has_bump_map", false);
+        m_shader->set_sampler("height_map", binder.free_2d_slot());
+        m_shader->set("has_height_map", false);
     }
 
     m_shader->set("color", m_parameters.m_color);
     m_shader->set("ambient", m_parameters.m_ambient);
 
-    m_shader->set("disp_scale", m_parameters.m_displ_scale);
-    m_shader->set("disp_bias", m_parameters.m_displ_bias);
-
-    if (m_parameters.m_displ_map ) {
-        m_shader->set_sampler("displ_map", binder.resolve(m_parameters.m_displ_map.get()));
-    } else {
-        m_shader->set_sampler("displ_map", binder.free_2d_slot());
-    }
+    // m_shader->set("disp_scale", m_parameters.m_displ_scale);
+    // m_shader->set("disp_bias", m_parameters.m_displ_bias);
+    // if (m_parameters.m_displ_map ) {
+    //     m_shader->set_sampler("displ_map", binder.resolve(m_parameters.m_displ_map.get()));
+    // } else {
+    //     m_shader->set_sampler("displ_map", binder.free_2d_slot());
+    // }
 
     m_shader->set("emissive", m_parameters.m_emissive);
     m_shader->set("emissive_scale", m_parameters.m_emissive_scale);

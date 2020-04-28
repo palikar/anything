@@ -76,13 +76,9 @@ uniform bool has_ao_map;
 uniform float ao_intensity;
 uniform sampler2D ao_map;
 
-uniform float bump_scale;
-uniform bool has_bump_map;
-uniform sampler2D bump_map;
-
-uniform float disp_scale;
-uniform float disp_bias;
-uniform sampler2D displ_map;
+uniform float height_scale;
+uniform bool has_height_map;
+uniform sampler2D height_map;
 
 uniform vec3 emissive;
 uniform float emissive_scale;
@@ -177,11 +173,36 @@ vec3 apply_spot_light(SpotLight light, BlinnPhongMaterial material, vec3 normal,
 
 }
 
-vec2 parallax_mapping(vec2 tex_coords, vec3 viewDir)
+vec2 parallax_mapping(vec2 texCoords, vec3 viewDir)
 {
-    float height = 1.0f - texture(bump_map, tex_coords).r;
-    vec2 p = viewDir.xy * (height * bump_scale);
-    return tex_coords - p;
+    // float height = 1.0f - texture(height_map, tex_coords).r;
+    // vec2 p = viewDir.xy * (height * height_scale);
+    // return tex_coords - p;
+
+    // number of depth layers
+    const float numLayers = 10;
+    // calculate the size of each layer
+    float layerDepth = 1.0 / numLayers;
+    // depth of current layer
+    float currentLayerDepth = 0.0;
+    // the amount to shift the texture coordinates per layer (from vector P)
+    vec2 P = viewDir.xy * height_scale; 
+    vec2 deltaTexCoords = P / numLayers;
+
+    vec2  currentTexCoords     = texCoords;
+    float currentDepthMapValue = 1.0 - texture(height_map, currentTexCoords).r;
+  
+    while(currentLayerDepth < currentDepthMapValue)
+    {
+        // shift texture coordinates along direction of P
+        currentTexCoords -= deltaTexCoords;
+        // get depthmap value at current texture coordinates
+        currentDepthMapValue =  1.0 - texture(height_map, currentTexCoords).r;  
+        // get depth of next layer
+        currentLayerDepth += layerDepth;  
+    }
+
+    return currentTexCoords;
 }
 
 
@@ -203,7 +224,7 @@ void main()
 
     vec2 tex_coords = uv;
 
-    if (has_bump_map) {
+    if (has_height_map) {
         vec3 view_dir  = normalize(tan_view_pos - tan_pos);
         tex_coords = parallax_mapping(tex_coords, view_dir);
     }
@@ -290,6 +311,9 @@ void main()
 
 
     frag_color = vec4(outgoing_light.rgb, opacity);
-    // frag_color = vec4((normal.rgb+1.0)/2, opacity);
+
+    float gamma = 1.3;
+    frag_color.rgb = pow(frag_color.rgb, vec3(1.0/gamma));
+    
 
 }

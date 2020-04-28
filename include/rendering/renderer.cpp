@@ -14,6 +14,7 @@ void RenderAPI::init()
     GLCall(glEnable(GL_CULL_FACE));
     GLCall(glCullFace(GL_BACK));
     GLCall(glFrontFace(GL_CW));
+    // GLCall(glEnable(GL_FRAMEBUFFER_SRGB));
 }
 
 void RenderAPI::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
@@ -51,9 +52,9 @@ void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
     {
         geometry.pack();
     }
-    
+
     geometry.gl_buffers()->bind();
-    
+
     if (geometry.is_indexed())
     {
         uint32_t count = element_count <= 0
@@ -64,15 +65,15 @@ void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
     }
     else
     {
-        
+
         GLCall(glDrawArrays(GL_LINES, 0, geometry.attribute("position").size() / 2));
-        
+
     }
 }
 
 void RenderAPI::draw_triangles(grph::Geometry &geometry, uint32_t element_count)
 {
-    
+
     if (geometry.is_dirty())
     {
         geometry.pack();
@@ -90,7 +91,7 @@ void RenderAPI::draw_triangles(grph::Geometry &geometry, uint32_t element_count)
     }
     else
     {
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, element_count));            
+        GLCall(glDrawArrays(GL_TRIANGLES, 0, element_count));
     }
 }
 

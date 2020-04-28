@@ -19,8 +19,8 @@ struct PhongParameters
     float m_ao_intensity{ 0.0 };
     rend::TexturePtr m_ao_map{nullptr};
 
-    float m_bump_scale{ 0.05 };
-    rend::TexturePtr m_bump_map{nullptr};
+    float m_height_scale{ 0.01 };
+    rend::TexturePtr m_height_map{nullptr};
 
     glm::vec3 m_color{ 0.0f, 0.0f, 0.0f };
     glm::vec3 m_ambient{ 0.2f, 0.2f, 0.2f };
@@ -30,9 +30,9 @@ struct PhongParameters
     glm::vec3 m_specular{ 0.8f, 0.8f, 0.8f };
     rend::TexturePtr m_specular_map{nullptr};
 
-    float m_displ_scale{ 0.0 };
-    float m_displ_bias{ 0.0 };
-    rend::TexturePtr m_displ_map;
+    // float m_displ_scale{ 0.0 };
+    // float m_displ_bias{ 0.0 };
+    // rend::TexturePtr m_displ_map;
 
     glm::vec3 m_emissive{ 0.0f, 0.0f, 0.0f };
     float m_emissive_scale{ 0.0 };
