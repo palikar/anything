@@ -98,20 +98,26 @@ void Application::render_engine()
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
-    ImGui::SetNextWindowPos(
-      { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
-    ImGui::SetNextWindowSize(
-      { static_cast<float>(m_window->width()), static_cast<float>(m_window->height()) });
-    ImGuizmo::SetRect(static_cast<float>(m_window->xpos()),
-                      static_cast<float>(m_window->ypos()),
-                      static_cast<float>(m_window->width()),
-                      static_cast<float>(m_window->height()));
+
+    // ImGui::SetNextWindowPos(
+    //   { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
+    // ImGui::SetNextWindowSize(
+    //   { static_cast<float>(m_window->width()), static_cast<float>(m_window->height()) });
+    
+
     ImGuizmo::SetDrawlist();
 
     ImGuizmo::BeginFrame();
+
+    // ImGuizmo::SetRect(static_cast<float>(m_window->xpos()),
+    //                   static_cast<float>(m_window->ypos()),
+    //                   static_cast<float>(m_window->width()),
+    //                   static_cast<float>(m_window->height()));
+    ImGuiIO& io = ImGui::GetIO();
+    ImGuizmo::SetRect(io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y, io.DisplaySize.x, io.DisplaySize.y);
     m_engine.render();
 
-    // ImGui::End();
+    
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

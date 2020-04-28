@@ -273,7 +273,6 @@ class BallScene : public gmt::GameBase
 
         if (selected ) {
             ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
-            ImGuizmo::SetDrawlist();
             ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
                                  glm::value_ptr(main_scene->camera().projection()),
                                  current_gizmo_operation,
