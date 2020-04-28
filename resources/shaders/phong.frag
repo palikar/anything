@@ -309,7 +309,6 @@ void main()
         outgoing_light = mix(outgoing_light, env_color.rgb, reflectivity * material.specular_strength) ;
     }
 
-
     frag_color = vec4(outgoing_light.rgb, opacity);
 
     float gamma = 1.3;
@@ -317,3 +316,13 @@ void main()
     
 
 }
+
+// vec3 ecPosition = vec3(gl_ModelViewMatrix * gl_Vertex);
+// vec3 tnorm = normalize(gl_NormalMatrix * gl_Normal);
+// vec3 lightVec = normalize(LightPosition - ecPosition);
+// float costheta = dot(tnorm, lightVec);
+// float a = 0.5 + 0.5 * costheta;    
+// gl_FrontColor = mix(GroundColor, SkyColor, a);    
+// gl_Position = ftransform();
+
+

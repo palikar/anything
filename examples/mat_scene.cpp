@@ -16,9 +16,7 @@ class MatScene : public gmt::GameBase
 
     gmt::Entity* floor_mesh;
 
-    gmt::BoxHelper* box;
     gmt::PointlightHelper* pointlight;
-    gmt::SpotlightHelper* spotlight;
 
     std::vector<rend::CubeTexturePtr> env_maps;
     std::vector<rend::TexturePtr> texs;
@@ -42,6 +40,18 @@ class MatScene : public gmt::GameBase
 
     void init_lighting()
     {
+        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
+        main_scene->light_setup().directional_light.intensity = 0.1f;
+
+        main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
+        main_scene->light_setup().ambient_light.intensity = 0.08f;
+
+        main_scene->point_light(0);
+        main_scene->light_setup().point_lights[0].constant = 0.0;
+        main_scene->light_setup().point_lights[0].linear = 0.074;
+        main_scene->light_setup().point_lights[0].quadratic = 0.000;
+        main_scene->light_setup().point_lights[0].position = {5.0f, 10.0f, 5.0f};
+        main_scene->light_setup().point_lights[0].color = {0.8f,0.8f,0.8f};
 
     }
 
@@ -91,16 +101,13 @@ class MatScene : public gmt::GameBase
         cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
         cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
 
-
-
         // // Initing the cube
-        // cube = main_scene->add(gmt::mesh_entity({grph::plane_geometry(50, 50, 30, 30), grph::solid_color(rend::Colors::blue)}));
-        // cmp::transform(cube).set_position({0.0f , 5.0f, 0.0f});
-        // cmp::transform(cube).rotateX(glm::radians(-90.0f));
+        cube = main_scene->add(gmt::mesh_entity({grph::cube_geometry(5, 5, 5, 5, 5, 5), grph::solid_color(0.8, 0.3, 0.8)}));
+        cmp::transform(cube).set_position({0.0f , 15.0f, -5.0f});
+        cmp::transform(cube).rotateX(glm::radians(-90.0f));
 
 
-        // Initing the torus
-            
+        // Initing the torus            
         auto rock_mat = grph::phong_material(0.2f, 0.2f, 0.2f);
         torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), std::move(rock_mat)}));
         cmp::transform(torus).set_position({-10.0f , 13.0f, 0.0f});
@@ -113,59 +120,33 @@ class MatScene : public gmt::GameBase
 
 
         // Initing the sphere
-
         auto brick_mat = grph::texture_material(brick);
         grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.1f, 0.1f, 0.1f});
         sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
         cmp::transform(sphere).set_position({10.0f , 10.0f, 0.0f});
         cmp::mesh(sphere).geometry().compute_bounding_box();
 
-        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().directional_light.intensity = 1.08f;
 
-        main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().ambient_light.intensity = 0.08f;
-
-        main_scene->point_light(0);
-        main_scene->light_setup().point_lights[0].constant = 0.0;
-        main_scene->light_setup().point_lights[0].linear = 0.074;
-        main_scene->light_setup().point_lights[0].quadratic = 0.000;
-        main_scene->light_setup().point_lights[0].position = {5.0f, 10.0f, 5.0f};
-        main_scene->light_setup().point_lights[0].color = {0.8f,0.8f,0.8f};
-
-        // box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f, -50.0f, -50.0f}, {50.0f, 50.0f, 50.0f}}));
-        // box = main_scene->add(gmt::box_helper(cmp::mesh(sphere).geometry().bounding_box()));
-
-
-
+        init_lighting();
         pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
         cmp::transform(pointlight).set_position({5.0f, 10.0f, 5.0f});
-
-        // spotlight = main_scene->add(gmt::spotlight_helper(20));
-        // cmp::transform(spotlight).set_position({-20.0f, 10.0f, -20.0f});
 
     }
 
     void update(double dt) override
     {
 
-        // cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
-        // cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
+        cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
+        cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
+        cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
 
-        // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
-        // cmp::transform(box).set_position(cmp::transform(sphere).position());
-
-        // float x = 25 * std::sin(glfwGetTime());
-        // float z = 25 * std::cos(glfwGetTime());
-        // main_scene->light_setup().point_lights[0].position[0] = x;
-        // main_scene->light_setup().point_lights[0].position[1] = 10;
-        // main_scene->light_setup().point_lights[0].position[2] = z;
-
-        // cmp::transform(pointlight).set_position({x, 10, z});
-
+        const float x = 15 * std::sin(glfwGetTime());
+        const float z = 15 * std::cos(glfwGetTime());
+        main_scene->light_setup().point_lights[0].position[0] = x;
+        main_scene->light_setup().point_lights[0].position[1] = 10;
+        main_scene->light_setup().point_lights[0].position[2] = z;
         main_scene->light_setup().needs_update = true;
-
-
+        cmp::transform(pointlight).set_position({x,10,z});
         main_scene->update(dt);
     }
 
@@ -305,7 +286,7 @@ class MatScene : public gmt::GameBase
         if (ImGui::CollapsingHeader("Ligting"))
         {
 
-            if (ImGui::SliderFloat("Light pos", (float*)&main_scene->light_setup().point_lights[0].position[0], -10.0f, 10.0f, "Position = %.3f")){
+            if (ImGui::SliderFloat("Light pos", (float*)&main_scene->light_setup().point_lights[0].position[0], -20.0f, 20.0f, "Position = %.3f")){
                 cmp::transform(pointlight).position()[0] = main_scene->light_setup().point_lights[0].position[0];
                 cmp::transform(pointlight).update();
             };
@@ -355,6 +336,12 @@ class MatScene : public gmt::GameBase
                 ImGui::TreePop();
             }
 
+        }
+
+        if (ImGui::CollapsingHeader("Cube"))
+        {
+            ImGui::ColorEdit3("Color", (float*)&cmp::mesh(cube).material<grph::SolidColorMaterial>()->params().m_color);
+            ImGui::SliderFloat("Shininess", (float*)&cmp::mesh(cube).material<grph::SolidColorMaterial>()->params().m_shininess, 2.0, 60.0, "Exponent = %.3f");
         }
 
         renderer.render_scene(*main_scene);

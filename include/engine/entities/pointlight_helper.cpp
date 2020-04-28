@@ -18,6 +18,7 @@ void PointlightHelper::init_points()
     sphere.pack();
 
     m_mesh = add_component<cmp::MeshComponent>(std::move(sphere), grph::solid_color(m_color, true));
+    m_mesh->mesh.material<grph::SolidColorMaterial>()->no_lighting();
 }
 
 

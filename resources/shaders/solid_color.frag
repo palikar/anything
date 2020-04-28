@@ -163,8 +163,7 @@ void main()
             }
         }
         
-        frag_color = vec4(final_color.xzy, opacity);
-
+        frag_color = vec4(final_color.rgb, opacity);
     }
 
 }

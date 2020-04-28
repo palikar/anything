@@ -196,6 +196,10 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
         shader->set("lighting_enabled", true);
         bind_lighting(shader);
     }
+    else
+    {
+        shader->set("lighting_enabled", false);
+    }
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 

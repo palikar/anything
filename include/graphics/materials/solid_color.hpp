@@ -12,7 +12,8 @@ namespace ay::grph
 struct SolidColorParameters
 {
     glm::vec3 m_color;
-    float m_shininess;
+    float m_shininess{30.0};
+    bool m_lighting{true};
 };
 
 class SolidColorMaterial : public Material
@@ -29,9 +30,19 @@ class SolidColorMaterial : public Material
 
     void update_uniforms(rend::TextureBinder &, rend::RenderContext &) override;
 
+    void no_lighting()
+    {
+        m_params.m_lighting = false;
+    }
+
+    void lighting()
+    {
+        m_params.m_lighting = true;
+    }
+        
     bool needs_lighting() override
     {
-        return true;
+        return m_params.m_lighting;
     }
 
     SolidColorParameters &params()
