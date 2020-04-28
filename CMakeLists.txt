@@ -160,7 +160,7 @@ include_directories(${GLFW_INCLUDE_DIRS})
 add_library(anything_engine
 
     ./include/rendering/renderer.cpp
-    
+
 
     ./include/rendering/texture.cpp
     ./include/rendering/frame_buffer.cpp
@@ -186,6 +186,7 @@ add_library(anything_engine
     ./include/engine/engine.cpp
     ./include/engine/scene.cpp
     ./include/engine/raycaster.cpp
+    ./include/engine/texture_library.cpp
 
     ./include/engine/entities/axis_helper.cpp
     ./include/engine/entities/camera_helper.cpp
@@ -201,8 +202,8 @@ add_library(anything_engine
     ./include/util/gl_helpers.cpp
     ./include/util/files.cpp
     ./include/util/logging.cpp
-    
-    
+
+
     )
 
 target_include_directories(anything_engine PUBLIC ./include)

@@ -25,6 +25,7 @@
 #include "engine/game_base.hpp"
 #include "engine/scene.hpp"
 #include "engine/raycaster.hpp"
+#include "engine/texture_library.hpp"
 
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/spotlight_helper.hpp"

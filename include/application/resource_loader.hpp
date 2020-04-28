@@ -17,6 +17,9 @@ class ResouceLoader
 
     fs::path m_root;
     fs::path m_shaders;
+    fs::path m_textures;
+    fs::path m_cube_textures;
+    fs::path m_objs;
 
   public:
     static ResouceLoader *get_instance()
@@ -38,9 +41,30 @@ class ResouceLoader
 
     std::pair<std::string, std::string> get_shader_sources(std::string_view t_shader);
 
+    std::string get_texture(std::string_view t_file);
+
+    std::string get_obj(std::string_view t_file);
+
+    std::string get_skybox(std::string_view t_file);
+    
     static auto path(std::string_view t_path)
     {
         return get_instance()->get_file_path(t_path);
+    }
+
+    static auto skybox(std::string_view t_path)
+    {
+        return get_instance()->get_skybox(t_path);
+    }
+
+    static auto texture(std::string_view t_path)
+    {
+        return get_instance()->get_texture(t_path);
+    }
+
+    static auto obj(std::string_view t_path)
+    {
+        return get_instance()->get_obj(t_path);
     }
 
     static auto text(std::string_view t_path)
