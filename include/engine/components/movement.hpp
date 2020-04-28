@@ -34,7 +34,6 @@ class MovementComponent : public gmt::Component
 
     bool event(app::Event &) override
     {
-        
     }
 
     void update(double) override

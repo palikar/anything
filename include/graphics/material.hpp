@@ -3,6 +3,8 @@
 #include "rendering/shaders.hpp"
 #include "rendering/api.hpp"
 
+#include "engine/shader_library.hpp"
+
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
@@ -55,7 +57,7 @@ class Material
     {
     }
 
-    virtual void init_shader(rend::ShaderLibrary &t_shader_lib)                = 0;
+    virtual void init_shader(gmt::ShaderLibrary &t_shader_lib)                 = 0;
     virtual void update_uniforms(rend::TextureBinder &, rend::RenderContext &) = 0;
     virtual bool needs_lighting()                                              = 0;
 

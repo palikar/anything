@@ -9,7 +9,7 @@ TextureMaterial::TextureMaterial(rend::TexturePtr tex) : m_parameters()
     m_parameters.m_map = std::move(tex);
 }
 
-void TextureMaterial::init_shader(rend::ShaderLibrary &t_shader_lib)
+void TextureMaterial::init_shader(gmt::ShaderLibrary &t_shader_lib)
 {
     m_shader = t_shader_lib.load("textured");
 }
@@ -29,7 +29,7 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
     m_shader->set("color", m_parameters.m_color);
     m_shader->set("color_intensity", m_parameters.m_color_intensity);
 
-    
+
     m_shader->set("ao_intensity", m_parameters.m_ao_intensity);
 
     m_shader->set("camera_pos", ctx.camera_pos);
@@ -51,7 +51,7 @@ void TextureMaterial::update_uniforms(rend::TextureBinder &binder,
     {
         m_shader->set_sampler("specular_map",
                               binder.resolve(m_parameters.m_specular_map.get()));
-        m_shader->set("has_specular_map", true );
+        m_shader->set("has_specular_map", true);
     }
     else
     {

@@ -36,8 +36,8 @@ class Geometry
 
   private:
     std::vector<uint32_t> m_index;
-    bool m_indexed{false};
-    
+    bool m_indexed{ false };
+
     std::unordered_map<std::string, Attriubute> m_buffers;
     std::vector<std::tuple<int32_t, int32_t>> m_groups;
     mutable rend::VertexArrayPtr m_glbuffers;
@@ -81,7 +81,7 @@ class Geometry
     void set_index(std::vector<uint32_t> buffer)
     {
         m_indexed = true;
-        m_index = std::move(buffer);
+        m_index   = std::move(buffer);
     }
 
     void remove_index()
@@ -194,7 +194,7 @@ class Geometry
     }
 
     const rend::VertexArray *gl_buffers() const
-    {        
+    {
         return m_glbuffers.get();
     }
 

@@ -103,4 +103,3 @@ class RendererScene3D
 };
 
 }  // namespace ay::rend
-

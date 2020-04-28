@@ -187,6 +187,7 @@ add_library(anything_engine
     ./include/engine/scene.cpp
     ./include/engine/raycaster.cpp
     ./include/engine/texture_library.cpp
+    ./include/engine/shader_library.cpp
 
     ./include/engine/entities/axis_helper.cpp
     ./include/engine/entities/camera_helper.cpp

@@ -50,7 +50,7 @@ class Scene3D
         t_entity->init(m_game);
         m_entities.push_back(std::move(t_entity));
 
-        return static_cast<T*>(m_entities.back().get());
+        return static_cast<T *>(m_entities.back().get());
     }
 
 

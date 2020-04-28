@@ -5,6 +5,11 @@ namespace ay::gmt
 {
 
 
+gmt::TextureLibrary &GameBase::textures()
+{
+    return m_engine->tex_lib();
+}
+
 Scene3D *GameBase::init_scene(const std::string &t_name)
 {
     auto sc = Scene3D();
@@ -12,7 +17,7 @@ Scene3D *GameBase::init_scene(const std::string &t_name)
     return &m_scenes.insert({ t_name, std::move(sc) }).first->second;
 }
 
-rend::ShaderLibrary &GameBase::shaders()
+gmt::ShaderLibrary &GameBase::shaders()
 {
     return m_engine->shader_lib();
 }

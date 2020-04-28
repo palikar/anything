@@ -150,32 +150,31 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *model_comp)
 {
 
-    auto& model = model_comp->model;
+    auto &model    = model_comp->model;
     auto transform = cmp::transform(object);
 
-    
+
     for (size_t i = 0; i < model.size(); ++i)
     {
         m_binder.begin_draw_call();
 
         auto mesh = model.get(i);
 
-        auto shader    = mesh->material()->shader();
-        auto mat       = mesh->material();
+        auto shader = mesh->material()->shader();
+        auto mat    = mesh->material();
 
         switch_shader(shader);
         switch_mvp(shader, transform.get_tranformation());
         handle_material(mat, shader);
-        
+
         if (mat->needs_lighting())
         {
             bind_lighting(shader);
         }
-        
+
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
         m_api->draw_triangles(mesh->geometry());
     }
-
 }
 
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)
@@ -244,9 +243,9 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
 {
     m_binder.begin_draw_call();
 
-    auto shader  = sky->shader();
-    auto tex     = sky->texture();
-    auto& geom = sky->geometry();
+    auto shader = sky->shader();
+    auto tex    = sky->texture();
+    auto &geom  = sky->geometry();
 
     switch_shader(shader);
     const auto slot = m_binder.resolve(tex);
@@ -256,7 +255,7 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     sky_view[3]   = glm::vec4(0, 0, 0, 1);
 
     shader->set("projection_matrix", m_projection * sky_view);
-    
+
     m_api->culling(Side::FRONT);
     m_api->draw_triangles(geom);
     m_api->culling(Side::BACK);

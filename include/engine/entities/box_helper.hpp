@@ -37,7 +37,9 @@ class BoxHelper : public Entity
 
     void init_points();
 
-    void update(double) override {}
+    void update(double) override
+    {
+    }
 
     bool event(app::Event &) override
     {
@@ -49,7 +51,7 @@ class BoxHelper : public Entity
     void upate(mth::Box3 t_box)
     {
         m_box = t_box;
-        
+
         m_transform->transform.set_position(m_box.center());
         m_transform->transform.set_scale(m_box.size() * 0.5f);
     }

@@ -45,7 +45,7 @@ class TextureMaterial : public Material
 
     virtual ~TextureMaterial() = default;
 
-    void init_shader(rend::ShaderLibrary &t_shader_lib) override;
+    void init_shader(gmt::ShaderLibrary &t_shader_lib) override;
 
     void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override;
 

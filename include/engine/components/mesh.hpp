@@ -15,9 +15,8 @@ namespace ay::cmp
 class MeshComponent : public gmt::Component
 {
   public:
-
     using construct_type = grph::Mesh;
-    
+
     grph::Mesh mesh;
 
   public:

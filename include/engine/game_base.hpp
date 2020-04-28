@@ -1,6 +1,10 @@
 #pragma once
 
 #include "engine/scene.hpp"
+
+#include "engine/texture_library.hpp"
+#include "engine/shader_library.hpp"
+
 #include "application/event.hpp"
 
 #include "std_header.hpp"
@@ -26,9 +30,14 @@ class GameBase
   public:
     virtual ~GameBase(){};
 
-    rend::ShaderLibrary &shaders();
+    gmt::ShaderLibrary &shaders();
+
+    gmt::TextureLibrary &textures();
+
     void set_up(GameEngine *t_engine);
+
     Scene3D *init_scene(const std::string &t_name);
+
     GameEngine *engine()
     {
         return m_engine;

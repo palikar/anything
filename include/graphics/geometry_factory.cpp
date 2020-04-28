@@ -219,7 +219,7 @@ Geometry sphere_geometry(float radius,
 
             auto norm = glm::normalize(glm::vec3(x, y, z));
             normals.insert(normals.end(), { norm.x, norm.y, norm.z });
-            
+
             uv.insert(uv.end(), { u + uOffset, 1 - v });
 
             // vertices.push_back({ x, y, z , norm.x, norm.y, norm.z, u + uOffset, 1 - v
@@ -227,7 +227,7 @@ Geometry sphere_geometry(float radius,
 
             verticesRow.push_back(index++);
         }
-        
+
         grid.push_back(verticesRow);
     }
 

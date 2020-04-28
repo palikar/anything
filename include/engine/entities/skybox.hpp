@@ -57,11 +57,10 @@ class Skybox : public Entity
         return m_cube.gl_buffers();
     }
 
-    grph::Geometry& geometry()
+    grph::Geometry &geometry()
     {
         return m_cube;
     }
-    
 };
 
 using SkyboxPtr = std::unique_ptr<Skybox>;

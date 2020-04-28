@@ -46,7 +46,7 @@ class ResouceLoader
     std::string get_obj(std::string_view t_file);
 
     std::string get_skybox(std::string_view t_file);
-    
+
     static auto path(std::string_view t_path)
     {
         return get_instance()->get_file_path(t_path);

@@ -6,6 +6,9 @@
 #include "rendering/shaders.hpp"
 #include "rendering/renderer.hpp"
 
+#include "engine/texture_library.hpp"
+#include "engine/shader_library.hpp"
+
 
 namespace ay::gmt
 {
@@ -21,7 +24,8 @@ class GameEngine
     int m_width;
     int m_height;
 
-    rend::ShaderLibrary m_shader_lib;
+    ShaderLibrary m_shader_lib;
+    TextureLibrary m_texture_lib;
     GameBase *m_game;
     rend::RenderAPI m_renderAPI;
 
@@ -35,9 +39,14 @@ class GameEngine
 
     void render();
 
-    rend::ShaderLibrary &shader_lib()
+    ShaderLibrary &shader_lib()
     {
         return m_shader_lib;
+    }
+
+    TextureLibrary &tex_lib()
+    {
+        return m_texture_lib;
     }
 
     rend::RenderAPI *api()

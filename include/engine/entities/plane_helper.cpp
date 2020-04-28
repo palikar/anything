@@ -25,7 +25,7 @@ void PlaneHelper::init_points()
 
     quad_geom.set_index({ 2, 1, 0, 4, 3, 0 });
 
-    
+
     // generate lines
     lines_geom.set_attribute("position",
                              { 1,  -1, 0, -1, 1,  0, -1, -1, 0, 1, 1, 0, -1, 1, 0,

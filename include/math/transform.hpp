@@ -141,7 +141,7 @@ class Transform
         m_rotation = r;
         update();
     }
-    
+
     void set_scale(glm::vec3 v)
     {
         m_scale = v;

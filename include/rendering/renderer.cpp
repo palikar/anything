@@ -40,12 +40,12 @@ void RenderAPI::draw_mutli_indexed(const VertexArray *vertex_array, uint32_t ind
     {
         vertex_array->bind_index(i);
         uint32_t count =
-            index_count <= 0 ? vertex_array->index_buffer(i)->count() : index_count;
+          index_count <= 0 ? vertex_array->index_buffer(i)->count() : index_count;
         GLCall(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr));
     }
 }
 
-void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
+void RenderAPI::draw_lines(grph::Geometry &geometry, uint32_t element_count)
 {
 
     if (geometry.is_dirty())
@@ -67,7 +67,6 @@ void RenderAPI::draw_lines(grph::Geometry& geometry, uint32_t element_count)
     {
 
         GLCall(glDrawArrays(GL_LINES, 0, geometry.attribute("position").size() / 2));
-
     }
 }
 
@@ -157,20 +156,19 @@ void RenderAPI::culling(const Side &setup)
 {
     switch (setup)
     {
-      case Side::BACK:
-          GLCall(glEnable(GL_CULL_FACE));
-          GLCall(glCullFace(GL_BACK));
-          break;
+    case Side::BACK:
+        GLCall(glEnable(GL_CULL_FACE));
+        GLCall(glCullFace(GL_BACK));
+        break;
 
-      case Side::FRONT:
-          GLCall(glEnable(GL_CULL_FACE));
-          GLCall(glCullFace(GL_FRONT));
-          break;
+    case Side::FRONT:
+        GLCall(glEnable(GL_CULL_FACE));
+        GLCall(glCullFace(GL_FRONT));
+        break;
 
-      case Side::BOTH: GLCall(glDisable(GL_CULL_FACE)); break;
+    case Side::BOTH: GLCall(glDisable(GL_CULL_FACE)); break;
     }
 }
 
 
-}
- 
+}  // namespace ay::rend

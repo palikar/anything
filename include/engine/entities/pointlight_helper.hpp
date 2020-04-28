@@ -26,11 +26,10 @@ namespace ay::gmt
 class PointlightHelper : public Entity
 {
   private:
-
     cmp::MeshComponent *m_mesh;
     cmp::TransformComponent *m_transform;
-    
-    float m_size; 
+
+    float m_size;
     glm::vec3 m_color;
 
   public:
@@ -38,7 +37,9 @@ class PointlightHelper : public Entity
 
     void init_points();
 
-    void update(double) override {}
+    void update(double) override
+    {
+    }
 
     bool event(app::Event &) override
     {
@@ -46,7 +47,6 @@ class PointlightHelper : public Entity
     }
 
     void init(GameBase *) override{};
-
 };
 
 

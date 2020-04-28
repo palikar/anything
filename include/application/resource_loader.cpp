@@ -8,11 +8,11 @@ namespace ay::app
 
 void ResouceLoader::init(std::string t_root)
 {
-    m_root    = fs::absolute(t_root);
-    m_shaders = m_root / "shaders";
-    m_textures = m_root / "textures";
+    m_root          = fs::absolute(t_root);
+    m_shaders       = m_root / "shaders";
+    m_textures      = m_root / "textures";
     m_cube_textures = m_textures / "cube";
-    m_objs = m_root / "objs";
+    m_objs          = m_root / "objs";
 }
 
 std::string ResouceLoader::get_file_path(std::string_view t_file)
@@ -66,7 +66,7 @@ std::pair<std::string, std::string>
 
 std::string ResouceLoader::get_texture(std::string_view t_file)
 {
-    
+
     fs::path path = m_textures / t_file;
     if (!fs::exists(path))
     {
@@ -74,13 +74,12 @@ std::string ResouceLoader::get_texture(std::string_view t_file)
     }
 
     return path;
-
 }
 
 std::string ResouceLoader::get_obj(std::string_view t_file)
 {
 
-    
+
     fs::path path = m_objs / t_file;
     if (!fs::exists(path))
     {
@@ -88,8 +87,6 @@ std::string ResouceLoader::get_obj(std::string_view t_file)
     }
 
     return path;
-
-
 }
 
 std::string ResouceLoader::get_skybox(std::string_view t_file)

@@ -207,48 +207,4 @@ ShaderPtr load_shader(std::string_view t_name)
     return std::make_shared<Shader>(std::string(t_name), vert, frag);
 }
 
-
-void ShaderLibrary::add(const std::string &name, const ShaderPtr &shader)
-{
-    m_shaders.insert({ name, shader });
-}
-
-void ShaderLibrary::add(const ShaderPtr &shader)
-{
-    m_shaders.insert({ shader->get_name(), shader });
-}
-
-ShaderPtr ShaderLibrary::load(const std::string &t_name)
-{
-    if (m_shaders.count(t_name) != 0)
-    {
-        return m_shaders.at(t_name);
-    }
-    auto sh = load_shader(t_name);
-    m_shaders.insert({ t_name, sh });
-    return sh;
-}
-
-ShaderPtr ShaderLibrary::get(const std::string &name)
-{
-    if (m_shaders.count(name) == 0)
-    {
-        return nullptr;
-    }
-
-    return m_shaders.at(name);
-}
-
-ShaderPtr ShaderLibrary::bind(const std::string &name)
-{
-    auto s = get(name);
-    s->bind();
-    return s;
-}
-
-bool ShaderLibrary::exists(const std::string &name) const
-{
-    return m_shaders.count(name) == 0;
-}
-
 }  // namespace ay::rend

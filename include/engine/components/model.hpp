@@ -20,10 +20,9 @@ class ModelComponent : public gmt::Component
   public:
     AY_COMPONENT(Mesh)
 
-    ModelComponent(grph::Model t_model) : model(std::move(t_model))
-    {};
+    ModelComponent(grph::Model t_model) : model(std::move(t_model)){};
 
-    void init(gmt::GameBase*) override
+    void init(gmt::GameBase *) override
     {
         // mesh.material()->init_shader(t_game->shaders());
     }

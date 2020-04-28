@@ -30,9 +30,9 @@ class RenderAPI
 
     void draw_mutli_indexed(const VertexArray *vertex_array, uint32_t index_count = 0);
 
-    void draw_lines(grph::Geometry& geometry, uint32_t element_count = 0);
+    void draw_lines(grph::Geometry &geometry, uint32_t element_count = 0);
 
-    void draw_triangles(grph::Geometry& geometry, uint32_t element_count = 0);
+    void draw_triangles(grph::Geometry &geometry, uint32_t element_count = 0);
 
     void depth_test(bool value);
 

@@ -30,14 +30,14 @@ class SpotlightHelper : public Entity
     glm::vec3 m_color;
     glm::vec3 m_dir;
 
-    float m_distance{50.0f};
-    float m_angle{mth::PI/4};
-    
+    float m_distance{ 50.0f };
+    float m_angle{ mth::PI / 4 };
+
 
   public:
     SpotlightHelper(float t_distance = 50.0f,
-                    float t_angle = mth::PI/8,
-                    glm::vec3 dir  = {0.0f, -1.0f, 0.0f},
+                    float t_angle    = mth::PI / 8,
+                    glm::vec3 dir    = { 0.0f, -1.0f, 0.0f },
                     glm::vec3 color  = { 0.7f, 0.7f, 0.7f });
 
     void init_points();
@@ -54,14 +54,12 @@ class SpotlightHelper : public Entity
     void init(GameBase *) override{};
 
     void update(float t_distance, float t_angle);
-    
+
     void dir(glm::vec3 t_dir);
 
 
   private:
-
     void update_tranform();
-    
 };
 
 
