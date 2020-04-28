@@ -10,6 +10,8 @@
 
 #include "std_header.hpp"
 
+#include <stb_image.h>
+
 namespace ay::app
 {
 
@@ -58,6 +60,21 @@ class Window
     void set_title(std::string_view t_name)
     {
         glfwSetWindowTitle(m_window, t_name.data());
+    }
+
+    void set_focus()
+    {
+        glfwFocusWindow(m_window);
+    }
+
+    void set_icon(const std::string &icon_file)
+    {
+        GLFWimage image;
+        int channels{};
+        stbi_set_flip_vertically_on_load(1);
+        image.pixels =
+          stbi_load(icon_file.c_str(), &image.width, &image.height, &channels, 0);
+        glfwSetWindowIcon(m_window, 1, &image);
     }
 
     void dispose();

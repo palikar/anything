@@ -53,28 +53,31 @@ class MatScene : public gmt::GameBase
         main_scene->light_setup().point_lights[0].position = {5.0f, 10.0f, 5.0f};
         main_scene->light_setup().point_lights[0].color = {0.8f,0.8f,0.8f};
 
+        pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
+        cmp::transform(pointlight).set_position({5.0f, 10.0f, 5.0f});
+
     }
 
     void init() override
     {
         init_basic();
 
-        rend::CubeTexturePtr sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
-        rend::CubeTexturePtr night_sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
+        auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
+        auto night_sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
 
-        rend::TexturePtr floor = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
-        rend::TexturePtr floor_normal = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-normal.png"));
-        rend::TexturePtr floor_bump = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-height.png"));
+        auto floor = textures().load("floor/floor-albedo.png", gmt::MapType::ALBEDO_MAP);
+        auto floor_normal = textures().load("floor/floor-normal.png", gmt::MapType::NORMAL_MAP);
+        auto floor_bump = textures().load("floor/floor-height.png", gmt::MapType::HEIGHT_MAP);
 
-        rend::TexturePtr brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
-        rend::TexturePtr brick_ao = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_ao.jpg"));
-        rend::TexturePtr brick_bump = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_height.png"));
-        rend::TexturePtr brick_normal = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_normal.jpg"));
+        auto brick_ao =textures().load("bricks/brick_ao.jpg", gmt::MapType::AO_MAP);
+        auto brick = textures().load("bricks/brick_base.jpg", gmt::MapType::DIFFUSE_MAP);
+        auto brick_normal =textures().load("bricks/brick_normal.jpg", gmt::MapType::NORMAL_MAP);
+        auto brick_bump = textures().load("bricks/brick_height.png", gmt::MapType::HEIGHT_MAP);
 
-        rend::TexturePtr rocks = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_color.jpg"));
-        rend::TexturePtr rocks_ao = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_ao.jpg"));
-        rend::TexturePtr rocks_normal = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_normal.jpg"));
-        rend::TexturePtr rocks_bump = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_displacement.jpg"));
+        auto rocks = textures().load("stones/rocks_color.jpg", gmt::MapType::DIFFUSE_MAP);
+        auto rocks_ao = textures().load("stones/rocks_ao.jpg", gmt::MapType::AO_MAP);
+        auto rocks_normal = textures().load("stones/rocks_normal.jpg", gmt::MapType::NORMAL_MAP);
+        auto rocks_bump = textures().load("stones/rocks_displacement.jpg", gmt::MapType::HEIGHT_MAP);
 
         texs.push_back(brick);
         texs.push_back(floor);
@@ -88,12 +91,10 @@ class MatScene : public gmt::GameBase
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
         cmp::mesh(floor_mesh).geometry().calculate_tangents();
-
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_height_map = floor_bump;
 
-        
         auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
         cmp::transform(wall_mesh).translateY(50.0f);
         cmp::transform(wall_mesh).translateZ(-50.0f);
@@ -128,9 +129,6 @@ class MatScene : public gmt::GameBase
 
 
         init_lighting();
-        pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
-        cmp::transform(pointlight).set_position({5.0f, 10.0f, 5.0f});
-
     }
 
     void update(double dt) override

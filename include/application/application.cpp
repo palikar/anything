@@ -77,19 +77,20 @@ int Application::run()
         std::this_thread::sleep_for(5ms);
     }
 
-
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-
-    m_window->dispose();
-    glfwTerminate();
-
+    shutdown();
 
     return 0;
 }
 
+void Application::shutdown()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    m_window->dispose();
+    glfwTerminate();
+}
 
 void Application::render_engine()
 {
@@ -114,7 +115,6 @@ void Application::render_engine()
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
-
 
 void Application::init()
 {
@@ -200,5 +200,37 @@ void Application::on_event(Event &t_event)
     }
 }
 
+bool Application::on_close(WindowCloseEvent &)
+{
+    AY_DEBUG(fmt::format("Closing window"));
+    m_running = false;
+    return false;
+}
+
+bool Application::on_resize(WindowResizeEvent &e)
+{
+    AY_DEBUG(fmt::format("Resizing: {}x{}", e.width(), e.height()));
+    m_engine.resize(e);
+    return false;
+}
+
+bool Application::on_resposition(WindowPositionEvent &)
+{
+    return false;
+}
+
+void Application::set_title(const std::string &name)
+{
+    m_window->set_title(name);
+}
+
+void Application::set_icon(const std::string &icon_file)
+{
+    m_window->set_icon(icon_file);
+}
+
+void Application::focus()
+{
+}
 
 }  // namespace ay::app

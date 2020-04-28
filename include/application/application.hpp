@@ -40,9 +40,16 @@ class Application
 
     int run();
 
+    void set_title(const std::string &name);
+
+    void set_icon(const std::string &icon_file);
+
+    void focus();
 
   private:
     void init();
+
+    void shutdown();
 
     void init_imgui();
 
@@ -50,25 +57,11 @@ class Application
 
     void on_event(Event &t_event);
 
-    bool on_close(WindowCloseEvent &)
-    {
-        AY_DEBUG(fmt::format("Closing window"));
-        m_running = false;
-        return false;
-    }
+    bool on_close(WindowCloseEvent &);
 
-    bool on_resize(WindowResizeEvent &e)
-    {
-        AY_DEBUG(fmt::format("Resizing: {}x{}", e.width(), e.height()));
-        m_engine.resize(e);
-        return false;
-    }
+    bool on_resize(WindowResizeEvent &e);
 
-    bool on_resposition(WindowPositionEvent &)
-    {
-
-        return false;
-    }
+    bool on_resposition(WindowPositionEvent &);
 };
 
 
