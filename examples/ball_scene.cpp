@@ -119,8 +119,6 @@ class BallScene : public gmt::GameBase
         init_lighting();
 
 
-        ImGuizmo::SetOrthographic(false);
-        ImGuizmo::Enable(true);
 
     }
 
@@ -215,7 +213,9 @@ class BallScene : public gmt::GameBase
     {
 
         bool changed = false;
-        ImGui::SetNextItemOpen(true);
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::Enable(true);
+        
         if (ImGui::CollapsingHeader("Ligting"))
         {
 
@@ -273,6 +273,7 @@ class BallScene : public gmt::GameBase
 
         if (selected ) {
             ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
+            ImGuizmo::SetDrawlist();
             ImGuizmo::Manipulate(glm::value_ptr(main_scene->camera().view()),
                                  glm::value_ptr(main_scene->camera().projection()),
                                  current_gizmo_operation,

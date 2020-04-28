@@ -6,7 +6,6 @@
 #include "commons.hpp"
 #include "imgui_header.hpp"
 
-
 #include "rendering/buffer_factory.hpp"
 #include "rendering/renderer.hpp"
 #include "rendering/renderer3D.hpp"
@@ -26,6 +25,7 @@
 #include "engine/scene.hpp"
 #include "engine/raycaster.hpp"
 #include "engine/texture_library.hpp"
+#include "engine/shader_library.hpp"
 
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/spotlight_helper.hpp"
@@ -76,6 +76,7 @@
 
 #include "graphics/loading/mesh_loader.hpp"
 
-
 #include "util/meta.hpp"
 #include "util/gl_helpers.hpp"
+#include "util/files.hpp"
+#include "util/logging.hpp"
