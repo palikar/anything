@@ -14,6 +14,8 @@ class MatScene : public gmt::GameBase
     gmt::Entity* cube;
     gmt::Entity* torus;
 
+    gmt::Entity* floor_mesh;
+
     gmt::BoxHelper* box;
     gmt::PointlightHelper* pointlight;
     gmt::SpotlightHelper* spotlight;
@@ -47,65 +49,73 @@ class MatScene : public gmt::GameBase
     {
         init_basic();
 
-        rend::TexturePtr floor = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
-        rend::TexturePtr floor_normal = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-normal.png"));
-        rend::TexturePtr brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
         rend::CubeTexturePtr sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/sky/"));
         rend::CubeTexturePtr night_sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
+
+        rend::TexturePtr floor = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
+        rend::TexturePtr floor_normal = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-normal.png"));
+        rend::TexturePtr floor_bump = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-height.png"));
+
+        rend::TexturePtr brick = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_base.jpg"));
         rend::TexturePtr brick_ao = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_ao.jpg"));
+        rend::TexturePtr brick_bump = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_height.png"));
+        rend::TexturePtr brick_normal = rend::create_texture(app::ResouceLoader::path("textures/bricks/brick_normal.jpg"));
 
         rend::TexturePtr rocks = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_color.jpg"));
         rend::TexturePtr rocks_normal = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_normal.jpg"));
+        rend::TexturePtr rocks_bump = rend::create_texture(app::ResouceLoader::path("textures/stones/rocks_displacement.jpg"));
 
-        texs.push_back(brick);
-        texs.push_back(floor);
-        env_maps.push_back(sky);
-        env_maps.push_back(night_sky);
-
-        texs.push_back(brick_ao);
+        // texs.push_back(brick);
+        // texs.push_back(floor);
+        // env_maps.push_back(sky);
+        // env_maps.push_back(night_sky);
+        // texs.push_back(brick_ao);
 
         main_scene->add(gmt::axis());
-        main_scene->set_skybox(gmt::skybox(sky));
+        // main_scene->set_skybox(gmt::skybox(sky));
 
-        auto floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.01, 0.01, 0.01)}));
+        floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
         cmp::mesh(floor_mesh).geometry().calculate_tangents();
-        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = rocks;
-        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
 
-        auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.01, 0.01, 0.01)}));
-        cmp::transform(wall_mesh).translateY(50.0f);
-        cmp::transform(wall_mesh).translateZ(-50.0f);
-        cmp::mesh(wall_mesh).geometry().calculate_tangents();
-        cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
-        cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
+        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = brick;
+        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = brick_normal;
+        cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_bump_map = brick_bump;
 
-        
+
+        // auto wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
+        // cmp::transform(wall_mesh).translateY(50.0f);
+        // cmp::transform(wall_mesh).translateZ(-50.0f);
+        // cmp::mesh(wall_mesh).geometry().calculate_tangents();
+        // cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
+        // cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
+
+
 
         // // Initing the cube
         // cube = main_scene->add(gmt::mesh_entity({grph::plane_geometry(50, 50, 30, 30), grph::solid_color(rend::Colors::blue)}));
         // cmp::transform(cube).set_position({0.0f , 5.0f, 0.0f});
         // cmp::transform(cube).rotateX(glm::radians(-90.0f));
-        
+
 
         // Initing the torus
-        auto rock_mat = grph::phong_material(0.2f, 0.2f, 0.2f);
-        torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), std::move(rock_mat)}));
-        cmp::transform(torus).set_position({-10.0f , 13.0f, 0.0f});
-        cmp::mesh(torus).geometry().calculate_tangents();
-        cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_map = rocks;
-        cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
+        // auto rock_mat = grph::phong_material(0.2f, 0.2f, 0.2f);
+        // torus = main_scene->add(gmt::mesh_entity({grph::torus_geometry(5, 1, 30, 30), std::move(rock_mat)}));
+        // cmp::transform(torus).set_position({-10.0f , 13.0f, 0.0f});
+        // cmp::mesh(torus).geometry().calculate_tangents();
+        // cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_map = rocks;
+        // cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
 
         // Initing the sphere
 
-        auto brick_mat = grph::texture_material(brick);
-        grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.1f, 0.1f, 0.1f});
-        sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
-        cmp::transform(sphere).set_position({10.0f , 10.0f, 0.0f});
-        cmp::mesh(sphere).geometry().compute_bounding_box();
+        // auto brick_mat = grph::texture_material(brick);
+        // grph::TexturedMaterialBuilder::from_existing(brick_mat.get()).color(glm::vec3{0.1f, 0.1f, 0.1f});
+        // sphere = main_scene->add(gmt::mesh_entity({grph::sphere_geometry(5, 40, 40), std::move(brick_mat)}));
+        // cmp::transform(sphere).set_position({10.0f , 10.0f, 0.0f});
+        // cmp::mesh(sphere).geometry().compute_bounding_box();
 
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().directional_light.intensity = 0.08f;
+        main_scene->light_setup().directional_light.intensity = 1.08f;
 
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().ambient_light.intensity = 0.08f;
@@ -120,10 +130,10 @@ class MatScene : public gmt::GameBase
         // box = main_scene->add(gmt::box_helper(mth::Box3{{-50.0f, -50.0f, -50.0f}, {50.0f, 50.0f, 50.0f}}));
         // box = main_scene->add(gmt::box_helper(cmp::mesh(sphere).geometry().bounding_box()));
 
-        
 
-        pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
-        cmp::transform(pointlight).set_position({5.0f, 10.0f, 5.0f});
+
+        // pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
+        // cmp::transform(pointlight).set_position({5.0f, 10.0f, 5.0f});
 
         // spotlight = main_scene->add(gmt::spotlight_helper(20));
         // cmp::transform(spotlight).set_position({-20.0f, 10.0f, -20.0f});
@@ -139,12 +149,14 @@ class MatScene : public gmt::GameBase
         // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
         // cmp::transform(box).set_position(cmp::transform(sphere).position());
 
-        float x = 15*std::sin(glfwGetTime());
-        float z = 15*std::cos(glfwGetTime());        
+        float x = 25 * std::sin(glfwGetTime());
+        float z = 25 * std::cos(glfwGetTime());
         main_scene->light_setup().point_lights[0].position[0] = x;
         main_scene->light_setup().point_lights[0].position[1] = 10;
         main_scene->light_setup().point_lights[0].position[2] = z;
-        cmp::transform(pointlight).set_position({x, 10, z});
+
+        // cmp::transform(pointlight).set_position({x, 10, z});
+
         main_scene->light_setup().needs_update = true;
 
 
@@ -197,7 +209,7 @@ class MatScene : public gmt::GameBase
     {
 
         bool changed = false;
-        
+
         if (ImGui::TreeNode("Sphere"))
         {
             ImGui::Text("Base material");
@@ -260,6 +272,8 @@ class MatScene : public gmt::GameBase
             ImGui::TreePop();
         }
 
+        ImGui::SliderFloat("Floor Bump", (float*)&cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_bump_scale, 0.0f, 5.0f, "Scale = %.3f");
+        
         if (ImGui::TreeNode("Torus"))
         {
             ImGui::Text("Texture material");
@@ -271,11 +285,16 @@ class MatScene : public gmt::GameBase
             ImGui::SliderFloat("Shininess:", (float*)&cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_shininess, 5.0f, 100.0f, "Exponent = %.3f");
 
             ImGui::Separator();
-            
-            ImGui::ColorEdit3("Emissiive", (float*)&cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_emissive);
-            
+
+            ImGui::ColorEdit3("Emissive", (float*)&cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_emissive);
+
+            ImGui::Separator();
+
+            ImGui::SliderFloat("Bump Scale", (float*)&cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_bump_scale, 0.0f, 5.0f, "Scale = %.3f");
+
+
             ImGui::TreePop();
-            
+
         }
 
         if (ImGui::CollapsingHeader("Ligting"))
@@ -285,7 +304,7 @@ class MatScene : public gmt::GameBase
                 cmp::transform(pointlight).position()[0] = main_scene->light_setup().point_lights[0].position[0];
                 cmp::transform(pointlight).update();
             };
-            
+
             if (ImGui::TreeNode("Directional light"))
             {
                 ImGui::Text("Color");
@@ -316,7 +335,7 @@ class MatScene : public gmt::GameBase
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().point_lights[0].position[1], 0.0f, 10.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
-            
+
             if (ImGui::TreeNode("Spot light"))
             {
                 ImGui::Text("Color");
@@ -334,7 +353,7 @@ class MatScene : public gmt::GameBase
         }
 
         renderer.render_scene(*main_scene);
-        
+
     }
 
 };

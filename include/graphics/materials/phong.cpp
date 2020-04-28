@@ -26,9 +26,13 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
     m_shader->set("bump_scale", m_parameters.m_bump_scale);
 
     if (m_parameters.m_bump_map) {
-        m_shader->set_sampler("bump_map", binder.resolve(m_parameters.m_bump_map.get()));
+        const auto slot = binder.resolve(m_parameters.m_bump_map.get());
+        // std::cout << "bump: " << slot << "\n";
+        m_shader->set_sampler("bump_map", slot);
+        m_shader->set("has_bump_map", true);
     } else {
         m_shader->set_sampler("bump_map", binder.free_2d_slot());
+        m_shader->set("has_bump_map", false);
     }
 
     m_shader->set("color", m_parameters.m_color);
@@ -78,21 +82,28 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
     }
     
     if (m_parameters.m_map) {
-        m_shader->set_sampler("map", binder.resolve(m_parameters.m_map.get()));
+        const auto slot = binder.resolve(m_parameters.m_map.get());
+        // std::cout << "map: " << slot << "\n"; 
+        m_shader->set_sampler("map", slot);
         m_shader->set("has_map", true);
     } else {
-        m_shader->set("has_map", false);
+        // std::cout << "map: " << binder.free_2d_slot() << "\n"; 
         m_shader->set_sampler("map", binder.free_2d_slot());
+        m_shader->set("has_map", false);
     }
 
     if (m_parameters.m_normal_map) {
-        m_shader->set_sampler("normal_map", binder.resolve(m_parameters.m_normal_map.get()));
+        const auto slot = binder.resolve(m_parameters.m_normal_map.get());
+        // std::cout << "normal: " << slot << "\n"; 
+        m_shader->set_sampler("normal_map", slot);
         m_shader->set("has_normal_map", true);
     } else {
         m_shader->set_sampler("normal_map", binder.free_2d_slot());
         m_shader->set("has_normal_map", false);
     }
 
+    // std::cout << "2d free:" <<  binder.free_2d_slot() << "\n";
+    // std::cout << "cube free:" <<  binder.free_cube_slot() << "\n";
 }
 
 bool PhongMaterial::needs_lighting()

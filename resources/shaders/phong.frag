@@ -50,7 +50,7 @@ struct BlinnPhongMaterial {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-    
+
     float specular_shininess;
     float specular_strength;
 };
@@ -63,6 +63,8 @@ in vec2 uv;
 in vec3 pos;
 in vec3 norm;
 in mat3 TBN;
+in vec3 tan_pos;
+in vec3 tan_view_pos;
 
 // Phong material
 uniform vec3 camera_pos;
@@ -75,6 +77,7 @@ uniform float ao_intensity;
 uniform sampler2D ao_map;
 
 uniform float bump_scale;
+uniform bool has_bump_map;
 uniform sampler2D bump_map;
 
 uniform float disp_scale;
@@ -134,10 +137,10 @@ vec3 apply_point_light(PointLight light, BlinnPhongMaterial material, vec3 norma
     vec3 light_to_surface  = normalize(light.position - surface_pos);
     float distance_to_light = length(light.position - surface_pos);
 
-    float attenuation = 1.0f / (light.constant + light.linear * distance_to_light + 
+    float attenuation = 1.0f / (light.constant + light.linear * distance_to_light +
                                 light.quadratic * (distance_to_light * distance_to_light));
 
-    
+
     float diffuse_coefficient = max(0.0, dot(normal, light_to_surface));
     vec3 diffuse = diffuse_coefficient * material.diffuse.rgb * light.color;
 
@@ -153,15 +156,15 @@ vec3 apply_spot_light(SpotLight light, BlinnPhongMaterial material, vec3 normal,
 {
     vec3 light_to_surface  = normalize(light.position - surface_pos);
     float theta = acos(dot(light_to_surface, normalize(-light.dir)));
-    
+
     if(theta < light.outer_cut_off) {
         float epsilon  = light.cut_off - light.outer_cut_off;
         float intensity = clamp((theta - light.outer_cut_off) / epsilon, 0.0, 1.0);
-        float distance_to_light = length(light.position - surface_pos);        
+        float distance_to_light = length(light.position - surface_pos);
 
         float diffuse_coefficient = max(0.0, dot(normal, light_to_surface));
         vec3 diffuse = material.diffuse.rgb * light.color * diffuse_coefficient;
-        
+
         float specular_coefficient = 0.0;
         if(diffuse_coefficient > 0.0) {
             specular_coefficient = pow(max(0.0, dot(surface_to_camera, reflect(-light_to_surface, normal))), material.specular_shininess);
@@ -173,6 +176,14 @@ vec3 apply_spot_light(SpotLight light, BlinnPhongMaterial material, vec3 normal,
     return vec3(0.0);
 
 }
+
+vec2 parallax_mapping(vec2 tex_coords, vec3 viewDir)
+{
+    float height = 1.0f - texture(bump_map, tex_coords).r;
+    vec2 p = viewDir.xy * (height * bump_scale);
+    return tex_coords - p;
+}
+
 
 void main()
 {
@@ -190,28 +201,35 @@ void main()
         frag_color = vec4(color, opacity);
     }
 
+    vec2 tex_coords = uv;
+
+    if (has_bump_map) {
+        vec3 view_dir  = normalize(tan_view_pos - tan_pos);
+        tex_coords = parallax_mapping(tex_coords, view_dir);
+    }
+
+
     vec3 diffuse_color = color;
     vec3 total_emissive = emissive;
     vec3 normal = normalize(norm);
 
     if (has_map) {
-        diffuse_color = mix(diffuse_color, texture(map, uv).rgb, 0.5);
+        diffuse_color = mix(diffuse_color, texture(map, tex_coords).rgb, 0.5);
     }
 
     float specular_strength = 1.0;
     if (has_specular_map) {
-        specular_strength = texture(specular_map, uv).r;
+        specular_strength = texture(specular_map, tex_coords).r;
     }
 
     if (has_normal_map) {
-        normal = texture(normal_map, uv).rgb;
+        normal = texture(normal_map, tex_coords).rgb;
         normal = normal * 2.0 - 1.0;
         normal = normalize(TBN * normal);
-        
     }
 
     if (has_emissive_map) {
-        total_emissive *= emissive_scale * texture(emissive_map, uv).rgb;
+        total_emissive *= emissive_scale * texture(emissive_map, tex_coords).rgb;
     }
 
     BlinnPhongMaterial material;
@@ -221,35 +239,36 @@ void main()
     material.specular_shininess = shininess;
     material.specular_strength = specular_strength;
 
-    vec3 outgoing_light = vec3(0.0);    
-    
+    vec3 outgoing_light = vec3(0.0);
+
     if (lighting_enabled) {
-        
-        vec3 to_camera = -normalize(pos - camera_pos);        
+
+        vec3 to_camera = -normalize(pos - camera_pos);
 
         outgoing_light += apply_ambient_light(lighting.ambient_light, material);
         outgoing_light += apply_dir_light(lighting.dir_light, material, normal , pos, to_camera);
-    
+
         for (int i = 0; i < MAX_LIGHT; ++i) {
             if(lighting.point_lights[i].act) {
-                outgoing_light += apply_point_light(lighting.point_lights[i], material, normal, pos, to_camera);   
+                outgoing_light += apply_point_light(lighting.point_lights[i], material, normal, pos, to_camera);
             }
         }
-        
+
         for (int i = 0; i < MAX_LIGHT; ++i) {
             if(lighting.spot_lights[i].act) {
-                outgoing_light += apply_spot_light(lighting.spot_lights[i], material, normal, pos, to_camera);   
+                outgoing_light += apply_spot_light(lighting.spot_lights[i], material, normal, pos, to_camera);
             }
         }
-        
+
     } else {
+        outgoing_light = material.diffuse;
         outgoing_light = material.diffuse;
     }
 
     outgoing_light += total_emissive;
 
     if (has_ao_map) {
-        float ambient_strength = (texture(ao_map, uv).r - 1.0) * ao_intensity + 1.0;
+        float ambient_strength = (texture(ao_map, tex_coords).r - 1.0) * ao_intensity + 1.0;
         outgoing_light *= ambient_strength;
     }
 
@@ -265,11 +284,11 @@ void main()
             vec3 R = refract(I, normalize(normal), refraction_ration);
             env_color = texture(env_map, R).rgb;
         }
-        
+
         outgoing_light = mix(outgoing_light, env_color.rgb, reflectivity * material.specular_strength) ;
     }
-    
-    
+
+
     frag_color = vec4(outgoing_light.rgb, opacity);
     // frag_color = vec4((normal.rgb+1.0)/2, opacity);
 

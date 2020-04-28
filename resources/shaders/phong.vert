@@ -12,8 +12,12 @@ out vec3 pos;
 out vec3 norm;
 out mat3 TBN;
 
+out vec3 tan_pos;
+out vec3 tan_view_pos;
+
 uniform mat4 projection_matrix;
 uniform mat4 model_matrix;
+uniform vec3 camera_pos;
 
 void main()
 {
@@ -26,6 +30,9 @@ void main()
     vec3 B = normalize(vec3(model_matrix * vec4(i_bitan, 0.0)));
     vec3 N = normalize(vec3(model_matrix * vec4(i_norm,  0.0)));
     TBN = mat3(T, B, N);
+
+    tan_view_pos  = transpose(TBN) * camera_pos; 
+    tan_pos  = transpose(TBN) * pos;
     
     gl_Position = projection_matrix * vec4(pos, 1.0);
     

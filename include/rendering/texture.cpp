@@ -43,18 +43,23 @@ Texture::Texture(const std::string &path)
         m_internal_format = GL_RGB8;
         m_data_format     = GL_RGB;
     }
+    else if (channels == 1)
+    {
+        m_internal_format = GL_R8;
+        m_data_format     = GL_RED;
+    }
 
-    glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
-    glTextureStorage2D(m_id, 1, m_internal_format, m_width, m_height);
+    GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &m_id));
+    GLCall(glTextureStorage2D(m_id, 1, m_internal_format, m_width, m_height));
 
-    glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    GLCall(glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    GLCall(glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
-    glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    GLCall(glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, GL_REPEAT));
+    GLCall(glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, GL_REPEAT));
 
-    glTextureSubImage2D(
-      m_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, data);
+    GLCall(glTextureSubImage2D(
+      m_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, data));
 
     stbi_image_free(data);
 }

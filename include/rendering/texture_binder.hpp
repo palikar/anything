@@ -71,12 +71,15 @@ class TextureBinder
             return slot;
         }
 
-        auto slot = m_free_slot++;
+
+        auto slot = static_cast<int>(m_free_slot++);
         while (slot == undef_2d || slot == undef_cube) {
             ++slot;
+            ++m_free_slot;
         }
+        
         t_texture->bind(slot);
-        m_slots.insert({ t_texture->id(), { t_texture->id(), slot, cube, false } });
+        m_slots.insert({ t_texture->id(), { t_texture->id(), static_cast<uint32_t>(slot), cube, false } });
         m_slot_filed[slot] = true;
 
         return slot;
