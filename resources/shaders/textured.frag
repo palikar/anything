@@ -64,7 +64,7 @@ void main()
     }
 
     // base color
-    vec3 final_color = texture(tex, uv).rgb;
+    vec3 final_color = texture(tex, uv * 10).rgb;
     final_color = mix(final_color, color, color_intensity);
 
     // Ambient occlusion

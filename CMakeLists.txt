@@ -224,6 +224,9 @@ target_link_libraries(balls_scene PUBLIC anything_engine)
 add_executable(mat_scene ./examples/mat_scene.cpp)
 target_link_libraries(mat_scene PUBLIC anything_engine)
 
+add_executable(terrain_scene ./examples/terrain_scene.cpp)
+target_link_libraries(terrain_scene PUBLIC anything_engine)
+
 
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
