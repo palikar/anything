@@ -81,3 +81,4 @@
 #include "util/gl_helpers.hpp"
 #include "util/files.hpp"
 #include "util/logging.hpp"
+#include "util/random.hpp"

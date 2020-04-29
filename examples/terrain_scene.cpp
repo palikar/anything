@@ -22,11 +22,12 @@ class TerrainScene : public gmt::GameBase
     {
         renderer.init(engine()->api());
         main_scene = init_scene("main");
-        main_scene->camera().init_prescpective_projection(glm::radians(65.0f), 1024.0/768.0, 0.001, 100000.0);
+        main_scene->camera().init_prescpective_projection(glm::radians(45.0f), 1024.0/768.0, 0.001, 10000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10, 10), glm::vec3(0.0f,0.0f,0.0f));
         oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
 
         oribital_camera_controller->set_max_radius(200.0f);
+        oribital_camera_controller->set_min_radius(0.005f);
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::Enable(true);
@@ -78,13 +79,27 @@ class TerrainScene : public gmt::GameBase
 
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50), grph::texture_material(rocks)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
-
         
         auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
         cmp::transform(x_wing).rotateX(glm::radians(-90.0f));
         cmp::transform(x_wing).translateY(5.0);
 
+        for (size_t i = 0; i < 130; ++i)
+        {
+
+            float x = util::Random::uniform_real(-150.0f, 150.0f);
+            float z = util::Random::uniform_real(-150.0f, 150.0f);
+
+            auto block =
+                main_scene->add(gmt::mesh_entity({ grph::cube_geometry(3, 20, 3, 10, 10, 10),
+                                                   grph::solid_color(0.7, x / 250.0, 0.3) }));
+            cmp::transform(block).set_position({x, 10, z});
+            
+        }
+
         init_lighting();
+
+        main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
     }
 
     void update(double dt) override

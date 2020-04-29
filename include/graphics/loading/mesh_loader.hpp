@@ -237,7 +237,7 @@ class Loader
                 
                 auto t_mat = load_material(scene->mMaterials[mesh->mMaterialIndex], scene);
 
-                meshes.push_back({std::move(geom), std:move(t_mat)});
+                meshes.push_back({std::move(geom), std::move(t_mat)});
                 
             }
             

@@ -36,15 +36,25 @@ uniform int mixing;
 
 // baisc material
 uniform float opacity;
-
 uniform float alpha_threshold;
-
 uniform bool visible;
+
+
+// fog
+uniform int fog_type;
+uniform vec3 fog_color;
+uniform float fog_near;
+uniform float fog_far;
+uniform float fog_density;
+
 
 // from the fragment shader
 in vec2 uv;
 in vec3 pos;
 in vec3 normal;
+
+in float fog_depth;
+
 
 
 void main()
@@ -64,7 +74,7 @@ void main()
     }
 
     // base color
-    vec3 final_color = texture(tex, uv * 10).rgb;
+    vec3 final_color = texture(tex, uv * 70).rgb;
     final_color = mix(final_color, color, color_intensity);
 
     // Ambient occlusion
@@ -101,9 +111,18 @@ void main()
     }
 
 
-
-
     frag_color = vec4(final_color, alpha_opacity);
-    // frag_color = vec4(normalize(normal)*0.5 + 0.5, alpha_opacity);
+    
+    if (fog_type == 1) {
+        const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);
+        frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
+    } else if (fog_type == 2) {
+        const float fog_factor = 1.0 - exp( - fog_density * fog_density * fog_depth * fog_depth );
+        frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
+    }
+    
+    
+
+    
 
 }

@@ -103,6 +103,8 @@ void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 {
 
     shader->set("projection_matrix", m_view_projection);
+    shader->set("view_matrix", m_current_context.view);
+    
     if (!m_mat_stack.empty())
     {
         shader->set("model_matrix", m_mat_stack.back() * transform);
@@ -137,6 +139,16 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
     m_api->submit_blending(material->blending_setup());
 
     m_api->culling(material->side());
+
+    if (m_current_context.fog.activ()) {
+        shader->set("fog_color", m_current_context.fog.color());
+        shader->set("fog_near", m_current_context.fog.near());
+        shader->set("fog_far", m_current_context.fog.far());
+        shader->set("fog_density", m_current_context.fog.density());
+        shader->set("fog_type", static_cast<int>(m_current_context.fog.type()));
+    } else {
+        shader->set("fog_type", 0);
+    }
 
 
     shader->set("opacity", material->opacity());
@@ -287,8 +299,11 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
 
     m_view_projection = m_projection * m_view;
 
+    m_current_context.proj  = m_projection;
+    m_current_context.view  = m_view;
     m_current_context.camera_pos  = scene.camera().pos();
     m_current_context.light_setup = &scene.light_setup();
+    m_current_context.fog = scene.fog();
 
     if (m_current_context.light_setup->needs_update)
     {

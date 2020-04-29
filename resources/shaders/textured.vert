@@ -8,8 +8,11 @@ smooth out vec2 uv;
 smooth out vec3 pos;
 smooth out vec3 normal;
 
+out float fog_depth;
+
 uniform mat4 projection_matrix;
 uniform mat4 model_matrix;
+uniform mat4 view_matrix;
 
 void main()
 {
@@ -17,6 +20,8 @@ void main()
     uv =  i_uv;
     normal =  mat3(transpose(inverse(model_matrix))) * i_norm;
     pos = vec3(model_matrix * vec4(i_pos, 1.0));
+
+    fog_depth = length(view_matrix * vec4(pos, 1.0));
     
     gl_Position = projection_matrix * vec4(pos, 1.0);
     

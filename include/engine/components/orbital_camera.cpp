@@ -19,6 +19,7 @@ bool OrbitalCameraComponent::scroll_radius(app::MouseScrolledEvent &t_e)
     m_radius += diff;
     m_radius      = mth::clamp(m_radius, m_min_radius, m_max_radius);
     m_last_scroll = t_e.x_offset();
+    
 
     update_rotation();
 
@@ -115,15 +116,15 @@ void OrbitalCameraComponent::update(double dt)
 
     if (app::Input::is_pressed(KeyCode::W))
     {
-        m_pos.x += m_camera->at().x * 1.0;
-        m_pos.z += m_camera->at().z * 1.0;
+        m_pos.x += m_camera->at().x * 15.0 *dt;
+        m_pos.z += m_camera->at().z * 15.0 *dt;
         update_rotation();
     }
 
     if (app::Input::is_pressed(KeyCode::S))
     {
-        m_pos.x -= m_camera->at().x * 1.0;
-        m_pos.z -= m_camera->at().z * 1.0;
+        m_pos.x -= m_camera->at().x * 15.0 *dt;
+        m_pos.z -= m_camera->at().z * 15.0 *dt;
         update_rotation();
     }
 
@@ -131,8 +132,8 @@ void OrbitalCameraComponent::update(double dt)
     {
         auto dir = glm::cross(glm::vec3(0.0, 1.0, 0.0),
                               glm::vec3(m_camera->at().x, 0, m_camera->at().z));
-        m_pos.x += dir.x * 1.0;
-        m_pos.z += dir.z * 1.0;
+        m_pos.x += dir.x * 15.0 * dt;
+        m_pos.z += dir.z * 15.0 * dt;
         update_rotation();
     }
 
@@ -140,8 +141,8 @@ void OrbitalCameraComponent::update(double dt)
     {
         auto dir = glm::cross(glm::vec3(0.0, 1.0, 0.0),
                               glm::vec3(m_camera->at().x, 0, m_camera->at().z));
-        m_pos.x -= dir.x * 1.0;
-        m_pos.z -= dir.z * 1.0;
+        m_pos.x -= dir.x * 15.0 * dt;
+        m_pos.z -= dir.z * 15.0 * dt;
         update_rotation();
     }
 }

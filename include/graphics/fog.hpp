@@ -51,6 +51,8 @@ class Fog
 
     float density() const { return m_density; }
 
+    glm::vec3 color() const { return m_color; }
+
     bool activ() const { return m_active; }
     
     void  enable() { m_active = true; }

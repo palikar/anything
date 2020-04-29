@@ -66,6 +66,12 @@ uniform vec3 camera_pos;
 uniform bool lighting_enabled;
 uniform LightSetup lighting;
 
+uniform int fog_type;
+uniform vec3 fog_color;
+uniform float fog_near;
+uniform float fog_far;
+uniform float fog_density;
+
 
 vec3 apply_dir_light(DirLight light, vec3 surface_color, vec3 normal, vec3 surface_pos, vec3 surface_to_camera)
 {
@@ -168,8 +174,14 @@ void main()
         frag_color = vec4(final_color.rgb, opacity);
     }
 
-    // vec3 fog_color = vecv(0.2,0.2, 0.2);
-    // float fogFactor = 1.0 - exp( - fog_density * fog_density * fog_depth * fog_depth );
-    // frag_color.rgb = mix( rag_color.rgb, fog_color, fog_color);
+    if (fog_type == 1) {
+        const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);
+        frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
+        // frag_color.rgb = vec3(1.0, 0.0, 0.0);
+    } else if (fog_type == 2) {
+        const float fog_factor = 1.0 - exp( - fog_density * fog_density * fog_depth * fog_depth );
+        frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
+    }
+
 
 }
