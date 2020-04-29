@@ -3,6 +3,7 @@
 #include "rendering/renderer.hpp"
 
 #include "graphics/light.hpp"
+#include "graphics/fog.hpp"
 
 #include "engine/component.hpp"
 #include "engine/entity.hpp"
@@ -29,6 +30,8 @@ class Scene3D
     grph::LightSetup m_light_setup;
 
     Skybox *m_skybox{ nullptr };
+
+    grph::Fog m_fog{};
 
     Camera m_camera;
 
@@ -164,6 +167,18 @@ class Scene3D
         m_light_setup.spot_lights[index].color    = color;
         m_light_setup.spot_lights[index].dir      = dir;
         m_light_setup.spot_lights[index].position = position;
+    }
+
+
+    void set_fog(grph::Fog fog)
+    {
+        m_fog = std::move(fog);
+        m_fog.enable();
+    }
+
+    grph::Fog &fog()
+    {
+        return m_fog;
     }
 };
 
