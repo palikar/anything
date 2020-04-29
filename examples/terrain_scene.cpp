@@ -78,7 +78,9 @@ class TerrainScene : public gmt::GameBase
 
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50), grph::texture_material(floor)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
-        
+
+
+        auto mod = load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"));
 
         init_lighting();
     }

@@ -6,6 +6,7 @@
 #include <assimp/postprocess.h>
 
 #include "graphics/mesh.hpp"
+#include "graphics/model.hpp"
 #include "graphics/geometry.hpp"
 #include "graphics/material.hpp"
 #include "graphics/material_builder.hpp"
@@ -69,6 +70,30 @@ class Loader
             geometry.set_attribute("uv", std::move(uvs), 2);
         }
 
+        if (t_mesh->HasTangentsAndBitangents())
+        {
+            std::vector<float> tangents;
+            std::vector<float> bitangents;
+            tangents.reserve(t_mesh->mNumVertices);
+            bitangents.reserve(t_mesh->mNumVertices);
+
+            for (unsigned int j = 0; j < t_mesh->mNum; j++)
+            {
+                tangents.push_back(t_mesh->mTangents[j].x);
+                tangents.push_back(t_mesh->mTangents[j].y);
+                tangents.push_back(t_mesh->mTangents[j].z);
+
+                bitangents.push_back(t_mesh->mBitangents[j].x);
+                bitangents.push_back(t_mesh->mBitangents[j].y);
+                bitangents.push_back(t_mesh->mBitangents[j].z);
+                
+            }
+            
+            geometry.set_attribute("tangent", std::move(tangents), 3);
+            geometry.set_attribute("bitangent", std::move(bitangents), 3);
+            
+        }
+
         if (t_mesh->HasFaces())
         {
             std::vector<uint32_t> indices;
@@ -106,6 +131,40 @@ class Loader
         }
 
         return {};
+    }
+
+
+
+    static grph::Model load_model(std::string_view t_path)
+    {
+
+        Assimp::Importer importer;
+        const aiScene *scene = importer.ReadFile(t_path.data(),
+                                                 aiProcess_Triangulate | aiProcess_FlipUVs
+                                                 | aiProcess_CalcTangentSpace);
+
+        std::cout << "loading: " << t_path << "\n";
+
+        std::vector<grph::Mesh> meshes;
+        
+        if (scene->mNumMeshes > 0)
+        {
+            for (size_t i = 0; i < scene->mNumMeshes; ++i) {
+
+                aiMesh *mesh = scene->mMeshes[i];
+
+                // mesh->mMaterialIndex
+                // scene->HasMaterials()
+                // scene->mMaterials[0]->
+                // aiTextureT
+                std::cout << "mesh:" << i << "\n";
+                
+            }
+            
+        }
+
+        return grph::Model(std::move(meshes));
+        
     }
 };
 
