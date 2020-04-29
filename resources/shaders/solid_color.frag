@@ -52,6 +52,8 @@ in vec2 uv;
 in vec3 pos;
 in vec3 norm;
 
+in float fog_depth;
+
 uniform vec3 color;
 uniform float opacity;
 uniform float alpha_threshold;
@@ -165,5 +167,9 @@ void main()
         
         frag_color = vec4(final_color.rgb, opacity);
     }
+
+    // vec3 fog_color = vecv(0.2,0.2, 0.2);
+    // float fogFactor = 1.0 - exp( - fog_density * fog_density * fog_depth * fog_depth );
+    // frag_color.rgb = mix( rag_color.rgb, fog_color, fog_color);
 
 }
