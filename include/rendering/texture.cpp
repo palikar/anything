@@ -5,12 +5,12 @@
 namespace ay::rend
 {
 
-Texture::Texture(uint32_t width, uint32_t height)
+Texture::Texture(uint32_t width, uint32_t height, TextureFormat format)
 {
     m_width  = width;
     m_height = height;
 
-    m_internal_format = GL_RGBA8;
+    m_internal_format = static_cast<GLenum>(format);
     m_data_format     = GL_RGBA;
 
     glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
@@ -64,5 +64,22 @@ Texture::Texture(const std::string &path)
     stbi_image_free(data);
 }
 
+Texture::~Texture()
+{
+    glDeleteTextures(1, &m_id);
+}
+
+void Texture::set_data(void *data, TextureFormat format)
+{
+    // uint32_t bpp = m_data_format == GL_RGBA ? 4 : 3;
+    m_data_format     = static_cast<GLenum>(format);
+    glTextureSubImage2D(
+        m_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, data);
+}
+
+void Texture::bind(uint32_t slot)
+{
+    glBindTextureUnit(slot, m_id);
+}
 
 }  // namespace ay::rend

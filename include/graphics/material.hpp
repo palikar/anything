@@ -142,7 +142,7 @@ class Material
         return m_parameters.m_blending;
     }
 
-    MaterialParameters &parameters()
+    MaterialParameters &base_parameters()
     {
         return m_parameters;
     }

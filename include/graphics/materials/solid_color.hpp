@@ -45,7 +45,7 @@ class SolidColorMaterial : public Material
         return m_params.m_lighting;
     }
 
-    SolidColorParameters &params()
+    SolidColorParameters &parameters()
     {
         return m_params;
     }

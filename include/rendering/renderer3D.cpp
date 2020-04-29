@@ -153,15 +153,14 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
     auto &model    = model_comp->model;
     auto transform = cmp::transform(object);
 
-
     for (size_t i = 0; i < model.size(); ++i)
     {
         m_binder.begin_draw_call();
 
         auto mesh = model.get(i);
 
-        auto shader = mesh->material()->shader();
         auto mat    = mesh->material();
+        auto shader = mesh->material()->shader();
 
         switch_shader(shader);
         switch_mvp(shader, transform.get_tranformation());
@@ -169,7 +168,12 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
 
         if (mat->needs_lighting())
         {
+            shader->set("lighting_enabled", true);
             bind_lighting(shader);
+        }
+        else
+        {
+            shader->set("lighting_enabled", false);
         }
 
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
@@ -271,6 +275,8 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
       t_obj, HANDLER(handle_line_segments));
 
     dispatch_component<cmp::GroupComponent>(t_obj, HANDLER(handle_group));
+    
+    dispatch_component<cmp::ModelComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_model));
 }
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)

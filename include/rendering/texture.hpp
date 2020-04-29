@@ -18,7 +18,6 @@ enum class TextureFormat : GLenum
     LUMINANCE_ALPHA = GL_LUMINANCE_ALPHA
 };
 
-
 class Texture
 {
 
@@ -32,14 +31,11 @@ class Texture
     GLenum m_data_format;
 
   public:
-    Texture(uint32_t width, uint32_t height);
+    Texture(uint32_t width, uint32_t height, TextureFormat format = TextureFormat::RGBA);
 
     explicit Texture(const std::string &path);
 
-    ~Texture()
-    {
-        glDeleteTextures(1, &m_id);
-    }
+    ~Texture();
 
     uint32_t width() const
     {
@@ -56,17 +52,9 @@ class Texture
         return m_id;
     }
 
-    void set_data(void *data)
-    {
-        // uint32_t bpp = m_data_format == GL_RGBA ? 4 : 3;
-        glTextureSubImage2D(
-          m_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, data);
-    }
+    void set_data(void *data, TextureFormat format = TextureFormat::RGBA);
 
-    void bind(uint32_t slot = 0)
-    {
-        glBindTextureUnit(slot, m_id);
-    }
+    void bind(uint32_t slot = 0);
 
     bool operator==(const Texture &other) const
     {
@@ -76,7 +64,6 @@ class Texture
 
 using TexturePtr = std::shared_ptr<Texture>;
 
-
 inline TexturePtr create_texture(const std::string &path)
 {
     return std::make_shared<Texture>(path);
@@ -85,6 +72,16 @@ inline TexturePtr create_texture(const std::string &path)
 inline TexturePtr create_texture(uint32_t width, uint32_t heigh)
 {
     return std::make_shared<Texture>(width, heigh);
+}
+
+inline TexturePtr create_texture(uint32_t width,
+                                 uint32_t heigh,
+                                 void *data,
+                                 TextureFormat format = TextureFormat::RGBA)
+{
+    auto tex = std::make_shared<Texture>(width, heigh);
+    tex->set_data(data, format);
+    return tex;
 }
 
 

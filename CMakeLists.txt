@@ -218,11 +218,11 @@ if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
 endif()
 
 
-add_executable(balls_scene ./examples/ball_scene.cpp)
-target_link_libraries(balls_scene PUBLIC anything_engine)
+# add_executable(balls_scene ./examples/ball_scene.cpp)
+# target_link_libraries(balls_scene PUBLIC anything_engine)
 
-add_executable(mat_scene ./examples/mat_scene.cpp)
-target_link_libraries(mat_scene PUBLIC anything_engine)
+# add_executable(mat_scene ./examples/mat_scene.cpp)
+# target_link_libraries(mat_scene PUBLIC anything_engine)
 
 add_executable(terrain_scene ./examples/terrain_scene.cpp)
 target_link_libraries(terrain_scene PUBLIC anything_engine)
@@ -231,12 +231,12 @@ target_link_libraries(terrain_scene PUBLIC anything_engine)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-install(TARGETS balls_scene
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-    RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
-    INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-    ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
+# install(TARGETS 
+#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+#     RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
+#     LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
+#     INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+#     ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
 
 install(DIRECTORY ./include/ DESTINATION include)
 

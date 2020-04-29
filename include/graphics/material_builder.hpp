@@ -2,6 +2,7 @@
 
 #include "rendering/shaders.hpp"
 #include "rendering/api.hpp"
+#include "rendering/texture.hpp"
 
 #include "glm_header.hpp"
 #include "std_header.hpp"
@@ -11,6 +12,7 @@
 #include "graphics/material.hpp"
 #include "graphics/materials/solid_color.hpp"
 #include "graphics/materials/textured.hpp"
+#include "graphics/materials/phong.hpp"
 
 
 namespace ay::grph
@@ -143,6 +145,21 @@ class MaterialBuilder
         return *this;
     }
 
+    MaterialBuilder &addative_blending()
+    {
+
+        m_mat->blending_setup().blend_equation       = rend::BlenidngEquation::ADD;
+        m_mat->blending_setup().blend_equation_alpha = rend::BlenidngEquation::ADD;
+
+        m_mat->blending_setup().blend_src = rend::BlenidngSource::ONE;
+        m_mat->blending_setup().blend_src_alpha = rend::BlenidngSource::ONE;
+
+        m_mat->blending_setup().blend_dst = rend::BlenidngDestination::ONE;
+        m_mat->blending_setup().blend_dst_alpha = rend::BlenidngDestination::ONE;
+
+        return *this;
+    }
+
     MaterialBuilder &depth_test(bool value = false)
     {
         m_mat->set_depth_test(value);
@@ -155,7 +172,6 @@ class MaterialBuilder
         return *this;
     }
 };
-
 
 class TexturedMaterialBuilder
 {
@@ -201,6 +217,120 @@ class TexturedMaterialBuilder
         m_mat->set_color(color);
         return *this;
     }
+};
+
+class ColorMaterialBuilder
+{
+  private:
+    SolidColorMaterial *m_mat;
+
+  public:
+    ColorMaterialBuilder(SolidColorMaterial *t_mat) : m_mat(t_mat)
+    {
+    }
+
+    static ColorMaterialBuilder from_existing(SolidColorMaterial *mat)
+    {
+        return ColorMaterialBuilder(mat);
+    }
+
+    void color(float r, float g, float b)
+    {
+        m_mat->parameters().m_color = {r, g, b};
+    }
+
+    void lighting(bool value = true)
+    {
+        m_mat->parameters().m_lighting = value;
+    }
+
+    void shininess(float value = 30.0)
+    {
+        m_mat->parameters().m_shininess = value;
+    }
+
+};
+
+class PhongMaterialBuilder
+{
+  private:
+    PhongMaterial *m_mat;
+
+  public:
+    PhongMaterialBuilder(PhongMaterial *t_mat) : m_mat(t_mat)
+    {
+    }
+
+    static PhongMaterialBuilder from_existing(PhongMaterial *mat)
+    {
+        return PhongMaterialBuilder(mat);
+    }
+
+    void color(float r, float g, float b)
+    {
+        m_mat->parameters().m_color = {r, g, b};
+    }
+
+    void ambient(float r, float g, float b)
+    {
+        m_mat->parameters().m_ambient = {r, g, b};
+    }
+
+    void specular(float r, float g, float b)
+    {
+        m_mat->parameters().m_specular = {r, g, b};
+    }
+
+    void emissive(float r, float g, float b)
+    {
+        m_mat->parameters().m_emissive = {r, g, b};
+    }
+
+    void diffuse_map(rend::TexturePtr tex)
+    {
+        m_mat->parameters().m_map = std::move(tex);
+    }
+
+    void normal_map(rend::TexturePtr tex)
+    {
+        m_mat->parameters().m_normal_map = std::move(tex);
+    }
+
+    void emissive_map(rend::TexturePtr tex)
+    {
+        m_mat->parameters().m_emissive_map = std::move(tex);
+    }
+
+    void specular_map(rend::TexturePtr tex)
+    {
+        m_mat->parameters().m_specular_map = std::move(tex);
+    }
+
+    void height_map(rend::TexturePtr tex)
+    {
+        m_mat->parameters().m_height_map = std::move(tex);
+    }
+
+    void ao_map(rend::TexturePtr tex)
+    {
+        m_mat->parameters().m_ao_map = std::move(tex);
+    }
+
+    void ao_intensity(float value)
+    {
+        m_mat->parameters().m_ao_intensity = value;
+    }
+
+    void shininess(float value = 30.0)
+    {
+        m_mat->parameters().m_shininess = value;
+    }
+
+    void lighting(bool value = true)
+    {
+        m_mat->parameters().m_lighting = value;
+    }
+
 };
 
 

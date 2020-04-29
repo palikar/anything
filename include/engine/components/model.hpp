@@ -22,9 +22,15 @@ class ModelComponent : public gmt::Component
 
     ModelComponent(grph::Model t_model) : model(std::move(t_model)){};
 
-    void init(gmt::GameBase *) override
+    void init(gmt::GameBase *game) override
     {
-        // mesh.material()->init_shader(t_game->shaders());
+        
+        for (size_t i = 0; i < model.size(); ++i)
+        {
+            model.get(i)->material()->init_shader(game->shaders());
+        }
+
+        
     }
 };
 

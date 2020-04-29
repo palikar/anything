@@ -4,6 +4,7 @@
 
 #include "engine/components/group.hpp"
 #include "engine/components/mesh.hpp"
+#include "engine/components/model.hpp"
 #include "engine/components/transform.hpp"
 #include "engine/components/line_segments.hpp"
 
@@ -17,6 +18,14 @@ inline EntityPtr mesh_entity(grph::Mesh mesh)
     EntityPtr new_ent = std::make_unique<Entity>();
     new_ent->add_component(std::make_unique<cmp::TransformComponent>());
     new_ent->add_component(std::make_unique<cmp::MeshComponent>(std::move(mesh)));
+    return new_ent;
+}
+
+inline EntityPtr model_entity(grph::Model model)
+{
+    EntityPtr new_ent = std::make_unique<Entity>();
+    new_ent->add_component(std::make_unique<cmp::TransformComponent>());
+    new_ent->add_component(std::make_unique<cmp::ModelComponent>(std::move(model)));
     return new_ent;
 }
 

@@ -43,16 +43,7 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
 
     m_shader->set("color", m_parameters.m_color);
     m_shader->set("ambient", m_parameters.m_ambient);
-
-    // m_shader->set("disp_scale", m_parameters.m_displ_scale);
-    // m_shader->set("disp_bias", m_parameters.m_displ_bias);
-    // if (m_parameters.m_displ_map ) {
-    //     m_shader->set_sampler("displ_map",
-    //     binder.resolve(m_parameters.m_displ_map.get()));
-    // } else {
-    //     m_shader->set_sampler("displ_map", binder.free_2d_slot());
-    // }
-
+    
     m_shader->set("emissive", m_parameters.m_emissive);
     m_shader->set("emissive_scale", m_parameters.m_emissive_scale);
 
@@ -131,7 +122,7 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
 
 bool PhongMaterial::needs_lighting()
 {
-    return true;
+    return m_parameters.m_lighting;
 }
 
 PhongParameters &PhongMaterial::parameters()
