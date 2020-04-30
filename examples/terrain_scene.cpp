@@ -116,9 +116,9 @@ class TerrainScene : public gmt::GameBase
         dispatch.dispatch<app::KeyReleasedEvent>(MEMBER(key_press));
         dispatch.dispatch<app::WindowResizeEvent>(MEMBER(resizing));
         
-            if (!e.handled) {
-                main_scene->event(e);
-            }
+        if (!e.handled) {
+            main_scene->event(e);
+        }
 
         return false;
     }
@@ -198,11 +198,33 @@ class TerrainScene : public gmt::GameBase
                 changed |=ImGui::SliderFloat("Outer:", (float*)&main_scene->light_setup().spot_lights[0].outer_cut_off, 0.0f, 5.0f, "Value = %.3f");
 
                 // changed |=ImGui::SliderFloat("X pos:", (float*)&main_scene->light_setup().spot_lights[0].position[0], 0.0f, 10.0f, "Value = %.3f");
-                changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().spot_lights[0].position[1], 0.0f, 20.0f, "Value = %.3f");
+                changed |= ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().spot_lights[0].position[1], 0.0f, 20.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
             main_scene->light_setup().needs_update = changed;
 
+        }
+
+        if (ImGui::CollapsingHeader("Fog"))
+        {
+            
+            ImGui::Checkbox("Active", &main_scene->fog().activ());
+            ImGui::Separator();
+            ImGui::ColorEdit3("Color", (float*)&main_scene->fog().color());
+            ImGui::Separator();
+
+            const char* type[] = {"None", "Linear", "Exp2"};
+            static int type_current = 1;
+            if (ImGui::Combo("Fog type", &type_current, type, 3)) {
+                main_scene->fog().type() = grph::FogType{type_current};
+            }
+            
+            ImGui::Separator();
+            ImGui::SliderFloat("Near", (float*)&main_scene->fog().near(), 0.0f, 100.0f, "Value = %.3f");
+            ImGui::SliderFloat("Far", (float*)&main_scene->fog().far(), 0.0f, 500.0f, "Value = %.3f");
+            ImGui::Separator();
+            ImGui::SliderFloat("Density", (float*)&main_scene->fog().density(), 0.0f, 0.005f, "Value = %.3f");            
+            
         }
 
         renderer.render_scene(*main_scene);

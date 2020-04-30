@@ -104,7 +104,7 @@ void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 
     shader->set("projection_matrix", m_view_projection);
     shader->set("view_matrix", m_current_context.view);
-    
+
     if (!m_mat_stack.empty())
     {
         shader->set("model_matrix", m_mat_stack.back() * transform);
@@ -140,13 +140,16 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 
     m_api->culling(material->side());
 
-    if (m_current_context.fog.activ()) {
+    if (m_current_context.fog.activ())
+    {
         shader->set("fog_color", m_current_context.fog.color());
         shader->set("fog_near", m_current_context.fog.near());
         shader->set("fog_far", m_current_context.fog.far());
         shader->set("fog_density", m_current_context.fog.density());
         shader->set("fog_type", static_cast<int>(m_current_context.fog.type()));
-    } else {
+    }
+    else
+    {
         shader->set("fog_type", 0);
     }
 
@@ -267,6 +270,19 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     const auto slot = m_binder.resolve(tex);
     shader->set_sampler("skybox", slot);
 
+    if (m_current_context.fog.activ())
+    {
+        shader->set("fog_color", m_current_context.fog.color());
+        shader->set("lower", m_current_context.fog.lower());
+        shader->set("upper", m_current_context.fog.upper());
+        shader->set("fog_type", 1);
+    }
+    else
+    {
+        shader->set("fog_type", 0);
+    }
+
+
     auto sky_view = m_view;
     sky_view[3]   = glm::vec4(0, 0, 0, 1);
 
@@ -287,8 +303,9 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
       t_obj, HANDLER(handle_line_segments));
 
     dispatch_component<cmp::GroupComponent>(t_obj, HANDLER(handle_group));
-    
-    dispatch_component<cmp::ModelComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_model));
+
+    dispatch_component<cmp::ModelComponent, cmp::TransformComponent>(
+      t_obj, HANDLER(handle_model));
 }
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)
@@ -299,11 +316,11 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
 
     m_view_projection = m_projection * m_view;
 
-    m_current_context.proj  = m_projection;
-    m_current_context.view  = m_view;
+    m_current_context.proj        = m_projection;
+    m_current_context.view        = m_view;
     m_current_context.camera_pos  = scene.camera().pos();
     m_current_context.light_setup = &scene.light_setup();
-    m_current_context.fog = scene.fog();
+    m_current_context.fog         = scene.fog();
 
     if (m_current_context.light_setup->needs_update)
     {

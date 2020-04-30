@@ -102,8 +102,9 @@ void Application::render_engine()
     // ImGui::SetNextWindowPos(
     //   { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
     // ImGui::SetNextWindowSize(
-    //   { static_cast<float>(m_window->width()), static_cast<float>(m_window->height()) });
-    
+    //   { static_cast<float>(m_window->width()), static_cast<float>(m_window->height())
+    //   });
+
 
     ImGuizmo::SetDrawlist();
 
@@ -113,11 +114,14 @@ void Application::render_engine()
     //                   static_cast<float>(m_window->ypos()),
     //                   static_cast<float>(m_window->width()),
     //                   static_cast<float>(m_window->height()));
-    ImGuiIO& io = ImGui::GetIO();
-    ImGuizmo::SetRect(io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y, io.DisplaySize.x, io.DisplaySize.y);
+    ImGuiIO &io = ImGui::GetIO();
+    ImGuizmo::SetRect(io.DisplayFramebufferScale.x,
+                      io.DisplayFramebufferScale.y,
+                      io.DisplaySize.x,
+                      io.DisplaySize.y);
     m_engine.render();
 
-    
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

@@ -24,13 +24,11 @@ class ModelComponent : public gmt::Component
 
     void init(gmt::GameBase *game) override
     {
-        
+
         for (size_t i = 0; i < model.size(); ++i)
         {
             model.get(i)->material()->init_shader(game->shaders());
         }
-
-        
     }
 };
 

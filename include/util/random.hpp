@@ -10,15 +10,13 @@ namespace ay::util
 
 namespace detail
 {
-static std::random_device rand_dev;
-static std::mt19937 rand_eng(rand_dev());
-}
-        
+    static std::random_device rand_dev;
+    static std::mt19937 rand_eng(rand_dev());
+}  // namespace detail
+
 class Random
 {
   private:
-
-
   public:
     static int uniform_int(int a, int b)
     {
@@ -36,8 +34,6 @@ class Random
     {
         return std::rand();
     }
-
-
 };
 
-}
+}  // namespace ay::util

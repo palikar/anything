@@ -43,7 +43,7 @@ void PhongMaterial::update_uniforms(rend::TextureBinder &binder, rend::RenderCon
 
     m_shader->set("color", m_parameters.m_color);
     m_shader->set("ambient", m_parameters.m_ambient);
-    
+
     m_shader->set("emissive", m_parameters.m_emissive);
     m_shader->set("emissive_scale", m_parameters.m_emissive_scale);
 

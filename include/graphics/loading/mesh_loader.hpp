@@ -16,7 +16,6 @@
 #include "graphics/materials/phong.hpp"
 
 
-
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
@@ -92,12 +91,10 @@ class Loader
                 bitangents.push_back(t_mesh->mBitangents[j].x);
                 bitangents.push_back(t_mesh->mBitangents[j].y);
                 bitangents.push_back(t_mesh->mBitangents[j].z);
-                
             }
-            
+
             geometry.set_attribute("tangent", std::move(tangents), 3);
             geometry.set_attribute("bitangent", std::move(bitangents), 3);
-            
         }
 
         if (t_mesh->HasFaces())
@@ -115,81 +112,94 @@ class Loader
         return geometry;
     }
 
-    static grph::MaterialPtr load_material(aiMaterial *t_mat, const aiScene*)
+    static grph::MaterialPtr load_material(aiMaterial *t_mat, const aiScene *)
     {
         aiString name;
         t_mat->Get(AI_MATKEY_NAME, name);
         std::cout << "Loading Material: " << name.C_Str() << "\n";
 
-        auto new_mat = grph::phong_material(0.0f, 0.0f, 0.0f);
+        auto new_mat     = grph::phong_material(0.0f, 0.0f, 0.0f);
         auto phong_build = grph::PhongMaterialBuilder::from_existing(new_mat.get());
-        auto base_build = grph::MaterialBuilder::from_existing(new_mat.get());
-        
+        auto base_build  = grph::MaterialBuilder::from_existing(new_mat.get());
+
         aiColor3D diffuse_color;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_color)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_color))
+        {
             phong_build.color(diffuse_color.r, diffuse_color.g, diffuse_color.b);
         }
 
         aiColor3D specular_color;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_SPECULAR, specular_color)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_SPECULAR, specular_color))
+        {
             phong_build.specular(specular_color.r, specular_color.g, specular_color.b);
         }
-        
+
         aiColor3D ambient_color;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient_color)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_AMBIENT, ambient_color))
+        {
             phong_build.ambient(ambient_color.r, ambient_color.g, ambient_color.b);
         }
-        
+
         float shininess;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_SHININESS, shininess)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_SHININESS, shininess))
+        {
             phong_build.shininess(shininess);
         }
 
         aiColor3D emissive_color;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive_color)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_COLOR_EMISSIVE, emissive_color))
+        {
             phong_build.emissive(emissive_color.r, emissive_color.g, emissive_color.b);
         }
-        
+
         aiString tex_dif;
-        if(AI_SUCCESS == t_mat->GetTexture(aiTextureType_DIFFUSE, 0, &tex_dif)) {
+        if (AI_SUCCESS == t_mat->GetTexture(aiTextureType_DIFFUSE, 0, &tex_dif))
+        {
             std::cout << "has diffuse tex: " << tex_dif.C_Str() << "\n";
         }
 
         int wireframe;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_ENABLE_WIREFRAME, wireframe)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_ENABLE_WIREFRAME, wireframe))
+        {
             base_build.wire_frame(wireframe == 0);
         }
 
         int culling;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_TWOSIDED, culling)) {
-            if(culling == 0) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_TWOSIDED, culling))
+        {
+            if (culling == 0)
+            {
                 base_build.front_side();
-            } else {
+            }
+            else
+            {
                 base_build.both_side();
             }
         }
 
         int blend;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_BLEND_FUNC, blend)) {
-            if (blend == aiBlendMode_Default ) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_BLEND_FUNC, blend))
+        {
+            if (blend == aiBlendMode_Default)
+            {
                 base_build.alpha_blending();
-            } else if(blend == aiBlendMode_Additive) {
+            }
+            else if (blend == aiBlendMode_Additive)
+            {
                 base_build.alpha_blending();
             }
         }
 
         float opacity;
-        if(AI_SUCCESS == t_mat->Get(AI_MATKEY_OPACITY, opacity)) {
+        if (AI_SUCCESS == t_mat->Get(AI_MATKEY_OPACITY, opacity))
+        {
             base_build.opacity(opacity);
         }
-        
+
 
         phong_build.lighting(true);
 
         return new_mat;
-
-
-             
     }
 
   public:
@@ -219,34 +229,30 @@ class Loader
     {
 
         Assimp::Importer importer;
-        const aiScene *scene = importer.ReadFile(t_path.data(),
-                                                 aiProcess_Triangulate
-                                                 | aiProcess_FlipUVs
-                                                 | aiProcess_CalcTangentSpace
-                                                 | aiProcess_GenSmoothNormals
-                                                 | aiProcess_JoinIdenticalVertices);
-        
+        const aiScene *scene = importer.ReadFile(
+          t_path.data(),
+          aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace
+            | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+
         std::vector<grph::Mesh> meshes;
-        
+
         if (scene->mNumMeshes > 0)
         {
-            for (size_t i = 0; i < scene->mNumMeshes; ++i) {
+            for (size_t i = 0; i < scene->mNumMeshes; ++i)
+            {
 
                 aiMesh *mesh = scene->mMeshes[i];
-                auto geom = load_geometry(mesh);
-                
-                auto t_mat = load_material(scene->mMaterials[mesh->mMaterialIndex], scene);
+                auto geom    = load_geometry(mesh);
 
-                meshes.push_back({std::move(geom), std::move(t_mat)});
-                
+                auto t_mat =
+                  load_material(scene->mMaterials[mesh->mMaterialIndex], scene);
+
+                meshes.push_back({ std::move(geom), std::move(t_mat) });
             }
-            
         }
 
-        return grph::Model(std::move(meshes));    
+        return grph::Model(std::move(meshes));
     }
-
-    
 };
 
 

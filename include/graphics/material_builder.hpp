@@ -151,10 +151,10 @@ class MaterialBuilder
         m_mat->blending_setup().blend_equation       = rend::BlenidngEquation::ADD;
         m_mat->blending_setup().blend_equation_alpha = rend::BlenidngEquation::ADD;
 
-        m_mat->blending_setup().blend_src = rend::BlenidngSource::ONE;
+        m_mat->blending_setup().blend_src       = rend::BlenidngSource::ONE;
         m_mat->blending_setup().blend_src_alpha = rend::BlenidngSource::ONE;
 
-        m_mat->blending_setup().blend_dst = rend::BlenidngDestination::ONE;
+        m_mat->blending_setup().blend_dst       = rend::BlenidngDestination::ONE;
         m_mat->blending_setup().blend_dst_alpha = rend::BlenidngDestination::ONE;
 
         return *this;
@@ -236,7 +236,7 @@ class ColorMaterialBuilder
 
     void color(float r, float g, float b)
     {
-        m_mat->parameters().m_color = {r, g, b};
+        m_mat->parameters().m_color = { r, g, b };
     }
 
     void lighting(bool value = true)
@@ -248,7 +248,6 @@ class ColorMaterialBuilder
     {
         m_mat->parameters().m_shininess = value;
     }
-
 };
 
 class PhongMaterialBuilder
@@ -268,22 +267,22 @@ class PhongMaterialBuilder
 
     void color(float r, float g, float b)
     {
-        m_mat->parameters().m_color = {r, g, b};
+        m_mat->parameters().m_color = { r, g, b };
     }
 
     void ambient(float r, float g, float b)
     {
-        m_mat->parameters().m_ambient = {r, g, b};
+        m_mat->parameters().m_ambient = { r, g, b };
     }
 
     void specular(float r, float g, float b)
     {
-        m_mat->parameters().m_specular = {r, g, b};
+        m_mat->parameters().m_specular = { r, g, b };
     }
 
     void emissive(float r, float g, float b)
     {
-        m_mat->parameters().m_emissive = {r, g, b};
+        m_mat->parameters().m_emissive = { r, g, b };
     }
 
     void diffuse_map(rend::TexturePtr tex)
@@ -330,7 +329,6 @@ class PhongMaterialBuilder
     {
         m_mat->parameters().m_lighting = value;
     }
-
 };
 
 
