@@ -65,6 +65,7 @@ in vec3 norm;
 in mat3 TBN;
 in vec3 tan_pos;
 in vec3 tan_view_pos;
+in float fog_depth;
 
 // Phong material
 uniform vec3 camera_pos;
@@ -102,7 +103,6 @@ uniform vec3 specular;
 uniform bool has_specular_map;
 uniform sampler2D specular_map;
 
-
 // Basic  material
 uniform float opacity;
 uniform float alpha_threshold;
@@ -112,6 +112,15 @@ uniform bool visible;
 // Lighting
 uniform bool lighting_enabled;
 uniform LightSetup lighting;
+
+// Fog
+uniform int fog_type;
+uniform vec3 fog_color;
+uniform float fog_near;
+uniform float fog_far;
+uniform float fog_density;
+
+
 
 
 vec3 apply_dir_light(DirLight light, BlinnPhongMaterial material, vec3 normal, vec3 surface_pos, vec3 surface_to_camera)
@@ -311,18 +320,17 @@ void main()
 
     frag_color = vec4(outgoing_light.rgb, opacity);
 
-    float gamma = 1.3;
-    frag_color.rgb = pow(frag_color.rgb, vec3(1.0/gamma));
     
+    if (fog_type == 1) {
+        const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);
+        frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
+    } else if (fog_type == 2) {
+        const float fog_factor = 1.0 - exp( - fog_density * fog_density * fog_depth * fog_depth );
+        frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
+    }
 
+    
+    // float gamma = 1.3;
+    // frag_color.rgb = pow(frag_color.rgb, vec3(1.0/gamma));
 }
-
-// vec3 ecPosition = vec3(gl_ModelViewMatrix * gl_Vertex);
-// vec3 tnorm = normalize(gl_NormalMatrix * gl_Normal);
-// vec3 lightVec = normalize(LightPosition - ecPosition);
-// float costheta = dot(tnorm, lightVec);
-// float a = 0.5 + 0.5 * costheta;    
-// gl_FrontColor = mix(GroundColor, SkyColor, a);    
-// gl_Position = ftransform();
-
 
