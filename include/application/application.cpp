@@ -96,34 +96,33 @@ void Application::render_engine()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-
     ImGui::NewFrame();
 
-    // ImGui::SetNextWindowPos(
-    //   { static_cast<float>(m_window->xpos()), static_cast<float>(m_window->ypos()) });
-    // ImGui::SetNextWindowSize(
-    //   { static_cast<float>(m_window->width()), static_cast<float>(m_window->height())
-    //   });
+    // ImGuizmo::SetDrawlist();
+    // ImGuizmo::BeginFrame();
 
-
-    ImGuizmo::SetDrawlist();
-
-    ImGuizmo::BeginFrame();
-
-    // ImGuizmo::SetRect(static_cast<float>(m_window->xpos()),
-    //                   static_cast<float>(m_window->ypos()),
-    //                   static_cast<float>(m_window->width()),
-    //                   static_cast<float>(m_window->height()));
     ImGuiIO &io = ImGui::GetIO();
     ImGuizmo::SetRect(io.DisplayFramebufferScale.x,
                       io.DisplayFramebufferScale.y,
                       io.DisplaySize.x,
                       io.DisplaySize.y);
-    m_engine.render();
 
+    
+    m_engine.render();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
+    
+    
+
 }
 
 void Application::init()
@@ -137,8 +136,6 @@ void Application::init()
         AY_ERROR("Cannot initilize GLFW");
         return;
     }
-
-    ImGui::CreateContext();
 
     m_window->init(m_width, m_height, "Anything");
     m_window->set_eventcall([this](Event &t_event) { this->on_event(t_event); });
@@ -171,15 +168,17 @@ void Application::init_imgui()
 {
     IMGUI_CHECKVERSION();
 
+    ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
 
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     io.ConfigDockingWithShift       = true;
-    io.ConfigViewportsNoAutoMerge   = true;
-    io.ConfigViewportsNoTaskBarIcon = true;
+    // io.ConfigViewportsNoAutoMerge   = true;
+    // io.ConfigViewportsNoTaskBarIcon = true;
+    io.ConfigWindowsResizeFromEdges = true;
 
     ImGui::StyleColorsDark();
 

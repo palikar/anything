@@ -9,11 +9,11 @@ class TerrainScene : public gmt::GameBase
     gmt::Scene3D* main_scene;
     rend::RendererScene3D renderer;
     cmp::OrbitalCameraComponent *oribital_camera_controller;
-    
+
     gmt::Entity* floor_mesh;
-    
+
     // gmt::PointlightHelper* pointlight;
-    
+
   public:
 
     TerrainScene() = default;
@@ -40,7 +40,7 @@ class TerrainScene : public gmt::GameBase
 
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().ambient_light.intensity = 0.08f;
-        
+
         // main_scene->point_light(0);
         // main_scene->light_setup().point_lights[0].constant = 0.0;
         // main_scene->light_setup().point_lights[0].linear = 0.074;
@@ -79,7 +79,7 @@ class TerrainScene : public gmt::GameBase
 
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50), grph::texture_material(rocks)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
-        
+
         auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
         cmp::transform(x_wing).rotateX(glm::radians(-90.0f));
         cmp::transform(x_wing).translateY(5.0);
@@ -91,10 +91,10 @@ class TerrainScene : public gmt::GameBase
             float z = util::Random::uniform_real(-150.0f, 150.0f);
 
             auto block =
-                main_scene->add(gmt::mesh_entity({ grph::cube_geometry(3, 20, 3, 10, 10, 10),
+                main_scene->add(gmt::mesh_entity({ grph::cube_geometry(3, 20, 3, 1, 1, 1),
                                                    grph::solid_color(0.7, x / 250.0, 0.3) }));
-            cmp::transform(block).set_position({x, 10, z});
-            
+            cmp::transform(block).set_position({x, 7, z});
+
         }
 
         init_lighting();
@@ -115,7 +115,7 @@ class TerrainScene : public gmt::GameBase
         dispatch.dispatch<app::MouseButtonReleasedEvent>(MEMBER(mouse_press));
         dispatch.dispatch<app::KeyReleasedEvent>(MEMBER(key_press));
         dispatch.dispatch<app::WindowResizeEvent>(MEMBER(resizing));
-        
+
         if (!e.handled) {
             main_scene->event(e);
         }
@@ -153,10 +153,77 @@ class TerrainScene : public gmt::GameBase
     void render(rend::RenderAPI&) override
     {
         bool changed = false;
+
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->Pos);
+        ImGui::SetNextWindowSize(viewport->Size);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::SetNextWindowBgAlpha(0.0f);
+
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        bool open = true;
+        ImGui::Begin("DockSpace Demo", &open, window_flags);
+        ImGui::PopStyleVar(3);
+
+        ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+        ImGuiDockNodeFlags dockspace_flags =  ImGuiDockNodeFlags_PassthruCentralNode;
+
+        ImGui::DockSpace(dockspace_id, ImGui::GetMainViewport()->Size, dockspace_flags);
+
+        static auto firstTime = true;
+        if (firstTime)
+        {
+            firstTime = false;
+            ImGui::DockBuilderRemoveNode(dockspace_id);
+            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_PassthruCentralNode);
+            ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
+            
+            ImGuiID dock_main_id = dockspace_id;
+            ImGuiID dock_id_left = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.20f, NULL, &dock_main_id);
+            ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.20f, NULL, &dock_main_id);
+            // ImGui::DockBuilderSetNodeSize(dock_id_left, {200, 200});
+            // ImGui::DockBuilderSetNodeSize(dock_id_bottom, {200, 200});
+
+            ImGui::DockBuilderDockWindow("Fog", dock_id_left);
+            ImGui::DockBuilderDockWindow("Lighting", dock_id_left);
+            ImGui::DockBuilderFinish(dockspace_id);
+        }
         
-        if (ImGui::CollapsingHeader("Ligting"))
+        ImGui::End();
+
+        if (ImGui::Begin("Fog"))
         {
 
+            ImGui::Checkbox("Active", &main_scene->fog().activ());
+            ImGui::Separator();
+            ImGui::ColorEdit3("Color", (float*)&main_scene->fog().color());
+            ImGui::Separator();
+
+            const char* type[] = {"None", "Linear", "Exp2"};
+            static int type_current = 1;
+            if (ImGui::Combo("Fog type", &type_current, type, 3)) {
+                main_scene->fog().type() = grph::FogType{type_current};
+            }
+
+            ImGui::Separator();
+            ImGui::SliderFloat("Near", (float*)&main_scene->fog().near(), 0.0f, 100.0f, "Value = %.3f");
+            ImGui::SliderFloat("Far", (float*)&main_scene->fog().far(), 0.0f, 500.0f, "Value = %.3f");
+            ImGui::Separator();
+            ImGui::SliderFloat("Density", (float*)&main_scene->fog().density(), 0.0f, 0.005f, "Value = %.3f");
+            ImGui::End();
+        }
+        else
+        {
+            ImGui::End();
+        }
+        if (ImGui::Begin("Lighting"))
+        {
             if (ImGui::TreeNode("Directional light"))
             {
                 ImGui::Text("Color");
@@ -166,7 +233,6 @@ class TerrainScene : public gmt::GameBase
                 changed |= ImGui::SliderFloat("Angle:", (float*)&main_scene->light_setup().directional_light.dir[1], -1.0f, 3.0f, "Direction = %.3f");
                 ImGui::TreePop();
             }
-
             if (ImGui::TreeNode("Ambient light"))
             {
                 ImGui::Text("Color");
@@ -175,7 +241,6 @@ class TerrainScene : public gmt::GameBase
                 changed |=ImGui::SliderFloat("Intensity:", (float*)&main_scene->light_setup().ambient_light.intensity, 0.0f, 2.0f, "Inesity = %.3fp");
                 ImGui::TreePop();
             }
-
             if (ImGui::TreeNode("Point light"))
             {
                 ImGui::Text("Color");
@@ -187,45 +252,25 @@ class TerrainScene : public gmt::GameBase
                 changed |=ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().point_lights[0].position[1], 0.0f, 10.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
-
             if (ImGui::TreeNode("Spot light"))
             {
                 ImGui::Text("Color");
                 ImGui::SameLine();
                 changed |=ImGui::ColorEdit3("Color:", (float*)&main_scene->light_setup().spot_lights[0].color);
-
                 changed |=ImGui::SliderFloat("Inner:", (float*)&main_scene->light_setup().spot_lights[0].cut_off, 0.0f, 6.28f, "Value = %.3f");
                 changed |=ImGui::SliderFloat("Outer:", (float*)&main_scene->light_setup().spot_lights[0].outer_cut_off, 0.0f, 5.0f, "Value = %.3f");
-
                 // changed |=ImGui::SliderFloat("X pos:", (float*)&main_scene->light_setup().spot_lights[0].position[0], 0.0f, 10.0f, "Value = %.3f");
                 changed |= ImGui::SliderFloat("Y pos:", (float*)&main_scene->light_setup().spot_lights[0].position[1], 0.0f, 20.0f, "Value = %.3f");
                 ImGui::TreePop();
             }
             main_scene->light_setup().needs_update = changed;
-
+            ImGui::End();
         }
-
-        if (ImGui::CollapsingHeader("Fog"))
+        else
         {
-            
-            ImGui::Checkbox("Active", &main_scene->fog().activ());
-            ImGui::Separator();
-            ImGui::ColorEdit3("Color", (float*)&main_scene->fog().color());
-            ImGui::Separator();
-
-            const char* type[] = {"None", "Linear", "Exp2"};
-            static int type_current = 1;
-            if (ImGui::Combo("Fog type", &type_current, type, 3)) {
-                main_scene->fog().type() = grph::FogType{type_current};
-            }
-            
-            ImGui::Separator();
-            ImGui::SliderFloat("Near", (float*)&main_scene->fog().near(), 0.0f, 100.0f, "Value = %.3f");
-            ImGui::SliderFloat("Far", (float*)&main_scene->fog().far(), 0.0f, 500.0f, "Value = %.3f");
-            ImGui::Separator();
-            ImGui::SliderFloat("Density", (float*)&main_scene->fog().density(), 0.0f, 0.005f, "Value = %.3f");            
-            
+            ImGui::End();
         }
+
 
         renderer.render_scene(*main_scene);
 
