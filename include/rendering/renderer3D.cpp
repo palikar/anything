@@ -20,7 +20,6 @@ namespace ay::rend
 
 RendererScene3D::RendererScene3D() : m_uniform_binder(m_binder)
 {
-
 }
 
 void RendererScene3D::init(RenderAPI *t_api)
@@ -96,14 +95,13 @@ void RendererScene3D::switch_shader(Shader *shader)
     {
         lighting_updated[shader->id()] = false;
     }
-    
+
     if (current_shader != shader->id())
     {
         shader->bind();
         current_shader = shader->id();
         m_uniform_binder.change_shader(shader);
     }
-    
 }
 
 void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)

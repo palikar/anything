@@ -97,8 +97,14 @@ class TerrainScene : public gmt::GameBase
 
         }
 
-        init_lighting();
 
+        auto obj = gmt::object_mesh({grph::sphere_geometry(3.0, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
+        obj->translateX(5.0f);
+        obj->translateY(5.0f);
+        
+        main_scene->add(std::move(obj));
+        
+        init_lighting();
         main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
     }
 
@@ -186,9 +192,6 @@ class TerrainScene : public gmt::GameBase
             
             ImGuiID dock_main_id = dockspace_id;
             ImGuiID dock_id_left = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.20f, NULL, &dock_main_id);
-            ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.20f, NULL, &dock_main_id);
-            // ImGui::DockBuilderSetNodeSize(dock_id_left, {200, 200});
-            // ImGui::DockBuilderSetNodeSize(dock_id_bottom, {200, 200});
 
             ImGui::DockBuilderDockWindow("Fog", dock_id_left);
             ImGui::DockBuilderDockWindow("Lighting", dock_id_left);

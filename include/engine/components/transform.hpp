@@ -14,7 +14,6 @@ class TransformComponent : public gmt::Component
   public:
     mth::Transform transform;
 
-  public:
     AY_COMPONENT(Tranform)
 
     TransformComponent() : transform(){};

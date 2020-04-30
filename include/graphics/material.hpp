@@ -57,9 +57,11 @@ class Material
     {
     }
 
-    virtual void init_shader(gmt::ShaderLibrary &t_shader_lib)                 = 0;
-    virtual void update_uniforms(rend::UniformBinder &, rend::TextureBinder &, rend::RenderContext &) = 0;
-    virtual bool needs_lighting()                                              = 0;
+    virtual void init_shader(gmt::ShaderLibrary &t_shader_lib) = 0;
+    virtual void update_uniforms(rend::UniformBinder &,
+                                 rend::TextureBinder &,
+                                 rend::RenderContext &)        = 0;
+    virtual bool needs_lighting()                              = 0;
 
     void set_wire_frame(bool value)
     {

@@ -17,7 +17,8 @@ class ModelComponent : public gmt::Component
   public:
     grph::Model model;
 
-  public:
+    using construct_type = grph::Model;
+
     AY_COMPONENT(Mesh)
 
     ModelComponent(grph::Model t_model) : model(std::move(t_model)){};

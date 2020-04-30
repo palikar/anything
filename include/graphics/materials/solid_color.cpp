@@ -17,7 +17,9 @@ void SolidColorMaterial::init_shader(gmt::ShaderLibrary &t_shader_lib)
     m_shader = t_shader_lib.load("solid_color");
 }
 
-void SolidColorMaterial::update_uniforms(rend::UniformBinder &uniform, rend::TextureBinder &, rend::RenderContext &ctx)
+void SolidColorMaterial::update_uniforms(rend::UniformBinder &uniform,
+                                         rend::TextureBinder &,
+                                         rend::RenderContext &ctx)
 {
     uniform.set_uniform("camera_pos", ctx.camera_pos);
     uniform.set_uniform("color", m_params.m_color);

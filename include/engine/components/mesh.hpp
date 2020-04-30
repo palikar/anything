@@ -19,7 +19,6 @@ class MeshComponent : public gmt::Component
 
     grph::Mesh mesh;
 
-  public:
     AY_COMPONENT(Mesh)
 
     MeshComponent(grph::Mesh t_mesh) : mesh(std::move(t_mesh)){};

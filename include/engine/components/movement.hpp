@@ -20,7 +20,6 @@ class MovementComponent : public gmt::Component
   public:
     mth::Transform &transform;
 
-  public:
     AY_COMPONENT(Movement)
 
     MovementComponent(mth::Transform &t_transform) : transform(t_transform)

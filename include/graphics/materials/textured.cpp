@@ -16,11 +16,11 @@ void TextureMaterial::init_shader(gmt::ShaderLibrary &t_shader_lib)
 
 
 void TextureMaterial::update_uniforms(rend::UniformBinder &uniform,
-                                      rend::TextureBinder &binder,
+                                      rend::TextureBinder &,
                                       rend::RenderContext &ctx)
 {
 
-    
+
     uniform.set_uniform("mixing", static_cast<int>(m_parameters.m_combine));
     uniform.set_uniform("reflectivity", m_parameters.m_reflectivity);
     uniform.set_uniform("refraction_ration", m_parameters.m_refraction_ration);
@@ -34,8 +34,6 @@ void TextureMaterial::update_uniforms(rend::UniformBinder &uniform,
     uniform.set_uniform("specular_map", m_parameters.m_specular_map.get());
     uniform.set_uniform("alpha_map", m_parameters.m_alpha_map.get());
     uniform.set_uniform("env_map", m_parameters.m_env_map.get());
-
-    
 }
 
 

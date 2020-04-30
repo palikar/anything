@@ -18,7 +18,7 @@ void PhongMaterial::update_uniforms(rend::UniformBinder &uniforms,
     uniforms.set_uniform("ao_intensity", m_parameters.m_ao_intensity);
     uniforms.set_uniform("ao_map", m_parameters.m_ao_map.get());
     uniforms.set_uniform("height_scale", m_parameters.m_height_scale);
-    uniforms.set_uniform("height_map", m_parameters.m_height_map.get());    
+    uniforms.set_uniform("height_map", m_parameters.m_height_map.get());
     uniforms.set_uniform("color", m_parameters.m_color);
     uniforms.set_uniform("ambient", m_parameters.m_ambient);
     uniforms.set_uniform("emissive", m_parameters.m_emissive);
@@ -33,7 +33,6 @@ void PhongMaterial::update_uniforms(rend::UniformBinder &uniforms,
     uniforms.set_uniform("specular_map", m_parameters.m_specular_map.get());
     uniforms.set_uniform("map", m_parameters.m_map.get());
     uniforms.set_uniform("normal_map", m_parameters.m_normal_map.get());
-
 }
 
 bool PhongMaterial::needs_lighting()

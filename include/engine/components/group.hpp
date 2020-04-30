@@ -14,7 +14,6 @@ class GroupComponent : public gmt::Component
   public:
     std::vector<gmt::EntityPtr> children;
 
-  public:
     AY_COMPONENT(Mesh)
 
     GroupComponent() : children(){};

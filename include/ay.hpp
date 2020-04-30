@@ -26,6 +26,7 @@
 #include "engine/raycaster.hpp"
 #include "engine/texture_library.hpp"
 #include "engine/shader_library.hpp"
+#include "engine/object_3d.hpp"
 
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/spotlight_helper.hpp"
@@ -45,6 +46,7 @@
 #include "engine/components/transform.hpp"
 #include "engine/components/group.hpp"
 #include "engine/components/clock.hpp"
+#include "engine/components/name.hpp"
 
 #include "math/box.hpp"
 #include "math/line.hpp"

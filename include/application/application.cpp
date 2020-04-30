@@ -107,22 +107,19 @@ void Application::render_engine()
                       io.DisplaySize.x,
                       io.DisplaySize.y);
 
-    
+
     m_engine.render();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    
+
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        GLFWwindow *backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-    
-    
-
 }
 
 void Application::init()
@@ -175,7 +172,7 @@ void Application::init_imgui()
     // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-    io.ConfigDockingWithShift       = true;
+    io.ConfigDockingWithShift = true;
     // io.ConfigViewportsNoAutoMerge   = true;
     // io.ConfigViewportsNoTaskBarIcon = true;
     io.ConfigWindowsResizeFromEdges = true;
