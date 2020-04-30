@@ -22,10 +22,7 @@ uniform vec3 camera_pos;
 
 
 void main()
-{
-
-    
-    
+{   
     uv =  i_uv;
     norm =  mat3(transpose(inverse(model_matrix))) * i_norm;
     pos = vec3(model_matrix * vec4(i_pos, 1.0));

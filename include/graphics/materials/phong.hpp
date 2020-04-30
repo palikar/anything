@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "graphics/material.hpp"
 
 #include "rendering/api.hpp"
@@ -67,7 +66,7 @@ class PhongMaterial : public Material
 
     void init_shader(gmt::ShaderLibrary &t_shader_lib) override;
 
-    void update_uniforms(rend::TextureBinder &binder, rend::RenderContext &ctx) override;
+    void update_uniforms(rend::UniformBinder &, rend::TextureBinder &binder, rend::RenderContext &ctx) override;
 
     bool needs_lighting() override;
 };

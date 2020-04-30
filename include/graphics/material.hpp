@@ -9,8 +9,8 @@
 #include "std_header.hpp"
 
 #include "rendering/texture_binder.hpp"
+#include "rendering/uniform_binder.hpp"
 #include "rendering/render_context.hpp"
-
 
 namespace ay::grph
 {
@@ -58,7 +58,7 @@ class Material
     }
 
     virtual void init_shader(gmt::ShaderLibrary &t_shader_lib)                 = 0;
-    virtual void update_uniforms(rend::TextureBinder &, rend::RenderContext &) = 0;
+    virtual void update_uniforms(rend::UniformBinder &, rend::TextureBinder &, rend::RenderContext &) = 0;
     virtual bool needs_lighting()                                              = 0;
 
     void set_wire_frame(bool value)

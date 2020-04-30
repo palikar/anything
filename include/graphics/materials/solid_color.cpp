@@ -17,11 +17,11 @@ void SolidColorMaterial::init_shader(gmt::ShaderLibrary &t_shader_lib)
     m_shader = t_shader_lib.load("solid_color");
 }
 
-void SolidColorMaterial::update_uniforms(rend::TextureBinder &, rend::RenderContext &ctx)
+void SolidColorMaterial::update_uniforms(rend::UniformBinder &uniform, rend::TextureBinder &, rend::RenderContext &ctx)
 {
-    m_shader->set("camera_pos", ctx.camera_pos);
-    m_shader->set("color", m_params.m_color);
-    m_shader->set("specular_exponent", m_params.m_shininess);
+    uniform.set_uniform("camera_pos", ctx.camera_pos);
+    uniform.set_uniform("color", m_params.m_color);
+    uniform.set_uniform("specular_exponent", m_params.m_shininess);
 }
 
 glm::vec3 &SolidColorMaterial::color()

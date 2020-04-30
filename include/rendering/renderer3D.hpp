@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rendering/uniform_binder.hpp"
 #include "rendering/texture_binder.hpp"
 #include "rendering/render_context.hpp"
 #include "rendering/shaders.hpp"
@@ -47,6 +48,7 @@ class RendererScene3D
     RenderAPI *m_api;
 
     TextureBinder m_binder;
+    UniformBinder m_uniform_binder;
 
     uint32_t current_shader = 0;
     std::unordered_map<uint32_t, bool> lighting_updated;
@@ -63,7 +65,7 @@ class RendererScene3D
     void bind_lighting(Shader *shader);
 
   public:
-    RendererScene3D() = default;
+    RendererScene3D();
 
     void init(RenderAPI *t_api);
 

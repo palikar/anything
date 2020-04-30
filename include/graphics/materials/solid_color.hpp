@@ -28,7 +28,7 @@ class SolidColorMaterial : public Material
 
     void init_shader(gmt::ShaderLibrary &t_shader_lib) override;
 
-    void update_uniforms(rend::TextureBinder &, rend::RenderContext &) override;
+    void update_uniforms(rend::UniformBinder &, rend::TextureBinder &, rend::RenderContext &) override;
 
     void no_lighting()
     {
