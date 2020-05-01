@@ -6,6 +6,7 @@
 #include "glm_header.hpp"
 
 #include "util/gl_helpers.hpp"
+#include "util/logging.hpp"
 
 namespace ay::rend
 {

@@ -23,7 +23,7 @@ bool OrbitalCameraComponent::scroll_radius(app::MouseScrolledEvent &t_e)
 
     update_rotation();
 
-    return true;
+    return false;
 }
 
 void OrbitalCameraComponent::update_rotation()
@@ -49,6 +49,7 @@ void OrbitalCameraComponent::update_rotation()
 
 void OrbitalCameraComponent::update(double dt)
 {
+    
     if (app::Input::is_released(MouseCode::BUTTON_1))
     {
         if (m_initial_click)
@@ -151,7 +152,7 @@ bool OrbitalCameraComponent::event(app::Event &e)
 {
     app::Dispatcher dispatch{ e };
     dispatch.dispatch<app::MouseScrolledEvent>(
-      [this](auto &ev) { return scroll_radius(ev); });
+        [this](auto &ev) { return scroll_radius(ev); });
     return false;
 }
 

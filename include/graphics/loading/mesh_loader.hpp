@@ -116,7 +116,7 @@ class Loader
     {
         aiString name;
         t_mat->Get(AI_MATKEY_NAME, name);
-        std::cout << "Loading Material: " << name.C_Str() << "\n";
+        AY_DEBUG("Loading Material: "s += name.C_Str());
 
         auto new_mat     = grph::phong_material(0.0f, 0.0f, 0.0f);
         auto phong_build = grph::PhongMaterialBuilder::from_existing(new_mat.get());
@@ -155,7 +155,7 @@ class Loader
         aiString tex_dif;
         if (AI_SUCCESS == t_mat->GetTexture(aiTextureType_DIFFUSE, 0, &tex_dif))
         {
-            std::cout << "has diffuse tex: " << tex_dif.C_Str() << "\n";
+            AY_DEBUG("Has diffuse tex: "s += tex_dif.C_Str());
         }
 
         int wireframe;

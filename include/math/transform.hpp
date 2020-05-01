@@ -49,6 +49,11 @@ class Transform
         rotate(glm::vec3(0, 0, 1), angle);
     }
 
+    void translate(glm::vec3 vec)
+    {
+        m_position += vec;
+    }
+            
     void translateX(float amt)
     {
         move(glm::vec3(1, 0, 0), amt);

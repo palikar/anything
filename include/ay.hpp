@@ -47,6 +47,8 @@
 #include "engine/components/group.hpp"
 #include "engine/components/clock.hpp"
 #include "engine/components/name.hpp"
+#include "engine/components/movement.hpp"
+#include "engine/components/tracking_camera.hpp"
 
 #include "math/box.hpp"
 #include "math/line.hpp"

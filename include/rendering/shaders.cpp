@@ -3,6 +3,8 @@
 
 #include "util/gl_helpers.hpp"
 
+using namespace std::string_literals;
+
 namespace ay::rend
 {
 
@@ -108,8 +110,8 @@ void Shader::unbind()
 }
 
 void Shader::compile_program(
-  const std::unordered_map<GLenum, std::string> &shader_sources,
-  bool reload)
+    const std::unordered_map<GLenum, std::string> &shader_sources,
+    bool reload)
 {
 
     if (!reload)
@@ -148,7 +150,9 @@ void Shader::compile_program(
             glDeleteShader(id);
         }
 
-        std::cout << "Shader m_id linking error:\n\t" << info_log.data() << "\n";
+        AY_DEBUG("Shader m_id linking error:\n\t");
+        AY_ERROR(info_log.data());
+        
     }
 
     glValidateProgram(m_id);
@@ -167,7 +171,10 @@ void Shader::compile_program(
         {
             glDeleteShader(id);
         }
-        std::cout << "Shader m_id validation error:\n\t" << info_log.data() << "\n";
+
+        AY_DEBUG("Shader m_id validation error:\n\t");
+        AY_ERROR(info_log.data());
+        
     }
 
     for (auto id : shader_ids)
@@ -176,7 +183,7 @@ void Shader::compile_program(
         glDeleteShader(id);
     }
 
-    std::cout << "Compiled program: " << m_name << "\n";
+    AY_DEBUG("Compiled program: "s += m_name);
 }
 
 GLuint Shader::compile_shader(const GLchar *t_src, GLenum type)
@@ -193,7 +200,10 @@ GLuint Shader::compile_shader(const GLchar *t_src, GLenum type)
         std::vector<GLchar> info_log(max_length);
         glGetShaderInfoLog(shader, max_length, &max_length, &info_log[0]);
         glDeleteShader(shader);
-        std::cout << "Shader compilation error:\n\t" << info_log.data() << "\n";
+
+        AY_DEBUG("Shader compilation error:\n\t");
+        AY_ERROR(info_log.data());
+        
     }
 
 

@@ -8,8 +8,7 @@ class TerrainScene : public gmt::GameBase
   private:
     gmt::Scene3D* main_scene;
     rend::RendererScene3D renderer;
-    cmp::OrbitalCameraComponent *oribital_camera_controller;
-
+    
     gmt::Entity* floor_mesh;
 
     // gmt::PointlightHelper* pointlight;
@@ -24,10 +23,10 @@ class TerrainScene : public gmt::GameBase
         main_scene = init_scene("main");
         main_scene->camera().init_prescpective_projection(glm::radians(45.0f), 1024.0/768.0, 0.001, 10000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10, 10), glm::vec3(0.0f,0.0f,0.0f));
-        oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
 
-        oribital_camera_controller->set_max_radius(200.0f);
-        oribital_camera_controller->set_min_radius(0.005f);
+        // oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
+        // oribital_camera_controller->set_max_radius(200.0f);
+        // oribital_camera_controller->set_min_radius(0.005f);
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::Enable(true);
@@ -36,7 +35,7 @@ class TerrainScene : public gmt::GameBase
     void init_lighting()
     {
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().directional_light.intensity = 0.1f;
+        main_scene->light_setup().directional_light.intensity = 1.01f;
 
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().ambient_light.intensity = 0.08f;
@@ -81,8 +80,14 @@ class TerrainScene : public gmt::GameBase
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
 
         auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
+        cmp::transform(x_wing).rotateY(glm::radians(180.0f));
         cmp::transform(x_wing).rotateX(glm::radians(-90.0f));
-        cmp::transform(x_wing).translateY(5.0);
+        cmp::transform(x_wing).translateY(1.0);
+        cmp::transform(x_wing).set_scale({0.2f, 0.2f, 0.2f});
+        cmp::transform(x_wing).update();
+
+        x_wing->add_component<cmp::TrackingCameraComponent>(cmp::transform(x_wing), main_scene->camera());
+        x_wing->add_component<cmp::MovementComponent>(cmp::transform(x_wing));
 
         for (size_t i = 0; i < 130; ++i)
         {
@@ -98,7 +103,7 @@ class TerrainScene : public gmt::GameBase
         }
 
 
-        auto obj = gmt::object_mesh({grph::sphere_geometry(3.0, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
+        auto obj = gmt::object_mesh({grph::sphere_geometry(1.0, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
         obj->translateX(5.0f);
         obj->translateY(5.0f);
         
@@ -125,7 +130,7 @@ class TerrainScene : public gmt::GameBase
         if (!e.handled) {
             main_scene->event(e);
         }
-
+        
         return false;
     }
 
@@ -134,7 +139,7 @@ class TerrainScene : public gmt::GameBase
 
         if (event.key_code() == KeyCode::F5)
         {
-            std::cout << "Realoading shaders" << "\n";
+            AY_DEBUG("Realoading shaders");
             this->shaders().reload_all();
         }
 
