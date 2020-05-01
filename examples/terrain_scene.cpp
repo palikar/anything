@@ -2,6 +2,8 @@
 
 using namespace ay;
 
+
+
 class TerrainScene : public gmt::GameBase
 {
 
@@ -32,6 +34,9 @@ class TerrainScene : public gmt::GameBase
         ImGuizmo::Enable(true);
     }
 
+    
+
+    
     void init_lighting()
     {
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
@@ -52,6 +57,8 @@ class TerrainScene : public gmt::GameBase
 
     }
 
+    
+    
     void init() override
     {
         init_basic();
@@ -102,7 +109,6 @@ class TerrainScene : public gmt::GameBase
 
         }
 
-
         auto obj = gmt::object_mesh({grph::sphere_geometry(1.0, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
         obj->translateX(5.0f);
         obj->translateY(5.0f);
@@ -111,7 +117,13 @@ class TerrainScene : public gmt::GameBase
         
         init_lighting();
         main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
+
+
+        anim::Vec3Track tr({ glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0) },
+                           { 0.0, 5.0 });
+        
     }
+    
 
     void update(double dt) override
     {

@@ -28,6 +28,16 @@
 #include "engine/shader_library.hpp"
 #include "engine/object_3d.hpp"
 
+#include "engine/animation/animator.hpp"
+#include "engine/animation/track.hpp"
+#include "engine/animation/timeline.hpp"
+
+#include "engine/animation/tracks/boolean.hpp"
+#include "engine/animation/tracks/number.hpp"
+#include "engine/animation/tracks/quaternion.hpp"
+#include "engine/animation/tracks/string.hpp"
+#include "engine/animation/tracks/vector.hpp"
+
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/spotlight_helper.hpp"
 #include "engine/entities/pointlight_helper.hpp"
