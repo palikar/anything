@@ -161,7 +161,6 @@ add_library(anything_engine
 
     ./include/rendering/renderer.cpp
 
-
     ./include/rendering/texture.cpp
     ./include/rendering/frame_buffer.cpp
     ./include/rendering/depth_texture.cpp
@@ -199,6 +198,9 @@ add_library(anything_engine
     ./include/engine/entities/spotlight_helper.cpp
 
     ./include/engine/components/orbital_camera.cpp
+
+    ./include/engine/animation/animator.cpp
+    ./include/engine/animation/timeline.cpp
 
     ./include/util/gl_helpers.cpp
     ./include/util/files.cpp

@@ -6,7 +6,8 @@
 namespace ay::gmt
 {
 
-GameEngine::GameEngine(gmt::GameBase *t_game) : m_renderAPI(), m_game(t_game)
+GameEngine::GameEngine(gmt::GameBase *t_game)
+    : m_main_animator(), m_renderAPI(), m_game(t_game)
 {
 }
 
@@ -20,7 +21,6 @@ void GameEngine::init(int width, int height)
     m_renderAPI.set_clear_color(glm::vec4(0.0, 0.0, 0.0, 0.0));
 
     m_game->set_up(this);
-
     m_game->init();
 }
 

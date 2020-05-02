@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "glm_header.hpp"
 #include "std_header.hpp"
 #include "math_header.hpp"

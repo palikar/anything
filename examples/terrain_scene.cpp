@@ -15,8 +15,6 @@ class TerrainScene : public gmt::GameBase
 
     gmt::Object3D* sphere;
 
-    // gmt::PointlightHelper* pointlight;
-
   public:
 
     TerrainScene() = default;
@@ -36,9 +34,6 @@ class TerrainScene : public gmt::GameBase
         ImGuizmo::Enable(true);
     }
 
-    
-
-    
     void init_lighting()
     {
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
@@ -59,8 +54,6 @@ class TerrainScene : public gmt::GameBase
 
     }
 
-    
-    
     void init() override
     {
         init_basic();
@@ -111,30 +104,26 @@ class TerrainScene : public gmt::GameBase
 
         }
 
-        auto s = gmt::object_mesh({grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
-        s->translateX(0.0f);
-        s->translateY(0.0f);
-        sphere = main_scene->add(std::move(s));
+        sphere = main_scene->add(gmt::object_mesh({grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(1.0, 0.0, 0.0)}));
         
-        
-        init_lighting();
-        main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
-
-
-        auto tr = anim::vector_track(
+        auto sphere_move = anim::vector_track(
             { { 0.0f, 0.0f, 0.0f }, { 0.0f, 5.0f, 0.0f }, { 0.0f, 5.0f, 5.0f }, { 0.0f, 0.0f, 0.0f } },
             { 0.0, 2.0, 4.0, 6.0 });
+        sphere_move->set_target(&sphere->transform().position());
+        animator().main_timeline().push_track("sphere_move", std::move(sphere_move));
+
+        auto sphere_scale = anim::vector_track(
+            { { 1.0f, 1.0f, 1.0f }, { 5.0f, 5.0f, 5.0f }, { 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f, 1.0f } },
+            { 0.0, 2.0, 4.0, 6.0 });
+        sphere_scale->set_target(&sphere->transform().scale());
+        animator().main_timeline().push_track("sphere_scale", std::move(sphere_scale));
         
-        tr->set_target(&sphere->transform().position());
-        anim::Timeline timline;
-        timline.push_track("sphere_move", std::move(tr));
+        animator().play();
 
-        animator().add_timeline("main_timeline", std::move(timline));
-
-        animator().play("main_timeline");
+        init_lighting();
+        main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
     }
     
-
     void update(double dt) override
     {
         main_scene->update(dt);
@@ -144,14 +133,12 @@ class TerrainScene : public gmt::GameBase
     bool event(app::Event& e) override
     {
 
-        app::Dispatcher dispatch{ e };
+        app::Dispatcher dispatch{e};
         dispatch.dispatch<app::MouseButtonReleasedEvent>(MEMBER(mouse_press));
         dispatch.dispatch<app::KeyReleasedEvent>(MEMBER(key_press));
         dispatch.dispatch<app::WindowResizeEvent>(MEMBER(resizing));
 
-        if (!e.handled) {
-            main_scene->event(e);
-        }
+        main_scene->event(e);
         
         return false;
     }
@@ -170,17 +157,17 @@ class TerrainScene : public gmt::GameBase
             gl::take_screenshot("screen.png");
         }
 
-        return true;
+        return false;
     }
 
     bool resizing(app::WindowResizeEvent&)
     {
-        return true;
+        return false;
     }
 
     bool mouse_press(app::MouseButtonReleasedEvent& )
     {
-        return true;
+        return false;
     }
 
     void render(rend::RenderAPI&) override

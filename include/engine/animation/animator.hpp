@@ -24,82 +24,36 @@ class Animator
     std::unordered_map<std::string, TimelineObject> m_timelines;
 
   public:
-    Animator() = default;
 
-    Timeline &timeline(const std::string &t_name)
-    {
-        return m_timelines.at(t_name).timeline;
-    }
+    Animator();
 
-    void add_timeline(std::string t_name, Timeline t_line)
-    {
-        m_timelines.insert(
-          { std::move(t_name), TimelineObject{ std::move(t_line), false } });
-    }
+    Timeline &timeline(const std::string &t_name);
 
-    void update(float dt)
-    {
-        for (auto &[name, timeline] : m_timelines)
-        {
-            timeline.timeline.update(dt);
-            timeline.playing = timeline.timeline.playing();
-        }
-    }
+    void add_timeline(std::string t_timeline,
+                      std::string t_track_name,
+                      BaseTrackPtr t_track);
 
-    void play_all()
-    {
-        for (auto &[name, timeline] : m_timelines)
-        {
-            timeline.playing = true;
-        }
-    }
+    Timeline &main_timeline();
 
-    void pause_all()
-    {
-        for (auto &[name, timeline] : m_timelines)
-        {
-            timeline.playing = false;
-        }
-    }
+    void add_timeline(std::string t_name, Timeline t_line);
 
-    void reset_all()
-    {
-        for (auto &[name, timeline] : m_timelines)
-        {
-            timeline.timeline.reset();
-        }
-    }
+    void update(float dt);
 
-    void stop_all()
-    {
-        for (auto &[name, timeline] : m_timelines)
-        {
-            timeline.playing = false;
-            timeline.timeline.reset();
-        }
-    }
+    void play_all();
 
+    void pause_all();
 
-    void play(const std::string &t_name)
-    {
-        m_timelines.at(t_name).playing = true;
-    }
+    void reset_all();
 
-    void pause(const std::string &t_name)
-    {
-        m_timelines.at(t_name).playing = false;
-    }
+    void stop_all();
+    
+    void play(const std::string &t_name = "main_timeline");
 
-    void reset(const std::string &t_name)
-    {
-        m_timelines.at(t_name).timeline.reset();
-    }
+    void pause(const std::string &t_name = "main_timeline");
 
-    void stop(const std::string &t_name)
-    {
-        m_timelines.at(t_name).playing = false;
-        m_timelines.at(t_name).timeline.reset();
-    }
+    void reset(const std::string &t_name = "main_timeline");
+
+    void stop(const std::string &t_name = "main_timeline");
 };
 
 
