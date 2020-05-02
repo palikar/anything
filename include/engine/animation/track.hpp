@@ -7,9 +7,9 @@
 namespace ay::anim
 {
 
-
 class BaseTrack
 {
+
   protected:
     std::vector<float> m_times;
 
@@ -36,7 +36,14 @@ class BaseTrack
     }
 
   public:
+
     virtual void update_time(float t) = 0;
+
+    virtual void reset() {};
+
+    virtual ~BaseTrack()
+    {
+    }
 
     BaseTrack(std::vector<float> times) : m_times(std::move(times))
     {
@@ -47,11 +54,8 @@ class BaseTrack
         return *std::max_element(m_times.begin(), m_times.end());
     }
 
-    virtual ~BaseTrack()
-    {
-    }
-};
 
+};
 
 using BaseTrackPtr = std::unique_ptr<BaseTrack>;
 
@@ -66,9 +70,13 @@ class Track : public BaseTrack
 
     T *m_target{ nullptr };
 
+    mth::Easing m_easing{};
+
     T interpolate(std::pair<T &, T &> values, float factor)
     {
-        return fun(values.first, values.second, factor);
+
+        return fun(values.first, values.second, m_easing(factor));
+
     }
 
   public:
@@ -116,6 +124,11 @@ class Track : public BaseTrack
     T &current()
     {
         return m_current;
+    }
+
+    mth::Easing& easing()
+    {
+        return m_easing;
     }
 };
 

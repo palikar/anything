@@ -37,6 +37,7 @@
 #include "engine/animation/tracks/quaternion.hpp"
 #include "engine/animation/tracks/string.hpp"
 #include "engine/animation/tracks/vector.hpp"
+#include "engine/animation/tracks/event.hpp"
 
 #include "engine/entities/camera_helper.hpp"
 #include "engine/entities/spotlight_helper.hpp"

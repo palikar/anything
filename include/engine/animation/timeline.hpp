@@ -20,15 +20,24 @@ enum class LoopMode
 struct TimelineParameters
 {
     LoopMode m_mode{ LoopMode::REPEAT };
+
+    bool m_reset_on_end{true};
+
+    float m_time_damping{1.0f};
+
 };
 
 class Timeline
 {
   private:
+    std::vector<std::function<void()>> m_end_callbacks;
+    std::vector<std::function<void()>> m_start_callbacks;
+    
     float m_current_time{ 0.0f };
     float m_max_time{ 0.0f };
     bool m_playing{ false };
 
+    
     TimelineParameters m_parameters;
 
     std::unordered_map<std::string, BaseTrackPtr> m_tracks;
@@ -55,6 +64,14 @@ class Timeline
     bool playing() const;
 
     TimelineParameters &parameters();
+
+    void add_on_end_callback(std::function<void()> fun);
+
+    void add_on_start_callback(std::function<void()> fun);
+
+    void run_start_callbacks();
+
+    void run_end_callbacks();
 
     
 };
