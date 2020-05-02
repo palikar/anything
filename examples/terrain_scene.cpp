@@ -13,6 +13,8 @@ class TerrainScene : public gmt::GameBase
     
     gmt::Entity* floor_mesh;
 
+    gmt::Object3D* sphere;
+
     // gmt::PointlightHelper* pointlight;
 
   public:
@@ -109,29 +111,34 @@ class TerrainScene : public gmt::GameBase
 
         }
 
-        auto obj = gmt::object_mesh({grph::sphere_geometry(1.0, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
-        obj->translateX(5.0f);
-        obj->translateY(5.0f);
+        auto s = gmt::object_mesh({grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(1.0, 0.0, 0.0)});
+        s->translateX(0.0f);
+        s->translateY(0.0f);
+        sphere = main_scene->add(std::move(s));
         
-        main_scene->add(std::move(obj));
         
         init_lighting();
         main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
 
 
-        anim::Vec3Track tr({ glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0) },
-                           { 0.0, 5.0 });
-
-        tr.update_time(2.5);
+        auto tr = anim::vector_track(
+            { { 0.0f, 0.0f, 0.0f }, { 0.0f, 5.0f, 0.0f }, { 0.0f, 5.0f, 5.0f }, { 0.0f, 0.0f, 0.0f } },
+            { 0.0, 2.0, 4.0, 6.0 });
         
-        std::cout << glm::to_string(tr.current()) << "\n";
+        tr->set_target(&sphere->transform().position());
+        anim::Timeline timline;
+        timline.push_track("sphere_move", std::move(tr));
+
+        animator().add_timeline("main_timeline", std::move(timline));
+
+        animator().play("main_timeline");
     }
     
 
     void update(double dt) override
     {
-
         main_scene->update(dt);
+        sphere->transform().update();
     }
 
     bool event(app::Event& e) override

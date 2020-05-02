@@ -6,7 +6,7 @@
 namespace ay::gmt
 {
 
-GameEngine::GameEngine(gmt::GameBase *t_game) : m_game(t_game), m_renderAPI()
+GameEngine::GameEngine(gmt::GameBase *t_game) : m_renderAPI(), m_game(t_game)
 {
 }
 
@@ -26,6 +26,7 @@ void GameEngine::init(int width, int height)
 
 void GameEngine::update(double dt)
 {
+    m_main_animator.update(dt);
     m_game->update(dt);
 }
 
@@ -46,6 +47,16 @@ bool GameEngine::resize(app::WindowResizeEvent &e)
 bool GameEngine::on_event(app::Event &t_event)
 {
     return m_game->event(t_event);
+}
+
+int GameEngine::width() const
+{
+    return m_width;
+}
+
+int GameEngine::height() const
+{
+    return m_height;
 }
 
 }  // namespace ay::gmt

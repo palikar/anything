@@ -19,14 +19,14 @@ enum class LoopMode
 
 struct TimelineParameters
 {
-    LoopMode m_mode{ LoopMode::ONCE };
+    LoopMode m_mode{ LoopMode::REPEAT };
 };
 
 class Timeline
 {
   private:
     float m_current_time{ 0.0f };
-    float m_max_time{ 10.0f };
+    float m_max_time{ 0.0f };
     bool m_playing{ false };
 
     TimelineParameters m_parameters;
@@ -43,11 +43,17 @@ class Timeline
             if (m_parameters.m_mode == LoopMode::ONCE)
             {
                 m_playing = false;
+                return;
             }
             else if (m_parameters.m_mode == LoopMode::REPEAT)
             {
                 m_current_time = 0.0f;
             }
+        }
+
+        for (auto &[_, track] : m_tracks)
+        {
+            track->update_time(m_current_time);
         }
     }
 
@@ -60,6 +66,7 @@ class Timeline
     template<typename T>
     T *push_track(std::string name, std::unique_ptr<T> t_track)
     {
+        m_max_time = std::max(t_track->max_time(), m_max_time);
         return static_cast<T *>(
           m_tracks.insert({ std::move(name), std::move(t_track) }).first->second.get());
     }

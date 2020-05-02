@@ -17,6 +17,12 @@ Scene3D *GameBase::init_scene(const std::string &t_name)
     return &m_scenes.insert({ t_name, std::move(sc) }).first->second;
 }
 
+anim::Animator &GameBase::animator()
+{
+    return m_engine->animator();
+}
+
+
 gmt::ShaderLibrary &GameBase::shaders()
 {
     return m_engine->shader_lib();

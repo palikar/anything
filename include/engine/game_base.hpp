@@ -4,9 +4,10 @@
 
 #include "engine/texture_library.hpp"
 #include "engine/shader_library.hpp"
+#include "engine/animation/animator.hpp"
+
 
 #include "application/event.hpp"
-
 #include "std_header.hpp"
 
 
@@ -33,6 +34,8 @@ class GameBase
     gmt::ShaderLibrary &shaders();
 
     gmt::TextureLibrary &textures();
+
+    anim::Animator &animator();
 
     void set_up(GameEngine *t_engine);
 

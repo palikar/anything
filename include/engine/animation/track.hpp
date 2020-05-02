@@ -43,6 +43,11 @@ class BaseTrack
     {
     }
 
+    float max_time()
+    {
+        return *std::max_element(m_times.begin(), m_times.end());
+    }
+
     virtual ~BaseTrack()
     {
     }
@@ -54,7 +59,7 @@ using BaseTrackPtr = std::unique_ptr<BaseTrack>;
 template<typename T, typename Function>
 class Track : public BaseTrack
 {
-  private:
+
   protected:
     std::vector<T> m_values;
 
@@ -69,6 +74,11 @@ class Track : public BaseTrack
 
   public:
     using fun_type = Function *;
+
+    using ptr_type = std::unique_ptr<Track<T, Function>>;
+
+    using data_type = T;
+
     static Function *fun;
 
     Track(std::vector<T> values, std::vector<float> times)
@@ -85,8 +95,9 @@ class Track : public BaseTrack
 
         const auto times = get_times(t);
 
-        const auto p = std::make_pair(std::ref(m_values[times[0].second]),
-                                      std::ref(m_values[times[1].second]));
+        const auto p = std::make_pair(std::ref(m_values[times[1].second]),
+                                      std::ref(m_values[times[0].second]));
+
 
         const float time = (times[1].first - t) / (times[1].first - times[0].first);
 
@@ -96,6 +107,11 @@ class Track : public BaseTrack
         {
             *m_target = m_current;
         }
+    }
+
+    void set_target(T *value)
+    {
+        m_target = value;
     }
 
     T &current()
