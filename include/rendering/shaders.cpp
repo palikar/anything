@@ -110,8 +110,8 @@ void Shader::unbind()
 }
 
 void Shader::compile_program(
-    const std::unordered_map<GLenum, std::string> &shader_sources,
-    bool reload)
+  const std::unordered_map<GLenum, std::string> &shader_sources,
+  bool reload)
 {
 
     if (!reload)
@@ -152,7 +152,6 @@ void Shader::compile_program(
 
         AY_DEBUG("Shader m_id linking error:\n\t");
         AY_ERROR(info_log.data());
-        
     }
 
     glValidateProgram(m_id);
@@ -174,7 +173,6 @@ void Shader::compile_program(
 
         AY_DEBUG("Shader m_id validation error:\n\t");
         AY_ERROR(info_log.data());
-        
     }
 
     for (auto id : shader_ids)
@@ -203,7 +201,6 @@ GLuint Shader::compile_shader(const GLchar *t_src, GLenum type)
 
         AY_DEBUG("Shader compilation error:\n\t");
         AY_ERROR(info_log.data());
-        
     }
 
 

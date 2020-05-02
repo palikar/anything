@@ -119,9 +119,12 @@ class TerrainScene : public gmt::GameBase
         main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
 
 
-        anim::Vec3Track tr({ glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0) },
+        anim::Vec3Track tr({ glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0) },
                            { 0.0, 5.0 });
+
+        tr.update_time(2.5);
         
+        std::cout << glm::to_string(tr.current()) << "\n";
     }
     
 

@@ -25,23 +25,23 @@ namespace ay::cmp
 class TrackingCameraComponent : public gmt::Component
 {
   private:
-
     mth::Transform &transform;
-    gmt::Camera& camera;
+    gmt::Camera &camera;
 
-    glm::vec2 m_orbit{0.0f, 0.0f};
+    glm::vec2 m_orbit{ 0.0f, 0.0f };
 
     float m_last_scroll = 10;
 
     float m_damping{ 0.3 };
     bool m_initial_click{ false };
     glm::vec2 m_last_mouse_pos{};
-    
-    float m_radius = 10;
+
+    float m_radius     = 10;
     float m_min_radius = 3;
     float m_max_radius = 30;
 
-    void update() {
+    void update()
+    {
         m_orbit.y = mth::clamp(m_orbit.y, -1.57f, 1.57f);
 
         if (m_orbit.x > 2 * mth::PI)
@@ -53,20 +53,19 @@ class TrackingCameraComponent : public gmt::Component
         {
             m_orbit.x += 2 * mth::PI;
         }
-        
+
         auto pos = transform.position();
-        
+
         const float camX = -m_radius * sin(m_orbit.x) * cos(m_orbit.y);
         const float camY = -m_radius * sin(m_orbit.y);
         const float camZ = -m_radius * cos(m_orbit.x) * cos(m_orbit.y);
-        
-        camera.set_look_at(glm::vec3(camX, camY, camZ) + pos, pos);
 
+        camera.set_look_at(glm::vec3(camX, camY, camZ) + pos, pos);
     }
 
     bool scroll_radius(app::MouseScrolledEvent &t_e)
     {
-        
+
         const auto diff = m_last_scroll - t_e.y_offset();
         m_radius += diff;
         m_radius      = mth::clamp(m_radius, m_min_radius, m_max_radius);
@@ -75,10 +74,10 @@ class TrackingCameraComponent : public gmt::Component
         update();
         return false;
     }
-    
+
   public:
-    using construct_type = mth::Transform&;
-    
+    using construct_type = mth::Transform &;
+
     AY_COMPONENT(TrackingCamera)
 
     TrackingCameraComponent(mth::Transform &t_transform, gmt::Camera &t_camera)
@@ -96,13 +95,15 @@ class TrackingCameraComponent : public gmt::Component
     {
         app::Dispatcher dispatch{ e };
         dispatch.dispatch<app::MouseScrolledEvent>(
-            [this](auto &ev) { return scroll_radius(ev); });
+          [this](auto &ev) { return scroll_radius(ev); });
 
         return false;
     }
-    
+
     void update(double dt) override
     {
+
+        float delta = static_cast<float>(dt);
 
         if (app::Input::is_released(MouseCode::BUTTON_1))
         {
@@ -125,17 +126,15 @@ class TrackingCameraComponent : public gmt::Component
             else
             {
                 const auto diff = m_last_mouse_pos - pos;
-                m_orbit += diff * static_cast<float>(dt * m_damping);
+                m_orbit += diff * m_damping * delta;
                 update();
             }
             m_last_mouse_pos = pos;
         }
 
-        
-        float delta = static_cast<float>(dt);
+
         update();
     }
-    
 };
 
 

@@ -53,7 +53,7 @@ class Transform
     {
         m_position += vec;
     }
-            
+
     void translateX(float amt)
     {
         move(glm::vec3(1, 0, 0), amt);

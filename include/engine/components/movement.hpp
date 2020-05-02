@@ -24,27 +24,26 @@ namespace ay::cmp
 class MovementComponent : public gmt::Component
 {
   private:
-
     mth::Transform &transform;
 
-    glm::vec3 velocity{0.0f, 0.0f, 0.0f};
+    glm::vec3 velocity{ 0.0f, 0.0f, 0.0f };
 
-    float speed{4.5f};
+    float speed{ 4.5f };
     bool m_move[4];
 
-    void update() {
+    void update()
+    {
 
         if (m_move[0] || m_move[1] || m_move[2] || m_move[3])
         {
             transform.translate(velocity);
             transform.update();
         }
-        
     }
 
   public:
-    using construct_type = mth::Transform&;
-    
+    using construct_type = mth::Transform &;
+
     AY_COMPONENT(Movement)
 
     MovementComponent(mth::Transform &t_transform) : transform(t_transform)
@@ -67,56 +66,54 @@ class MovementComponent : public gmt::Component
         if (app::Input::is_pressed(KeyCode::W) and !m_move[0])
         {
             velocity += glm::vec3(0.0f, 0.0f, 1.0f) * delta * speed;
-            m_move[0] = true;    
+            m_move[0] = true;
         }
 
         if (app::Input::is_pressed(KeyCode::S) and !m_move[1])
         {
-            velocity -=  glm::vec3(0.0f, 0.0f, 1.0f) * delta  * speed;
+            velocity -= glm::vec3(0.0f, 0.0f, 1.0f) * delta * speed;
             m_move[1] = true;
         }
 
         if (app::Input::is_pressed(KeyCode::A) and !m_move[2])
         {
-            velocity += glm::vec3(1.0f, 0.0f, 0.0f) * delta  * speed;
+            velocity += glm::vec3(1.0f, 0.0f, 0.0f) * delta * speed;
             m_move[2] = true;
         }
 
         if (app::Input::is_pressed(KeyCode::D) and !m_move[3])
         {
-            velocity -= glm::vec3(1.0f, 0.0f, 0.0f) * delta  * speed;
+            velocity -= glm::vec3(1.0f, 0.0f, 0.0f) * delta * speed;
             m_move[3] = true;
         }
 
 
-        
         if (app::Input::is_released(KeyCode::W) and m_move[0])
         {
             velocity.z = 0;
-            m_move[0] = false;
+            m_move[0]  = false;
         }
-        
+
         if (app::Input::is_released(KeyCode::S) and m_move[1])
         {
             velocity.z = 0;
-            m_move[1] = false;
+            m_move[1]  = false;
         }
-        
+
         if (app::Input::is_released(KeyCode::A) and m_move[2])
         {
             velocity.x = 0;
-            m_move[2] = false;
+            m_move[2]  = false;
         }
-        
+
         if (app::Input::is_released(KeyCode::D) and m_move[3])
         {
             velocity.x = 0;
-            m_move[3] = false;
+            m_move[3]  = false;
         }
 
-        
-        update();
 
+        update();
     }
 };
 

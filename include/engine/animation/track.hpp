@@ -1,7 +1,6 @@
 #pragma once
 
 
-
 #include "glm_header.hpp"
 #include "std_header.hpp"
 #include "math_header.hpp"
@@ -15,78 +14,95 @@ class BaseTrack
   protected:
     std::vector<float> m_times;
 
-    std::array<std::pair<float, int>, 2> get_times(float)
+    std::array<std::pair<float, int>, 2> get_times(float time)
     {
+        for (size_t i = 1; i < m_times.size(); ++i)
+        {
+            if (time <= m_times[i])
+            {
+                return { std::pair{ m_times[i - 1], i - 1 }, std::pair{ m_times[i], i } };
+            }
+        }
+        return {};
+    }
 
-        return {std::pair{0.1f, 0}, std::pair{0.10f, 1}};
+    bool before_start(float time)
+    {
+        return time < m_times.front();
+    }
+
+    bool after_end(float time)
+    {
+        return m_times.back() < time;
     }
 
   public:
-
     virtual void update_time(float t) = 0;
 
     BaseTrack(std::vector<float> times) : m_times(std::move(times))
     {
+    }
 
+    virtual ~BaseTrack()
+    {
     }
 };
 
+
+using BaseTrackPtr = std::unique_ptr<BaseTrack>;
 
 template<typename T, typename Function>
 class Track : public BaseTrack
 {
   private:
-    
   protected:
     std::vector<T> m_values;
 
     T m_current;
-    T* m_target;
 
-    T interpolate(std::pair<T&,T&> values, float factor)
+    T *m_target{ nullptr };
+
+    T interpolate(std::pair<T &, T &> values, float factor)
     {
         return fun(values.first, values.second, factor);
     }
 
   public:
-    
-    using fun_type = Function*;
+    using fun_type = Function *;
     static Function *fun;
+
+    Track(std::vector<T> values, std::vector<float> times)
+      : BaseTrack(std::move(times)), m_values(std::move(values))
+    {
+    }
 
     void update_time(float t) override
     {
-        auto times = get_times(t);
-        auto p     = std::make_pair(std::ref(m_values[times[0].second]),
-                                    std::ref(m_values[times[1].second]));
-        float time = (times[1].first - t) / (times[1].first - times[0].first);
+        if (before_start(t) or after_end(t))
+        {
+            return;
+        }
+
+        const auto times = get_times(t);
+
+        const auto p = std::make_pair(std::ref(m_values[times[0].second]),
+                                      std::ref(m_values[times[1].second]));
+
+        const float time = (times[1].first - t) / (times[1].first - times[0].first);
 
         m_current = interpolate(p, time);
-        
-    }
-    
 
-    Track(std::vector<T> values, std::vector<float> times)
-        : BaseTrack(std::move(times)), m_values(std::move(values))
-    {
+        if (m_target != nullptr)
+        {
+            *m_target = m_current;
+        }
     }
 
     T &current()
     {
         return m_current;
     }
-
 };
 
 
-static glm::vec3 inter(glm::vec3 a, glm::vec3 b, float f)
-{
-    return a*(1-f) * b*f; 
-}
-
-using Vec3Track = anim::Track<glm::vec3, decltype(inter)>;
-template<>Vec3Track::fun_type Vec3Track::fun = &inter;
-
-
-
-
-}
+}  // namespace ay::anim

@@ -83,14 +83,18 @@ class Entity
     auto add_component(Args &&... args)
     {
 
-        auto t_comp = [&](){
-            if constexpr (std::is_constructible_v<T, Args ...>)  {
+        auto t_comp = [&]() {
+            if constexpr (std::is_constructible_v<T, Args...>)
+            {
                 return std::make_unique<T>(std::forward<Args>(args)...);
-            } else {
-                return std::make_unique<T>(typename T::construct_type(std::forward<Args>(args)...));
+            }
+            else
+            {
+                return std::make_unique<T>(
+                  typename T::construct_type(std::forward<Args>(args)...));
             }
         }();
-                
+
 
         if (m_game != nullptr)
         {
@@ -134,16 +138,16 @@ class Entity
 
     virtual bool event(app::Event &e)
     {
-        
+
         for (auto &[_, comp] : m_components)
         {
             comp->event(e);
         }
 
-        
+
         return false;
     }
-    
+
     virtual void init(GameBase *){};
 
 
