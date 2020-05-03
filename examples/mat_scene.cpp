@@ -195,25 +195,25 @@ class MatScene : public gmt::GameBase
         {
             ImGui::Text("Base material");
 
-            ImGui::Checkbox("Visible", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_visible);
+            ImGui::Checkbox("Visible", (bool*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_visible);
             ImGui::SameLine();
-            ImGui::Checkbox("Transparent", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_transparent);
+            ImGui::Checkbox("Transparent", (bool*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_transparent);
             ImGui::SameLine();
-            ImGui::Checkbox("Wire Frame", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_wire_frame);
+            ImGui::Checkbox("Wire Frame", (bool*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_wire_frame);
 
 
-            ImGui::Checkbox("Enable blending", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_blending.blending);
-            ImGui::SliderFloat("Opacity", (float*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_opacity, 0.0f, 1.0f, "Value = %.3f");
-            ImGui::SliderFloat("Alpha test", (float*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_blending.alpha_test, 0.0f, 1.0f, "Value = %.3f");
+            ImGui::Checkbox("Enable blending", (bool*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_blending.blending);
+            ImGui::SliderFloat("Opacity", (float*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_opacity, 0.0f, 1.0f, "Value = %.3f");
+            ImGui::SliderFloat("Alpha test", (float*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_blending.alpha_test, 0.0f, 1.0f, "Value = %.3f");
 
-            ImGui::Checkbox("Depth test", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_depth_test);
+            ImGui::Checkbox("Depth test", (bool*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_depth_test);
             ImGui::SameLine();
-            ImGui::Checkbox("Depth write", (bool*)&cmp::mesh(sphere).material<grph::Material>()->parameters().m_depth_write);
+            ImGui::Checkbox("Depth write", (bool*)&cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_depth_write);
 
             const char* sides[] = {"Front", "Back", "Both"};
             static int current = 0;
             ImGui::Combo("Render side", &current, sides, 3);
-            cmp::mesh(sphere).material<grph::Material>()->parameters().m_side = rend::Side{current};
+            cmp::mesh(sphere).material<grph::Material>()->base_parameters().m_side = rend::Side{current};
 
             ImGui::Separator();
             ImGui::Text("Texture material");
@@ -332,8 +332,8 @@ class MatScene : public gmt::GameBase
 
         if (ImGui::CollapsingHeader("Cube"))
         {
-            ImGui::ColorEdit3("Color", (float*)&cmp::mesh(cube).material<grph::SolidColorMaterial>()->params().m_color);
-            ImGui::SliderFloat("Shininess", (float*)&cmp::mesh(cube).material<grph::SolidColorMaterial>()->params().m_shininess, 2.0, 60.0, "Exponent = %.3f");
+            ImGui::ColorEdit3("Color", (float*)&cmp::mesh(cube).material<grph::SolidColorMaterial>()->parameters().m_color);
+            ImGui::SliderFloat("Shininess", (float*)&cmp::mesh(cube).material<grph::SolidColorMaterial>()->parameters().m_shininess, 2.0, 60.0, "Exponent = %.3f");
         }
 
         renderer.render_scene(*main_scene);

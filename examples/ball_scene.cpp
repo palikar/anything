@@ -296,7 +296,7 @@ class BallScene : public gmt::GameBase
         {
             for (int j = 0; j < ball_grid_y; ++j)
             {
-                cmp::mesh(entities[i][j]).material<grph::SolidColorMaterial>()->params().m_shininess = shining;
+                cmp::mesh(entities[i][j]).material<grph::SolidColorMaterial>()->parameters().m_shininess = shining;
             }
         }
 
