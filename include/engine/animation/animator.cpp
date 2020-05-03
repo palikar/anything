@@ -7,7 +7,6 @@ namespace ay::anim
 {
 
 
-
 Animator::Animator()
 {
     add_timeline("main_timeline", anim::Timeline());
@@ -34,8 +33,7 @@ Timeline &Animator::main_timeline()
 
 void Animator::add_timeline(std::string t_name, Timeline t_line)
 {
-    m_timelines.insert(
-        { std::move(t_name), TimelineObject{ std::move(t_line), false } });
+    m_timelines.insert({ std::move(t_name), TimelineObject{ std::move(t_line), false } });
 }
 
 void Animator::update(float dt)
@@ -51,9 +49,9 @@ void Animator::play_all()
 {
     for (auto &[name, timeline] : m_timelines)
     {
-            timeline.playing = true;
-        }
+        timeline.playing = true;
     }
+}
 
 void Animator::pause_all()
 {
@@ -74,11 +72,11 @@ void Animator::reset_all()
 void Animator::stop_all()
 {
     for (auto &[name, timeline] : m_timelines)
-        {
-            timeline.playing = false;
-            timeline.timeline.reset();
-        }
+    {
+        timeline.playing = false;
+        timeline.timeline.reset();
     }
+}
 
 
 void Animator::play(const std::string &t_name)
@@ -98,8 +96,8 @@ void Animator::reset(const std::string &t_name)
 
 void Animator::stop(const std::string &t_name)
 {
-        m_timelines.at(t_name).playing = false;
-        m_timelines.at(t_name).timeline.reset();
-    }
-
+    m_timelines.at(t_name).playing = false;
+    m_timelines.at(t_name).timeline.reset();
 }
+
+}  // namespace ay::anim

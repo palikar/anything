@@ -21,10 +21,9 @@ struct TimelineParameters
 {
     LoopMode m_mode{ LoopMode::REPEAT };
 
-    bool m_reset_on_end{true};
+    bool m_reset_on_end{ true };
 
-    float m_time_damping{1.0f};
-
+    float m_time_damping{ 1.0f };
 };
 
 class Timeline
@@ -32,7 +31,7 @@ class Timeline
   private:
     std::vector<std::function<void()>> m_end_callbacks;
     std::vector<std::function<void()>> m_start_callbacks;
-    
+
     float m_current_time{ 0.0f };
     float m_max_time{ 0.0f };
     bool m_playing{ false };
@@ -47,7 +46,7 @@ class Timeline
     void run_backward(float dt);
 
     void update_tracks();
-    
+
 
   public:
     void update(float dt);
@@ -81,11 +80,10 @@ class Timeline
     void run_end_callbacks();
 
     void repeate();
-    
+
     void once();
 
     void ping_pong();
-    
 };
 
 

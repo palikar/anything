@@ -1,4 +1,4 @@
-#include "rendering/texture_binder.hpp"
+#include "texture_binder.hpp"
 
 namespace ay::rend
 {

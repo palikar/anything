@@ -1,11 +1,8 @@
 #pragma once
 
-#include "rendering/vertex_array.hpp"
-
 #include "graphics/geometry.hpp"
 
 #include "math/utils.hpp"
-
 
 namespace ay::grph
 {

@@ -3,7 +3,6 @@
 #include "graphics/geometry.hpp"
 #include "graphics/material.hpp"
 
-
 #include "glm_header.hpp"
 #include "std_header.hpp"
 

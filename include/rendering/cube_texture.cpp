@@ -5,6 +5,24 @@
 namespace ay::rend
 {
 
+CubeTexture::~CubeTexture()
+{
+    GLCall(glDeleteTextures(1, &m_id));
+}
+
+void CubeTexture::bind(uint slot) const
+{
+    GLCall(glActiveTexture(GL_TEXTURE0 + slot));
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, m_id));
+}
+
+void CubeTexture::Unbind(uint slot) const
+{
+    GLCall(glActiveTexture(GL_TEXTURE0 + slot));
+    GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
+}
+
+
 unsigned char *CubeTexture::load_image(const std::string &t_file)
 {
     int width{}, height{}, channels{};

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "rendering/uniform_binder.hpp"
-#include "rendering/texture_binder.hpp"
-#include "rendering/render_context.hpp"
+
 #include "rendering/shaders.hpp"
 
 #include "graphics/material.hpp"
 #include "graphics/light.hpp"
+#include "graphics/uniform_binder.hpp"
+#include "graphics/texture_binder.hpp"
+#include "graphics/render_context.hpp"
 
 #include "engine/entity.hpp"
 

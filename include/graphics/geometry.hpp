@@ -3,7 +3,6 @@
 #include "rendering/vertex.hpp"
 #include "rendering/buffer_factory.hpp"
 
-
 #include "glm_header.hpp"
 #include "std_header.hpp"
 #include "math_header.hpp"

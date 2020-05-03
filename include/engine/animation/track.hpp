@@ -36,10 +36,9 @@ class BaseTrack
     }
 
   public:
-
     virtual void update_time(float t) = 0;
 
-    virtual void reset() {};
+    virtual void reset(){};
 
     virtual ~BaseTrack()
     {
@@ -53,8 +52,6 @@ class BaseTrack
     {
         return *std::max_element(m_times.begin(), m_times.end());
     }
-
-
 };
 
 using BaseTrackPtr = std::unique_ptr<BaseTrack>;
@@ -75,9 +72,8 @@ class Track : public BaseTrack
     static Function *fun;
 
   protected:
-
     std::vector<T> m_values;
-    
+
     T m_current;
 
     T *m_target{ nullptr };
@@ -88,11 +84,9 @@ class Track : public BaseTrack
     {
 
         return fun(values.first, values.second, m_easing(factor));
-
     }
+
   public:
-
-
     Track(std::vector<T> values, std::vector<float> times)
       : BaseTrack(std::move(times)), m_values(std::move(values))
     {
@@ -106,7 +100,8 @@ class Track : public BaseTrack
         }
 
         const auto times = get_times(t);
-        const auto p = std::make_pair(m_values[times[1].second], m_values[times[0].second]);
+        const auto p =
+          std::make_pair(m_values[times[1].second], m_values[times[0].second]);
 
 
         const float time = (times[1].first - t) / (times[1].first - times[0].first);
@@ -129,7 +124,7 @@ class Track : public BaseTrack
         return m_current;
     }
 
-    mth::EasingFun& easing()
+    mth::EasingFun &easing()
     {
         return m_easing;
     }

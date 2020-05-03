@@ -22,38 +22,42 @@ struct Easing
     {
 
         template<int steps>
-        static  void bezier_table(glm::vec2 P[4], glm::vec2 results[steps + 1]) 
+        static void bezier_table(glm::vec2 P[4], glm::vec2 results[steps + 1])
         {
             static float C[(steps + 1) * 4], *K = 0;
-            if (!K) {
+            if (!K)
+            {
                 K = C;
-                for (unsigned step = 0; step <= steps; ++step) {
-                    float t = (float) step / (float) steps;
-                    C[step * 4 + 0] = (1 - t)*(1 - t)*(1 - t);
-                    C[step * 4 + 1] = 3 * (1 - t)*(1 - t) * t;
-                    C[step * 4 + 2] = 3 * (1 - t) * t*t;
-                    C[step * 4 + 3] = t * t*t;
+                for (unsigned step = 0; step <= steps; ++step)
+                {
+                    float t         = (float)step / (float)steps;
+                    C[step * 4 + 0] = (1 - t) * (1 - t) * (1 - t);
+                    C[step * 4 + 1] = 3 * (1 - t) * (1 - t) * t;
+                    C[step * 4 + 2] = 3 * (1 - t) * t * t;
+                    C[step * 4 + 3] = t * t * t;
                 }
             }
-            
-            for (unsigned step = 0; step <= steps; ++step) {
-                glm::vec2 point = {
-                    K[step * 4 + 0] * P[0].x + K[step * 4 + 1] * P[1].x + K[step * 4 + 2] * P[2].x + K[step * 4 + 3] * P[3].x,
-                    K[step * 4 + 0] * P[0].y + K[step * 4 + 1] * P[1].y + K[step * 4 + 2] * P[2].y + K[step * 4 + 3] * P[3].y
-                };
-                results[step] = point;
+
+            for (unsigned step = 0; step <= steps; ++step)
+            {
+                glm::vec2 point = { K[step * 4 + 0] * P[0].x + K[step * 4 + 1] * P[1].x
+                                      + K[step * 4 + 2] * P[2].x
+                                      + K[step * 4 + 3] * P[3].x,
+                                    K[step * 4 + 0] * P[0].y + K[step * 4 + 1] * P[1].y
+                                      + K[step * 4 + 2] * P[2].y
+                                      + K[step * 4 + 3] * P[3].y };
+                results[step]   = point;
             }
         }
 
-        static float cubic(float dt01, float P[4]) 
+        static float cubic(float dt01, float P[4])
         {
             constexpr int STEPS = 256;
-            glm::vec2 Q[4] = { { 0, 0 }, { P[0], P[1] }, { P[2], P[3] }, { 1, 1 } };
+            glm::vec2 Q[4]      = { { 0, 0 }, { P[0], P[1] }, { P[2], P[3] }, { 1, 1 } };
             glm::vec2 results[STEPS + 1];
             bezier_table<STEPS>(Q, results);
-            return results[(int) ((dt01 < 0 ? 0 : dt01 > 1 ? 1 : dt01) * STEPS)].y;
+            return results[(int)((dt01 < 0 ? 0 : dt01 > 1 ? 1 : dt01) * STEPS)].y;
         }
-
     };
 
     static float linear(float k)
@@ -161,12 +165,12 @@ struct Easing
             return 1.0f - std::sqrt(1.0f - k * k);
         }
 
-      static float out(float k)
+        static float out(float k)
         {
             return std::sqrt(1.0f - ((k -= 1.0f) * k));
         }
 
-      static float in_out(float k)
+        static float in_out(float k)
         {
             if ((k *= 2.0f) < 1.0f)
                 return -0.5f * (std::sqrt(1.0f - k * k) - 1);
@@ -184,7 +188,7 @@ struct Easing
             if (k == 1)
                 return 1;
             return -std::pow(2.0f, 10.0f * (k -= 1.0f))
-                * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f);
+                   * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f);
         }
 
         static float out(float k)
@@ -193,18 +197,19 @@ struct Easing
                 return 0;
             if (k == 1)
                 return 1;
-            return std::pow(2.0f, -10.0f * k) * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f)
-                + 1.0f;
+            return std::pow(2.0f, -10.0f * k)
+                     * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f)
+                   + 1.0f;
         }
 
         static float in_out(float k)
         {
             if ((k *= 2.0f) < 1.0f)
                 return -0.5f * std::pow(2.0f, 10.0f * (k -= 1.0f))
-                    * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f);
+                       * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f);
             return std::pow(2.0f, -10.0f * (k -= 1.0f))
-                * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f) * 0.5f
-                + 1.0f;
+                     * std::sin((k - 0.1f) * (2.0f * mth::PI) / 0.4f) * 0.5f
+                   + 1.0f;
         }
     };
 
@@ -265,7 +270,6 @@ struct Easing
             return out(k * 2.0f - 1.0f) * 0.5f + 0.5f;
         }
     };
-
 };
 
 inline static std::string interpolation_names[] = {
@@ -296,7 +300,7 @@ inline static std::string interpolation_names[] = {
     "Bounce_in_out",
 };
 
-inline static float(*interpolations[])(float) = {
+inline static float (*interpolations[])(float) = {
     &Easing::linear,
     &Easing::Quadratic::in,
     &Easing::Quadratic::out,
@@ -332,22 +336,22 @@ enum class EasingType
 
 struct EasingFun
 {
-    EasingType type{EasingType::STANDARD};
-    std::function<float(float)> fun{&mth::Easing::linear};
-    size_t index{0};
+    EasingType type{ EasingType::STANDARD };
+    std::function<float(float)> fun{ &mth::Easing::linear };
+    size_t index{ 0 };
     std::array<float, 5> params;
 
     void set_from_index(size_t i)
     {
         index = i;
-        fun = mth::interpolations[index];
+        fun   = mth::interpolations[index];
     }
 
     void make_bezier()
     {
         fun = [&](float t) {
             return mth::Easing::Bezier::cubic(
-                t, (float[]){ params[0], params[1], params[2], params[3] });
+              t, (float[]){ params[0], params[1], params[2], params[3] });
         };
     }
 
@@ -360,7 +364,6 @@ struct EasingFun
     {
         return fun(t);
     }
-
 };
 
 
@@ -368,4 +371,4 @@ struct EasingFun
 #pragma GCC diagnostic pop
 #endif
 
-}
+}  // namespace ay::mth

@@ -7,7 +7,7 @@ namespace ay::gmt
 {
 
 GameEngine::GameEngine(gmt::GameBase *t_game)
-    : m_main_animator(), m_renderAPI(), m_game(t_game)
+  : m_main_animator(), m_renderAPI(), m_game(t_game)
 {
 }
 

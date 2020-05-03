@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rendering/renderer.hpp"
+#include "rendering/render_api.hpp"
 
 #include "graphics/light.hpp"
 #include "graphics/fog.hpp"

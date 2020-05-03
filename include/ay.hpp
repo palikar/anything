@@ -7,8 +7,7 @@
 #include "imgui_header.hpp"
 
 #include "rendering/buffer_factory.hpp"
-#include "rendering/renderer.hpp"
-#include "rendering/renderer3D.hpp"
+#include "rendering/render_api.hpp"
 #include "rendering/shaders.hpp"
 #include "rendering/texture.hpp"
 #include "rendering/cube_texture.hpp"
@@ -16,6 +15,7 @@
 #include "rendering/vertex_array.hpp"
 #include "rendering/frame_buffer.hpp"
 
+#include "engine/rendering/renderer3D.hpp"
 #include "engine/camera.hpp"
 #include "engine/engine.hpp"
 #include "engine/component.hpp"

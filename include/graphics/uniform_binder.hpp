@@ -1,10 +1,10 @@
 #pragma once
 
-
 #include "rendering/shaders.hpp"
 #include "rendering/texture.hpp"
 #include "rendering/cube_texture.hpp"
-#include "rendering/texture_binder.hpp"
+
+#include "graphics/texture_binder.hpp"
 
 #include "std_header.hpp"
 
@@ -14,7 +14,7 @@ using namespace std::string_literals;
 
 class UniformBinder
 {
-    
+
   private:
     Shader *m_shader;
     TextureBinder &m_binder;

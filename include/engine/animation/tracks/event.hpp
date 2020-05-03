@@ -15,9 +15,8 @@ class EventTrack : public BaseTrack
     size_t m_current = 0;
 
   public:
-
     EventTrack(std::vector<std::function<void()>> events, std::vector<float> times)
-        : BaseTrack(std::move(times)), m_events(std::move(events))
+      : BaseTrack(std::move(times)), m_events(std::move(events))
     {
     }
 
@@ -39,7 +38,6 @@ class EventTrack : public BaseTrack
     {
         m_current = 0;
     }
-
 };
 
 }  // namespace ay::anim

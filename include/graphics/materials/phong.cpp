@@ -33,7 +33,6 @@ void PhongMaterial::update_uniforms(rend::UniformBinder &uniforms,
     uniforms.set_uniform("specular_map", m_parameters.m_specular_map.get());
     uniforms.set_uniform("map", m_parameters.m_map.get());
     uniforms.set_uniform("normal_map", m_parameters.m_normal_map.get());
-
 }
 
 bool PhongMaterial::needs_lighting()

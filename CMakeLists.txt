@@ -156,30 +156,47 @@ include_directories(${OPENGL_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIRS})
 include_directories(${GLFW_INCLUDE_DIRS})
 
-# The testing example
-add_library(anything_engine
-
-    ./include/rendering/renderer.cpp
-
+add_library(anything_rendering
+    ./include/rendering/render_api.cpp
     ./include/rendering/texture.cpp
     ./include/rendering/frame_buffer.cpp
     ./include/rendering/depth_texture.cpp
     ./include/rendering/cube_texture.cpp
-    ./include/rendering/renderer3D.cpp
     ./include/rendering/shaders.cpp
     ./include/rendering/vertex_array.cpp
-    ./include/rendering/texture_binder.cpp
+    )
+target_link_libraries(anything_rendering PUBLIC project_options project_warnings project_defines
+    PUBLIC glfw OpenGL::GL GLEW::GLEW fmt stb)
+target_include_directories(anything_rendering PUBLIC ./include)
 
+
+add_library(anything_graphics
     ./include/graphics/materials/phong.cpp
     ./include/graphics/materials/solid_color.cpp
     ./include/graphics/materials/textured.cpp
     ./include/graphics/mesh_factory.cpp
     ./include/graphics/geometry.cpp
     ./include/graphics/geometry_factory.cpp
+    ./include/graphics/texture_binder.cpp
+    )
+target_link_libraries(anything_graphics PUBLIC project_options project_warnings project_defines
+    PUBLIC assimp fmt anything_rendering)
+target_include_directories(anything_graphics PUBLIC ./include)
 
+
+add_library(anything_application
     ./include/application/resource_loader.cpp
     ./include/application/application.cpp
     ./include/application/window.cpp
+    )
+target_link_libraries(anything_application PUBLIC project_options project_warnings project_defines
+    PUBLIC glfw imgui fmt imguizmo)
+target_include_directories(anything_application PUBLIC ./include)
+
+
+add_library(anything_engine
+
+    ./include/engine/rendering/renderer3D.cpp
 
     ./include/engine/game_base.cpp
     ./include/engine/engine.cpp
@@ -205,14 +222,12 @@ add_library(anything_engine
     ./include/util/gl_helpers.cpp
     ./include/util/files.cpp
     ./include/util/logging.cpp
-
-
     )
-
 target_include_directories(anything_engine PUBLIC ./include)
-
 target_link_libraries(anything_engine PUBLIC project_options project_warnings project_defines
-    PUBLIC glfw OpenGL::GL GLEW::GLEW imgui assimp imguizmo fmt stb)
+    PUBLIC fmt)
+target_link_libraries(anything_engine PUBLIC anything_graphics anything_rendering anything_application)
+
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
     target_precompile_headers(anything_engine
@@ -233,7 +248,7 @@ target_link_libraries(terrain_scene PUBLIC anything_engine)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-# install(TARGETS 
+# install(TARGETS
 #     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
 #     RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
 #     LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}

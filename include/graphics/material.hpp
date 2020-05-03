@@ -5,12 +5,13 @@
 
 #include "engine/shader_library.hpp"
 
+#include "graphics/texture_binder.hpp"
+#include "graphics/uniform_binder.hpp"
+#include "graphics/render_context.hpp"
+
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
-#include "rendering/texture_binder.hpp"
-#include "rendering/uniform_binder.hpp"
-#include "rendering/render_context.hpp"
 
 namespace ay::grph
 {

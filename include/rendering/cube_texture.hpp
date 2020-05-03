@@ -36,24 +36,13 @@ class CubeTexture
         load_from_files(t_files, t_format);
     }
 
-    ~CubeTexture()
-    {
-        GLCall(glDeleteTextures(1, &m_id));
-    }
+    ~CubeTexture();
 
-    void bind(uint slot = 0) const
-    {
-        GLCall(glActiveTexture(GL_TEXTURE0 + slot));
-        GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, m_id));
-    }
+    void bind(uint slot = 0) const;
 
-    void Unbind(uint slot = 0) const
-    {
-        GLCall(glActiveTexture(GL_TEXTURE0 + slot));
-        GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
-    }
+    void Unbind(uint slot = 0) const;
 
-    uint32_t id()
+    inline uint32_t id()
     {
         return m_id;
     }

@@ -4,7 +4,8 @@
 #include "application/event.hpp"
 
 #include "rendering/shaders.hpp"
-#include "rendering/renderer.hpp"
+
+#include "rendering/render_api.hpp"
 
 #include "engine/texture_library.hpp"
 #include "engine/shader_library.hpp"

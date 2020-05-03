@@ -39,9 +39,8 @@ void Timeline::run_backward(float dt)
     if (m_current_time <= 0)
     {
         m_current_time = 0.0;
-        m_forward = true;
+        m_forward      = true;
     }
-    
 }
 
 void Timeline::update_tracks()
@@ -55,7 +54,7 @@ void Timeline::update_tracks()
 void Timeline::update(float dt)
 
 {
-    
+
     if (m_current_time <= 0.0)
     {
         run_start_callbacks();
@@ -68,7 +67,6 @@ void Timeline::update(float dt)
     else
     {
         run_backward(dt);
-
     }
 
     update_tracks();
@@ -105,7 +103,7 @@ void Timeline::add_on_start_callback(std::function<void()> fun)
 
 void Timeline::run_start_callbacks()
 {
-    for (auto& call : m_start_callbacks)
+    for (auto &call : m_start_callbacks)
     {
         call();
     }
@@ -113,7 +111,7 @@ void Timeline::run_start_callbacks()
 
 void Timeline::run_end_callbacks()
 {
-    for (auto& call : m_end_callbacks)
+    for (auto &call : m_end_callbacks)
     {
         call();
     }
@@ -123,7 +121,7 @@ void Timeline::repeate()
 {
     m_parameters.m_mode = anim::LoopMode::REPEAT;
 }
-    
+
 void Timeline::once()
 {
     m_parameters.m_mode = anim::LoopMode::ONCE;
@@ -135,4 +133,4 @@ void Timeline::ping_pong()
 }
 
 
-}
+}  // namespace ay::anim

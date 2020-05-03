@@ -1,4 +1,4 @@
-#include "rendering/renderer.hpp"
+#include "rendering/render_api.hpp"
 
 namespace ay::rend
 {
@@ -160,8 +160,8 @@ void RenderAPI::culling(const Side &setup)
         GLCall(glEnable(GL_CULL_FACE));
         GLCall(glCullFace(GL_FRONT));
         break;
-      case Side::FRONT:
-          GLCall(glEnable(GL_CULL_FACE));
+    case Side::FRONT:
+        GLCall(glEnable(GL_CULL_FACE));
         GLCall(glCullFace(GL_BACK));
         break;
 

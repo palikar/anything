@@ -7,8 +7,6 @@
 #include "glm_header.hpp"
 #include "std_header.hpp"
 
-#include "rendering/texture_binder.hpp"
-
 #include "graphics/material.hpp"
 #include "graphics/materials/solid_color.hpp"
 #include "graphics/materials/textured.hpp"

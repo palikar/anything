@@ -24,7 +24,6 @@ class Animator
     std::unordered_map<std::string, TimelineObject> m_timelines;
 
   public:
-
     Animator();
 
     Timeline &timeline(const std::string &t_name);
@@ -46,7 +45,7 @@ class Animator
     void reset_all();
 
     void stop_all();
-    
+
     void play(const std::string &t_name = "main_timeline");
 
     void pause(const std::string &t_name = "main_timeline");
