@@ -296,8 +296,6 @@ inline static std::string interpolation_names[] = {
     "Bounce_in_out",
 };
 
-using EasingFun = float(*)(float);
-
 inline static float(*interpolations[])(float) = {
     &Easing::linear,
     &Easing::Quadratic::in,
@@ -332,7 +330,7 @@ enum class EasingType
     BEZIER,
 };
 
-struct Easing
+struct EasingFun
 {
     EasingType type{EasingType::STANDARD};
     std::function<float(float)> fun{&mth::Easing::linear};

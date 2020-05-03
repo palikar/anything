@@ -64,13 +64,6 @@ class RendererScene3D
 
     void bind_lighting(Shader *shader);
 
-  public:
-    RendererScene3D();
-
-    void init(RenderAPI *t_api);
-
-    void render_scene(gmt::Scene3D &scene);
-
     void handle_sky(gmt::Skybox *sky);
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
@@ -102,6 +95,13 @@ class RendererScene3D
             func(object, comp);
         }
     }
+
+  public:
+    RendererScene3D();
+
+    void init(RenderAPI *t_api);
+
+    void render_scene(gmt::Scene3D &scene);
 };
 
 }  // namespace ay::rend

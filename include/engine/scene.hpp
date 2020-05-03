@@ -25,6 +25,7 @@ class Scene3D
 {
   private:
     std::vector<EntityPtr> m_entities;
+
     std::vector<ComponentPtr> m_game_components;
 
     grph::LightSetup m_light_setup;
@@ -55,7 +56,6 @@ class Scene3D
 
         return static_cast<T *>(m_entities.back().get());
     }
-
 
     template<typename T, typename... Args>
     T *add_component(Args... args)

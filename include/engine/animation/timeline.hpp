@@ -36,11 +36,18 @@ class Timeline
     float m_current_time{ 0.0f };
     float m_max_time{ 0.0f };
     bool m_playing{ false };
+    bool m_forward{ true };
 
-    
     TimelineParameters m_parameters;
 
     std::unordered_map<std::string, BaseTrackPtr> m_tracks;
+
+    void run_forward(float dt);
+
+    void run_backward(float dt);
+
+    void update_tracks();
+    
 
   public:
     void update(float dt);
@@ -73,6 +80,11 @@ class Timeline
 
     void run_end_callbacks();
 
+    void repeate();
+    
+    void once();
+
+    void ping_pong();
     
 };
 

@@ -3,7 +3,6 @@
 using namespace ay;
 
 
-
 class TerrainScene : public gmt::GameBase
 {
 
@@ -79,7 +78,7 @@ class TerrainScene : public gmt::GameBase
         main_scene->set_skybox(gmt::skybox(sky));
 
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50), grph::texture_material(rocks)}));
-        cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
+        cmp::transform(floor_mesh).rotateX(glm::radians(90.0f));
 
         auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
         cmp::transform(x_wing).rotateY(glm::radians(180.0f));
@@ -117,6 +116,7 @@ class TerrainScene : public gmt::GameBase
             { 0.0, 2.0, 4.0, 6.0 });
         sphere_scale->set_target(&sphere->transform().scale());
         animator().main_timeline().push_track("sphere_scale", std::move(sphere_scale));
+        animator().main_timeline().ping_pong();
         
         animator().play();
 

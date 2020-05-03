@@ -158,12 +158,11 @@ void RenderAPI::culling(const Side &setup)
     {
     case Side::BACK:
         GLCall(glEnable(GL_CULL_FACE));
-        GLCall(glCullFace(GL_BACK));
-        break;
-
-    case Side::FRONT:
-        GLCall(glEnable(GL_CULL_FACE));
         GLCall(glCullFace(GL_FRONT));
+        break;
+      case Side::FRONT:
+          GLCall(glEnable(GL_CULL_FACE));
+        GLCall(glCullFace(GL_BACK));
         break;
 
     case Side::BOTH: GLCall(glDisable(GL_CULL_FACE)); break;

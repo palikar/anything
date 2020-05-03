@@ -199,6 +199,7 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
         m_api->draw_triangles(mesh->geometry());
     }
+    
 }
 
 void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp)
@@ -226,7 +227,7 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
-    m_api->culling(Side::BOTH);
+    
     m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 
@@ -286,31 +287,27 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     {
         shader->set("fog_type", 0);
     }
-
-
+    
     auto sky_view = m_view;
     sky_view[3]   = glm::vec4(0, 0, 0, 1);
 
     shader->set("projection_matrix", m_projection * sky_view);
 
-    m_api->culling(Side::FRONT);
-    m_api->draw_triangles(geom);
-    m_api->culling(Side::BACK);
+    // m_api->culling(Side::BACK);
+    // m_api->draw_triangles(geom);
+    // m_api->culling(Side::FRONT);
 }
 
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
 {
 
-    dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj,
-                                                                    HANDLER(handle_mesh));
+    dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj, HANDLER(handle_mesh));
 
-    dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>(
-      t_obj, HANDLER(handle_line_segments));
-
+    dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>( t_obj, HANDLER(handle_line_segments));
+    
     dispatch_component<cmp::GroupComponent>(t_obj, HANDLER(handle_group));
 
-    dispatch_component<cmp::ModelComponent, cmp::TransformComponent>(
-      t_obj, HANDLER(handle_model));
+    dispatch_component<cmp::ModelComponent, cmp::TransformComponent>( t_obj, HANDLER(handle_model));
 }
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)

@@ -244,12 +244,14 @@ Geometry sphere_geometry(float radius,
 
             if (iy != 0 || theta_start > 0)
             {
-                indices.insert(indices.end(), { a, b, d });
+                // indices.insert(indices.end(), { a, b, d });
+                indices.insert(indices.end(), { d, b, a });
             }
 
             if (iy != height_segments - 1 || theta_end < mth::PI)
             {
-                indices.insert(indices.end(), { b, c, d });
+                // indices.insert(indices.end(), { b, c, d });
+                indices.insert(indices.end(), { d, c, b });
             }
         }
     }

@@ -14,8 +14,7 @@ using namespace std::string_literals;
 
 class UniformBinder
 {
-
-
+    
   private:
     Shader *m_shader;
     TextureBinder &m_binder;

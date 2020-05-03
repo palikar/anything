@@ -4,19 +4,14 @@
 namespace ay::anim
 {
 
-void Timeline::update(float dt)
+void Timeline::run_forward(float dt)
 {
-    
-    if (m_current_time == 0.0)
-    {
-        run_start_callbacks();
-    }
-    
     m_current_time += dt * m_parameters.m_time_damping;
 
-    if (m_current_time > m_max_time)
+    if (m_current_time >= m_max_time)
     {
         run_end_callbacks();
+        m_current_time = m_max_time;
         if (m_parameters.m_mode == LoopMode::ONCE)
         {
             m_playing = false;
@@ -30,12 +25,53 @@ void Timeline::update(float dt)
         {
             reset();
         }
+        else
+        {
+            m_forward = false;
+        }
+    }
+}
+
+void Timeline::run_backward(float dt)
+{
+    m_current_time -= dt * m_parameters.m_time_damping;
+
+    if (m_current_time <= 0)
+    {
+        m_current_time = 0.0;
+        m_forward = true;
     }
     
+}
+
+void Timeline::update_tracks()
+{
     for (auto &[_, track] : m_tracks)
     {
         track->update_time(m_current_time);
     }
+}
+
+void Timeline::update(float dt)
+
+{
+    
+    if (m_current_time <= 0.0)
+    {
+        run_start_callbacks();
+    }
+
+    if (m_forward)
+    {
+        run_forward(dt);
+    }
+    else
+    {
+        run_backward(dt);
+
+    }
+
+    update_tracks();
 }
 
 void Timeline::reset()
@@ -83,6 +119,20 @@ void Timeline::run_end_callbacks()
     }
 }
 
+void Timeline::repeate()
+{
+    m_parameters.m_mode = anim::LoopMode::REPEAT;
+}
+    
+void Timeline::once()
+{
+    m_parameters.m_mode = anim::LoopMode::ONCE;
+}
+
+void Timeline::ping_pong()
+{
+    m_parameters.m_mode = anim::LoopMode::PING_PONG;
+}
 
 
 }
