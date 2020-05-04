@@ -21,7 +21,6 @@ NumTrack::ptr_type num_track(std::vector<float> nums, std::vector<float> times)
 }
 
 
-
 static int inter_int(int a, int b, float factor)
 {
     return factor > 0.5f ? a : b;

@@ -91,11 +91,10 @@ struct BufferElement
 {
     std::string name;
     ShaderDataType type;
-    bool per_instance{false};
+    bool per_instance{ false };
     size_t offset{ 0 };
     uint32_t size{ data_type_size(type) };
     bool normalized{ false };
-    
 };
 
 class BufferLayout

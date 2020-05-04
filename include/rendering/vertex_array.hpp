@@ -21,7 +21,7 @@ class VertexArray
 
     void unbind() const;
 
-    VertexBuffer* add_vertex_buffer(VertexBufferPtr vertex_buffer);
+    VertexBuffer *add_vertex_buffer(VertexBufferPtr vertex_buffer);
 
     void set_index_buffer(IndexBufferPtr index_buffer, size_t index = 0);
 

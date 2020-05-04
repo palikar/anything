@@ -46,10 +46,10 @@ class Material
 {
   protected:
     rend::ShaderPtr m_shader;
-    
+
     MaterialParameters m_parameters;
 
-    bool m_instanced{false};
+    bool m_instanced{ false };
 
   public:
     Material()
@@ -77,7 +77,7 @@ class Material
         m_parameters.m_wire_frame = value;
     }
 
-    inline  bool wire_frame() const
+    inline bool wire_frame() const
     {
         return m_parameters.m_wire_frame;
     }
@@ -118,7 +118,7 @@ class Material
         return m_parameters.m_opacity;
     }
 
-    inline  bool depth_test()
+    inline bool depth_test()
     {
         return m_parameters.m_depth_test;
     }
@@ -157,8 +157,6 @@ class Material
     {
         return m_parameters;
     }
-
-    
 };
 
 using MaterialPtr = std::unique_ptr<Material>;

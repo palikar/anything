@@ -178,6 +178,7 @@ add_library(anything_graphics
     ./include/graphics/geometry.cpp
     ./include/graphics/geometry_factory.cpp
     ./include/graphics/texture_binder.cpp
+    ./include/graphics/instanced_mesh.cpp
     )
 target_link_libraries(anything_graphics PUBLIC project_options project_warnings project_defines
     PUBLIC assimp fmt anything_rendering)

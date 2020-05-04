@@ -199,7 +199,7 @@ class Geometry
 
     rend::VertexArray *gl_buffers()
     {
-        
+
         return m_glbuffers.get();
     }
 

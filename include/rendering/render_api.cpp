@@ -28,7 +28,6 @@ void RenderAPI::init()
 
     glGetIntegerv(GL_MAX_VARYING_FLOATS, &result);
     AY_DEBUG(fmt::format("Max Varying Floats: {}", result));
-    
 }
 
 void RenderAPI::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
