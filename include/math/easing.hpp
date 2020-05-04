@@ -12,7 +12,9 @@ namespace ay::mth
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wunsequenced"
+#pragma GCC diagnostic ignored "-Wsequence-point"
 #endif
 
 struct Easing
@@ -50,7 +52,7 @@ struct Easing
             }
         }
 
-        static float cubic(float dt01, float P[4])
+        static float cubic(float dt01, const float P[4])
         {
             constexpr int STEPS = 256;
             glm::vec2 Q[4]      = { { 0, 0 }, { P[0], P[1] }, { P[2], P[3] }, { 1, 1 } };
@@ -350,9 +352,9 @@ struct EasingFun
     void make_bezier()
     {
         fun = [&](float t) {
-            return mth::Easing::Bezier::cubic(
-              t, (float[]){ params[0], params[1], params[2], params[3] });
-        };
+                  const float arr [] = { params[0], params[1], params[2], params[3] };
+                  return mth::Easing::Bezier::cubic( t, arr);
+              };
     }
 
     std::array<float, 5> &parameters()

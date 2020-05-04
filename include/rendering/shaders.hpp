@@ -23,7 +23,6 @@ class Shader
            const std::string &fragment_src);
 
     ~Shader();
-
     const std::string &get_name() const
     {
         return m_name;

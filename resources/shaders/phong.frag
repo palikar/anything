@@ -122,7 +122,6 @@ uniform float fog_density;
 
 
 
-
 vec3 apply_dir_light(DirLight light, BlinnPhongMaterial material, vec3 normal, vec3 surface_pos, vec3 surface_to_camera)
 {
     vec3 light_to_surface  = normalize(light.direction);
@@ -232,12 +231,10 @@ void main()
     }
 
     vec2 tex_coords = uv;
-
     if (has_height_map) {
         vec3 view_dir  = normalize(tan_view_pos - tan_pos);
         tex_coords = parallax_mapping(tex_coords, view_dir);
     }
-
 
     vec3 diffuse_color = color;
     vec3 total_emissive = emissive;

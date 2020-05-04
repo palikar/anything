@@ -156,6 +156,16 @@ include_directories(${OPENGL_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIRS})
 include_directories(${GLFW_INCLUDE_DIRS})
 
+add_library(anything_util
+    ./include/util/gl_helpers.cpp
+    ./include/util/files.cpp
+    ./include/util/logging.cpp
+    )
+target_include_directories(anything_util PUBLIC ./include)
+target_link_libraries(anything_util
+    PUBLIC project_options project_warnings project_defines
+    PUBLIC assimp fmt OpenGL::GL GLEW::GLEW fmt stb)
+
 add_library(anything_rendering
     ./include/rendering/render_api.cpp
     ./include/rendering/texture.cpp
@@ -165,7 +175,8 @@ add_library(anything_rendering
     ./include/rendering/shaders.cpp
     ./include/rendering/vertex_array.cpp
     )
-target_link_libraries(anything_rendering PUBLIC project_options project_warnings project_defines
+target_link_libraries(anything_rendering
+    PUBLIC project_options project_warnings project_defines anything_util
     PUBLIC glfw OpenGL::GL GLEW::GLEW fmt stb)
 target_include_directories(anything_rendering PUBLIC ./include)
 
@@ -180,20 +191,22 @@ add_library(anything_graphics
     ./include/graphics/texture_binder.cpp
     ./include/graphics/instanced_mesh.cpp
     )
-target_link_libraries(anything_graphics PUBLIC project_options project_warnings project_defines
+target_link_libraries(anything_graphics
+    PUBLIC project_options project_warnings project_defines anything_util
     PUBLIC assimp fmt anything_rendering)
 target_include_directories(anything_graphics PUBLIC ./include)
-
+set_property(TARGET anything_graphics PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(anything_application
     ./include/application/resource_loader.cpp
     ./include/application/application.cpp
     ./include/application/window.cpp
     )
-target_link_libraries(anything_application PUBLIC project_options project_warnings project_defines
+target_link_libraries(anything_application
+    PUBLIC project_options project_warnings project_defines anything_util
     PUBLIC glfw imgui fmt imguizmo)
 target_include_directories(anything_application PUBLIC ./include)
-
+set_property(TARGET anything_application PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(anything_engine
 
@@ -216,18 +229,21 @@ add_library(anything_engine
     ./include/engine/entities/spotlight_helper.cpp
 
     ./include/engine/components/orbital_camera.cpp
-
+    
     ./include/engine/animation/animator.cpp
     ./include/engine/animation/timeline.cpp
 
-    ./include/util/gl_helpers.cpp
-    ./include/util/files.cpp
-    ./include/util/logging.cpp
+    ./include/engine/shader_builder/shader_builder.cpp
+    ./include/engine/shader_builder/shader_chunk.cpp
+    ./include/engine/shader_builder/chunk_lib.cpp
+
     )
+
 target_include_directories(anything_engine PUBLIC ./include)
 target_link_libraries(anything_engine PUBLIC project_options project_warnings project_defines
     PUBLIC fmt)
-target_link_libraries(anything_engine PUBLIC anything_graphics anything_rendering anything_application)
+target_link_libraries(anything_engine PUBLIC anything_graphics anything_rendering anything_application anything_util)
+set_property(TARGET anything_engine PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
@@ -245,16 +261,14 @@ endif()
 add_executable(terrain_scene ./examples/terrain_scene.cpp)
 target_link_libraries(terrain_scene PUBLIC anything_engine)
 
-
-
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-# install(TARGETS
-#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-#     RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
-#     LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
-#     INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
-#     ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
+install(TARGETS anything_engine
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+    RUNTIME DESTINATION       ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION       ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION      ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/
+    ARCHIVE DESTINATION       ${CMAKE_INSTALL_SHAREDSTATEDIR})
 
 install(DIRECTORY ./include/ DESTINATION include)
 
