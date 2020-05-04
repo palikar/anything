@@ -1,17 +1,24 @@
 #include "engine/shader_library.hpp"
 
-
+#include "application/resource_loader.hpp"
+                    
 namespace ay::gmt
 {
 
-void ShaderLibrary::add(const std::string &name, const rend::ShaderPtr &shader)
+rend::ShaderPtr ShaderLibrary::add(const std::string &name, const rend::ShaderPtr &shader)
 {
-    m_shaders.insert({ name, shader });
+
+    if (m_shaders.count(name) > 0)
+    {
+        return m_shaders.at(name);
+    }
+
+    return m_shaders.insert({ name, shader }).first->second;
 }
 
-void ShaderLibrary::add(const rend::ShaderPtr &shader)
+rend::ShaderPtr ShaderLibrary::add(const rend::ShaderPtr &shader)
 {
-    m_shaders.insert({ shader->get_name(), shader });
+    return m_shaders.insert({ shader->get_name(), shader }).first->second;
 }
 
 rend::ShaderPtr ShaderLibrary::load(const std::string &t_name)
@@ -47,5 +54,20 @@ bool ShaderLibrary::exists(const std::string &name) const
     return m_shaders.count(name) == 0;
 }
 
+void ShaderLibrary::reload(const std::string &name)
+{
+    auto [vert, frag] = app::ResouceLoader::get_instance()->get_shader_sources(name);
+    m_shaders[name]->reload(vert, frag);
+}
+
+void ShaderLibrary::reload_all()
+{
+    for (auto &[name, shader] : m_shaders)
+    {
+        auto [vert, frag] =
+            app::ResouceLoader::get_instance()->get_shader_sources(name);
+            shader->reload(vert, frag);
+        }
+    }
 
 }  // namespace ay::gmt
