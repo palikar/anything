@@ -46,8 +46,10 @@ class Material
 {
   protected:
     rend::ShaderPtr m_shader;
-
+    
     MaterialParameters m_parameters;
+
+    bool m_instanced{false};
 
   public:
     Material()
@@ -64,12 +66,18 @@ class Material
                                  rend::RenderContext &)        = 0;
     virtual bool needs_lighting()                              = 0;
 
+
+    void make_instanced()
+    {
+        m_instanced = true;
+    }
+
     void set_wire_frame(bool value)
     {
         m_parameters.m_wire_frame = value;
     }
 
-    bool wire_frame() const
+    inline  bool wire_frame() const
     {
         return m_parameters.m_wire_frame;
     }
@@ -85,17 +93,17 @@ class Material
         return static_cast<T *>(this);
     }
 
-    bool &transparent()
+    inline bool &transparent()
     {
         return m_parameters.m_transparent;
     }
 
-    bool &visible()
+    inline bool &visible()
     {
         return m_parameters.m_visible;
     }
 
-    rend::Side &side()
+    inline rend::Side &side()
     {
         return m_parameters.m_side;
     }
@@ -105,12 +113,12 @@ class Material
         m_parameters.m_opacity = val;
     }
 
-    float opacity()
+    inline float opacity()
     {
         return m_parameters.m_opacity;
     }
 
-    bool depth_test()
+    inline  bool depth_test()
     {
         return m_parameters.m_depth_test;
     }
@@ -120,7 +128,7 @@ class Material
         m_parameters.m_depth_test = value;
     }
 
-    bool depth_write()
+    inline bool depth_write()
     {
         return m_parameters.m_depth_write;
     }
@@ -130,7 +138,7 @@ class Material
         m_parameters.m_depth_write = value;
     }
 
-    rend::DepthFunc depth_func()
+    inline rend::DepthFunc depth_func()
     {
         return m_parameters.m_depth_func;
     }
@@ -140,7 +148,7 @@ class Material
         m_parameters.m_depth_func = value;
     }
 
-    rend::BlendingSetup &blending_setup()
+    inline rend::BlendingSetup &blending_setup()
     {
         return m_parameters.m_blending;
     }
@@ -149,6 +157,8 @@ class Material
     {
         return m_parameters;
     }
+
+    
 };
 
 using MaterialPtr = std::unique_ptr<Material>;

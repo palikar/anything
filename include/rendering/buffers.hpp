@@ -84,7 +84,6 @@ inline GLenum data_type_gl_base_type(ShaderDataType t_type)
     case ShaderDataType::Bool: return GL_BOOL;
     }
 
-
     return 0;
 }
 
@@ -92,13 +91,11 @@ struct BufferElement
 {
     std::string name;
     ShaderDataType type;
+    bool per_instance{false};
     size_t offset{ 0 };
     uint32_t size{ data_type_size(type) };
     bool normalized{ false };
-
-    // BufferElement(std::string t_name, ShaderDataType t_type, bool t_normalized):
-    //     name(t_name), type(t_type), normalized(t_normalized)
-    // {}
+    
 };
 
 class BufferLayout

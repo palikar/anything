@@ -72,6 +72,14 @@ using Vertex8fg =
                           rend::ShaderDataType::Float2>>;
 
 
+using Vertex16fg =
+    Vertex3fGen<16,
+                Types<float, float, float, float,
+                      float, float, float, float,
+                      float, float, float, float,
+                      float, float, float, float>,
+                ShaderTypes<rend::ShaderDataType::Mat4>>;
+
 class Vertex3f
 {
   public:

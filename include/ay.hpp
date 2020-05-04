@@ -85,6 +85,7 @@
 #include "graphics/material_builder.hpp"
 #include "graphics/mesh_factory.hpp"
 #include "graphics/fog.hpp"
+#include "graphics/instanced_mesh.hpp"
 
 #include "graphics/materials/solid_color.hpp"
 #include "graphics/materials/phong.hpp"

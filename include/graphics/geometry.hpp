@@ -197,6 +197,12 @@ class Geometry
         return m_glbuffers.get();
     }
 
+    rend::VertexArray *gl_buffers()
+    {
+        
+        return m_glbuffers.get();
+    }
+
     rend::VertexArrayPtr take_buffers()
     {
         if (m_dirty)

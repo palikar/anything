@@ -1,5 +1,8 @@
 #include "rendering/render_api.hpp"
 
+#include "util/logging.hpp"
+#include <fmt/format.h>
+
 namespace ay::rend
 {
 
@@ -15,6 +18,17 @@ void RenderAPI::init()
     GLCall(glCullFace(GL_BACK));
     GLCall(glFrontFace(GL_CW));
     // GLCall(glEnable(GL_FRAMEBUFFER_SRGB));
+
+    GLint result;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &result);
+    AY_DEBUG(fmt::format("Max Vertex Attribs: {}", result));
+
+    glGetIntegerv(GL_MAX_TEXTURE_UNITS, &result);
+    AY_DEBUG(fmt::format("Max Texture Units: {}", result));
+
+    glGetIntegerv(GL_MAX_VARYING_FLOATS, &result);
+    AY_DEBUG(fmt::format("Max Varying Floats: {}", result));
+    
 }
 
 void RenderAPI::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
