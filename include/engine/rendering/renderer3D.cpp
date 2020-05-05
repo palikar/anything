@@ -241,6 +241,7 @@ void RendererScene3D::handle_instanced_mesh(gmt::Entity*, cmp::InstancedMeshComp
 
     switch_shader(shader);
     handle_material(mat, shader);
+    switch_mvp(shader, mesh_comp->mesh[0].get_tranformation());
 
     // if (mat->needs_lighting())
     // {

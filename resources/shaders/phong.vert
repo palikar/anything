@@ -28,8 +28,14 @@ void main()
     uv =  i_uv;
 
 #ifdef INSTANCING
+
     normal =  mat3(transpose(inverse(i_transform))) * i_norm;
     pos = vec3(i_transform * vec4(i_pos, 1.0));
+
+    // normal =  mat3(transpose(inverse(model_matrix))) * i_norm;
+    // pos = vec3(model_matrix * vec4(i_pos + vec3(1.0, 0.0, 0.0) * gl_InstanceID*5.0, 1.0));
+
+    
 #else
     pos = vec3(model_matrix * vec4(i_pos, 1.0));
     normal =  mat3(transpose(inverse(model_matrix))) * i_norm;

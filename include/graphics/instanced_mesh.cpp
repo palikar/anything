@@ -14,8 +14,7 @@ InstancedMesh::InstancedMesh(Geometry t_geometry, MaterialPtr t_material, size_t
 
     m_geometry.pack();
 
-    auto instance_buf = std::make_unique<rend::VertexBuffer>(
-        m_transforms.size() * rend::data_type_size(rend::ShaderDataType::Mat4));
+    auto instance_buf = std::make_unique<rend::VertexBuffer>(sizeof(glm::mat4));
 
     instance_buf->set_layout(rend::BufferLayout(
                                  { rend::BufferElement{ "transform", rend::ShaderDataType::Mat4, true } }));

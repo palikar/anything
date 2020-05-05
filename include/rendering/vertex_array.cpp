@@ -58,7 +58,7 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
                                          4,
                                          GL_FLOAT,
                                          element.normalized ? GL_TRUE : GL_FALSE,
-                                         data_type_size(ShaderDataType::Mat4),
+                                         4*data_type_size(ShaderDataType::Float4),
                                          (const void *)0));
 
             GLCall(glEnableVertexAttribArray(m_index + 1));
@@ -66,24 +66,24 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
                                          4,
                                          GL_FLOAT,
                                          element.normalized ? GL_TRUE : GL_FALSE,
-                                         data_type_size(ShaderDataType::Mat4),
-                                         (const void *)(1 * 4 * 4)));
+                                         4*data_type_size(ShaderDataType::Float4),
+                                         (const void *)(1 * data_type_size(ShaderDataType::Float4))));
 
             GLCall(glEnableVertexAttribArray(m_index + 2));
             GLCall(glVertexAttribPointer(m_index + 2,
                                          4,
                                          GL_FLOAT,
                                          element.normalized ? GL_TRUE : GL_FALSE,
-                                         data_type_size(ShaderDataType::Mat4),
-                                         (const void *)(2 * 4 * 4)));
+                                         4*data_type_size(ShaderDataType::Float4),
+                                         (const void *)(2 * data_type_size(ShaderDataType::Float4))));
 
             GLCall(glEnableVertexAttribArray(m_index + 3));
             GLCall(glVertexAttribPointer(m_index + 3,
                                          4,
                                          GL_FLOAT,
                                          element.normalized ? GL_TRUE : GL_FALSE,
-                                         data_type_size(ShaderDataType::Mat4),
-                                         (const void *)(2 * 4 * 4)));
+                                         4*data_type_size(ShaderDataType::Float4),
+                                         (const void *)(3 * data_type_size(ShaderDataType::Float4))));
 
 
             if (element.per_instance)
@@ -93,6 +93,7 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
                 GLCall(glVertexAttribDivisor(m_index + 2, 1));
                 GLCall(glVertexAttribDivisor(m_index + 3, 1));
             }
+            
 
             m_index += 4;
             continue;
