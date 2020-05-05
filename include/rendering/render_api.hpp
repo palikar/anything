@@ -34,6 +34,8 @@ class RenderAPI
 
     void draw_triangles(grph::Geometry &geometry, uint32_t element_count = 0);
 
+    void draw_instanced(grph::Geometry &geometry, uint32_t instance_count);
+
     void depth_test(bool value);
 
     void depth_write(bool value);

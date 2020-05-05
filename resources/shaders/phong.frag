@@ -1,4 +1,6 @@
 #version 460 core
+
+
 #define MAX_LIGHT 5
 
 struct DirLight {
@@ -217,17 +219,20 @@ vec2 parallax_mapping(vec2 texCoords, vec3 viewDir)
 void main()
 {
 
+#ifdef INSTANCING
+    frag_color = vec4(1.0, 0.0, 1.0, 1.0);
+    return;
+#endif
+
+
     if (!visible){
         discard;
     }
 
-    if (opacity <= 0.0) {
-        frag_color = vec4(color, 1.0);
-    } else {
-        if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
-            discard;
-        }
-        frag_color = vec4(color, opacity);
+    float opacity_strength = opacity;
+
+    if (alpha_threshold >= 0.0 && opacity_strength < alpha_threshold){
+        discard;
     }
 
     vec2 tex_coords = uv;
@@ -237,24 +242,25 @@ void main()
     }
 
     vec3 diffuse_color = color;
-    vec3 total_emissive = emissive;
-    vec3 normal = normalize(normal);
-
     if (has_map) {
         diffuse_color = mix(diffuse_color, texture(map, tex_coords).rgb, 0.5);
     }
 
+    vec3 specular_color = vec3(1.0, 1.0, 1.0);
     float specular_strength = 1.0;
+    float shininess_strength = shininess;
     if (has_specular_map) {
         specular_strength = texture(specular_map, tex_coords).r;
     }
 
+    vec3 normal = normalize(normal);
     if (has_normal_map) {
         normal = texture(normal_map, tex_coords).rgb;
         normal = normal * 2.0 - 1.0;
         normal = normalize(TBN * normal);
     }
 
+    vec3 total_emissive = emissive;
     if (has_emissive_map) {
         total_emissive *= emissive_scale * texture(emissive_map, tex_coords).rgb;
     }
@@ -262,8 +268,8 @@ void main()
     BlinnPhongMaterial material;
     material.ambient = ambient.rgb;
     material.diffuse = diffuse_color.rgb;
-    material.specular = specular.rgb;
-    material.specular_shininess = shininess;
+    material.specular = specular_color.rgb;
+    material.specular_shininess = shininess_strength;
     material.specular_strength = specular_strength;
 
     vec3 outgoing_light = vec3(0.0);
@@ -288,7 +294,6 @@ void main()
         }
 
     } else {
-        outgoing_light = material.diffuse;
         outgoing_light = material.diffuse;
     }
 
@@ -315,8 +320,7 @@ void main()
         outgoing_light = mix(outgoing_light, env_color.rgb, reflectivity * material.specular_strength) ;
     }
 
-    frag_color = vec4(outgoing_light.rgb, opacity);
-
+    frag_color = vec4(outgoing_light.rgb, opacity_strength);
     
     if (fog_type == 1) {
         const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);

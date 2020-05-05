@@ -61,10 +61,6 @@
 #include "engine/components/movement.hpp"
 #include "engine/components/tracking_camera.hpp"
 
-#include "engine/shader_builder/shader_builder.hpp"
-#include "engine/shader_builder/shader_chunk.hpp"
-#include "engine/shader_builder/chunk_lib.hpp"
-
 #include "math/box.hpp"
 #include "math/line.hpp"
 #include "math/plane.hpp"
@@ -96,6 +92,10 @@
 #include "graphics/materials/textured.hpp"
 
 #include "graphics/loading/mesh_loader.hpp"
+
+#include "graphics/shader_builder/shader_builder.hpp"
+#include "graphics/shader_builder/shader_chunk.hpp"
+#include "graphics/shader_builder/chunk_lib.hpp"
 
 #include "util/meta.hpp"
 #include "util/gl_helpers.hpp"

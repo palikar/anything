@@ -91,6 +91,11 @@ class ShaderChunk
         m_provides.push_back(t_feature);
     }
 
+    void add_define(std::string t_feature)
+    {
+        m_defines.push_back(t_feature);
+    }
+
     void add_requirement(std::string t_feature)
     {
         m_requires.push_back(t_feature);

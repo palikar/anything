@@ -51,7 +51,7 @@ rend::ShaderPtr ShaderLibrary::bind(const std::string &name)
 
 bool ShaderLibrary::exists(const std::string &name) const
 {
-    return m_shaders.count(name) == 0;
+    return m_shaders.count(name) > 0;
 }
 
 void ShaderLibrary::reload(const std::string &name)

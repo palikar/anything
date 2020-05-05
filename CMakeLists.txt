@@ -190,6 +190,10 @@ add_library(anything_graphics
     ./include/graphics/geometry_factory.cpp
     ./include/graphics/texture_binder.cpp
     ./include/graphics/instanced_mesh.cpp
+    
+    ./include/graphics/shader_builder/shader_builder.cpp
+    ./include/graphics/shader_builder/shader_chunk.cpp
+    ./include/graphics/shader_builder/chunk_lib.cpp
     )
 target_link_libraries(anything_graphics
     PUBLIC project_options project_warnings project_defines anything_util
@@ -232,10 +236,6 @@ add_library(anything_engine
     
     ./include/engine/animation/animator.cpp
     ./include/engine/animation/timeline.cpp
-
-    ./include/engine/shader_builder/shader_builder.cpp
-    ./include/engine/shader_builder/shader_chunk.cpp
-    ./include/engine/shader_builder/chunk_lib.cpp
 
     )
 

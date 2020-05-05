@@ -10,6 +10,7 @@
 #include "engine/components/transform.hpp"
 #include "engine/components/model.hpp"
 #include "engine/components/mesh.hpp"
+#include "engine/components/instanced_mesh.hpp"
 #include "engine/components/group.hpp"
 #include "engine/components/line_segments.hpp"
 
@@ -230,6 +231,35 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 
+void RendererScene3D::handle_instanced_mesh(gmt::Entity*, cmp::InstancedMeshComponent *mesh_comp)
+{
+    
+    m_binder.begin_draw_call();
+
+    auto mat       = mesh_comp->mesh.material();
+    auto shader    = mat->shader();
+
+    switch_shader(shader);
+    handle_material(mat, shader);
+
+    // if (mat->needs_lighting())
+    // {
+    //     shader->set("lighting_enabled", true);
+    //     bind_lighting(shader);
+    // }
+    // else
+    // {
+    // }
+
+    shader->set("lighting_enabled", false);
+
+    // EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
+    // std::cout << "count: " << mesh_comp->mesh.count() << "\n";
+    m_api->culling(rend::Side::BOTH);
+    m_api->draw_instanced(mesh_comp->mesh.geometry(), mesh_comp->mesh.count());
+
+}
+
 void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent *)
 {
 
@@ -302,7 +332,7 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
 
     dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj,
                                                                     HANDLER(handle_mesh));
-
+    
     dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>(
       t_obj, HANDLER(handle_line_segments));
 
@@ -310,6 +340,8 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
 
     dispatch_component<cmp::ModelComponent, cmp::TransformComponent>(
       t_obj, HANDLER(handle_model));
+
+    dispatch_component<cmp::InstancedMeshComponent>(t_obj, HANDLER(handle_instanced_mesh));
 }
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)

@@ -36,6 +36,7 @@ VertexArray::~VertexArray()
 
 VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
 {
+    
     GLCall(glBindVertexArray(m_vao));
     vertex_buffer->bind();
 
@@ -107,7 +108,7 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
 
         if (element.per_instance)
         {
-            glVertexAttribDivisor(m_index, 1);
+            glVertexAttribDivisor(m_index + 0, 1);
         }
 
         ++m_index;
