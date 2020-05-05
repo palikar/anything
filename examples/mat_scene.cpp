@@ -92,14 +92,16 @@ class MatScene : public gmt::GameBase
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
         cmp::mesh(floor_mesh).geometry().calculate_tangents();
+        cmp::mesh(floor_mesh).geometry().pack();
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_height_map = floor_bump;
 
         wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
         cmp::transform(wall_mesh).translateY(50.0f);
-        cmp::transform(wall_mesh).translateZ(-50.0f);
+        cmp::transform(wall_mesh).translateZ(50.0f);
         cmp::mesh(wall_mesh).geometry().calculate_tangents();
+        cmp::mesh(wall_mesh).geometry().pack();
         cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
         cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
 
@@ -112,6 +114,7 @@ class MatScene : public gmt::GameBase
         torus = main_scene->add(gmt::mesh_entity({ grph::torus_geometry(5, 1, 30, 30), grph::phong_material(0.2f, 0.2f, 0.2f) }));
         cmp::transform(torus).set_position({ -10.0f, 13.0f, 0.0f });
         cmp::mesh(torus).geometry().calculate_tangents();
+        cmp::mesh(torus).geometry().pack();
         cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_map = rocks;
         cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
         cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_height_map = rocks_bump;

@@ -12,9 +12,10 @@ InstancedMesh::InstancedMesh(Geometry t_geometry, MaterialPtr t_material, size_t
     m_transforms.resize(m_max_num);
     m_matirces.resize(m_max_num);
 
+    m_geometry.calculate_tangents();
     m_geometry.pack();
 
-    auto instance_buf = std::make_unique<rend::VertexBuffer>(sizeof(glm::mat4));
+    auto instance_buf = std::make_unique<rend::VertexBuffer>(sizeof(glm::mat4) * m_max_num);
 
     instance_buf->set_layout(rend::BufferLayout(
                                  { rend::BufferElement{ "transform", rend::ShaderDataType::Mat4, true } }));

@@ -227,13 +227,11 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
-
     m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 
 void RendererScene3D::handle_instanced_mesh(gmt::Entity*, cmp::InstancedMeshComponent *mesh_comp)
 {
-    
     m_binder.begin_draw_call();
 
     auto mat       = mesh_comp->mesh.material();
@@ -243,22 +241,19 @@ void RendererScene3D::handle_instanced_mesh(gmt::Entity*, cmp::InstancedMeshComp
     handle_material(mat, shader);
     switch_mvp(shader, mesh_comp->mesh[0].get_tranformation());
 
-    // if (mat->needs_lighting())
-    // {
-    //     shader->set("lighting_enabled", true);
-    //     bind_lighting(shader);
-    // }
-    // else
-    // {
-    // }
+    if (mat->needs_lighting())
+    {
+        shader->set("lighting_enabled", true);
+        bind_lighting(shader);
+    }
+    else
+    {
+        shader->set("lighting_enabled", false);
+    }
+    
+    EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
-    shader->set("lighting_enabled", false);
-
-    // EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
-    // std::cout << "count: " << mesh_comp->mesh.count() << "\n";
-    m_api->culling(rend::Side::BOTH);
     m_api->draw_instanced(mesh_comp->mesh.geometry(), mesh_comp->mesh.count());
-
 }
 
 void RendererScene3D::handle_group(gmt::Entity *object, cmp::GroupComponent *)

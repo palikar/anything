@@ -252,11 +252,11 @@ if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
 endif()
 
 
-# add_executable(balls_scene ./examples/ball_scene.cpp)
-# target_link_libraries(balls_scene PUBLIC anything_engine)
+add_executable(balls_scene ./examples/ball_scene.cpp)
+target_link_libraries(balls_scene PUBLIC anything_engine)
 
-# add_executable(mat_scene ./examples/mat_scene.cpp)
-# target_link_libraries(mat_scene PUBLIC anything_engine)
+add_executable(mat_scene ./examples/mat_scene.cpp)
+target_link_libraries(mat_scene PUBLIC anything_engine)
 
 add_executable(terrain_scene ./examples/terrain_scene.cpp)
 target_link_libraries(terrain_scene PUBLIC anything_engine)

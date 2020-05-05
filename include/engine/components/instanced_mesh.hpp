@@ -33,9 +33,11 @@ class InstancedMeshComponent : public gmt::Component
 inline grph::InstancedMesh &instanced_mesh(gmt::Entity *t_entity)
 {
     auto p = t_entity->component<InstancedMeshComponent>();
+
     if (!p)
     {
     }
+
     return p->mesh;
 }
 

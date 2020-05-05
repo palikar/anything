@@ -99,12 +99,12 @@ class ShaderBuilder
         fragment_content << defines.str() << "\n";
         fragment_content << util::replace_all(fragment.str(), "#version 460 core", "") << "\n";
 
-        std::cout << "vertex shader:" << "\n";
-        std::cout << vertex_content.str() << "\n";
-        std::cout << "-------------------" << "\n";
+        // std::cout << "vertex shader:" << "\n";
+        // std::cout << vertex_content.str() << "\n";
+        // std::cout << "-------------------" << "\n";
         // std::cout << "fragment shader:" << "\n";
         // std::cout << fragment_content.str() << "\n";
-
+        
         return std::make_shared<rend::Shader>(t_name, vertex_content.str(), fragment_content.str());
     }
 

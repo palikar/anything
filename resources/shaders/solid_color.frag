@@ -55,6 +55,7 @@ in vec3 norm;
 in float fog_depth;
 
 uniform vec3 color;
+
 uniform float opacity;
 uniform float alpha_threshold;
 uniform bool visible;
@@ -146,6 +147,7 @@ void main()
         frag_color = vec4(color, opacity);
     }
 
+    
     // alpha test
     if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
         discard;
@@ -174,9 +176,9 @@ void main()
             }
         }
         
-        final_color.rgb = frag_color.rgb;
+        frag_color.rgb = final_color.rgb;
+        
     }
-
 
     // fog color
     if (fog_type == 1) {

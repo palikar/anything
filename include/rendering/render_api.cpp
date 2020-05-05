@@ -111,7 +111,6 @@ void RenderAPI::draw_instanced(grph::Geometry &geometry, uint32_t instance_count
 {
     geometry.gl_buffers()->bind();
     uint32_t count = geometry.gl_buffers()->index_buffer()->count();
-    std::cout << count << "\n";
     glDrawElementsInstanced(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0, instance_count);
     
 

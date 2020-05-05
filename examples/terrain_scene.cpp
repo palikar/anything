@@ -25,9 +25,9 @@ class TerrainScene : public gmt::GameBase
         main_scene->camera().init_prescpective_projection(glm::radians(45.0f), 1024.0/768.0, 0.001, 10000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10, 10), glm::vec3(0.0f,0.0f,0.0f));
 
-        auto oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
-        oribital_camera_controller->set_max_radius(200.0f);
-        oribital_camera_controller->set_min_radius(0.005f);
+        // auto oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
+        // oribital_camera_controller->set_max_radius(200.0f);
+        // oribital_camera_controller->set_min_radius(0.005f);
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::Enable(true);
@@ -35,7 +35,7 @@ class TerrainScene : public gmt::GameBase
 
     void init_lighting()
     {
-        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
+        main_scene->directional_light(glm::vec3(0.5, 0.5f, 0.0), glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().directional_light.intensity = 1.01f;
 
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
@@ -75,32 +75,32 @@ class TerrainScene : public gmt::GameBase
         auto rocks_bump = textures().load("stones/rocks_displacement.jpg", gmt::MapType::HEIGHT_MAP);
 
         main_scene->add(gmt::axis());
-        // main_scene->set_skybox(gmt::skybox(sky));
+        main_scene->set_skybox(gmt::skybox(sky));
+        floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50), grph::texture_material(rocks)}));
+        cmp::transform(floor_mesh).rotateX(glm::radians(90.0f));
 
-        // floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50),
-        //                                                grph::phong_material(0.8f, 0.1f, 0.1f)}));
-        // cmp::transform(floor_mesh).rotateX(glm::radians(90.0f));
+        // auto block =
+        //     main_scene->add(gmt::instanced_mesh_entity({ grph::cube_geometry(2, 3, 2, 1, 1, 1),
+        //                                                  grph::phong_material(0.2f, 0.8f, 0.1f),
+        //                                                  100}));
 
-        auto block =
-            main_scene->add(gmt::instanced_mesh_entity({ grph::cube_geometry(2, 3, 2, 1, 1, 1),
-                                                         grph::phong_material(0.1f, 0.8f, 0.1f),
-                                                         5}));
+        // for (size_t i = 0; i < 100; ++i) {
 
-        cmp::instanced_mesh(block).set_position(0, {0.0, 0.2 , 0.0});
-        cmp::instanced_mesh(block).set_position(1, {5.0, 0.2 , 0.0});
-        cmp::instanced_mesh(block).set_position(2, {10.0, 0.2 , 0.0});
-        cmp::instanced_mesh(block).set_position(3, {15.0, 0.2 , 0.0});
-        cmp::instanced_mesh(block).set_position(4, {20.0, 0.2 , 0.0});
+        //     cmp::instanced_mesh(block).set_position(i, { - 250.0 + i * 5,
+        //                                                  1.2 * (i % 2 == 0? -1.0 : 1.0),
+        //                                                  0.0 });
+            
+        // }
+
+        auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
+        cmp::transform(x_wing).rotateY(glm::radians(180.0f));
+        cmp::transform(x_wing).rotateX(glm::radians(-90.0f));
+        cmp::transform(x_wing).translateY(1.0);
+        cmp::transform(x_wing).set_scale({0.2f, 0.2f, 0.2f});
+        cmp::transform(x_wing).update();
+        x_wing->add_component<cmp::TrackingCameraComponent>(cmp::transform(x_wing), main_scene->camera());
+        x_wing->add_component<cmp::MovementComponent>(cmp::transform(x_wing));
         
-
-        // auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
-        // cmp::transform(x_wing).rotateY(glm::radians(180.0f));
-        // cmp::transform(x_wing).rotateX(glm::radians(-90.0f));
-        // cmp::transform(x_wing).translateY(1.0);
-        // cmp::transform(x_wing).set_scale({0.2f, 0.2f, 0.2f});
-        // cmp::transform(x_wing).update();
-        // x_wing->add_component<cmp::TrackingCameraComponent>(cmp::transform(x_wing), main_scene->camera());
-        // x_wing->add_component<cmp::MovementComponent>(cmp::transform(x_wing));
 
         // for (size_t i = 0; i < 130; ++i)
         // {

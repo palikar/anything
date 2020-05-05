@@ -12,7 +12,7 @@ layout (location = 5) in mat4 i_transform;
 
 out vec2 uv;
 out vec3 pos;
-out vec3 normal;
+out vec3 norm;
 out mat3 TBN;
 out vec3 tan_pos;
 out vec3 tan_view_pos;
@@ -29,20 +29,19 @@ void main()
 
 #ifdef INSTANCING
 
-    normal =  mat3(transpose(inverse(i_transform))) * i_norm;
+    norm =  mat3(transpose(inverse(i_transform))) * i_norm;
     pos = vec3(i_transform * vec4(i_pos, 1.0));
-
-    // normal =  mat3(transpose(inverse(model_matrix))) * i_norm;
-    // pos = vec3(model_matrix * vec4(i_pos + vec3(1.0, 0.0, 0.0) * gl_InstanceID*5.0, 1.0));
-
     
 #else
+
     pos = vec3(model_matrix * vec4(i_pos, 1.0));
-    normal =  mat3(transpose(inverse(model_matrix))) * i_norm;
+    norm =  mat3(transpose(inverse(model_matrix))) * i_norm;
+    
 #endif
 
     gl_Position = projection_matrix * vec4(pos, 1.0);
 
+    
 #ifdef INSTANCING
     vec3 T = normalize(vec3(i_transform * vec4(i_tan,   0.0)));
     vec3 B = normalize(vec3(i_transform * vec4(i_bitan, 0.0)));
@@ -50,10 +49,10 @@ void main()
 #else
     vec3 T = normalize(vec3(model_matrix * vec4(i_tan,   0.0)));
     vec3 B = normalize(vec3(model_matrix * vec4(i_bitan, 0.0)));
-    vec3 N = normalize(vec3(model_matrix * vec4(i_norm,  0.0)));
-    
+    vec3 N = normalize(vec3(model_matrix * vec4(i_norm,  0.0)));    
 #endif
 
+    
     TBN = mat3(T, B, N);
     tan_view_pos  = transpose(TBN) * camera_pos; 
     tan_pos  = transpose(TBN) * pos;

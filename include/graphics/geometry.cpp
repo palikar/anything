@@ -3,6 +3,7 @@
 
 namespace ay::grph
 {
+
 void Geometry::apply(glm::mat4 t_mat)
 {
 
@@ -78,6 +79,8 @@ void Geometry::merge(Geometry &other)
 
 void Geometry::pack()
 {
+    m_dirty = false;
+    
     if (m_dynamic)
     {
         pack_vertex_buffers_dynamic();
@@ -109,12 +112,25 @@ void Geometry::pack()
         pack_group(last_start + last_count, m_index.size() - (last_start + last_count));
     }
 
-    m_dirty = false;
 }
 
 void Geometry::pack_vertex_buffers()
 {
     m_glbuffers = std::make_unique<rend::VertexArray>();
+
+    auto handle_attr = [&](const std::string &name) {
+        auto buf    = m_buffers.at(name);
+        auto &data  = (buf).data;
+        auto stride = (buf).stride;
+
+        const auto data_type = stride_to_data_type(stride);
+
+        auto vert =
+            std::make_unique<rend::VertexBuffer>(data.data(), data.size() * sizeof(float));
+
+        vert->set_layout({ { name, data_type } });
+        m_glbuffers->add_vertex_buffer(std::move(vert));
+    };
 
     if (m_buffers.count("position") > 0 && m_buffers.count("normal") > 0
         && m_buffers.count("uv") > 0)
@@ -123,6 +139,7 @@ void Geometry::pack_vertex_buffers()
         auto &pos  = (m_buffers.at("position")).data;
         auto &norm = (m_buffers.at("normal")).data;
         auto &uv   = (m_buffers.at("uv")).data;
+        
         std::vector<Vertex8fg> verts;
 
         for (size_t i = 0, j = 0; i < pos.size() - 2; i += 3, j += 2)
@@ -138,6 +155,23 @@ void Geometry::pack_vertex_buffers()
         }
 
         m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
+    }
+    else
+    {
+        if (m_buffers.count("position") > 0)
+        {
+            handle_attr("position");
+        }
+
+        if (m_buffers.count("normal") > 0)
+        {
+            handle_attr("normal");
+        }
+
+        if (m_buffers.count("uv") > 0)
+        {
+            handle_attr("uv");
+        }
     }
 
     if (m_buffers.count("tangents") > 0 && m_buffers.count("bitangents") > 0)
@@ -156,45 +190,19 @@ void Geometry::pack_vertex_buffers()
 
         m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
     }
-
-    auto handle_attr = [&](const std::string &name) {
-        auto buf    = m_buffers.at(name);
-        auto &data  = (buf).data;
-        auto stride = (buf).stride;
-
-        const auto data_type = stride_to_data_type(stride);
-
-        auto vert =
-          std::make_unique<rend::VertexBuffer>(data.data(), data.size() * sizeof(float));
-
-        vert->set_layout({ { name, data_type } });
-        m_glbuffers->add_vertex_buffer(std::move(vert));
-    };
-
-    if (m_buffers.count("position") > 0)
+    else
     {
-        handle_attr("position");
+        if (m_buffers.count("tangents") > 0)
+        {
+            handle_attr("tangents");
+        }
+
+        if (m_buffers.count("bitangents") > 0)
+        {
+            handle_attr("bitangents");
+        }
     }
 
-    if (m_buffers.count("normal") > 0)
-    {
-        handle_attr("normal");
-    }
-
-    if (m_buffers.count("uv") > 0)
-    {
-        handle_attr("uv");
-    }
-
-    if (m_buffers.count("tangents") > 0)
-    {
-        handle_attr("tangents");
-    }
-
-    if (m_buffers.count("bitangents") > 0)
-    {
-        handle_attr("bitangents");
-    }
 
     m_dirty = false;
 }
@@ -373,8 +381,6 @@ void Geometry::calculate_tangents()
         set_attribute("tangents", std::move(tangents), 3);
         set_attribute("bitangents", std::move(bi_tangents), 3);
     }
-
-    pack();
 }
 
 }  // namespace ay::grph
