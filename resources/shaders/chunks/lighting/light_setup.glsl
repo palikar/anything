@@ -43,3 +43,6 @@ struct LightSetup {
     PointLight point_lights[MAX_LIGHT];
     SpotLight spot_lights[MAX_LIGHT];
 };
+
+uniform bool lighting_enabled;
+uniform LightSetup lighting;

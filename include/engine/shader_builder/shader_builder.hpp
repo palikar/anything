@@ -35,7 +35,7 @@ class ShaderBuilder
                     
             if (res == std::end(current))
             {
-                AY_ERROR("Missing shader feature");
+                AY_ERROR(fmt::format("Missing shader feature: {}", req));
             }
                     
         }        
@@ -59,6 +59,7 @@ class ShaderBuilder
 
         for (auto& ch : t_chunks)
         {
+            ch.init();
             for (auto& def : ch.defines())
             {
                 defines << "#define " << def << "\n";
@@ -67,8 +68,10 @@ class ShaderBuilder
             if (ch.stage() == ChunkStage::VERTEX)
             {
                 check_features(ch, vertex_features);
+
+                std::copy(std::begin(ch.provides()), std::end(ch.provides()), std::back_inserter(vertex_features));
                 
-                vertex << ch.content() << "\n\n";
+                vertex << ch.content() << "\n";
             }
             else if (ch.stage() == ChunkStage::FRAGMENT)
             {
@@ -76,23 +79,30 @@ class ShaderBuilder
 
                 std::copy(std::begin(ch.provides()), std::end(ch.provides()), std::back_inserter(fragment_features));
                 
-                fragment << ch.content() << "\n\n";
+                fragment << ch.content() << "\n";
             }
 
         }
 
         std::stringstream vertex_content;
-        vertex_content << GLSL_VERSION << "\n\n";
-        vertex_content << defines.str() << "\n\n";
-        vertex_content << vertex.str() << "\n\n";
+        vertex_content << GLSL_VERSION << "\n";
+        vertex_content << defines.str() << "\n";
+        vertex_content << vertex.str() << "\n";
 
         std::stringstream fragment_content;
-        fragment_content << GLSL_VERSION << "\n\n";
-        fragment_content << defines.str() << "\n\n";
-        fragment_content << fragment.str() << "\n\n";
+        fragment_content << GLSL_VERSION << "\n";
+        fragment_content << defines.str() << "\n";
+        fragment_content << fragment.str() << "\n";
 
+        std::cout << "vertex shader:" << "\n";
+        std::cout << vertex_content.str() << "\n";
+
+        std::cout << "-------------------" << "\n";
         
-        return std::make_shared<rend::Shader>("", vertex.str(), fragment.str());
+        std::cout << "fragment shader:" << "\n";
+        std::cout << fragment_content.str() << "\n";
+        
+        return std::make_shared<rend::Shader>("", vertex_content.str(), fragment_content.str());
     }
 
 

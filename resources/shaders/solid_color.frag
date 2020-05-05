@@ -135,7 +135,7 @@ vec3 apply_spot_light(SpotLight light, vec3 surface_color, vec3 normal, vec3 sur
 
 void main()
 {
-
+    // basic mat
     if (!visible){
         discard;
     }
@@ -143,12 +143,15 @@ void main()
     if (opacity <= 0.0) {
         frag_color = vec4(color, 1.0);
     } else {
-        if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
-            discard;
-        }
         frag_color = vec4(color, opacity);
     }
 
+    // alpha test
+    if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
+        discard;
+    }
+
+    // lighting calculation
     if (lighting_enabled) {
 
         vec3 normal = normalize(norm);
@@ -171,9 +174,11 @@ void main()
             }
         }
         
-        frag_color = vec4(final_color.rgb, opacity);
+        final_color.rgb = frag_color.rgb;
     }
 
+
+    // fog color
     if (fog_type == 1) {
         const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);
         frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);

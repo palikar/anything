@@ -8,7 +8,7 @@ layout (location = 4) in vec3 i_bitan;
 
 out vec2 uv;
 out vec3 pos;
-out vec3 norm;
+out vec3 normal;
 out mat3 TBN;
 out vec3 tan_pos;
 out vec3 tan_view_pos;
@@ -22,7 +22,7 @@ uniform vec3 camera_pos;
 void main()
 {   
     uv =  i_uv;
-    norm =  mat3(transpose(inverse(model_matrix))) * i_norm;
+    normal =  mat3(transpose(inverse(model_matrix))) * i_norm;
     pos = vec3(model_matrix * vec4(i_pos, 1.0));
 
     fog_depth = -(view_matrix * vec4(pos, 1.0)).z;
@@ -35,6 +35,6 @@ void main()
     tan_view_pos  = transpose(TBN) * camera_pos; 
     tan_pos  = transpose(TBN) * pos;
     
-    gl_Position = projection_matrix * view_matrix * vec4(pos, 1.0);
+    gl_Position = projection_matrix * vec4(pos, 1.0);
     
 }

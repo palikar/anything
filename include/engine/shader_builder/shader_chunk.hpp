@@ -8,22 +8,6 @@
 
 #include <fmt/format.h>
 
-// struct Feature
-// {
-//     std::vector<std::string> uniforms;
-//     std::vector<std::string> attributes;
-//     std::vector<std::string> variables;
-//     std::vector<std::string> types;
-// };
-
-// struct Requirement
-// {
-//     std::vector<std::string> uniforms;
-//     std::vector<std::string> attributes;
-//     std::vector<std::string> variables;
-// };
-
-
 namespace ay::shdr
 {
 
@@ -52,11 +36,17 @@ class ShaderChunk
 
     ShaderChunk()
     {
-
     }
 
     void init()
     {
+
+        if (!m_initialized)
+        {
+            m_content = files::load_file(m_file);
+            m_initialized = true;
+        }        
+        
     }
 
     std::vector<std::string> &provides()

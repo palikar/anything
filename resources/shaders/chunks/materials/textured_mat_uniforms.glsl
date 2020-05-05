@@ -24,6 +24,6 @@ uniform float reflectivity;
 
 uniform float refraction_ration;
 
-uniform vec3 camera_pos;
-
 uniform int mixing;
+
+// uniform vec3 camera_pos;

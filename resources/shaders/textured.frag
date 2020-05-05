@@ -64,7 +64,6 @@ void main()
         discard;
     }
 
-
     float alpha_opacity = texture(alpha_map, uv).g;
     if (alpha_opacity == 0.0) {
         alpha_opacity = opacity;
@@ -77,14 +76,13 @@ void main()
     vec3 final_color = texture(tex, uv * 70).rgb;
     final_color = mix(final_color, color, color_intensity);
 
-    // Ambient occlusion
+    // Ambient
     float ambient_strength = (texture(ao_map, uv).r - 1.0) * ao_intensity + 1.0;
     final_color *= ambient_strength;
 
     // Environment
     vec3 I = normalize(pos - camera_pos);
     vec3 env_color = vec3(0,0,0);
-
     if (is_relfection) {
         vec3 R = reflect(I, normalize(normal));
         env_color = texture(env_map, R).rgb;
@@ -93,12 +91,10 @@ void main()
         env_color = texture(env_map, R).rgb;
     }
 
-
     float specular_strength = texture(specular_map, uv).r;
     if (specular_strength == 0.0) {
         specular_strength = 1.0;
     }
-
 
     if (has_env) {
         if (mixing == 0) {
@@ -110,8 +106,7 @@ void main()
         }
     }
 
-
-    frag_color = vec4(final_color, alpha_opacity);
+    frag_color = vec4(final_color, alpha_opacity);    
     
     if (fog_type == 1) {
         const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);

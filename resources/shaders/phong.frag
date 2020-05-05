@@ -61,7 +61,7 @@ out vec4 frag_color;
 // Input
 in vec2 uv;
 in vec3 pos;
-in vec3 norm;
+in vec3 normal;
 in mat3 TBN;
 in vec3 tan_pos;
 in vec3 tan_view_pos;
@@ -238,7 +238,7 @@ void main()
 
     vec3 diffuse_color = color;
     vec3 total_emissive = emissive;
-    vec3 normal = normalize(norm);
+    vec3 normal = normalize(normal);
 
     if (has_map) {
         diffuse_color = mix(diffuse_color, texture(map, tex_coords).rgb, 0.5);
