@@ -98,8 +98,8 @@ void Application::render_engine()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    // ImGuizmo::SetDrawlist();
-    // ImGuizmo::BeginFrame();
+    ImGuizmo::SetDrawlist();
+    ImGuizmo::BeginFrame();
 
     ImGuiIO &io = ImGui::GetIO();
     ImGuizmo::SetRect(io.DisplayFramebufferScale.x,
