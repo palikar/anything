@@ -139,8 +139,6 @@ pkg_search_module(GLFW REQUIRED glfw3)
 find_package(GLEW REQUIRED)
 find_package(ASSIMP REQUIRED)
 
-
-
 option(GLCALLS_CHECKS "Check all OpenGL calls for errors" TRUE)
 if (${GLCALLS_CHECKS})
     target_compile_definitions(project_defines INTERFACE OPENGL_CHECKS)
@@ -252,14 +250,29 @@ if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
 endif()
 
 
-add_executable(balls_scene ./examples/ball_scene.cpp)
-target_link_libraries(balls_scene PUBLIC anything_engine)
+option(BUILD_ALL_EXAMPLES "Build all examples" FALSE)
 
-add_executable(mat_scene ./examples/mat_scene.cpp)
-target_link_libraries(mat_scene PUBLIC anything_engine)
 
-add_executable(terrain_scene ./examples/terrain_scene.cpp)
-target_link_libraries(terrain_scene PUBLIC anything_engine)
+option(BUILD_BALL_SCENE "Build balls scene" FALSE)
+if(${BUILD_BALL_SCENE} OR ${BUILD_ALL_EXAMPLES})
+    add_executable(balls_scene ./examples/ball_scene.cpp)
+    target_link_libraries(balls_scene PUBLIC anything_engine)
+endif()
+
+
+option(BUILD_MAT_SCENE "Build material scene" FALSE)
+if(${BUILD_MAT_SCENE} OR ${BUILD_ALL_EXAMPLES})
+    add_executable(mat_scene ./examples/mat_scene.cpp)
+    target_link_libraries(mat_scene PUBLIC anything_engine)
+endif()
+
+option(BUILD_PLANE_SCENE "Build plane scene" TRUE)
+if(${BUILD_PLANE_SCENE} OR ${BUILD_ALL_EXAMPLES})
+    add_executable(terrain_scene ./examples/terrain_scene.cpp)
+    target_link_libraries(terrain_scene PUBLIC anything_engine)
+endif()
+
+
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
