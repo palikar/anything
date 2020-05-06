@@ -115,24 +115,23 @@ class TerrainScene : public gmt::GameBase
 
         // }
 
-        // sphere = main_scene->add(gmt::object_mesh({grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(1.0, 0.0, 0.0)}));
-        
-        // auto sphere_move = anim::vector_track(
-        //     { { 0.0f, 0.0f, 0.0f }, { 0.0f, 5.0f, 0.0f }, { 0.0f, 5.0f, 5.0f }, { 0.0f, 0.0f, 0.0f } },
-        //     { 0.0, 2.0, 4.0, 6.0 });
-        // sphere_move->set_target(&sphere->transform().position());
-        // animator().main_timeline().push_track("sphere_move", std::move(sphere_move));
+        sphere = main_scene->add(gmt::object_mesh({grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(1.0, 0.0, 0.0)}));        
+        auto sphere_move = anim::vector_track(
+            { { 0.0f, 0.0f, 0.0f }, { 0.0f, 5.0f, 0.0f }, { 0.0f, 5.0f, 5.0f }, { 0.0f, 0.0f, 0.0f } },
+            { 0.0, 2.0, 4.0, 6.0 });
+        sphere_move->set_target(&sphere->transform().position());
+        animator().main_timeline().push_track("sphere_move", std::move(sphere_move));
 
-        // auto sphere_scale = anim::vector_track(
-        //     { { 1.0f, 1.0f, 1.0f }, { 5.0f, 5.0f, 5.0f }, { 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f, 1.0f } },
-        //     { 0.0, 2.0, 4.0, 6.0 });
-        // sphere_scale->set_target(&sphere->transform().scale());
-        // animator().main_timeline().push_track("sphere_scale", std::move(sphere_scale));
-        // animator().main_timeline().ping_pong();
+        auto sphere_scale = anim::vector_track(
+            { { 1.0f, 1.0f, 1.0f }, { 5.0f, 5.0f, 5.0f }, { 3.0f, 3.0f, 3.0f }, { 1.0f, 1.0f, 1.0f } },
+            { 0.0, 2.0, 4.0, 6.0 });
+        sphere_scale->set_target(&sphere->transform().scale());
+        animator().main_timeline().push_track("sphere_scale", std::move(sphere_scale));
+        animator().main_timeline().ping_pong();
         
-        // animator().play();
+        animator().play();
 
-        // init_lighting();
+        init_lighting();
         // main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
 
     }

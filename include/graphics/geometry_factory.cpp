@@ -105,6 +105,7 @@ Geometry cube_geometry(float width,
     geometry.set_attribute("normal", normals, 3);
     geometry.set_attribute("uv", uv, 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 
@@ -137,7 +138,7 @@ Geometry
             auto x = ix * segment_width - half_width;
 
             pos.insert(pos.end(), { x, -y, 0 });
-            normals.insert(normals.end(), { 0, 0, 1 });
+            normals.insert(normals.end(), { 1, 0, 0 });
             uv.insert(uv.end(), { ix / grid_x, 1 - (iy / grid_y) });
         }
     }
@@ -162,6 +163,7 @@ Geometry
     geometry.set_attribute("normal", normals, 3);
     geometry.set_attribute("uv", uv, 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 
@@ -261,6 +263,7 @@ Geometry sphere_geometry(float radius,
     geometry.set_attribute("normal", std::move(normals), 3);
     geometry.set_attribute("uv", std::move(uv), 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 
@@ -412,6 +415,7 @@ Geometry cylinder_geometry(float radiusTop,
     geometry.set_attribute("normal", normals, 3);
     geometry.set_attribute("uv", uv, 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 
@@ -462,6 +466,7 @@ Geometry
     geometry.set_attribute("normal", normals, 3);
     geometry.set_attribute("uv", uv, 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 
@@ -534,6 +539,7 @@ Geometry ring_geometry(float innerRadius,
     geometry.set_attribute("normal", normals, 3);
     geometry.set_attribute("uv", uv, 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 
@@ -595,6 +601,7 @@ Geometry torus_geometry(float radius,
     geometry.set_attribute("normal", normals, 3);
     geometry.set_attribute("uv", uv, 2);
     geometry.set_index(indices);
+    geometry.calculate_tangents();
     return geometry;
 }
 

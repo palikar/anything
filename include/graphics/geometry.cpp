@@ -158,21 +158,24 @@ void Geometry::pack_vertex_buffers()
     }
     else
     {
-        if (m_buffers.count("position") > 0)
-        {
-            handle_attr("position");
-        }
-
-        if (m_buffers.count("normal") > 0)
-        {
-            handle_attr("normal");
-        }
-
-        if (m_buffers.count("uv") > 0)
-        {
-            handle_attr("uv");
-        }
+        
+    if (m_buffers.count("position") > 0)
+    {
+        handle_attr("position");
     }
+
+    if (m_buffers.count("normal") > 0)
+    {
+        handle_attr("normal");
+    }
+
+    if (m_buffers.count("uv") > 0)
+    {
+        handle_attr("uv");
+    }
+
+    }
+
 
     if (m_buffers.count("tangents") > 0 && m_buffers.count("bitangents") > 0)
     {
@@ -185,7 +188,7 @@ void Geometry::pack_vertex_buffers()
         for (size_t i = 0; i < tan.size() - 2; i += 3)
         {
             verts.push_back(
-              { tan[i + 0], tan[i + 1], tan[i + 2], bi[i + 0], bi[i + 1], bi[i + 2] });
+                { tan[i + 0], tan[i + 1], tan[i + 2], bi[i + 0], bi[i + 1], bi[i + 2] });
         }
 
         m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
@@ -201,7 +204,9 @@ void Geometry::pack_vertex_buffers()
         {
             handle_attr("bitangents");
         }
+
     }
+    
 
 
     m_dirty = false;

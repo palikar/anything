@@ -90,9 +90,7 @@ class MatScene : public gmt::GameBase
         main_scene->set_skybox(gmt::skybox(sky));
 
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
-        cmp::transform(floor_mesh).rotateX(glm::radians(-90.0f));
-        cmp::mesh(floor_mesh).geometry().calculate_tangents();
-        cmp::mesh(floor_mesh).geometry().pack();
+        cmp::transform(floor_mesh).rotateX(glm::radians(90.0f));
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
         cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_height_map = floor_bump;
@@ -100,8 +98,6 @@ class MatScene : public gmt::GameBase
         wall_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(100, 100, 50, 50), grph::phong_material(0.0f, 0.0f, 0.0f)}));
         cmp::transform(wall_mesh).translateY(50.0f);
         cmp::transform(wall_mesh).translateZ(50.0f);
-        cmp::mesh(wall_mesh).geometry().calculate_tangents();
-        cmp::mesh(wall_mesh).geometry().pack();
         cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_map = floor;
         cmp::mesh(wall_mesh).material<grph::PhongMaterial>()->parameters().m_normal_map = floor_normal;
 
@@ -113,8 +109,6 @@ class MatScene : public gmt::GameBase
         // Initing the torus
         torus = main_scene->add(gmt::mesh_entity({ grph::torus_geometry(5, 1, 30, 30), grph::phong_material(0.2f, 0.2f, 0.2f) }));
         cmp::transform(torus).set_position({ -10.0f, 13.0f, 0.0f });
-        cmp::mesh(torus).geometry().calculate_tangents();
-        cmp::mesh(torus).geometry().pack();
         cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_map = rocks;
         cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_normal_map = rocks_normal;
         cmp::mesh(torus).material<grph::PhongMaterial>()->parameters().m_height_map = rocks_bump;
@@ -132,8 +126,8 @@ class MatScene : public gmt::GameBase
     {
 
         cmp::transform(torus).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
-        cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
-        cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
+        // cmp::transform(cube).rotate(glm::vec3{1,1,1}, static_cast<float>(dt) * 1.5);
+        // cmp::transform(sphere).translateY(std::sin(glfwGetTime() * 10.5f)*0.3);
 
         const float x = 15 * std::sin(glfwGetTime());
         const float z = 15 * std::cos(glfwGetTime());
@@ -141,6 +135,7 @@ class MatScene : public gmt::GameBase
         main_scene->light_setup().point_lights[0].position[1] = 10;
         main_scene->light_setup().point_lights[0].position[2] = z;
         main_scene->light_setup().needs_update = true;
+        
         cmp::transform(pointlight).set_position({x,10,z});
         main_scene->update(dt);
     }
@@ -192,7 +187,7 @@ class MatScene : public gmt::GameBase
 
         bool changed = false;
 
-        ImGui::SliderFloat("Floor Bump", (float*)&cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_height_scale, 0.0f, 0.5f, "Scale = %.3f");
+        // ImGui::SliderFloat("Floor Bump", (float*)&cmp::mesh(floor_mesh).material<grph::PhongMaterial>()->parameters().m_height_scale, 0.0f, 0.5f, "Scale = %.3f");
 
         if (ImGui::CollapsingHeader("Sphere"))
         {

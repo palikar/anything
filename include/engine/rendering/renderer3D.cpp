@@ -197,6 +197,7 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
             shader->set("lighting_enabled", false);
         }
 
+        // m_api->culling(rend::Side::BOTH);
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
         m_api->draw_triangles(mesh->geometry());
     }
@@ -226,7 +227,9 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     }
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
-
+    
+    // m_api->culling(rend::Side::BOTH);
+    
     m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 

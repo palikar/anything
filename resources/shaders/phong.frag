@@ -195,20 +195,20 @@ vec2 parallax_mapping(vec2 texCoords, vec3 viewDir)
     // depth of current layer
     float currentLayerDepth = 0.0;
     // the amount to shift the texture coordinates per layer (from vector P)
-    vec2 P = viewDir.xy * height_scale; 
+    vec2 P = viewDir.xy * height_scale;
     vec2 deltaTexCoords = P / numLayers;
 
     vec2  currentTexCoords     = texCoords;
     float currentDepthMapValue = 1.0 - texture(height_map, currentTexCoords).r;
-  
+
     while(currentLayerDepth < currentDepthMapValue)
     {
         // shift texture coordinates along direction of P
         currentTexCoords -= deltaTexCoords;
         // get depthmap value at current texture coordinates
-        currentDepthMapValue =  1.0 - texture(height_map, currentTexCoords).r;  
+        currentDepthMapValue =  1.0 - texture(height_map, currentTexCoords).r;
         // get depth of next layer
-        currentLayerDepth += layerDepth;  
+        currentLayerDepth += layerDepth;
     }
 
     return currentTexCoords;
@@ -232,7 +232,6 @@ void main()
     }
 
     vec2 tex_coords = uv;
-
     if (has_height_map) {
         vec3 view_dir  = normalize(tan_view_pos - tan_pos);
         tex_coords = parallax_mapping(tex_coords, view_dir);
@@ -257,6 +256,9 @@ void main()
         normal = normal * 2.0 - 1.0;
         normal = normalize(TBN * normal);
     }
+
+    // frag_color.rgb = normal;
+    // return;
 
     if (has_emissive_map) {
         total_emissive *= emissive_scale * texture(emissive_map, tex_coords).rgb;
@@ -288,10 +290,9 @@ void main()
             if(lighting.spot_lights[i].act) {
                 outgoing_light += apply_spot_light(lighting.spot_lights[i], material, normal, pos, to_camera);
             }
-        }
+        }        
 
     } else {
-        outgoing_light = material.diffuse;
         outgoing_light = material.diffuse;
     }
 
@@ -320,7 +321,7 @@ void main()
 
     frag_color = vec4(outgoing_light.rgb, opacity);
 
-    
+
     if (fog_type == 1) {
         const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);
         frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
@@ -329,8 +330,5 @@ void main()
         frag_color.rgb = mix(frag_color.rgb, fog_color, fog_factor);
     }
 
-    
-    // float gamma = 1.3;
-    // frag_color.rgb = pow(frag_color.rgb, vec3(1.0/gamma));
-}
 
+}
