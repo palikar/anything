@@ -352,9 +352,9 @@ struct EasingFun
     void make_bezier()
     {
         fun = [&](float t) {
-                  const float arr [] = { params[0], params[1], params[2], params[3] };
-                  return mth::Easing::Bezier::cubic( t, arr);
-              };
+            const float arr[] = { params[0], params[1], params[2], params[3] };
+            return mth::Easing::Bezier::cubic(t, arr);
+        };
     }
 
     std::array<float, 5> &parameters()

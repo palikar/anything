@@ -160,7 +160,7 @@ class MatScene : public gmt::GameBase
 
         if (event.key_code() == KeyCode::F5)
         {
-            std::cout << "Realoading shaders" << "\n";
+            AY_INFO("Realoading shaders");
             this->shaders().reload_all();
         }
 

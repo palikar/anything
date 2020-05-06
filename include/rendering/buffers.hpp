@@ -49,18 +49,18 @@ inline std::string data_str(ShaderDataType t_type)
 {
     switch (t_type)
     {
-      case ShaderDataType::None: return "none";
-      case ShaderDataType::Float: return "flaot";
-      case ShaderDataType::Float2: return "vec2";
-      case ShaderDataType::Float3: return "vec3";
-      case ShaderDataType::Float4: return "vec4";
-      case ShaderDataType::Mat3: return "mat3";
-      case ShaderDataType::Mat4: return "mat4";
-      case ShaderDataType::Int: return "int";
-      case ShaderDataType::Int2: return "ivec2";
-      case ShaderDataType::Int3: return "ivec3";
-      case ShaderDataType::Int4: return "ivec4";
-      case ShaderDataType::Bool: return "bool";
+    case ShaderDataType::None: return "none";
+    case ShaderDataType::Float: return "flaot";
+    case ShaderDataType::Float2: return "vec2";
+    case ShaderDataType::Float3: return "vec3";
+    case ShaderDataType::Float4: return "vec4";
+    case ShaderDataType::Mat3: return "mat3";
+    case ShaderDataType::Mat4: return "mat4";
+    case ShaderDataType::Int: return "int";
+    case ShaderDataType::Int2: return "ivec2";
+    case ShaderDataType::Int3: return "ivec3";
+    case ShaderDataType::Int4: return "ivec4";
+    case ShaderDataType::Bool: return "bool";
     }
 
     return 0;

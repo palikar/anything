@@ -133,7 +133,7 @@ vec3 apply_dir_light(DirLight light, BlinnPhongMaterial material, vec3 normal, v
 
 vec3 apply_ambient_light(AmbientLight light, BlinnPhongMaterial material)
 {
-    return light.intensity * material.ambient.rgb;
+     return light.intensity *  light.color * material.ambient.rgb;
 }
 
 vec3 apply_point_light(PointLight light, BlinnPhongMaterial material, vec3 normal, vec3 surface_pos, vec3 surface_to_camera)
@@ -217,31 +217,21 @@ vec2 parallax_mapping(vec2 texCoords, vec3 viewDir)
 
 void main()
 {
-
     if (!visible){
         discard;
     }
-
-    if (opacity <= 0.0) {
-        frag_color = vec4(color, 1.0);
-    } else {
-        if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
-            discard;
-        }
-        frag_color = vec4(color, opacity);
+    
+    if (alpha_threshold >= 0.0 && opacity < alpha_threshold){
+        discard;
     }
-
+    
     vec2 tex_coords = uv;
     if (has_height_map) {
         vec3 view_dir  = normalize(tan_view_pos - tan_pos);
         tex_coords = parallax_mapping(tex_coords, view_dir);
     }
 
-
     vec3 diffuse_color = color;
-    vec3 total_emissive = emissive;
-    vec3 normal = normalize(norm);
-
     if (has_map) {
         diffuse_color = mix(diffuse_color, texture(map, tex_coords).rgb, 0.5);
     }
@@ -251,15 +241,14 @@ void main()
         specular_strength = texture(specular_map, tex_coords).r;
     }
 
+    vec3 normal = normalize(norm);
     if (has_normal_map) {
         normal = texture(normal_map, tex_coords).rgb;
         normal = normal * 2.0 - 1.0;
         normal = normalize(TBN * normal);
     }
 
-    // frag_color.rgb = normal;
-    // return;
-
+    vec3 total_emissive = emissive;
     if (has_emissive_map) {
         total_emissive *= emissive_scale * texture(emissive_map, tex_coords).rgb;
     }
@@ -320,7 +309,6 @@ void main()
     }
 
     frag_color = vec4(outgoing_light.rgb, opacity);
-
 
     if (fog_type == 1) {
         const float fog_factor = smoothstep(fog_near, fog_far, fog_depth);

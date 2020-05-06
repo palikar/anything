@@ -176,6 +176,10 @@ class Loader
                 base_build.both_side();
             }
         }
+        else
+        {
+            base_build.both_side();
+        }
 
         int blend;
         if (AI_SUCCESS == t_mat->Get(AI_MATKEY_BLEND_FUNC, blend))

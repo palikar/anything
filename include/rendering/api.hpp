@@ -7,6 +7,8 @@
 namespace ay::rend
 {
 
+inline constexpr const char *SHADER_HEADER = "#version 460 core";
+
 enum class BlenidngEquation : GLenum
 {
     ADD         = GL_FUNC_ADD,

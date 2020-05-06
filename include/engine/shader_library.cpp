@@ -1,7 +1,8 @@
 #include "engine/shader_library.hpp"
 
 #include "application/resource_loader.hpp"
-                    
+#include "util/logging.hpp"
+
 namespace ay::gmt
 {
 
@@ -62,12 +63,12 @@ void ShaderLibrary::reload(const std::string &name)
 
 void ShaderLibrary::reload_all()
 {
+    AY_DEBUG("Reloading all shaders");
     for (auto &[name, shader] : m_shaders)
     {
-        auto [vert, frag] =
-            app::ResouceLoader::get_instance()->get_shader_sources(name);
-            shader->reload(vert, frag);
-        }
+        auto [vert, frag] = app::ResouceLoader::get_instance()->get_shader_sources(name);
+        shader->reload(vert, frag);
     }
+}
 
 }  // namespace ay::gmt

@@ -159,7 +159,6 @@ class BallScene : public gmt::GameBase
 
         if (event.key_code() == KeyCode::F5)
         {
-            std::cout << "Realoading shaders" << "\n";
             this->shaders().reload_all();
 
         }

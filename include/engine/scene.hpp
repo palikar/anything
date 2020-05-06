@@ -76,11 +76,10 @@ class Scene3D
     void remove_component(Component *t_comp)
     {
 
-        auto it = std::remove_if(
-          m_game_components.begin(), m_game_components.end(), [t_comp](auto &el) {
-              std::cout << (el.get()->id() == t_comp->id()) << "\n";
-              return el.get()->id() == t_comp->id();
-          });
+        auto it =
+          std::remove_if(m_game_components.begin(),
+                         m_game_components.end(),
+                         [t_comp](auto &el) { return el.get()->id() == t_comp->id(); });
 
         m_game_components.erase(it, m_game_components.end());
     }

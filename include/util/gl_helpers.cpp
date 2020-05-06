@@ -2,8 +2,10 @@
 #include "std_header.hpp"
 
 #include "util/gl_helpers.hpp"
+#include "util/logging.hpp"
 
 #include <stb_image_write.h>
+#include <fmt/format.h>
 
 namespace ay::gl
 {
@@ -18,8 +20,7 @@ bool GLLogCall(const char *function, const char *file, int32_t line)
     GLenum error = GLCheckError();
     if (error != GL_NO_ERROR)
     {
-        std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file
-                  << ":" << line << "\n";
+        AY_ERROR(fmt::format("[OpenGL Error]({}):{}:line", error, function, file, line));
         return false;
     }
     return true;

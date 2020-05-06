@@ -77,7 +77,10 @@ using PhongMaterialPtr = std::unique_ptr<PhongMaterial>;
 
 inline PhongMaterialPtr phong_material(float r, float g, float b)
 {
-    return std::make_unique<PhongMaterial>(glm::vec3(r, g, b));
+    auto new_mat                    = std::make_unique<PhongMaterial>(glm::vec3(r, g, b));
+    new_mat->parameters().m_ambient = glm::vec3(r, g, b);
+    new_mat->parameters().m_specular = glm::vec3(r, g, b);
+    return new_mat;
 }
 
 

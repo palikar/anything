@@ -107,7 +107,6 @@ void RendererScene3D::switch_shader(Shader *shader)
 
 void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 {
-
     shader->set("projection_matrix", m_view_projection);
     shader->set("view_matrix", m_current_context.view);
 
@@ -136,7 +135,6 @@ void RendererScene3D::push_transform(glm::mat4 transform)
 
 void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
 {
-
     m_api->depth_func(material->depth_func());
     m_api->depth_test(material->depth_test());
     m_api->depth_write(material->depth_write());
@@ -159,11 +157,9 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
         shader->set("fog_type", 0);
     }
 
-
     shader->set("opacity", material->opacity());
     shader->set("alpha_threshold", material->blending_setup().alpha_test);
     shader->set("visible", material->visible());
-
 
     material->update_uniforms(m_uniform_binder, m_binder, m_current_context);
 }
@@ -197,7 +193,6 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
             shader->set("lighting_enabled", false);
         }
 
-        // m_api->culling(rend::Side::BOTH);
         EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
         m_api->draw_triangles(mesh->geometry());
     }
@@ -207,10 +202,9 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 {
     m_binder.begin_draw_call();
 
-    auto transform = cmp::transform(object);
-    auto shader    = mesh_comp->mesh.material()->shader();
-    auto mat       = mesh_comp->mesh.material();
-
+    auto transform     = cmp::transform(object);
+    const auto &shader = mesh_comp->mesh.material()->shader();
+    const auto &mat    = mesh_comp->mesh.material();
 
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
@@ -227,18 +221,17 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
     }
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
-    
-    // m_api->culling(rend::Side::BOTH);
-    
+
     m_api->draw_triangles(mesh_comp->mesh.geometry());
 }
 
-void RendererScene3D::handle_instanced_mesh(gmt::Entity*, cmp::InstancedMeshComponent *mesh_comp)
+void RendererScene3D::handle_instanced_mesh(gmt::Entity *,
+                                            cmp::InstancedMeshComponent *mesh_comp)
 {
     m_binder.begin_draw_call();
 
-    auto mat       = mesh_comp->mesh.material();
-    auto shader    = mat->shader();
+    auto mat    = mesh_comp->mesh.material();
+    auto shader = mat->shader();
 
     switch_shader(shader);
     handle_material(mat, shader);
@@ -253,7 +246,7 @@ void RendererScene3D::handle_instanced_mesh(gmt::Entity*, cmp::InstancedMeshComp
     {
         shader->set("lighting_enabled", false);
     }
-    
+
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
     m_api->draw_instanced(mesh_comp->mesh.geometry(), mesh_comp->mesh.count());
@@ -331,7 +324,7 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
 
     dispatch_component<cmp::MeshComponent, cmp::TransformComponent>(t_obj,
                                                                     HANDLER(handle_mesh));
-    
+
     dispatch_component<cmp::LineSegmentsComponent, cmp::TransformComponent>(
       t_obj, HANDLER(handle_line_segments));
 
@@ -340,7 +333,8 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
     dispatch_component<cmp::ModelComponent, cmp::TransformComponent>(
       t_obj, HANDLER(handle_model));
 
-    dispatch_component<cmp::InstancedMeshComponent>(t_obj, HANDLER(handle_instanced_mesh));
+    dispatch_component<cmp::InstancedMeshComponent>(t_obj,
+                                                    HANDLER(handle_instanced_mesh));
 }
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)

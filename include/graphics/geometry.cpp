@@ -80,7 +80,7 @@ void Geometry::merge(Geometry &other)
 void Geometry::pack()
 {
     m_dirty = false;
-    
+
     if (m_dynamic)
     {
         pack_vertex_buffers_dynamic();
@@ -111,7 +111,6 @@ void Geometry::pack()
     {
         pack_group(last_start + last_count, m_index.size() - (last_start + last_count));
     }
-
 }
 
 void Geometry::pack_vertex_buffers()
@@ -126,7 +125,7 @@ void Geometry::pack_vertex_buffers()
         const auto data_type = stride_to_data_type(stride);
 
         auto vert =
-            std::make_unique<rend::VertexBuffer>(data.data(), data.size() * sizeof(float));
+          std::make_unique<rend::VertexBuffer>(data.data(), data.size() * sizeof(float));
 
         vert->set_layout({ { name, data_type } });
         m_glbuffers->add_vertex_buffer(std::move(vert));
@@ -139,7 +138,7 @@ void Geometry::pack_vertex_buffers()
         auto &pos  = (m_buffers.at("position")).data;
         auto &norm = (m_buffers.at("normal")).data;
         auto &uv   = (m_buffers.at("uv")).data;
-        
+
         std::vector<Vertex8fg> verts;
 
         for (size_t i = 0, j = 0; i < pos.size() - 2; i += 3, j += 2)
@@ -158,22 +157,21 @@ void Geometry::pack_vertex_buffers()
     }
     else
     {
-        
-    if (m_buffers.count("position") > 0)
-    {
-        handle_attr("position");
-    }
 
-    if (m_buffers.count("normal") > 0)
-    {
-        handle_attr("normal");
-    }
+        if (m_buffers.count("position") > 0)
+        {
+            handle_attr("position");
+        }
 
-    if (m_buffers.count("uv") > 0)
-    {
-        handle_attr("uv");
-    }
+        if (m_buffers.count("normal") > 0)
+        {
+            handle_attr("normal");
+        }
 
+        if (m_buffers.count("uv") > 0)
+        {
+            handle_attr("uv");
+        }
     }
 
 
@@ -188,7 +186,7 @@ void Geometry::pack_vertex_buffers()
         for (size_t i = 0; i < tan.size() - 2; i += 3)
         {
             verts.push_back(
-                { tan[i + 0], tan[i + 1], tan[i + 2], bi[i + 0], bi[i + 1], bi[i + 2] });
+              { tan[i + 0], tan[i + 1], tan[i + 2], bi[i + 0], bi[i + 1], bi[i + 2] });
         }
 
         m_glbuffers->add_vertex_buffer(rend::make_buffer(verts));
@@ -204,9 +202,7 @@ void Geometry::pack_vertex_buffers()
         {
             handle_attr("bitangents");
         }
-
     }
-    
 
 
     m_dirty = false;

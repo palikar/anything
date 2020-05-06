@@ -1,6 +1,7 @@
 #pragma once
 #include "std_header.hpp"
 
+#include <fmt/printf.h>
 #include <fmt/format.h>
 
 namespace ay::logging
@@ -30,8 +31,12 @@ struct StdLog
 
     void log(LogEntry t_entry)
     {
-        std::cout << '[' << t_entry.file_name << ':' << t_entry.function_name << ':'
-                  << t_entry.line_number << "] " << t_entry.message << "\n";
+        fmt::fprintf(stdout,
+                     "[%s:%s:%i] %s\n",
+                     t_entry.file_name.c_str(),
+                     t_entry.function_name.c_str(),
+                     t_entry.line_number,
+                     t_entry.message.c_str());
     }
 };
 
@@ -51,8 +56,12 @@ struct ErrLog
 
     void log(LogEntry t_entry)
     {
-        std::cerr << '[' << t_entry.file_name << ':' << t_entry.function_name << ':'
-                  << t_entry.line_number << "] " << t_entry.message << "\n";
+        fmt::fprintf(stderr,
+                     "[%s:%s:%i] %s\n",
+                     t_entry.file_name.c_str(),
+                     t_entry.function_name.c_str(),
+                     t_entry.line_number,
+                     t_entry.message.c_str());
     }
 };
 

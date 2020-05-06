@@ -70,7 +70,8 @@ class RendererScene3D
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
 
-    void handle_instanced_mesh(gmt::Entity *object, cmp::InstancedMeshComponent *mesh_comp);
+    void handle_instanced_mesh(gmt::Entity *object,
+                               cmp::InstancedMeshComponent *mesh_comp);
 
     void handle_model(gmt::Entity *object, cmp::ModelComponent *mesh_comp);
 

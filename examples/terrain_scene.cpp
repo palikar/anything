@@ -79,18 +79,6 @@ class TerrainScene : public gmt::GameBase
         floor_mesh = main_scene->add(gmt::mesh_entity({grph::plane_geometry(500, 500, 50, 50), grph::texture_material(rocks)}));
         cmp::transform(floor_mesh).rotateX(glm::radians(90.0f));
 
-        // auto block =
-        //     main_scene->add(gmt::instanced_mesh_entity({ grph::cube_geometry(2, 3, 2, 1, 1, 1),
-        //                                                  grph::phong_material(0.2f, 0.8f, 0.1f),
-        //                                                  100}));
-
-        // for (size_t i = 0; i < 100; ++i) {
-
-        //     cmp::instanced_mesh(block).set_position(i, { - 250.0 + i * 5,
-        //                                                  1.2 * (i % 2 == 0? -1.0 : 1.0),
-        //                                                  0.0 });
-            
-        // }
 
         auto x_wing = main_scene->add(gmt::model_entity(load::Loader::load_model(app::ResouceLoader::obj("star-wars-x-wing.blend"))));
         cmp::transform(x_wing).rotateY(glm::radians(180.0f));
@@ -101,19 +89,24 @@ class TerrainScene : public gmt::GameBase
         x_wing->add_component<cmp::TrackingCameraComponent>(cmp::transform(x_wing), main_scene->camera());
         x_wing->add_component<cmp::MovementComponent>(cmp::transform(x_wing));
         
+        
+        auto simple_block =
+            main_scene->add(gmt::mesh_entity({ grph::cube_geometry(2, 10, 2, 1, 1, 1),
+                                               grph::phong_material(0.2f, 0.8f, 0.1f)}));
+        cmp::transform(simple_block).set_position({25.0, 4.0, 25.0});
+        
+        auto block =
+            main_scene->add(gmt::instanced_mesh_entity({ grph::cube_geometry(2, 10, 2, 1, 1, 1),
+                                                         grph::phong_material(0.2f, 0.8f, 0.1f),
+                                                         130}));
+        for (size_t i = 0; i < 130; ++i)
+        {
 
-        // for (size_t i = 0; i < 130; ++i)
-        // {
+            float x = util::Random::uniform_real(-100.0f, 100.0f);
+            float z = util::Random::uniform_real(-100.0f, 100.0f);
 
-        //     float x = util::Random::uniform_real(-150.0f, 150.0f);
-        //     float z = util::Random::uniform_real(-150.0f, 150.0f);
-
-        //     auto block =
-        //         main_scene->add(gmt::mesh_entity({ grph::cube_geometry(3, 20, 3, 1, 1, 1),
-        //                                            grph::solid_color(0.7, x / 250.0, 0.3) }));
-        //     cmp::transform(block).set_position({x, 7, z});
-
-        // }
+            cmp::instanced_mesh(block).set_position(i, {x, 4.0, z});
+        }
 
         sphere = main_scene->add(gmt::object_mesh({grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(1.0, 0.0, 0.0)}));        
         auto sphere_move = anim::vector_track(
@@ -132,14 +125,14 @@ class TerrainScene : public gmt::GameBase
         animator().play();
 
         init_lighting();
-        // main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
+        main_scene->set_fog(grph::linear_fog({0.1, 1.0, 1.0}, 50, 100));
 
     }
     
     void update(double dt) override
     {
         main_scene->update(dt);
-        // sphere->transform().update();
+        sphere->transform().update();
     }
 
     bool event(app::Event& e) override
@@ -160,7 +153,6 @@ class TerrainScene : public gmt::GameBase
 
         if (event.key_code() == KeyCode::F5)
         {
-            AY_DEBUG("Realoading shaders");
             this->shaders().reload_all();
         }
         if (event.key_code() == KeyCode::F10)

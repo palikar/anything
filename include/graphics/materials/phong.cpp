@@ -15,15 +15,16 @@ void PhongMaterial::init_shader(gmt::ShaderLibrary &t_shader_lib)
             m_shader = t_shader_lib.get("PhongShader_I");
             return;
         }
-        
+
         std::vector<shdr::ShaderChunk> chunks;
         chunks.push_back(shdr::Chunk::define("INSTANCING"));
-        chunks.push_back(shdr::Chunk::vertex_from_file(app::ResouceLoader::path("shaders/phong.vert")));
-        chunks.push_back(shdr::Chunk::fragment_from_file(app::ResouceLoader::path("shaders/phong.frag")));
-        m_shader = shdr::ShaderBuilder::build("PhongShader_I", std::move(chunks));    
+        chunks.push_back(
+          shdr::Chunk::vertex_from_file(app::ResouceLoader::path("shaders/phong.vert")));
+        chunks.push_back(shdr::Chunk::fragment_from_file(
+          app::ResouceLoader::path("shaders/phong.frag")));
+        m_shader = shdr::ShaderBuilder::build("PhongShader_I", std::move(chunks));
         t_shader_lib.add("PhongShader_I", m_shader);
         return;
-        
     }
 
     if (t_shader_lib.exists("PhongShader"))
@@ -31,15 +32,16 @@ void PhongMaterial::init_shader(gmt::ShaderLibrary &t_shader_lib)
         m_shader = t_shader_lib.get("PhongShader");
         return;
     }
-    
-    std::vector<shdr::ShaderChunk> chunks;
-    chunks.push_back(shdr::Chunk::vertex_from_file(app::ResouceLoader::path("shaders/phong.vert")));
-    chunks.push_back(shdr::Chunk::fragment_from_file(app::ResouceLoader::path("shaders/phong.frag")));
-    m_shader = shdr::ShaderBuilder::build("PhongShader", std::move(chunks));    
-    t_shader_lib.add("PhongShader", m_shader);
-    
-    return;
 
+    std::vector<shdr::ShaderChunk> chunks;
+    chunks.push_back(
+      shdr::Chunk::vertex_from_file(app::ResouceLoader::path("shaders/phong.vert")));
+    chunks.push_back(
+      shdr::Chunk::fragment_from_file(app::ResouceLoader::path("shaders/phong.frag")));
+    m_shader = shdr::ShaderBuilder::build("PhongShader", std::move(chunks));
+    t_shader_lib.add("PhongShader", m_shader);
+
+    return;
 }
 
 void PhongMaterial::update_uniforms(rend::UniformBinder &uniforms,

@@ -22,7 +22,7 @@ class InstancedMesh
     std::vector<mth::Transform> m_transforms;
     std::vector<glm::mat4> m_matirces;
     rend::VertexBuffer *m_transforms_buffer;
-
+    bool m_dirty{ true };
 
   public:
     InstancedMesh(Geometry t_geometry, MaterialPtr t_material, size_t t_max_num);
@@ -30,8 +30,10 @@ class InstancedMesh
     Geometry &geometry();
 
     const rend::VertexArray *buffers();
-    
-    mth::Transform &operator[](int index);    
+
+    mth::Transform &operator[](int index);
+
+    const mth::Transform &operator[](int index) const;
 
     void set_position(int index, glm::vec3 pos);
 
@@ -56,9 +58,6 @@ class InstancedMesh
     {
         return m_material.get();
     }
-
-    
-    
 };
 
 

@@ -138,7 +138,7 @@ Geometry
             auto x = ix * segment_width - half_width;
 
             pos.insert(pos.end(), { x, -y, 0 });
-            normals.insert(normals.end(), { 1, 0, 0 });
+            normals.insert(normals.end(), { 0, 0, -1 });
             uv.insert(uv.end(), { ix / grid_x, 1 - (iy / grid_y) });
         }
     }

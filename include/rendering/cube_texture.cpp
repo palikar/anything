@@ -74,13 +74,6 @@ void CubeTexture::load_from_files(const std::vector<std::string> &t_files,
 
         GLenum internal_format = static_cast<GLenum>(t_format);
 
-        // std::cout << xp_data << "\n";
-        // std::cout << xn_data << "\n";
-        // std::cout << yp_data << "\n";
-        // std::cout << yn_data << "\n";
-        // std::cout << zp_data << "\n";
-        // std::cout << zn_data << "\n";
-
         GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,
                             0,
                             internal_format,
