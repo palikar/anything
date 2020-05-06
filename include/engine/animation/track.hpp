@@ -52,6 +52,11 @@ class BaseTrack
     {
         return *std::max_element(m_times.begin(), m_times.end());
     }
+
+    std::vector<float> &times()
+    {
+        return m_times;
+    }
 };
 
 using BaseTrackPtr = std::unique_ptr<BaseTrack>;
@@ -128,6 +133,13 @@ class Track : public BaseTrack
     {
         return m_easing;
     }
+
+    std::vector<T> &values()
+    {
+        return m_values;
+    }
+
+    
 };
 
 

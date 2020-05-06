@@ -35,10 +35,11 @@ class AnimScene : public gmt::GameBase
     void init_lighting()
     {
         main_scene->directional_light(glm::vec3(0.5, 0.5f, 0), glm::vec3(0.8, 0.8f, 0.6f));
-        main_scene->light_setup().directional_light.intensity = 0.1f;
+        main_scene->light_setup().directional_light.intensity = 1.1f;
 
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().ambient_light.intensity = 0.15;
+        
 
     }
 
@@ -48,8 +49,30 @@ class AnimScene : public gmt::GameBase
 
         main_scene->add(gmt::axis());
         main_scene->add(gmt::grid_helper(50, 30));
+        auto top_grid = main_scene->add(gmt::grid_helper(50, 30));
+        cmp::transform(top_grid).translateY(10.0f);
 
-        
+        auto move_sphere = main_scene->add(gmt::object_mesh(
+            { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
+        cmp::transform(move_sphere).set_position({5.0, 0.4, 5.0});
+
+        auto move_animation = anim::vector_track(
+            { { 5.0, 0.4, 5.0 }, { 5.0, 10.0 - 0.4, 5.0 }, { 5.0, 0.4, 5.0 } },
+            { 0.0, 2.0, 4.0 });
+        move_animation->set_target(&move_sphere->transform().position());
+        move_animation->easing() = mth::EasingType::Bounce_in;
+        animator().main_timeline().push_track("sphere_move", std::move(move_animation));
+
+        auto color_sphere = main_scene->add(gmt::object_mesh(
+                                                { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
+        cmp::transform(color_sphere).set_position({-5.0, 0.4, 5.0});
+
+        auto color_animation = anim::vector_track(
+            { {0.7, 0.2, 0.4}, {0.2, 0.7, 0.5}, {0.7, 0.2, 0.4} },
+            { 0.0, 1.0, 2.0 });
+        color_animation->set_target(&color_sphere->material<grph::SolidColorMaterial>().parameters().m_color);
+        color_animation->easing() = mth::EasingType::Quadratic_in_out;
+        animator().main_timeline().push_track("sphere_color", std::move(color_animation));
 
         init_lighting();
     }
@@ -94,7 +117,56 @@ class AnimScene : public gmt::GameBase
 
     void render(rend::RenderAPI&) override
     {
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->Pos);
+        ImGui::SetNextWindowSize(viewport->Size);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::SetNextWindowBgAlpha(0.0f);
 
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        bool open = true;
+        ImGui::Begin("DockSpace Demo", &open, window_flags);
+        ImGui::PopStyleVar(3);
+
+        ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+        ImGuiDockNodeFlags dockspace_flags =  ImGuiDockNodeFlags_PassthruCentralNode;
+        ImGui::DockSpace(dockspace_id, ImGui::GetMainViewport()->Size, dockspace_flags);
+        
+        static auto firstTime = true;
+        if (firstTime)
+        {
+            firstTime = false;
+            ImGui::DockBuilderRemoveNode(dockspace_id);
+            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_PassthruCentralNode);
+            ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
+            
+            ImGuiID dock_main_id = dockspace_id;
+            ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.3f, NULL, &dock_main_id);
+
+            ImGui::DockBuilderDockWindow("Animation", dock_id_bottom);
+            ImGui::DockBuilderFinish(dockspace_id);
+        }
+        ImGui::End();
+
+        
+        if (ImGui::Begin("Animation"))
+        {
+            if (ImGui::TreeNode("Moving ball"))
+            {
+                
+                ImGui::TreePop();
+            }
+            
+        }
+        ImGui::End();
+        
+        
         renderer.render_scene(*main_scene);
 
     }

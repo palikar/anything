@@ -52,6 +52,7 @@ class Object3D : public Entity
 
     void update(double) override
     {
+        m_transform->transform.update();
     }
 
     mth::Transform &transform()
@@ -150,7 +151,7 @@ class Object3D : public Entity
     }
 
     template<typename T>
-    grph::Material &material(size_t index = 0)
+    T &material(size_t index = 0)
     {
         return *m_model->model.get(index)->material<T>();
     }

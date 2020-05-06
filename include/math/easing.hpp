@@ -302,6 +302,34 @@ inline static std::string interpolation_names[] = {
     "Bounce_in_out",
 };
 
+enum class EasingType {
+    Linear = 0,
+    Quadratic_in,
+    Quadratic_out,
+    Quadratic_in_out,
+    Cubic_in,
+    Cubic_out,
+    Cubic_in_out,
+    Sinusoidal_in,
+    Sinusoidal_out,
+    Sinusoidal_in_out,
+    Exponential_in,
+    Exponential_out,
+    Exponential_in_out,
+    Circular_in,
+    Circular_out,
+    Circular_in_out,
+    Elastic_in,
+    Elastic_out,
+    Elastic_in_out,
+    Back_in,
+    Back_out,
+    Back_in_out,
+    Bounce_in,
+    Bounce_out,
+    Bounce_in_out
+};
+
 inline static float (*interpolations[])(float) = {
     &Easing::linear,
     &Easing::Quadratic::in,
@@ -309,14 +337,14 @@ inline static float (*interpolations[])(float) = {
     &Easing::Quadratic::in_out,
     &Easing::Cubic::in,
     &Easing::Cubic::out,
-    &Easing::Cubic::in_out,
-    &Easing::Sinusoidal::in,
-    &Easing::Sinusoidal::out,
-    &Easing::Sinusoidal::in_out,
-    &Easing::Exponential::in,
-    &Easing::Exponential::out,
-    &Easing::Exponential::in_out,
-    &Easing::Circular::in,
+        &Easing::Cubic::in_out,
+        &Easing::Sinusoidal::in,
+        &Easing::Sinusoidal::out,
+        &Easing::Sinusoidal::in_out,
+        &Easing::Exponential::in,
+        &Easing::Exponential::out,
+        &Easing::Exponential::in_out,
+        &Easing::Circular::in,
     &Easing::Circular::out,
     &Easing::Circular::in_out,
     &Easing::Elastic::in,
@@ -330,7 +358,7 @@ inline static float (*interpolations[])(float) = {
     &Easing::Bounce::in_out,
 };
 
-enum class EasingType
+enum class EasingCategory
 {
     STANDARD = 0,
     BEZIER,
@@ -338,7 +366,7 @@ enum class EasingType
 
 struct EasingFun
 {
-    EasingType type{ EasingType::STANDARD };
+    EasingType type{ EasingCategory::STANDARD };
     std::function<float(float)> fun{ &mth::Easing::linear };
     size_t index{ 0 };
     std::array<float, 5> params;
@@ -365,6 +393,12 @@ struct EasingFun
     float operator()(float t)
     {
         return fun(t);
+    }
+
+    EasingFun &operator=(EasingType t_type)
+    {
+        set_from_index(static_cast<size_t>(t_type));
+        return *this;
     }
 };
 
