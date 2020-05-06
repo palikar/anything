@@ -20,7 +20,6 @@
 namespace ay::gmt
 {
 
-
 class GridHelper : public Entity
 {
   private:
@@ -50,7 +49,6 @@ class GridHelper : public Entity
 
     void init(GameBase *) override{};
 };
-
 
 using GridHelperPtr = std::unique_ptr<GridHelper>;
 

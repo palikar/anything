@@ -22,7 +22,7 @@ void GridHelper::init_points()
     verts.reserve((m_divisions + 1) * 12);
 
     // float center = m_divisions / 2;
-    const float step     = m_size / m_divisions;
+    const float step     = static_cast<float>(m_size) / m_divisions;
     const float halfSize = static_cast<float>(m_size) / 2.0f;
 
     float k = -halfSize;

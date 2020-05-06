@@ -57,13 +57,13 @@ class SolidColorMaterial : public Material
     void set_color(glm::vec3 t_color);
 };
 
-inline MaterialPtr solid_color(glm::vec3 color, bool wireframe = false)
+inline auto solid_color(glm::vec3 color, bool wireframe = false)
 {
     return std::make_unique<SolidColorMaterial>(std::move(color), wireframe);
 }
 
 
-inline MaterialPtr solid_color(float r, float g, float b)
+inline auto solid_color(float r, float g, float b)
 {
     return std::make_unique<SolidColorMaterial>(glm::vec3(r, g, b));
 }

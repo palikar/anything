@@ -268,8 +268,15 @@ endif()
 
 option(BUILD_PLANE_SCENE "Build plane scene" TRUE)
 if(${BUILD_PLANE_SCENE} OR ${BUILD_ALL_EXAMPLES})
-    add_executable(terrain_scene ./examples/terrain_scene.cpp)
-    target_link_libraries(terrain_scene PUBLIC anything_engine)
+    add_executable(plane_scene ./examples/plane_scene.cpp)
+    target_link_libraries(plane_scene PUBLIC anything_engine)
+endif()
+
+
+option(BUILD_ANIMATION_SCENE "Build animation scene" TRUE)
+if(${BUILD_ANIMATION_SCENE} OR ${BUILD_ALL_EXAMPLES})
+    add_executable(animation_scene ./examples/animation_scene.cpp)
+    target_link_libraries(animation_scene PUBLIC anything_engine)
 endif()
 
 

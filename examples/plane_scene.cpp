@@ -24,11 +24,7 @@ class TerrainScene : public gmt::GameBase
         main_scene = init_scene("main");
         main_scene->camera().init_prescpective_projection(glm::radians(45.0f), 1024.0/768.0, 0.001, 10000.0);
         main_scene->camera().set_look_at(glm::vec3(10,10, 10), glm::vec3(0.0f,0.0f,0.0f));
-
-        // auto oribital_camera_controller = main_scene->add_component<cmp::OrbitalCameraComponent>(&main_scene->camera());
-        // oribital_camera_controller->set_max_radius(200.0f);
-        // oribital_camera_controller->set_min_radius(0.005f);
-
+        
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::Enable(true);
     }
@@ -40,16 +36,6 @@ class TerrainScene : public gmt::GameBase
 
         main_scene->ambient_light(glm::vec3(0.8, 0.8f, 0.6f));
         main_scene->light_setup().ambient_light.intensity = 0.08f;
-
-        // main_scene->point_light(0);
-        // main_scene->light_setup().point_lights[0].constant = 0.0;
-        // main_scene->light_setup().point_lights[0].linear = 0.074;
-        // main_scene->light_setup().point_lights[0].quadratic = 0.000;
-        // main_scene->light_setup().point_lights[0].position = {5.0f, 10.0f, 5.0f};
-        // main_scene->light_setup().point_lights[0].color = {0.8f,0.8f,0.8f};
-
-        // pointlight = main_scene->add(gmt::pointlight_helper(5.0f));
-        // cmp::transform(pointlight).set_position({5.0f, 10.0f, 5.0f});
 
     }
 

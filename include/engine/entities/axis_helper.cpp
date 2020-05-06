@@ -44,13 +44,19 @@ void AxisHelper::init_meshes()
                       0.0);
     arrow_3.translate(0.0, (cyl_height) / 2, 0.f);
 
+    auto mat1 = grph::solid_color(glm::vec3(0.0f, 0.0f, 1.0f));
+    mat1->no_lighting();
 
-    cmp::add_children(
-      this,
-      mesh_entity({ std::move(arrow_1), grph::solid_color(glm::vec3(0.0f, 1.0f, 0.0f)) }),
-      mesh_entity({ std::move(arrow_2), grph::solid_color(glm::vec3(0.0f, 0.0f, 1.0f)) }),
-      mesh_entity(
-        { std::move(arrow_3), grph::solid_color(glm::vec3(1.0f, 0.0f, 0.0f)) }));
+    auto mat2 = grph::solid_color(glm::vec3(0.0f, 1.0f, 0.0f));
+    mat2->no_lighting();
+
+    auto mat3 = grph::solid_color(glm::vec3(1.0f, 0.0f, 0.0f));
+    mat3->no_lighting();
+
+    cmp::add_children(this,
+                      mesh_entity({ std::move(arrow_1), std::move(mat1) }),
+                      mesh_entity({ std::move(arrow_2), std::move(mat2) }),
+                      mesh_entity({ std::move(arrow_3), std::move(mat3) }));
 }
 
 

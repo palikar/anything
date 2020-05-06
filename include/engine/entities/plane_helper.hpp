@@ -32,7 +32,7 @@ class PlaneHelper : public Entity
     size_t m_size;
 
   public:
-    PlaneHelper(glm::vec3 color = { 1.0f, 0.0f, 0.0f }, size_t size = 5);
+    PlaneHelper(size_t size = 5, glm::vec3 color = { 1.0f, 0.0f, 0.0f });
 
     void init_points();
 
@@ -51,9 +51,9 @@ class PlaneHelper : public Entity
 
 using PlaneHelperPtr = std::unique_ptr<PlaneHelper>;
 
-inline PlaneHelperPtr plane_helper()
+inline PlaneHelperPtr plane_helper(size_t size = 5)
 {
-    return std::make_unique<PlaneHelper>();
+    return std::make_unique<PlaneHelper>(size);
 }
 
 

@@ -4,7 +4,7 @@ namespace ay::gmt
 {
 
 
-PlaneHelper::PlaneHelper(glm::vec3 color, size_t size) : m_color(color), m_size(size)
+PlaneHelper::PlaneHelper(size_t size, glm::vec3 color) : m_color(color), m_size(size)
 {
 
     m_transform = add_component(std::make_unique<cmp::TransformComponent>());
