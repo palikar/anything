@@ -33,7 +33,7 @@ class MeshComponent;
 class InstancedMeshComponent;
 class GroupComponent;
 class LineSegmentsComponent;
-
+class ParticleComponent;
 }  // namespace ay::cmp
 
 
@@ -100,6 +100,8 @@ class RendererScene3D
     void handle_sky(gmt::Skybox *sky);
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
+
+    void handle_particles(gmt::Entity *object, cmp::ParticleComponent *particle_comp);
 
     void handle_instanced_mesh(gmt::Entity *object,
                                cmp::InstancedMeshComponent *mesh_comp);

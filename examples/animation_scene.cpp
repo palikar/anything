@@ -10,6 +10,8 @@ class AnimScene : public gmt::GameBase
     rend::RendererScene3D renderer;
     cmp::OrbitalCameraComponent *oribital_camera_controller;
 
+    gmt::Entity* system;
+
 
   public:
 
@@ -52,33 +54,41 @@ class AnimScene : public gmt::GameBase
         auto top_grid = main_scene->add(gmt::grid_helper(50, 30));
         cmp::transform(top_grid).translateY(10.0f);
 
-        auto move_sphere = main_scene->add(gmt::object_mesh(
-            { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
-        cmp::transform(move_sphere).set_position({5.0, 0.4, 5.0});
+        // auto move_sphere = main_scene->add(gmt::object_mesh(
+        //     { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
+        // cmp::transform(move_sphere).set_position({5.0, 0.4, 5.0});
 
-        auto move_animation = anim::vector_track(
-            { { 5.0, 0.4, 5.0 }, { 5.0, 10.0 - 0.4, 5.0 }, { 5.0, 0.4, 5.0 } },
-            { 0.0, 2.0, 4.0 });
-        move_animation->set_target(&move_sphere->transform().position());
-        move_animation->easing() = mth::EasingType::Bounce_in;
-        animator().main_timeline().push_track("sphere_move", std::move(move_animation));
+        // auto move_animation = anim::vector_track(
+        //     { { 5.0, 0.4, 5.0 }, { 5.0, 10.0 - 0.4, 5.0 }, { 5.0, 0.4, 5.0 } },
+        //     { 0.0, 2.0, 4.0 });
+        // move_animation->set_target(&move_sphere->transform().position());
+        // move_animation->easing() = mth::EasingType::Bounce_in;
+        // animator().main_timeline().push_track("sphere_move", std::move(move_animation));
 
-        auto color_sphere = main_scene->add(gmt::object_mesh(                                                
-            { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
-        cmp::transform(color_sphere).set_position({-5.0, 0.4, 5.0});
+        // auto color_sphere = main_scene->add(gmt::object_mesh(                                                
+        //     { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
+        // cmp::transform(color_sphere).set_position({-5.0, 0.4, 5.0});
 
-        auto color_animation = anim::vector_track(
-            { {0.7, 0.2, 0.4}, {0.2, 0.7, 0.5}, {0.7, 0.2, 0.4} },
-            { 0.0, 1.0, 2.0 });
-        color_animation->set_target(&color_sphere->material<grph::SolidColorMaterial>().parameters().m_color);
-        color_animation->easing() = mth::EasingType::Quadratic_in_out;
-        animator().main_timeline().push_track("sphere_color", std::move(color_animation));
+        // auto color_animation = anim::vector_track(
+        //     { {0.7, 0.2, 0.4}, {0.2, 0.7, 0.5}, {0.7, 0.2, 0.4} },
+        //     { 0.0, 1.0, 2.0 });
+        // color_animation->set_target(&color_sphere->material<grph::SolidColorMaterial>().parameters().m_color);
+        // color_animation->easing() = mth::EasingType::Quadratic_in_out;
+        // animator().main_timeline().push_track("sphere_color", std::move(color_animation));
+
+
+        system = main_scene->add(gmt::particle_system_entity());
+
+
+
+        
 
         init_lighting();
     }
 
     void update(double dt) override
     {
+
         main_scene->update(dt);
     }
 

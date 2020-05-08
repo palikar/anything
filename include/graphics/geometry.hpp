@@ -69,7 +69,7 @@ class Geometry
 
     void drop_attribute(std::string name)
     {
-        m_buffers.erase(m_buffers.find(name));
+        m_buffers.erase(name);
     }
 
     std::vector<float> &attribute(const std::string &name)

@@ -8,6 +8,7 @@
 #include "engine/components/model.hpp"
 #include "engine/components/transform.hpp"
 #include "engine/components/line_segments.hpp"
+#include "engine/components/particle_system.hpp"
 
 #include "graphics/mesh.hpp"
 
@@ -29,7 +30,6 @@ inline EntityPtr instanced_mesh_entity(grph::InstancedMesh mesh)
     return new_ent;
 }
 
-
 inline EntityPtr model_entity(grph::Model model)
 {
     EntityPtr new_ent = std::make_unique<Entity>();
@@ -43,6 +43,14 @@ inline EntityPtr line_segments_entity(grph::LineSegments segs)
     EntityPtr new_ent = std::make_unique<Entity>();
     new_ent->add_component(std::make_unique<cmp::TransformComponent>());
     new_ent->add_component(std::make_unique<cmp::LineSegmentsComponent>(std::move(segs)));
+    return new_ent;
+}
+
+inline EntityPtr particle_system_entity()
+{
+    EntityPtr new_ent = std::make_unique<Entity>();
+    new_ent->add_component(std::make_unique<cmp::TransformComponent>());
+    new_ent->add_component<cmp::ParticleComponent>(std::make_unique<part::ParticleSystem<part::QuadParticle>>());
     return new_ent;
 }
 

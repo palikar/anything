@@ -65,10 +65,19 @@ class Entity
     }
 
 
-    template<typename T>
+	template<typename T>
     auto add_component()
     {
-        auto t_comp = std::make_unique<T>();
+
+        auto t_comp = [&](){
+            if constexpr (std::is_default_constructible_v<typename T::construct_type>)
+                                       {
+                                           return std::make_unique<T>(typename T::construct_type{});
+                                       } else
+			{
+				return std::make_unique<T>();
+			}
+		}();
 
         if (m_game != nullptr)
         {

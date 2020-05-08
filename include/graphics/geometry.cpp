@@ -134,7 +134,7 @@ void Geometry::pack_vertex_buffers()
     if (m_buffers.count("position") > 0 && m_buffers.count("normal") > 0
         && m_buffers.count("uv") > 0)
     {
-
+        
         auto &pos  = (m_buffers.at("position")).data;
         auto &norm = (m_buffers.at("normal")).data;
         auto &uv   = (m_buffers.at("uv")).data;

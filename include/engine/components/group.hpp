@@ -12,6 +12,9 @@ namespace ay::cmp
 class GroupComponent : public gmt::Component
 {
   public:
+    using construct_type = typename std::vector<gmt::EntityPtr>;
+
+    
     std::vector<gmt::EntityPtr> children;
 
     AY_COMPONENT(Mesh)

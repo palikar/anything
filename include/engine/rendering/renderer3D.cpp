@@ -13,6 +13,7 @@
 #include "engine/components/instanced_mesh.hpp"
 #include "engine/components/group.hpp"
 #include "engine/components/line_segments.hpp"
+#include "engine/components/particle_system.hpp"
 
 #include <fmt/format.h>
 
@@ -290,6 +291,31 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
     m_api->draw_lines(line->segments.geometry());
 }
 
+
+void RendererScene3D::handle_particles(gmt::Entity *object, cmp::ParticleComponent *particle_comp)
+{
+
+    
+    m_binder.begin_draw_call();
+
+    auto mat    = particle_comp->system->material();
+    auto shader = mat->shader();
+
+    switch_shader(shader);
+    process_material(mat, shader);
+
+    auto transform     = cmp::transform(object);
+    switch_mvp(shader, transform.get_tranformation());
+
+    shader->set("lighting_enabled", false);
+    
+    EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
+
+    // std::cout << "rendering particles" <<  particle_comp->system->count() <<  "\n";
+    
+    m_api->draw_instanced(particle_comp->system->geometry(), particle_comp->system->count());
+}
+
 void RendererScene3D::handle_sky(gmt::Skybox *sky)
 {
     m_binder.begin_draw_call();
@@ -343,6 +369,8 @@ void RendererScene3D::render_entity(gmt::Entity *t_obj)
 
     dispatch_component<cmp::InstancedMeshComponent>(t_obj,
                                                     HANDLER(handle_instanced_mesh));
+
+    dispatch_component<cmp::ParticleComponent>(t_obj, HANDLER(handle_particles));
 }
 
 void RendererScene3D::render_scene(gmt::Scene3D &scene)
