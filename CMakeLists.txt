@@ -235,6 +235,8 @@ add_library(anything_engine
     ./include/engine/animation/animator.cpp
     ./include/engine/animation/timeline.cpp
 
+    ./include/engine/particle_system/particle_system.cpp
+
     )
 
 target_include_directories(anything_engine PUBLIC ./include)

@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 
 #include "rendering/shaders.hpp"
@@ -64,8 +64,39 @@ class RendererScene3D
 
     void render_entity(gmt::Entity *object);
 
+    template<typename T, typename... Ts, typename Func>
+    void dispatch_component(gmt::Entity *object, Func && func)
+    {
+        auto comp = object->component<T>();
+
+        if (comp == nullptr)
+        {
+            return;
+        }
+
+        bool valid = true;
+        valid      = ((object->component<Ts>() != nullptr) && ...);
+        
+        if (valid)
+        {
+            func(object, comp);
+        }
+    }
+
+
+    
     void bind_lighting(Shader *shader);
 
+    void process_material(grph::Material *material, Shader *shader);
+
+    void switch_shader(Shader *shader);
+
+    void switch_mvp(Shader *shader, glm::mat4 transform);
+
+    void push_transform(glm::mat4 transform);
+
+
+    
     void handle_sky(gmt::Skybox *sky);
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);
@@ -79,27 +110,6 @@ class RendererScene3D
 
     void handle_group(gmt::Entity *object, cmp::GroupComponent *group_comp);
 
-    void handle_material(grph::Material *material, Shader *shader);
-
-    void switch_shader(Shader *shader);
-
-    void switch_mvp(Shader *shader, glm::mat4 transform);
-
-    void push_transform(glm::mat4 transform);
-
-    template<typename T, typename... Ts, typename Func>
-    void dispatch_component(gmt::Entity *object, Func &&func)
-    {
-        auto comp = object->component<T>();
-
-        bool valid = true;
-        valid      = ((object->component<Ts>() != nullptr) && ...);
-
-        if (comp != nullptr && valid)
-        {
-            func(object, comp);
-        }
-    }
 
   public:
     RendererScene3D();

@@ -22,7 +22,7 @@ class SolidColorMaterial : public Material
     SolidColorParameters m_params;
 
   public:
-    SolidColorMaterial(glm::vec3 t_color, bool t_wireframe = false);
+    SolidColorMaterial(glm::vec3 t_color = { 1.0, 0.0, 0.0 }, bool t_wireframe = false);
 
     virtual ~SolidColorMaterial() = default;
 

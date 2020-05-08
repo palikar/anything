@@ -63,8 +63,8 @@ class AnimScene : public gmt::GameBase
         move_animation->easing() = mth::EasingType::Bounce_in;
         animator().main_timeline().push_track("sphere_move", std::move(move_animation));
 
-        auto color_sphere = main_scene->add(gmt::object_mesh(
-                                                { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
+        auto color_sphere = main_scene->add(gmt::object_mesh(                                                
+            { grph::sphere_geometry(0.7f, 20, 20), grph::solid_color(0.7, 0.2, 0.4) }));
         cmp::transform(color_sphere).set_position({-5.0, 0.4, 5.0});
 
         auto color_animation = anim::vector_track(

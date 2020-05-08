@@ -23,6 +23,8 @@ RendererScene3D::RendererScene3D() : m_uniform_binder(m_binder)
 {
 }
 
+// Utilities
+
 void RendererScene3D::init(RenderAPI *t_api)
 {
     m_api = t_api;
@@ -133,7 +135,7 @@ void RendererScene3D::push_transform(glm::mat4 transform)
     }
 }
 
-void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
+void RendererScene3D::process_material(grph::Material *material, Shader *shader)
 {
     m_api->depth_func(material->depth_func());
     m_api->depth_test(material->depth_test());
@@ -164,6 +166,9 @@ void RendererScene3D::handle_material(grph::Material *material, Shader *shader)
     material->update_uniforms(m_uniform_binder, m_binder, m_current_context);
 }
 
+
+// Rendering handlers
+
 void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *model_comp)
 {
 
@@ -181,7 +186,7 @@ void RendererScene3D::handle_model(gmt::Entity *object, cmp::ModelComponent *mod
 
         switch_shader(shader);
         switch_mvp(shader, transform.get_tranformation());
-        handle_material(mat, shader);
+        process_material(mat, shader);
 
         if (mat->needs_lighting())
         {
@@ -208,7 +213,7 @@ void RendererScene3D::handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_
 
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
-    handle_material(mat, shader);
+    process_material(mat, shader);
 
     if (mat->needs_lighting())
     {
@@ -234,7 +239,7 @@ void RendererScene3D::handle_instanced_mesh(gmt::Entity *,
     auto shader = mat->shader();
 
     switch_shader(shader);
-    handle_material(mat, shader);
+    process_material(mat, shader);
     switch_mvp(shader, mesh_comp->mesh[0].get_tranformation());
 
     if (mat->needs_lighting())
@@ -278,7 +283,7 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
 
     switch_shader(shader);
     switch_mvp(shader, transform.get_tranformation());
-    handle_material(mat, shader);
+    process_material(mat, shader);
 
     shader->set("lighting_enabled", false);
 
@@ -318,6 +323,9 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
     m_api->draw_triangles(geom);
     m_api->culling(Side::FRONT);
 }
+
+
+// Render Dispatchers
 
 void RendererScene3D::render_entity(gmt::Entity *t_obj)
 {
