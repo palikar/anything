@@ -138,8 +138,6 @@ class Track : public BaseTrack
     {
         return m_values;
     }
-
-    
 };
 
 

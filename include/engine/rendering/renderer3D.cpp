@@ -292,10 +292,11 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
 }
 
 
-void RendererScene3D::handle_particles(gmt::Entity *object, cmp::ParticleComponent *particle_comp)
+void RendererScene3D::handle_particles(gmt::Entity *object,
+                                       cmp::ParticleComponent *particle_comp)
 {
 
-    
+
     m_binder.begin_draw_call();
 
     auto mat    = particle_comp->system->material();
@@ -304,16 +305,17 @@ void RendererScene3D::handle_particles(gmt::Entity *object, cmp::ParticleCompone
     switch_shader(shader);
     process_material(mat, shader);
 
-    auto transform     = cmp::transform(object);
+    auto transform = cmp::transform(object);
     switch_mvp(shader, transform.get_tranformation());
 
     shader->set("lighting_enabled", false);
-    
+
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
     // std::cout << "rendering particles" <<  particle_comp->system->count() <<  "\n";
-    
-    m_api->draw_instanced(particle_comp->system->geometry(), particle_comp->system->count());
+
+    m_api->draw_instanced(particle_comp->system->geometry(),
+                          particle_comp->system->count());
 }
 
 void RendererScene3D::handle_sky(gmt::Skybox *sky)

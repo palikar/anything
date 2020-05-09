@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 
 
 #include "rendering/shaders.hpp"
@@ -65,7 +65,7 @@ class RendererScene3D
     void render_entity(gmt::Entity *object);
 
     template<typename T, typename... Ts, typename Func>
-    void dispatch_component(gmt::Entity *object, Func && func)
+    void dispatch_component(gmt::Entity *object, Func &&func)
     {
         auto comp = object->component<T>();
 
@@ -76,7 +76,7 @@ class RendererScene3D
 
         bool valid = true;
         valid      = ((object->component<Ts>() != nullptr) && ...);
-        
+
         if (valid)
         {
             func(object, comp);
@@ -84,7 +84,6 @@ class RendererScene3D
     }
 
 
-    
     void bind_lighting(Shader *shader);
 
     void process_material(grph::Material *material, Shader *shader);
@@ -96,7 +95,6 @@ class RendererScene3D
     void push_transform(glm::mat4 transform);
 
 
-    
     void handle_sky(gmt::Skybox *sky);
 
     void handle_mesh(gmt::Entity *object, cmp::MeshComponent *mesh_comp);

@@ -1,21 +1,21 @@
 #version 460 core
 
 layout (location = 0) in vec3 i_pos;
-// layout (location = 1) in mat4 i_model;
-
 layout (location = 1) in vec3 i_position;
 layout (location = 2) in vec4 i_color;
 
-out float col;
+out vec4 col;
 
+uniform mat4 model_matrix;
 uniform mat4 projection_matrix;
 
-
 void main() {
-    
-    mat4 model = mat4(1.0);
-    model[3].xyz = i_position;
-    vec3 pos = vec3(model * vec4(i_pos, 1.0));
+
+    col = i_color;
+        
+    mat4 paritcle_model = mat4(1.0);
+    paritcle_model[3].xyz = i_position;
+    vec3 pos = vec3(model_matrix * paritcle_model * vec4(i_pos, 1.0));
     
     gl_Position = projection_matrix * vec4(pos, 1.0);
 

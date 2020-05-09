@@ -12,7 +12,6 @@ namespace ay::grph
 struct QuadParticleParameters
 {
     glm::vec3 m_color;
-    
 };
 
 class QuadParticleMaterial : public Material
@@ -22,7 +21,7 @@ class QuadParticleMaterial : public Material
 
   public:
     QuadParticleMaterial(glm::vec3 t_color = { 1.0, 0.0, 0.0 }, bool t_wireframe = false)
-        : m_params{ t_color}
+      : m_params{ t_color }
     {
         m_parameters.m_wire_frame = t_wireframe;
     }
@@ -35,8 +34,8 @@ class QuadParticleMaterial : public Material
     }
 
     void update_uniforms(rend::UniformBinder &,
-    rend::TextureBinder &,
-    rend::RenderContext &) override
+                         rend::TextureBinder &,
+                         rend::RenderContext &) override
     {
     }
 
@@ -57,7 +56,6 @@ class QuadParticleMaterial : public Material
         m_params.m_color = t_color;
     }
 };
-
 
 
 }  // namespace ay::grph

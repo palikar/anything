@@ -12,9 +12,8 @@ namespace ay::cmp
 class TransformComponent : public gmt::Component
 {
   public:
-
     using construct_type = mth::Transform;
-    
+
     mth::Transform transform;
 
     AY_COMPONENT(Tranform)

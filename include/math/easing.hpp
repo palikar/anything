@@ -302,7 +302,8 @@ inline static std::string interpolation_names[] = {
     "Bounce_in_out",
 };
 
-enum class EasingType {
+enum class EasingType
+{
     Linear = 0,
     Quadratic_in,
     Quadratic_out,
@@ -337,14 +338,14 @@ inline static float (*interpolations[])(float) = {
     &Easing::Quadratic::in_out,
     &Easing::Cubic::in,
     &Easing::Cubic::out,
-        &Easing::Cubic::in_out,
-        &Easing::Sinusoidal::in,
-        &Easing::Sinusoidal::out,
-        &Easing::Sinusoidal::in_out,
-        &Easing::Exponential::in,
-        &Easing::Exponential::out,
-        &Easing::Exponential::in_out,
-        &Easing::Circular::in,
+    &Easing::Cubic::in_out,
+    &Easing::Sinusoidal::in,
+    &Easing::Sinusoidal::out,
+    &Easing::Sinusoidal::in_out,
+    &Easing::Exponential::in,
+    &Easing::Exponential::out,
+    &Easing::Exponential::in_out,
+    &Easing::Circular::in,
     &Easing::Circular::out,
     &Easing::Circular::in_out,
     &Easing::Elastic::in,
