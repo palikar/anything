@@ -9,6 +9,7 @@ out vec3 pos;
 out vec3 norm;
 
 uniform mat4 projection_matrix;
+uniform mat4 view_projection_matrix;
 uniform mat4 model_matrix;
 uniform mat4 view_matrix;
 
@@ -23,6 +24,6 @@ void main()
 
     fog_depth = -(view_matrix * vec4(pos, 1.0)).z;
 
-    gl_Position = projection_matrix * vec4(pos, 1.0);
+    gl_Position = view_projection_matrix * vec4(pos, 1.0);
     
 }

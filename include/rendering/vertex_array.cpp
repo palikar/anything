@@ -112,8 +112,6 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
 
         if (element.per_instance)
         {
-            std::cout << "per isntance"
-                      << "\n";
             glVertexAttribDivisor(m_index, 1);
         }
 

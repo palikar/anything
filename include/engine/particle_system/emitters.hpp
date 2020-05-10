@@ -23,17 +23,45 @@ class ParticleEmitter
   protected:
     EmitterParameters m_parameters;
 
+    virtual void do_update_parameters() = 0;
+
+  private:
+    glm::vec3 m_vel{ 0.0, 1.0, 0.0 };
+    glm::vec3 m_vel_error[2] = { { -1.0, 0.0, -1.0 }, { 1.0, 0.0, 1.0 } };
+    float m_speed{ 10.0 };
 
   public:
-    ParticleEmitter()                 = default;
+    ParticleEmitter()
+    {
+        m_parameters["velocity"]            = m_vel;
+        m_parameters["velocity_error_down"] = m_vel_error[0];
+        m_parameters["velocity_error_up"]   = m_vel_error[1];
+        m_parameters["speed"]               = 5.0f;
+    };
+
+    virtual ~ParticleEmitter() = default;
+
     virtual glm::vec3 next_position() = 0;
-    virtual glm::vec3 next_velocity() = 0;
 
-    virtual void update_parameters() = 0;
+    virtual glm::vec3 next_velocity()
+    {
+        const float x = util::Random::uniform_real(m_vel_error[0].x, m_vel_error[1].x);
+        const float y = util::Random::uniform_real(m_vel_error[0].y, m_vel_error[1].y);
+        const float z = util::Random::uniform_real(m_vel_error[0].z, m_vel_error[1].z);
 
-    virtual EmitterParameters &parameters()
+        return m_speed * glm::normalize(m_vel + glm::vec3{ x, y, z });
+    };
+
+    EmitterParameters &parameters()
     {
         return m_parameters;
+    }
+
+    void update_parameters()
+    {
+        m_vel = std::get<Position>(m_parameters["velocity"]);
+
+        do_update_parameters();
     }
 
     template<typename T>
@@ -43,38 +71,33 @@ class ParticleEmitter
     }
 };
 
+using ParticleEmitterPtr = std::unique_ptr<ParticleEmitter>;
+
 
 class LineEmitter : public ParticleEmitter
 {
   private:
     glm::vec3 m_p1;
     glm::vec3 m_p2;
-    glm::vec3 m_vel;
+
 
   public:
-    LineEmitter(glm::vec3 p1, glm::vec3 p2) : m_p1(p1), m_p2(p2), m_vel(0.0, 1.0, 0.0)
+    LineEmitter(glm::vec3 p1, glm::vec3 p2) : m_p1(p1), m_p2(p2)
     {
-        m_parameters["start"]    = p1;
-        m_parameters["end"]      = p2;
-        m_parameters["velocity"] = m_vel;
+        m_parameters["start"] = p1;
+        m_parameters["end"]   = p2;
     }
 
-    void update_parameters() override
+    void do_update_parameters() override
     {
-        m_p1  = std::get<Position>(m_parameters["start"]);
-        m_p2  = std::get<Position>(m_parameters["end"]);
-        m_vel = std::get<Position>(m_parameters["velocity"]);
+        m_p1 = std::get<Position>(m_parameters["start"]);
+        m_p2 = std::get<Position>(m_parameters["end"]);
     }
 
     glm::vec3 next_position() override
     {
         auto t = util::Random::uniform_real(0, 1.0f);
         return (1 - t) * m_p1 + t * m_p2;
-    }
-
-    glm::vec3 next_velocity() override
-    {
-        return m_vel;
     }
 };
 
@@ -83,33 +106,25 @@ class CircleEmitter : public ParticleEmitter
   private:
     glm::vec3 m_p;
     float m_radius;
-    glm::vec3 m_vel;
 
   public:
     CircleEmitter(glm::vec3 p = { 0.0, 0.0, 0.0 }, float radius = 1.0)
-      : m_p(p), m_radius(radius), m_vel(0.0, 1.0, 0.0)
+      : m_p(p), m_radius(radius)
     {
         m_parameters["position"] = p;
         m_parameters["radius"]   = radius;
-        m_parameters["velocity"] = m_vel;
     }
 
-    void update_parameters() override
+    void do_update_parameters() override
     {
         m_p      = std::get<Position>(m_parameters["position"]);
         m_radius = std::get<float>(m_parameters["radius"]);
-        m_vel    = std::get<Position>(m_parameters["velocity"]);
     }
 
     glm::vec3 next_position() override
     {
         auto t = util::Random::uniform_real(0, 2 * mth::PI);
         return m_p + glm::vec3{ m_radius * std::sin(t), 0.0, m_radius * std::cos(t) };
-    }
-
-    glm::vec3 next_velocity() override
-    {
-        return m_vel;
     }
 };
 
@@ -129,7 +144,7 @@ class CircleAreaEmitter : public ParticleEmitter
         m_parameters["velocity"] = m_vel;
     }
 
-    void update_parameters() override
+    void do_update_parameters() override
     {
         m_p          = std::get<Position>(m_parameters["position"]);
         m_max_radius = std::get<float>(m_parameters["radius"]);
@@ -164,7 +179,7 @@ class ConeEmitter : public ParticleEmitter
         m_parameters["angle"]    = angle;
     }
 
-    void update_parameters() override
+    void do_update_parameters() override
     {
         m_p     = std::get<Position>(m_parameters["position"]);
         m_angle = std::get<float>(m_parameters["angle"]);
@@ -187,4 +202,6 @@ class ConeEmitter : public ParticleEmitter
         return m_p + pos;
     }
 };
+
+
 }  // namespace ay::part

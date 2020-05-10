@@ -2,12 +2,14 @@
 #include "engine/particle_system/particle_system.hpp"
 #include "util/random.hpp"
 
+#include "graphics/material_builder.hpp"
+
 namespace ay::part
 {
 
 grph::Geometry QuadParticle::geometry()
 {
-    auto gem = grph::cube_geometry(0.5, 0.5, 0.5, 1, 1, 1);
+    auto gem = grph::plane_geometry(1, 1, 1, 1);
     gem.drop_attribute("uv");
     gem.drop_attribute("normal");
     gem.drop_attribute("tangents");
@@ -29,8 +31,6 @@ std::array<std::pair<rend::VertexBuffer *, size_t>, QuadParticle::per_instance_b
     color_buf->set_layout(rend::BufferLayout(
       { rend::BufferElement{ "color", rend::ShaderDataType::Float4, true } }));
 
-    std::cout << "adding instance data"
-              << "\n";
     auto pos   = geom.gl_buffers()->add_vertex_buffer(std::move(position_buf));
     auto color = geom.gl_buffers()->add_vertex_buffer(std::move(color_buf));
 
@@ -52,6 +52,11 @@ void QuadParticle::update_buffers(
     data[1][index * 4 + 3] = color.a;
 }
 
+void QuadParticle::init_material(QuadParticle::material_type *material)
+{
+    grph::MaterialBuilder::from_existing(material).addative_blending().enable_blending();
+}
+
 void QuadParticle::update(float dt)
 {
     life -= dt;
@@ -61,19 +66,10 @@ void QuadParticle::update(float dt)
 
 void QuadParticle::init()
 {
-    auto r = util::Random::uniform_real(0, 3.14 * 2);
-    color  = { util::Random::uniform_real(0, 1.0f),
+    color = { util::Random::uniform_real(0, 1.0f),
               util::Random::uniform_real(0, 1.0f),
               util::Random::uniform_real(0, 1.0f),
-              util::Random::uniform_real(0, 1.0f) };
-
-    auto q = util::Random::uniform_real(0, 1.0f);
-
-    auto p = (q - 1) * glm::vec3{ 20.0, 0.0, 0.0 } + q * glm::vec3{ 0.0, 0.0, 0.0 };
-
-    position = p;
-    velocity = { 0.0f, 8.0, 3 * std::cos(r) };
-    life     = 3.0f + util::Random::uniform_real(0.0, 0.5);
+              util::Random::uniform_real(0, 0.5f) };
 }
 
 

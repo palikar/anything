@@ -110,8 +110,9 @@ void RendererScene3D::switch_shader(Shader *shader)
 
 void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 {
-    shader->set("projection_matrix", m_view_projection);
+    shader->set("view_projection_matrix", m_view_projection);
     shader->set("view_matrix", m_current_context.view);
+    shader->set("projection_matrix", m_current_context.proj);
 
     if (!m_mat_stack.empty())
     {

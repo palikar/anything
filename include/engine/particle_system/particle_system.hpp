@@ -41,6 +41,14 @@ class ParticleSystemBase
     virtual size_t count() = 0;
 };
 
+struct ParticleSystemParameters
+{
+    float life_base = 3.0f;
+    glm::vec2 life_error{ 0.0, 1.0f };
+
+    int spawn_rate = 5;
+};
+
 template<typename ParticleType>
 class ParticleSystem : public ParticleSystemBase
 {
@@ -50,8 +58,10 @@ class ParticleSystem : public ParticleSystemBase
     static constexpr size_t instance_buffers = Particle::per_instance_buffers;
 
   private:
+    ParticleSystemParameters m_parameters{};
+
     grph::Geometry m_geometry;
-    grph::MaterialPtr m_material;
+    std::unique_ptr<Material> m_material;
     std::array<std::pair<rend::VertexBuffer *, size_t>, instance_buffers> m_buffers;
     std::array<std::vector<float>, instance_buffers> m_data;
 
@@ -61,6 +71,8 @@ class ParticleSystem : public ParticleSystemBase
 
     size_t last_used_particle = 0;
     size_t m_count            = 0;
+
+    ParticleEmitterPtr m_emitter{ nullptr };
 
     size_t find_unused_particle()
     {
@@ -86,6 +98,38 @@ class ParticleSystem : public ParticleSystemBase
         return 0;
     }
 
+    inline void init_particle(Particle &t_particle)
+    {
+        t_particle.position = m_emitter->next_position();
+
+        t_particle.velocity = m_emitter->next_velocity();
+
+        t_particle.life = m_parameters.life_base
+                          + util::Random::uniform_real(m_parameters.life_error.x,
+                                                       m_parameters.life_error.y);
+
+        t_particle.init();
+    }
+
+    inline void spawn(float dt)
+    {
+        for (size_t i = 0; i < m_parameters.spawn_rate * dt; ++i)
+        {
+            const size_t index = find_unused_particle();
+            init_particle(m_particles[index]);
+        }
+    }
+
+    inline void update_intance_buffers()
+    {
+        for (size_t i = 0; i < instance_buffers; ++i)
+        {
+            m_buffers[i].first->set_data(&m_data[i][0],
+                                         sizeof(float) * m_count * m_buffers[i].second);
+        }
+    }
+
+
   public:
     ParticleSystem(const size_t t_max_particles = 4000)
       : m_geometry(ParticleType::geometry())
@@ -95,6 +139,8 @@ class ParticleSystem : public ParticleSystemBase
         m_geometry.pack();
 
         m_buffers = ParticleType::init_buffers(m_geometry, max_particles);
+        ParticleType::init_material(m_material.get());
+
 
         for (size_t i = 0; i < instance_buffers; ++i)
         {
@@ -102,42 +148,30 @@ class ParticleSystem : public ParticleSystemBase
         }
 
         m_particles.resize(max_particles);
-    }
 
+        m_emitter = std::make_unique<LineEmitter>(glm::vec3{ 0.0, 0.0, 0.0 },
+                                                  glm::vec3{ 0.0, 0.0, 0.0 });
+    }
 
     void update(float dt) override
     {
+        spawn(dt);
 
-        for (size_t i = 0; i < 5; ++i)
-        {
-
-            size_t index = find_unused_particle();
-
-            m_particles[index].init();
-        }
-
-        size_t count = 0;
+        m_count      = 0;
         size_t index = 0;
         for (size_t i = 0; i < max_particles; ++i)
         {
 
             if (m_particles[i].life > 0.0)
             {
-                ++count;
+                ++m_count;
+                ;
                 m_particles[i].update(dt);
                 m_particles[i].update_buffers(index++, m_data);
             }
         }
 
-        m_count = count;
-
-        for (size_t i = 0; i < instance_buffers; ++i)
-        {
-            // std::cout << "data isze " << sizeof(float) * max_particles *
-            // m_buffers[i].second << "\n";
-            m_buffers[i].first->set_data(
-              &m_data[i][0], sizeof(float) * max_particles * m_buffers[i].second);
-        }
+        update_intance_buffers();
     }
 
     grph::Geometry &geometry() override

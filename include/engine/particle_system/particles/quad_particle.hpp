@@ -30,6 +30,8 @@ struct QuadParticle
 
     static grph::Geometry geometry();
 
+    static void init_material(material_type *material);
+
     static std::array<std::pair<rend::VertexBuffer *, size_t>, per_instance_buffers>
       init_buffers(grph::Geometry &geom, size_t t_particle_count);
 
