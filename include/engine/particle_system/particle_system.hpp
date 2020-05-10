@@ -189,6 +189,8 @@ class ParticleSystem : public ParticleSystemBase
         update_intance_buffers();
     }
 
+    // Stuff needed for the rendering
+
     grph::Geometry &geometry() override
     {
         return m_geometry;
@@ -198,6 +200,13 @@ class ParticleSystem : public ParticleSystemBase
     {
         return m_material.get();
     }
+
+    size_t count() override
+    {
+        return m_count;
+    }
+
+    // Particle system settings
 
     PhysicsParameters &phisics_parameters()
     {
@@ -219,9 +228,26 @@ class ParticleSystem : public ParticleSystemBase
         return Particle::g_init_params;
     }
 
-    size_t count() override
+    // Emitter Settings
+
+    void make_sphere_emitter()
     {
-        return m_count;
+        m_emitter = std::make_unique<SphereEmitter>();
+    }
+
+    void make_circle_emitter()
+    {
+        m_emitter = std::make_unique<CircleEmitter>();
+    }
+
+    void make_circle_area_emitter()
+    {
+        m_emitter = std::make_unique<CircleAreaEmitter>();
+    }
+
+    void make_line_emitter()
+    {
+        m_emitter = std::make_unique<LineEmitter>();
     }
 };
 
