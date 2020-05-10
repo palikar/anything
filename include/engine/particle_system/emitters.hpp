@@ -203,5 +203,39 @@ class ConeEmitter : public ParticleEmitter
     }
 };
 
+class SphereEmitter : public ParticleEmitter
+{
+  private:
+    glm::vec3 m_p;
+    float m_radius;
+
+  public:
+    SphereEmitter(glm::vec3 p = { 0.0, 0.0, 0.0 }, float radius = 1.0)
+      : m_p(p), m_radius(radius)
+    {
+        m_parameters["position"] = p;
+        m_parameters["radius"]   = radius;
+    }
+
+    void do_update_parameters() override
+    {
+        m_p      = std::get<Position>(m_parameters["position"]);
+        m_radius = std::get<float>(m_parameters["radius"]);
+    }
+
+
+    glm::vec3 next_position() override
+    {
+        auto polar   = util::Random::uniform_real(0, 2 * mth::PI);
+        auto azimuth = util::Random::uniform_real(0, 2 * mth::PI);
+        const auto r = m_radius;
+
+        return m_p
+               + glm::vec3{ r * std::sin(polar) * std::cos(azimuth),
+                            r * std::sin(polar) * std::sin(azimuth),
+                            r * std::cos(polar) };
+    }
+};
+
 
 }  // namespace ay::part

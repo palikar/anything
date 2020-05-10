@@ -12,13 +12,14 @@
 #include "graphics/instanced_mesh.hpp"
 #include "graphics/geometry_factory.hpp"
 
+#include "util/random.hpp"
+
 #include "std_header.hpp"
 #include "glm_header.hpp"
 #include "math_header.hpp"
 
-#include "util/random.hpp"
-
 #include "emitters.hpp"
+#include "physics.hpp"
 
 
 namespace ay::part
@@ -53,8 +54,9 @@ template<typename ParticleType>
 class ParticleSystem : public ParticleSystemBase
 {
   public:
-    using Particle                           = ParticleType;
-    using Material                           = typename ParticleType::material_type;
+    using Particle           = ParticleType;
+    using ParticleInitParams = typename ParticleType::init_parameters_type;
+    using Material           = typename ParticleType::material_type;
     static constexpr size_t instance_buffers = Particle::per_instance_buffers;
 
   private:
@@ -73,6 +75,7 @@ class ParticleSystem : public ParticleSystemBase
     size_t m_count            = 0;
 
     ParticleEmitterPtr m_emitter{ nullptr };
+    ParticlePhysics m_phisics{};
 
     size_t find_unused_particle()
     {
@@ -129,6 +132,19 @@ class ParticleSystem : public ParticleSystemBase
         }
     }
 
+    inline void update_particle(float dt, Particle &t_particle)
+    {
+
+        t_particle.life -= dt;
+
+        m_phisics.apply_force(t_particle.mass, t_particle.acc);
+
+        t_particle.velocity += t_particle.acc * dt * 0.5f;
+        t_particle.position += t_particle.velocity * dt;
+
+        t_particle.update(dt);
+    }
+
 
   public:
     ParticleSystem(const size_t t_max_particles = 4000)
@@ -164,10 +180,9 @@ class ParticleSystem : public ParticleSystemBase
 
             if (m_particles[i].life > 0.0)
             {
-                ++m_count;
-                ;
-                m_particles[i].update(dt);
+                update_particle(dt, m_particles[i]);
                 m_particles[i].update_buffers(index++, m_data);
+                ++m_count;
             }
         }
 
@@ -182,6 +197,26 @@ class ParticleSystem : public ParticleSystemBase
     grph::Material *material() override
     {
         return m_material.get();
+    }
+
+    PhysicsParameters &phisics_parameters()
+    {
+        return m_phisics.parameters();
+    }
+
+    ParticleSystemParameters &parameters()
+    {
+        return m_parameters;
+    }
+
+    EmitterParameters &emitter_parameters()
+    {
+        return m_emitter->parameters();
+    }
+
+    ParticleInitParams &particle_parameters()
+    {
+        return Particle::g_init_params;
     }
 
     size_t count() override

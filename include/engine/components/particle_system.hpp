@@ -42,4 +42,15 @@ inline part::ParticleSystemBase &particle_system(gmt::Entity *t_entity)
     return *p->system;
 }
 
+
+template<typename T>
+inline T &particle_system(gmt::Entity *t_entity)
+{
+    auto p = t_entity->component<ParticleComponent>();
+    if (!p)
+    {
+    }
+    return *static_cast<T *>(p->system);
+}
+
 }  // namespace ay::cmp
