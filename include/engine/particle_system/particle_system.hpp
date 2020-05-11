@@ -74,12 +74,12 @@ class ParticleSystem : public ParticleSystemBase
     size_t m_count            = 0;
 
     ParticleEmitterPtr m_emitter{ nullptr };
-    ParticlePhysics m_phisics{};
+    ParticlePhysics m_physics{};
 
     size_t find_unused_particle()
     {
 
-        for (size_t i = last_used_particle; i < max_particles; i++)
+        for (size_t i = last_used_particle; i < max_particles; ++i)
         {
             if (m_particles[i].life < 0.0f)
             {
@@ -88,9 +88,9 @@ class ParticleSystem : public ParticleSystemBase
             }
         }
 
-        for (size_t i = 0; i < last_used_particle; i++)
+        for (size_t i = 0; i < last_used_particle; ++i)
         {
-            if (m_particles[i].life < 0)
+            if (m_particles[i].life < 0.0f)
             {
                 last_used_particle = i;
                 return i;
@@ -109,6 +109,8 @@ class ParticleSystem : public ParticleSystemBase
         t_particle.life = m_parameters.life_base
                           + util::Random::uniform_real(m_parameters.life_error.x,
                                                        m_parameters.life_error.y);
+
+        t_particle.max_life = t_particle.life;
 
         t_particle.init();
     }
@@ -133,10 +135,9 @@ class ParticleSystem : public ParticleSystemBase
 
     inline void update_particle(float dt, Particle &t_particle)
     {
-
         t_particle.life -= dt;
 
-        m_phisics.apply_force(t_particle.mass, t_particle.acc);
+        m_physics.apply_force(t_particle.mass, t_particle.acc);
 
         t_particle.velocity += t_particle.acc * dt * 0.5f;
         t_particle.position += t_particle.velocity * dt;
@@ -176,7 +177,6 @@ class ParticleSystem : public ParticleSystemBase
         size_t index = 0;
         for (size_t i = 0; i < max_particles; ++i)
         {
-
             if (m_particles[i].life > 0.0)
             {
                 update_particle(dt, m_particles[i]);
@@ -214,7 +214,7 @@ class ParticleSystem : public ParticleSystemBase
 
     PhysicsParameters &phisics_parameters()
     {
-        return m_phisics.parameters();
+        return m_physics.parameters();
     }
 
     ParticleSystemParameters &parameters()
@@ -232,7 +232,16 @@ class ParticleSystem : public ParticleSystemBase
         return Particle::g_init_params;
     }
 
+    auto &physics()
+    {
+        return m_physics;
+    }
+
     // Emitter Settings
+    auto emitter()
+    {
+        return m_emitter.get();
+    }
 
     void make_sphere_emitter()
     {

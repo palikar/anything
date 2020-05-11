@@ -25,11 +25,12 @@ std::array<std::pair<rend::VertexBuffer *, size_t>, QuadParticle::per_instance_b
 {
 
     auto position_buf = std::make_unique<rend::VertexBuffer>(
-      (sizeof(glm::vec4) + sizeof(float)) * t_particle_count);
+      (sizeof(glm::vec4) + sizeof(glm::vec3)) * t_particle_count);
 
     position_buf->set_layout(rend::BufferLayout(
       { rend::BufferElement{ "position_scale", rend::ShaderDataType::Float4, true },
-        rend::BufferElement{ "angle", rend::ShaderDataType::Float, true } }));
+        rend::BufferElement{
+          "angle_factor_index", rend::ShaderDataType::Float3, true } }));
 
     auto color_buf =
       std::make_unique<rend::VertexBuffer>(sizeof(glm::vec4) * t_particle_count);
@@ -39,7 +40,7 @@ std::array<std::pair<rend::VertexBuffer *, size_t>, QuadParticle::per_instance_b
     auto pos   = geom.gl_buffers()->add_vertex_buffer(std::move(position_buf));
     auto color = geom.gl_buffers()->add_vertex_buffer(std::move(color_buf));
 
-    return { std::make_pair(pos, 5), std::make_pair(color, 4) };
+    return { std::make_pair(pos, 7), std::make_pair(color, 4) };
 }
 
 void QuadParticle::update_buffers(
@@ -47,11 +48,14 @@ void QuadParticle::update_buffers(
   std::array<std::vector<float>, per_instance_buffers> &data)
 {
 
-    data[0][index * 5 + 0] = position.x;
-    data[0][index * 5 + 1] = position.y;
-    data[0][index * 5 + 2] = position.z;
-    data[0][index * 5 + 3] = m_parameters.scale;
-    data[0][index * 5 + 4] = m_parameters.angle;
+    data[0][index * 7 + 0] = position.x;
+    data[0][index * 7 + 1] = position.y;
+    data[0][index * 7 + 2] = position.z;
+    data[0][index * 7 + 3] = m_parameters.scale;
+
+    data[0][index * 7 + 4] = m_parameters.angle;
+    data[0][index * 7 + 5] = m_parameters.factor;
+    data[0][index * 7 + 6] = m_parameters.index;
 
     data[1][index * 4 + 0] = m_parameters.color.r;
     data[1][index * 4 + 1] = m_parameters.color.g;
@@ -69,6 +73,12 @@ void QuadParticle::init_material(QuadParticle::material_type *material)
 
 void QuadParticle::update(float)
 {
+
+    const float d     = max_life / g_init_params.atlas_entries;
+    const float index = (max_life - life) / d;
+
+    m_parameters.index  = static_cast<int>(index);
+    m_parameters.factor = index - static_cast<int>(index);
 }
 
 void QuadParticle::init()

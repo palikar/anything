@@ -59,7 +59,10 @@ class ParticleEmitter
 
     void update_parameters()
     {
-        m_vel = std::get<Position>(m_parameters["velocity"]);
+        m_vel          = std::get<Position>(m_parameters["velocity"]);
+        m_speed        = std::get<float>(m_parameters["speed"]);
+        m_vel_error[0] = std::get<Position>(m_parameters["velocity_error_down"]);
+        m_vel_error[1] = std::get<Position>(m_parameters["velocity_error_up"]);
 
         do_update_parameters();
     }
@@ -134,22 +137,19 @@ class CircleAreaEmitter : public ParticleEmitter
   private:
     glm::vec3 m_p;
     float m_max_radius;
-    glm::vec3 m_vel;
 
   public:
     CircleAreaEmitter(glm::vec3 p = { 0.0, 0.0, 0.0 }, float radius = 1.0)
-      : m_p(p), m_max_radius(radius), m_vel(0.0f, 1.0f, 0.0f)
+      : m_p(p), m_max_radius(radius)
     {
         m_parameters["position"] = p;
         m_parameters["radius"]   = radius;
-        m_parameters["velocity"] = m_vel;
     }
 
     void do_update_parameters() override
     {
         m_p          = std::get<Position>(m_parameters["position"]);
         m_max_radius = std::get<float>(m_parameters["radius"]);
-        m_vel        = std::get<Position>(m_parameters["velocity"]);
     }
 
     glm::vec3 next_position() override
@@ -157,11 +157,6 @@ class CircleAreaEmitter : public ParticleEmitter
         auto t = util::Random::uniform_real(0, 2 * mth::PI);
         auto r = util::Random::uniform_real(0, m_max_radius);
         return m_p + glm::vec3{ r * std::sin(t), 0.0, r * std::cos(t) };
-    }
-
-    glm::vec3 next_velocity() override
-    {
-        return m_vel;
     }
 };
 

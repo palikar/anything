@@ -20,6 +20,9 @@ struct QuadParticleAttributes
     glm::vec4 color{};
     float angle{ 0.0 };
     float scale{ 0.0 };
+
+    float index;
+    float factor;
 };
 
 struct InitParams
@@ -32,6 +35,8 @@ struct InitParams
 
     float scale{ 1.0 };
     float scale_error[2] = { 0.0, 0.0 };
+
+    size_t atlas_entries{ 16 };
 };
 
 struct QuadParticle
@@ -46,6 +51,7 @@ struct QuadParticle
     glm::vec3 acc{};
     float mass{ 1.0 };
     float life{ -1.0 };
+    float max_life{ -1.0 };
 
     QuadParticleAttributes m_parameters;
 
