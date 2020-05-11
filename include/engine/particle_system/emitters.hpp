@@ -82,7 +82,8 @@ class LineEmitter : public ParticleEmitter
 
 
   public:
-    LineEmitter(glm::vec3 p1, glm::vec3 p2) : m_p1(p1), m_p2(p2)
+    LineEmitter(glm::vec3 p1 = { 0.0f, 0.0f, 0.0f }, glm::vec3 p2 = { 5.0f, 0.0f, 0.0f })
+      : m_p1(p1), m_p2(p2)
     {
         m_parameters["start"] = p1;
         m_parameters["end"]   = p2;

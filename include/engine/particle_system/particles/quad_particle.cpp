@@ -64,8 +64,8 @@ grph::Geometry QuadParticle::geometry()
 {
     auto gem = grph::plane_geometry(1, 1, 1, 1);
     // auto gem = grph::cube_geometry();
-    // gem.rotate_y(glm::radians(90.0));
-    gem.drop_attribute("uv");
+    gem.rotate_y(glm::radians(180.0));
+    // gem.drop_attribute("uv");
     gem.drop_attribute("normal");
     gem.drop_attribute("tangents");
     gem.drop_attribute("bitangents");
@@ -116,7 +116,7 @@ void QuadParticle::init_material(QuadParticle::material_type *material)
     grph::MaterialBuilder::from_existing(material)
       .addative_blending()
       .enable_blending()
-      .both_side();
+      .depth_write(false);
 }
 
 void QuadParticle::update(float)
@@ -132,6 +132,7 @@ void QuadParticle::init()
 
 
 template class ParticleSystem<QuadParticle>;
+
 InitParams QuadParticle::g_init_params{};
 
 }  // namespace ay::part

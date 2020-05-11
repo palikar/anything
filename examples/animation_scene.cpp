@@ -76,12 +76,15 @@ class AnimScene : public gmt::GameBase
         // color_animation->easing() = mth::EasingType::Quadratic_in_out;
         // animator().main_timeline().push_track("sphere_color", std::move(color_animation));
 
-
-        system = main_scene->add(gmt::particle_system_entity());
-
-
-
+        auto atlas = textures().load("explosion_atlas.png", gmt::MapType::ATLAS);
         
+        system = main_scene->add(gmt::particle_system_entity());
+        auto quad_system = cmp::particle_system<part::ParticleSystem<part::QuadParticle>>(system);
+        auto mat = quad_system->particle_material();
+
+        mat->parameters().m_height_segments = 3;
+        mat->parameters().m_width_segments = 3;
+        mat->parameters().m_atlas = atlas;
 
         init_lighting();
     }

@@ -18,7 +18,8 @@ enum class MapType
     NORMAL_MAP,
     AO_MAP,
     ALBEDO_MAP,
-    HEIGHT_MAP
+    HEIGHT_MAP,
+    ATLAS
 
 };
 

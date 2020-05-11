@@ -1,11 +1,13 @@
 #version 460 core
 
 layout (location = 0) in vec3 i_pos;
-layout (location = 1) in vec4 i_position;
-layout (location = 2) in float i_angle;
-layout (location = 3) in vec4 i_color;
+layout (location = 1) in vec2 i_uv;
+layout (location = 2) in vec4 i_position;
+layout (location = 3) in float i_angle;
+layout (location = 4) in vec4 i_color;
 
 out vec4 col;
+out vec2 uv;
 
 uniform mat4 model_matrix;
 uniform mat4 view_matrix;
@@ -35,6 +37,8 @@ void main() {
     
     vec4 pos = vec4(projection_matrix * view * vec4(i_pos, 1.0));
     gl_Position = pos;
+    
+    uv = i_uv;
 
 
 }

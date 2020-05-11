@@ -70,4 +70,5 @@ struct QuadParticle
     void init();
 };
 
+
 }  // namespace ay::part

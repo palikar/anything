@@ -141,7 +141,7 @@ void RendererScene3D::process_material(grph::Material *material, Shader *shader)
 {
     m_api->depth_func(material->depth_func());
     m_api->depth_test(material->depth_test());
-    m_api->depth_write(material->depth_write());
+    // m_api->depth_write(material->depth_write());
 
     m_api->blending(material->blending_setup().blending);
     m_api->submit_blending(material->blending_setup());
@@ -312,8 +312,7 @@ void RendererScene3D::handle_particles(gmt::Entity *object,
     shader->set("lighting_enabled", false);
 
     EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
-
-    // std::cout << "rendering particles" <<  particle_comp->system->count() <<  "\n";
+    EnableDisableDepthWrite depthwrite_raii{ *m_api, mat->depth_write() };
 
     m_api->draw_instanced(particle_comp->system->geometry(),
                           particle_comp->system->count());

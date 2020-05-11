@@ -8,7 +8,6 @@
 #include "rendering/vertex_array.hpp"
 
 #include "graphics/material.hpp"
-#include "graphics/materials/quad_particle.hpp"
 #include "graphics/instanced_mesh.hpp"
 #include "graphics/geometry_factory.hpp"
 
@@ -197,6 +196,11 @@ class ParticleSystem : public ParticleSystemBase
     }
 
     grph::Material *material() override
+    {
+        return m_material.get();
+    }
+
+    Material *particle_material()
     {
         return m_material.get();
     }
