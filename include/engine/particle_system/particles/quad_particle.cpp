@@ -7,58 +7,6 @@
 namespace ay::part
 {
 
-float real_with_error(float base, float lower, float upper)
-{
-    return base + util::Random::uniform_real(lower, upper);
-}
-
-glm::vec2 vec2_with_error(glm::vec2 base, glm::vec2 lower, glm::vec2 upper)
-{
-    float x = util::Random::uniform_int(lower.x, upper.x);
-    float y = util::Random::uniform_int(lower.y, upper.y);
-    return base + glm::vec2(x, y);
-}
-
-glm::vec3 vec3_with_error(glm::vec3 base, glm::vec3 lower, glm::vec3 upper)
-{
-    float x = util::Random::uniform_int(lower.x, upper.x);
-    float y = util::Random::uniform_int(lower.y, upper.y);
-    float z = util::Random::uniform_int(lower.z, upper.z);
-
-    return base + glm::vec3(x, y, z);
-}
-
-glm::vec4 vec4_with_error(glm::vec4 base, glm::vec4 lower, glm::vec4 upper)
-{
-    float x = util::Random::uniform_int(lower.x, upper.x);
-    float y = util::Random::uniform_int(lower.y, upper.y);
-    float z = util::Random::uniform_int(lower.z, upper.z);
-    float w = util::Random::uniform_int(lower.w, upper.w);
-
-    return base + glm::vec4(x, y, z, w);
-}
-
-
-float real_with_error(float base, float bounds[2])
-{
-    return real_with_error(base, bounds[0], bounds[1]);
-}
-
-glm::vec2 vec2_with_error(glm::vec2 base, glm::vec2 bounds[2])
-{
-    return vec2_with_error(base, bounds[0], bounds[1]);
-}
-
-glm::vec3 vec3_with_error(glm::vec3 base, glm::vec3 bounds[2])
-{
-    return vec3_with_error(base, bounds[0], bounds[1]);
-}
-
-glm::vec4 vec4_with_error(glm::vec4 base, glm::vec4 bounds[2])
-{
-    return vec4_with_error(base, bounds[0], bounds[1]);
-}
-
 
 grph::Geometry QuadParticle::geometry()
 {
@@ -125,9 +73,12 @@ void QuadParticle::update(float)
 
 void QuadParticle::init()
 {
-    m_parameters.color = vec4_with_error(g_init_params.color, g_init_params.color_error);
-    m_parameters.scale = real_with_error(g_init_params.scale, g_init_params.scale_error);
-    m_parameters.angle = real_with_error(g_init_params.angle, g_init_params.angle_error);
+    m_parameters.color =
+      mth::vec4_with_error(g_init_params.color, g_init_params.color_error);
+    m_parameters.scale =
+      mth::real_with_error(g_init_params.scale, g_init_params.scale_error);
+    m_parameters.angle =
+      mth::real_with_error(g_init_params.angle, g_init_params.angle_error);
 }
 
 
