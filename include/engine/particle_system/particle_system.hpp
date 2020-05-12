@@ -41,6 +41,12 @@ class ParticleSystemBase
     virtual size_t count() = 0;
 };
 
+enum class LoopMode
+{
+    ONCE,
+    REPEAT
+};
+
 struct ParticleSystemParameters
 {
     float life_base = 3.0f;
@@ -48,7 +54,9 @@ struct ParticleSystemParameters
 
     int spawn_rate = 5;
 
-    bool sort_particles{ false };
+    bool sort_particles{ true };
+
+    LoopMode loop_mode{ LoopMode::REPEAT };
 };
 
 template<typename ParticleType>
@@ -70,11 +78,11 @@ class ParticleSystem : public ParticleSystemBase
     std::array<std::pair<rend::VertexBuffer *, size_t>, instance_buffers> m_buffers;
     std::array<std::vector<float>, instance_buffers> m_data;
 
+    bool m_done{ false };
+
     const size_t max_particles;
-
     std::vector<ParticleType> m_particles;
-
-    std::vector<Particle *> m_working_set;
+    std::vector<ParticleType *> m_working_set;
 
     size_t last_used_particle = 0;
     size_t m_count            = 0;
@@ -151,6 +159,48 @@ class ParticleSystem : public ParticleSystemBase
         t_particle.update(dt);
     }
 
+    inline void update_regular(float dt)
+    {
+
+        m_count      = 0;
+        size_t index = 0;
+        for (size_t i = 0; i < max_particles; ++i)
+        {
+            if (m_particles[i].life > 0.0)
+            {
+                update_particle(dt, m_particles[i]);
+                m_particles[i].update_buffers(index++, m_data);
+                ++m_count;
+            }
+        }
+    }
+
+    inline void update_sorted(float dt)
+    {
+
+        size_t working_index = 0;
+        for (size_t i = 0; i < max_particles; ++i)
+        {
+            if (m_particles[i].life > 0.0)
+            {
+                update_particle(dt, m_particles[i]);
+                m_working_set[working_index++] = &m_particles[i];
+            }
+        }
+
+        std::sort(std::begin(m_working_set),
+                  std::begin(m_working_set) + working_index,
+                  [this](auto &p1, auto &p2) {
+                      return glm::distance2(p1->position, camera_pos)
+                             >= glm::distance2(p2->position, camera_pos);
+                  });
+
+        m_count = working_index;
+        for (size_t i = 0; i < working_index; ++i)
+        {
+            m_working_set[i]->update_buffers(i, m_data);
+        }
+    }
 
   public:
     ParticleSystem(const size_t t_max_particles = 4000)
@@ -178,52 +228,26 @@ class ParticleSystem : public ParticleSystemBase
 
     void update(float dt) override
     {
-        spawn(dt);
+        if (!m_done)
+        {
+            spawn(dt);
+        }
 
         if (m_parameters.sort_particles)
         {
-            size_t working_index = 0;
-            for (size_t i = 0; i < max_particles; ++i)
-            {
-                if (m_particles[i].life > 0.0)
-                {
-                    update_particle(dt, m_particles[i]);
-                    m_working_set.at(working_index) = &m_particles[i];
-                }
-            }
-
-            std::sort(std::begin(m_working_set),
-                      std::begin(m_working_set) + working_index,
-                      [this](auto &p1, auto &p2) {
-                          return glm::distance2(p1->position, camera_pos)
-                                 < glm::distance2(p2->position, camera_pos);
-                      });
-
-            m_count      = 0;
-            size_t index = 0;
-            for (size_t i = 0; i < working_index; ++i)
-            {
-                m_working_set[i]->update_buffers(index++, m_data);
-                ++m_count;
-            }
+            update_sorted(dt);
         }
         else
         {
-            m_count      = 0;
-            size_t index = 0;
-            for (size_t i = 0; i < max_particles; ++i)
-            {
-                if (m_particles[i].life > 0.0)
-                {
-                    update_particle(dt, m_particles[i]);
-                    m_particles[i].update_buffers(index++, m_data);
-                    ++m_count;
-                }
-            }
+            update_regular(dt);
         }
 
-
         update_intance_buffers();
+
+        if (m_parameters.loop_mode == LoopMode::ONCE)
+        {
+            m_done = true;
+        }
     }
 
     // Stuff needed for the rendering
@@ -307,6 +331,18 @@ class ParticleSystem : public ParticleSystemBase
     void make_line_emitter()
     {
         m_emitter = std::make_unique<LineEmitter>();
+    }
+
+    void set_camera_position(glm::vec3 pos)
+    {
+        camera_pos = pos;
+    }
+
+    // Control
+
+    void spawn_once()
+    {
+        m_done = false;
     }
 };
 

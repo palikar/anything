@@ -89,12 +89,18 @@ struct EnableDisableDepthWrite
     EnableDisableDepthWrite(RenderAPI &t_renderer, bool t_value = true)
       : m_renderer(t_renderer), m_value(t_value)
     {
-        t_renderer.depth_write(m_value);
+        if (!t_value)
+        {
+            t_renderer.depth_write(false);
+        }
     }
 
     ~EnableDisableDepthWrite()
     {
-        m_renderer.depth_write(!m_value);
+        if (!m_value)
+        {
+            m_renderer.depth_write(true);
+        }
     }
 
     AY_RAII_OBJECT(EnableDisableDepthWrite);

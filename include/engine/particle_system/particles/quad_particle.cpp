@@ -66,9 +66,10 @@ void QuadParticle::update_buffers(
 void QuadParticle::init_material(QuadParticle::material_type *material)
 {
     grph::MaterialBuilder::from_existing(material)
-      .addative_blending()
       .enable_blending()
-      .depth_write(false);
+      .alpha_blending()
+      .depth_test(false)
+      .depth_write(true);
 }
 
 void QuadParticle::update(float)

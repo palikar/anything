@@ -44,7 +44,7 @@ void main() {
         const vec4 p_2 = get_atlas_color(i_2);
         
         const float f =  clamp(factor, 0.0, 1.0);
-
+        
         frag_color = mix(p_1, p_2, f);
 
     } else {
