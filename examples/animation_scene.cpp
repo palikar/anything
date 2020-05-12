@@ -107,21 +107,21 @@ class AnimScene : public gmt::GameBase
         // quad_system->emitter_parameters()["radius"] = 5.0;
         // quad_system->emitter()->update_parameters();
 
-        // quad_system->make_line_emitter();
-        // quad_system->emitter_parameters()["velocity"] = glm::vec3{0.0, 1.0, 0.0};
-        // quad_system->emitter_parameters()["velocity_error_up"] = glm::vec3{0.0, 0.0, 0.0};
-        // quad_system->emitter_parameters()["velocity_error_down"] = glm::vec3{0.0, 0.0, 0.0};
-        // quad_system->emitter_parameters()["speed"] = 3.1;
-        // quad_system->emitter_parameters()["start"] = glm::vec3{15.0, 0.0, 0.0};
-        // quad_system->emitter_parameters()["end"] = glm::vec3{-15.0, 0.0, 0.0};
+        quad_system->make_line_emitter();
+        quad_system->emitter_parameters()["velocity"] = glm::vec3{0.0, 1.0, 0.0};
+        quad_system->emitter_parameters()["velocity_error_up"] = glm::vec3{0.0, 0.0, 0.0};
+        quad_system->emitter_parameters()["velocity_error_down"] = glm::vec3{0.0, 0.0, 0.0};
+        quad_system->emitter_parameters()["speed"] = 3.1;
+        quad_system->emitter_parameters()["start"] = glm::vec3{15.0, 0.0, 0.0};
+        quad_system->emitter_parameters()["end"] = glm::vec3{-15.0, 0.0, 0.0};
         
         quad_system->emitter()->update_parameters();
 
         
         quad_system->parameters().spawn_rate = 40;
         
-        quad_system->phisics_parameters().m_gravity = false;
-        quad_system->physics().update();
+        quad_system->physics_parameters().m_gravity = false;
+        quad_system->physics()->update();
     }
 
     void update(double dt) override

@@ -47,6 +47,8 @@ struct ParticleSystemParameters
     glm::vec2 life_error{ 0.0, 1.0f };
 
     int spawn_rate = 5;
+
+    bool sort_particles{ false };
 };
 
 template<typename ParticleType>
@@ -59,6 +61,8 @@ class ParticleSystem : public ParticleSystemBase
     static constexpr size_t instance_buffers = Particle::per_instance_buffers;
 
   private:
+    glm::vec3 camera_pos{ 0.0, 0.0, 0.0 };
+
     ParticleSystemParameters m_parameters{};
 
     grph::Geometry m_geometry;
@@ -69,6 +73,8 @@ class ParticleSystem : public ParticleSystemBase
     const size_t max_particles;
 
     std::vector<ParticleType> m_particles;
+
+    std::vector<Particle *> m_working_set;
 
     size_t last_used_particle = 0;
     size_t m_count            = 0;
@@ -164,6 +170,7 @@ class ParticleSystem : public ParticleSystemBase
         }
 
         m_particles.resize(max_particles);
+        m_working_set.resize(max_particles);
 
         m_emitter = std::make_unique<LineEmitter>(glm::vec3{ 0.0, 0.0, 0.0 },
                                                   glm::vec3{ 0.0, 0.0, 0.0 });
@@ -173,17 +180,48 @@ class ParticleSystem : public ParticleSystemBase
     {
         spawn(dt);
 
-        m_count      = 0;
-        size_t index = 0;
-        for (size_t i = 0; i < max_particles; ++i)
+        if (m_parameters.sort_particles)
         {
-            if (m_particles[i].life > 0.0)
+            size_t working_index = 0;
+            for (size_t i = 0; i < max_particles; ++i)
             {
-                update_particle(dt, m_particles[i]);
-                m_particles[i].update_buffers(index++, m_data);
+                if (m_particles[i].life > 0.0)
+                {
+                    update_particle(dt, m_particles[i]);
+                    m_working_set.at(working_index) = &m_particles[i];
+                }
+            }
+
+            std::sort(std::begin(m_working_set),
+                      std::begin(m_working_set) + working_index,
+                      [this](auto &p1, auto &p2) {
+                          return glm::distance2(p1->position, camera_pos)
+                                 < glm::distance2(p2->position, camera_pos);
+                      });
+
+            m_count      = 0;
+            size_t index = 0;
+            for (size_t i = 0; i < working_index; ++i)
+            {
+                m_working_set[i]->update_buffers(index++, m_data);
                 ++m_count;
             }
         }
+        else
+        {
+            m_count      = 0;
+            size_t index = 0;
+            for (size_t i = 0; i < max_particles; ++i)
+            {
+                if (m_particles[i].life > 0.0)
+                {
+                    update_particle(dt, m_particles[i]);
+                    m_particles[i].update_buffers(index++, m_data);
+                    ++m_count;
+                }
+            }
+        }
+
 
         update_intance_buffers();
     }
@@ -212,7 +250,7 @@ class ParticleSystem : public ParticleSystemBase
 
     // Particle system settings
 
-    PhysicsParameters &phisics_parameters()
+    PhysicsParameters &physics_parameters()
     {
         return m_physics.parameters();
     }
@@ -232,16 +270,24 @@ class ParticleSystem : public ParticleSystemBase
         return Particle::g_init_params;
     }
 
-    auto &physics()
+    // Component access
+    ParticlePhysics *physics()
     {
-        return m_physics;
+        return &m_physics;
     }
 
-    // Emitter Settings
-    auto emitter()
+    ParticleEmitter *emitter()
     {
         return m_emitter.get();
     }
+
+    void update_parameters()
+    {
+        m_emitter->update_parameters();
+        m_physics.update();
+    }
+
+    // Emitter Settings
 
     void make_sphere_emitter()
     {

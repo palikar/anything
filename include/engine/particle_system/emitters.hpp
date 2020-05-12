@@ -234,4 +234,10 @@ class SphereEmitter : public ParticleEmitter
 };
 
 
+inline const char *emitters[] = { "Line Emitter",
+                                  "Circle Emitter",
+                                  "Circle Area Emitter",
+                                  "Sphere Emitter",
+                                  "Cone emitter" };
+
 }  // namespace ay::part
