@@ -11,7 +11,7 @@ class AnimScene : public gmt::GameBase
     cmp::OrbitalCameraComponent *oribital_camera_controller;
 
     gmt::Entity* system;
-
+    part::ParticleSystem<part::QuadParticle> *quad_system;
 
   public:
 
@@ -76,19 +76,64 @@ class AnimScene : public gmt::GameBase
         // color_animation->easing() = mth::EasingType::Quadratic_in_out;
         // animator().main_timeline().push_track("sphere_color", std::move(color_animation));
 
-
+        auto atlas = textures().load("fire_atlas.png", gmt::MapType::ATLAS);
+        
         system = main_scene->add(gmt::particle_system_entity());
+        quad_system = cmp::particle_system<part::ParticleSystem<part::QuadParticle>>(system);
 
+        auto mat = quad_system->particle_material();
+        mat->parameters().m_height_segments = 4;
+        mat->parameters().m_width_segments = 5;
+        mat->parameters().m_atlas = atlas;
 
+        quad_system->particle_parameters().atlas_entries = 20;
+
+        // quad_system->make_sphere_emitter();
+        // quad_system->emitter_parameters()["velocity"] = glm::vec3{0.0, 0.0, 0.0};
+        // quad_system->emitter_parameters()["speed"] = 1.1;
+        // quad_system->emitter_parameters()["velocity_error_up"] = glm::vec3{0.1, 0.1, 0.1};
+        // quad_system->emitter_parameters()["velocity_error_down"] = glm::vec3{-0.1, -0.1, -0.1};
+        // quad_system->emitter_parameters()["position"] = glm::vec3{0.0, 0.0, 0.0};
+        // quad_system->emitter_parameters()["radius"] = 5.0;
+        // quad_system->emitter()->update_parameters();
 
         
+        // quad_system->make_circle_area_emitter();
+        // quad_system->emitter_parameters()["velocity"] = glm::vec3{0.0, 1.0, 0.0};
+        // quad_system->emitter_parameters()["velocity_error_up"] = glm::vec3{0.0, 0.0, 0.0};
+        // quad_system->emitter_parameters()["velocity_error_down"] = glm::vec3{0.0, 0.0, 0.0};
+        // quad_system->emitter_parameters()["speed"] = 3.1;        
+        // quad_system->emitter_parameters()["position"] = glm::vec3{0.0, 0.0, 0.0};
+        // quad_system->emitter_parameters()["radius"] = 5.0;
+        // quad_system->emitter()->update_parameters();
 
-        init_lighting();
+        quad_system->make_line_emitter();
+        quad_system->emitter_parameters()["velocity"] = glm::vec3{0.0, 1.0, 0.0};
+        quad_system->emitter_parameters()["velocity_error_up"] = glm::vec3{0.0, 0.0, 0.0};
+        quad_system->emitter_parameters()["velocity_error_down"] = glm::vec3{0.0, 0.0, 0.0};
+        quad_system->emitter_parameters()["speed"] = 3.1;
+        quad_system->emitter_parameters()["start"] = glm::vec3{1.0, 0.0, 0.0};
+        quad_system->emitter_parameters()["end"] = glm::vec3{-1.0, 0.0, 0.0};
+
+        quad_system->physics_parameters().m_gravity = false;
+
+        quad_system->parameters().spawn_rate = 2000;
+        quad_system->parameters().loop_mode = part::LoopMode::ONCE;
+
+        quad_system->update_parameters();
+
+        auto clock = main_scene->add_component(cmp::clock());
+        clock->add_callback(1, [quad_system=quad_system](){
+            std::cout << "clock" << "\n";
+            quad_system->spawn_once();
+        });
+        clock->start();
+        
     }
 
     void update(double dt) override
     {
-
+        quad_system->set_camera_position(main_scene->camera().pos());
         main_scene->update(dt);
     }
 

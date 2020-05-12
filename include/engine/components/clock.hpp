@@ -67,4 +67,9 @@ class Clock : public gmt::Component
     }
 };
 
+inline std::unique_ptr<Clock> clock()
+{
+    return std::make_unique<Clock>();
+}
+
 }  // namespace ay::cmp

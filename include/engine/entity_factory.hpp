@@ -9,8 +9,7 @@
 #include "engine/components/transform.hpp"
 #include "engine/components/line_segments.hpp"
 #include "engine/components/particle_system.hpp"
-
-#include "graphics/mesh.hpp"
+#include "engine/particle_system/particles/quad_particle.hpp"
 
 namespace ay::gmt
 {
@@ -50,7 +49,8 @@ inline EntityPtr particle_system_entity()
 {
     EntityPtr new_ent = std::make_unique<Entity>();
     new_ent->add_component(std::make_unique<cmp::TransformComponent>());
-    new_ent->add_component<cmp::ParticleComponent>(std::make_unique<part::ParticleSystem<part::QuadParticle>>());
+    new_ent->add_component<cmp::ParticleComponent>(
+      std::make_unique<part::ParticleSystem<part::QuadParticle>>());
     return new_ent;
 }
 

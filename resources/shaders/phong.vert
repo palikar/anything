@@ -20,6 +20,7 @@ out float fog_depth;
 
 uniform mat4 view_matrix;
 uniform mat4 projection_matrix;
+uniform mat4 view_projection_matrix;
 uniform mat4 model_matrix;
 uniform vec3 camera_pos;
 
@@ -39,7 +40,7 @@ void main()
     
 #endif
 
-    gl_Position = projection_matrix * vec4(pos, 1.0);
+    gl_Position = view_projection_matrix * vec4(pos, 1.0);
 
     
 #ifdef INSTANCING

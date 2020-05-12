@@ -60,6 +60,12 @@
 #include "engine/components/name.hpp"
 #include "engine/components/movement.hpp"
 #include "engine/components/tracking_camera.hpp"
+#include "engine/components/particle_system.hpp"
+
+#include "engine/particle_system/physics.hpp"
+#include "engine/particle_system/emitters.hpp"
+#include "engine/particle_system/particle_system.hpp"
+#include "engine/particle_system/particles/quad_particle.hpp"
 
 #include "math/box.hpp"
 #include "math/line.hpp"

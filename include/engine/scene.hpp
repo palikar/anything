@@ -57,6 +57,14 @@ class Scene3D
         return static_cast<T *>(m_entities.back().get());
     }
 
+    template<typename T>
+    T *add_component(std::unique_ptr<T> t_comp)
+    {
+        m_game_components.push_back(std::move(t_comp));
+        m_game_components.back().get()->set_game(m_game, temp_id++);
+        return static_cast<T *>(m_game_components.back().get());
+    }
+
     template<typename T, typename... Args>
     T *add_component(Args... args)
     {

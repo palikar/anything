@@ -101,7 +101,7 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
         // std::cout << "cont " << data_type_element_count(element.type) << "\n";
         // std::cout << "stride " << layout.get_stride() << "\n";
         // std::cout << "offset " << element.offset << "\n";
-        
+
         GLCall(glEnableVertexAttribArray(m_index));
         GLCall(glVertexAttribPointer(m_index,
                                      data_type_element_count(element.type),
@@ -112,7 +112,6 @@ VertexBuffer *VertexArray::add_vertex_buffer(VertexBufferPtr vertex_buffer)
 
         if (element.per_instance)
         {
-            std::cout << "per isntance" << "\n";
             glVertexAttribDivisor(m_index, 1);
         }
 

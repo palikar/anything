@@ -236,6 +236,8 @@ add_library(anything_engine
     ./include/engine/animation/timeline.cpp
 
     ./include/engine/particle_system/particle_system.cpp
+    ./include/engine/particle_system/physics.cpp
+    ./include/engine/particle_system/particles/quad_particle.cpp
 
     )
 

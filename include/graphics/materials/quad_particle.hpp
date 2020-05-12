@@ -11,8 +11,12 @@ namespace ay::grph
 
 struct QuadParticleParameters
 {
-    glm::vec3 m_color;
-    
+    glm::vec3 m_color{};
+
+    int m_width_segments{ 1 };
+    int m_height_segments{ 1 };
+
+    rend::TexturePtr m_atlas{ nullptr };
 };
 
 class QuadParticleMaterial : public Material
@@ -21,10 +25,8 @@ class QuadParticleMaterial : public Material
     QuadParticleParameters m_params;
 
   public:
-    QuadParticleMaterial(glm::vec3 t_color = { 1.0, 0.0, 0.0 }, bool t_wireframe = false)
-        : m_params{ t_color}
+    QuadParticleMaterial() : m_params{}
     {
-        m_parameters.m_wire_frame = t_wireframe;
     }
 
     virtual ~QuadParticleMaterial() = default;
@@ -34,10 +36,13 @@ class QuadParticleMaterial : public Material
         m_shader = t_shader_lib.load("quad_particle");
     }
 
-    void update_uniforms(rend::UniformBinder &,
-    rend::TextureBinder &,
-    rend::RenderContext &) override
+    void update_uniforms(rend::UniformBinder &uni_binder,
+                         rend::TextureBinder &,
+                         rend::RenderContext &) override
     {
+        uni_binder.set_uniform("width_segments", m_params.m_width_segments);
+        uni_binder.set_uniform("height_segments", m_params.m_height_segments);
+        uni_binder.set_uniform("atlas", m_params.m_atlas.get());
     }
 
     bool needs_lighting() override
@@ -57,7 +62,6 @@ class QuadParticleMaterial : public Material
         m_params.m_color = t_color;
     }
 };
-
 
 
 }  // namespace ay::grph

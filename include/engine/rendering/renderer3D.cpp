@@ -110,8 +110,9 @@ void RendererScene3D::switch_shader(Shader *shader)
 
 void RendererScene3D::switch_mvp(Shader *shader, glm::mat4 transform)
 {
-    shader->set("projection_matrix", m_view_projection);
+    shader->set("view_projection_matrix", m_view_projection);
     shader->set("view_matrix", m_current_context.view);
+    shader->set("projection_matrix", m_current_context.proj);
 
     if (!m_mat_stack.empty())
     {
@@ -140,7 +141,7 @@ void RendererScene3D::process_material(grph::Material *material, Shader *shader)
 {
     m_api->depth_func(material->depth_func());
     m_api->depth_test(material->depth_test());
-    m_api->depth_write(material->depth_write());
+    // m_api->depth_write(material->depth_write());
 
     m_api->blending(material->blending_setup().blending);
     m_api->submit_blending(material->blending_setup());
@@ -292,10 +293,11 @@ void RendererScene3D::handle_line_segments(gmt::Entity *object,
 }
 
 
-void RendererScene3D::handle_particles(gmt::Entity *object, cmp::ParticleComponent *particle_comp)
+void RendererScene3D::handle_particles(gmt::Entity *object,
+                                       cmp::ParticleComponent *particle_comp)
 {
 
-    
+
     m_binder.begin_draw_call();
 
     auto mat    = particle_comp->system->material();
@@ -304,16 +306,16 @@ void RendererScene3D::handle_particles(gmt::Entity *object, cmp::ParticleCompone
     switch_shader(shader);
     process_material(mat, shader);
 
-    auto transform     = cmp::transform(object);
+    auto transform = cmp::transform(object);
     switch_mvp(shader, transform.get_tranformation());
 
     shader->set("lighting_enabled", false);
-    
-    EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
 
-    // std::cout << "rendering particles" <<  particle_comp->system->count() <<  "\n";
-    
-    m_api->draw_instanced(particle_comp->system->geometry(), particle_comp->system->count());
+    EnableDisableWireframe wireframe_raii{ *m_api, mat->wire_frame() };
+    EnableDisableDepthWrite depthwrite_raii{ *m_api, mat->depth_write() };
+
+    m_api->draw_instanced(particle_comp->system->geometry(),
+                          particle_comp->system->count());
 }
 
 void RendererScene3D::handle_sky(gmt::Skybox *sky)

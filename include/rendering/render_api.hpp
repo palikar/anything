@@ -83,4 +83,31 @@ struct EnableDisableWireframe
     bool m_execute;
 };
 
+struct EnableDisableDepthWrite
+{
+
+    EnableDisableDepthWrite(RenderAPI &t_renderer, bool t_value = true)
+      : m_renderer(t_renderer), m_value(t_value)
+    {
+        if (!t_value)
+        {
+            t_renderer.depth_write(false);
+        }
+    }
+
+    ~EnableDisableDepthWrite()
+    {
+        if (!m_value)
+        {
+            m_renderer.depth_write(true);
+        }
+    }
+
+    AY_RAII_OBJECT(EnableDisableDepthWrite);
+
+  private:
+    RenderAPI &m_renderer;
+    bool m_value;
+};
+
 }  // namespace ay::rend
