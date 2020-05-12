@@ -162,7 +162,7 @@ add_library(anything_util
 target_include_directories(anything_util PUBLIC ./include)
 target_link_libraries(anything_util
     PUBLIC project_options project_warnings project_defines
-    PUBLIC assimp fmt OpenGL::GL GLEW::GLEW fmt stb)
+    PUBLIC assimp fmt OpenGL::GL GLEW::GLEW fmt stb cmp)
 
 add_library(anything_rendering
     ./include/rendering/render_api.cpp

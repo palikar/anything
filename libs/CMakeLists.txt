@@ -33,3 +33,8 @@ add_library(stb ./src/stb.cpp)
 target_include_directories(stb PUBLIC ./include)
 set_property(TARGET stb PROPERTY POSITION_INDEPENDENT_CODE ON)
 
+
+add_library(cmp ./src/cmp.cpp)
+target_include_directories(cmp PUBLIC ./include)
+set_property(TARGET cmp PROPERTY POSITION_INDEPENDENT_CODE ON)
+
