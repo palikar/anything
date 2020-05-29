@@ -211,7 +211,7 @@ target_include_directories(anything_application PUBLIC ./include)
 set_property(TARGET anything_application PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(anything_engine
-
+    
     ./include/engine/rendering/renderer3D.cpp
 
     ./include/engine/game_base.cpp
