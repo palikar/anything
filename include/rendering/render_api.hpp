@@ -76,7 +76,6 @@ struct EnableDisableWireframe
         }
     }
 
-    AY_RAII_OBJECT(EnableDisableWireframe);
 
   private:
     RenderAPI &m_renderer;
@@ -103,7 +102,6 @@ struct EnableDisableDepthWrite
         }
     }
 
-    AY_RAII_OBJECT(EnableDisableDepthWrite);
 
   private:
     RenderAPI &m_renderer;
