@@ -124,7 +124,6 @@ class AnimScene : public gmt::GameBase
 
         auto clock = main_scene->add_component(cmp::clock());
         clock->add_callback(1, [quad_system=quad_system](){
-            std::cout << "clock" << "\n";
             quad_system->spawn_once();
         });
         clock->start();

@@ -15,7 +15,7 @@ uniform float upper;
 void main()
 {
     frag_color = texture(skybox, pos);
-    
+
     if (fog_type != 0) {
         const float factor = (pos.y - lower) / (upper - lower);
         frag_color = mix(texture(skybox, pos), vec4(fog_color, 1.0), clamp(1.0 - factor, 0.0, 1.0));

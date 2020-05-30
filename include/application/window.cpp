@@ -66,21 +66,18 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
 
                            switch (action)
                            {
-                           case GLFW_PRESS:
-                           {
+                           case GLFW_PRESS: {
                                KeyPressedEvent event(static_cast<KeyCode>(key), 0, mod);
                                win.m_callback(event);
                                break;
                            }
-                           case GLFW_RELEASE:
-                           {
+                           case GLFW_RELEASE: {
 
                                KeyReleasedEvent event(static_cast<KeyCode>(key), mod);
                                win.m_callback(event);
                                break;
                            }
-                           case GLFW_REPEAT:
-                           {
+                           case GLFW_REPEAT: {
                                KeyPressedEvent event(static_cast<KeyCode>(key), 1);
                                win.m_callback(event);
                                break;
@@ -100,14 +97,12 @@ void Window::init(int t_width, int t_height, std::string_view t_name)
 
           switch (action)
           {
-          case GLFW_PRESS:
-          {
+          case GLFW_PRESS: {
               MouseButtonPressedEvent event(static_cast<MouseCode>(button), mod);
               win.m_callback(event);
               break;
           }
-          case GLFW_RELEASE:
-          {
+          case GLFW_RELEASE: {
               MouseButtonReleasedEvent event(static_cast<MouseCode>(button), mod);
               win.m_callback(event);
               break;

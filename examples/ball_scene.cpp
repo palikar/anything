@@ -79,9 +79,9 @@ class BallScene : public gmt::GameBase
 
         auto tex = rend::create_texture(app::ResouceLoader::path("textures/floor/floor-albedo.png"));
         auto sky = rend::create_cubetexture_jpgs(app::ResouceLoader::path("textures/cube/night_sky/"));
-
+        
         main_scene->set_skybox(gmt::skybox(sky));
-
+        
         main_scene->add(gmt::axis());
         main_scene->add(gmt::grid_helper(60, 20, rend::Colors::black));
 
@@ -301,6 +301,7 @@ class BallScene : public gmt::GameBase
         }
 
         renderer.render_scene(*main_scene);
+        
 
     }
 

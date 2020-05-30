@@ -349,7 +349,6 @@ void RendererScene3D::handle_sky(gmt::Skybox *sky)
 
     m_api->culling(Side::BACK);
     m_api->draw_triangles(geom);
-    m_api->culling(Side::FRONT);
 }
 
 
@@ -389,6 +388,7 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
     m_current_context.light_setup = &scene.light_setup();
     m_current_context.fog         = scene.fog();
 
+
     if (m_current_context.light_setup->needs_update)
     {
         for (auto &[_, val] : lighting_updated)
@@ -397,8 +397,8 @@ void RendererScene3D::render_scene(gmt::Scene3D &scene)
         }
     }
 
-    auto *sky = scene.skybox();
-    if (sky != nullptr)
+
+    if (auto *sky = scene.skybox(); sky != nullptr)
     {
         handle_sky(sky);
     }

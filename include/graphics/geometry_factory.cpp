@@ -79,6 +79,7 @@ Geometry cube_geometry(float width,
                 uint32_t d = numberOfVertices + (ix + 1) + gridX1 * iy;
 
                 indices.insert(indices.end(), { d, b, a, d, c, b });
+                // indices.insert(indices.end(), { a, b, d, d, c, b });
             }
         }
 

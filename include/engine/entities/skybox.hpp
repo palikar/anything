@@ -30,8 +30,8 @@ class Skybox : public Entity
     {
 
         m_cube = grph::cube_geometry(t_size, t_size, t_size);
-        m_cube.drop_attribute("normal");
-        m_cube.drop_attribute("uv");
+        // m_cube.drop_attribute("normal");
+        // m_cube.drop_attribute("uv");
         m_cube.pack();
 
         m_texture = std::move(tex);
