@@ -13,6 +13,8 @@ I the past I&rsquo;ve also worked with [ThreeJS](https://threejs.org/). For this
 
 The rendering API of choice for the project is [OpenGL](https://www.opengl.org/). At some point maybe I&rsquo;ll also implement a [Direct3D](https://en.wikipedia.org/wiki/Direct3D) backend but is a plan for the far future.
 
+**&ldquo;Anything&rdquo; is in no way close to stable or usable state. The project is in active development and it&rsquo;s not even in alpha-version yet.**
+
 
 ## Building
 
@@ -61,6 +63,18 @@ make -j4 install
 ```
 
 The source files for the examples are in the `examples/` directory. Each source file constructs a single scene by using the &ldquo;Anything&rdquo; engine.
+
+
+
+Some screenshots of the examples:
+
+![img](./screenshots/materials.png)
+
+![img](./screenshots/particles.png)
+
+![img](./screenshots/plane.png)
+
+![img](./screenshots/spheres_lighting.png)
 
 
 ## Features so far
